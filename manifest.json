@@ -1,0 +1,6 @@
+{
+    "name": "Bandcamp2Discogs",
+    "version": "0.1",
+    "description": "Helper for adding bandcamp release to discogs",
+    "manifest_version": 2
+}

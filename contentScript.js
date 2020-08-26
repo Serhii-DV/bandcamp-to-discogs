@@ -31,7 +31,12 @@ function main () {
 		about: TralbumData.current.about,
 		credits: TralbumData.current.credits,
 		type: TralbumData.current.type,
+		coverSrc: '',
 	}
+
+	// Get cover
+	let linkImageSrc = document.querySelectorAll('link[rel="image_src"]');
+	release.coverSrc = linkImageSrc[0].getAttribute('href');
 
 	TralbumData.trackinfo.forEach(track => {
 		release.trackinfo.push({

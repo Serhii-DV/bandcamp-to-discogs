@@ -22,6 +22,7 @@ class Release {
 		this.about = release.about;
 		this.credits = release.credits;
 		this.type = release.type;
+		this.coverSrc = release.coverSrc;
 	}
 }
 

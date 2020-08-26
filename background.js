@@ -8,7 +8,12 @@ chrome.runtime.onInstalled.addListener(function() {
 		  conditions: [
 			new chrome.declarativeContent.PageStateMatcher({
 				pageUrl: {
-					hostEquals: 'abismohumano.bandcamp.com'
+					hostContains: 'bandcamp.com'
+				},
+			}),
+			new chrome.declarativeContent.PageStateMatcher({
+				pageUrl: {
+					hostContains: 'discogs.com'
 				},
 			})
 		  ],

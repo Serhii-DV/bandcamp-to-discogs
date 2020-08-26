@@ -11,6 +11,10 @@
 		{
 			"matches": ["https://*.bandcamp.com/*"],
 			"js": ["bandcamp/contentScript.js"]
+		},
+		{
+			"matches": ["https://www.discogs.com/*"],
+			"js": ["discogs/contentScript.js"]
 		}
 	],
 	"page_action": {

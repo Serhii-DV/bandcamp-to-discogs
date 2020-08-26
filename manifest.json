@@ -14,7 +14,10 @@
 		},
 		{
 			"matches": ["https://www.discogs.com/*"],
-			"js": ["discogs/contentScript.js"]
+			"js": [
+				"app/classes.js",
+				"discogs/contentScript.js"
+			]
 		}
 	],
 	"page_action": {

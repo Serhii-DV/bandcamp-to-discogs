@@ -1,23 +1,20 @@
 'use strict';
 
-let Release = {};
+let release = {};
 
 window.addEventListener("message", function(event) {
 	// We only accept messages from ourselves
 	if (event.source != window)
 		return;
 
-	Release = event.data;
-	console.log("Content script received: ", Release);
-	// if (event.data.type && (event.data.type == "FROM_PAGE")) {
-		// chrome.runtime.sendMessage({release: event.data});
-		// console.log("Sended message: ", event.data);
-	// }
+	release = event.data;
+	console.log("Content script received: ", release);
+	chrome.storage.local.set({release: release});
 }, false);
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if (request.type == 'getRelease') {
-		sendResponse(Release);
+		sendResponse(release);
 	}
 });
 

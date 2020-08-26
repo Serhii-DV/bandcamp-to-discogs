@@ -1,7 +1,9 @@
 'use strict';
 
-let Release;
+let release;
 
 chrome.storage.local.get(['release'], function(result) {
-	console.log(result.release);
+	release = new Release(result.release);
 });
+
+console.log(release);

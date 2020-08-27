@@ -1,16 +1,55 @@
 let changeColor = document.getElementById('changeColor');
-let album = document.getElementById('release');
-let releaseArtist = document.getElementById('release-artist');
-let releaseTitle = document.getElementById('release-title');
-let releaseDate = document.getElementById('release-year');
-let releaseTracklist = document.getElementById('release-tracklist');
+let exportCsv = document.getElementById('exportCsv');
 
 changeColor.onclick = function(element) {
 	getRelease();
 };
 
+exportCsv.onclick = function () {
+	chrome.storage.local.get(['release'], function(result) {
+		let release = new Release(result.release);
+
+		let rows =[];
+
+		rows.push([
+			'artist',
+			'title',
+			'label',
+			'catno',
+			'format',
+			'genre',
+			'style',
+			'tracks',
+			'date',
+			'image',
+		]);
+
+		rows.push([
+			release.artist,
+			release.title,
+			`Not On Label (${release.artist} Self-released)`,
+			'none',
+			'',
+			'Electronic',
+			'Industrial,Dark Ambient',
+			'',
+			release.date.getFullYear(),
+			''
+		]);
+
+		let csvContent = csvContentFromArray(rows);
+		downloadCsvContent(csvContent, 'discogs');
+	});
+};
+
 function outputRelease(release) {
 	console.log(release);
+
+	let album = document.getElementById('release');
+	let releaseArtist = document.getElementById('release-artist');
+	let releaseTitle = document.getElementById('release-title');
+	let releaseDate = document.getElementById('release-year');
+	let releaseTracklist = document.getElementById('release-tracklist');
 
 	releaseArtist.innerHTML = release.artist;
 	releaseTitle.innerHTML = release.title;

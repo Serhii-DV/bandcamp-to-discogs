@@ -24,6 +24,12 @@ exportCsv.onclick = function () {
 			'image',
 		]);
 
+		let tracks = '';
+
+		release.trackinfo.forEach(track => {
+			tracks += track.title + "\n";
+		});
+
 		rows.push([
 			release.artist,
 			release.title,
@@ -32,9 +38,9 @@ exportCsv.onclick = function () {
 			'',
 			'Electronic',
 			'Industrial,Dark Ambient',
-			'',
+			tracks,
 			release.date.getFullYear(),
-			''
+			release.coverSrc.big
 		]);
 
 		let csvContent = csvContentFromArray(rows);

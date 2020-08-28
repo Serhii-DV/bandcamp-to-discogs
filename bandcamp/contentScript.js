@@ -28,12 +28,18 @@ function main () {
 		about: TralbumData.current.about,
 		credits: TralbumData.current.credits,
 		type: TralbumData.current.type,
-		coverSrc: '',
+		coverSrc: {
+			small: '',
+			big: '',
+		}
 	}
 
 	// Get cover
-	let linkImageSrc = document.querySelectorAll('link[rel="image_src"]');
-	release.coverSrc = linkImageSrc[0].getAttribute('href');
+	let imgCoverBig = document.querySelector('img[itemprop="image"]');
+	release.coverSrc.big = imgCoverBig.src;
+
+	let imgCoverSmall = document.querySelector('link[rel~="shortcut"]');
+	release.coverSrc.small = imgCoverSmall.getAttribute('href');
 
 	TralbumData.trackinfo.forEach(track => {
 		release.trackinfo.push({

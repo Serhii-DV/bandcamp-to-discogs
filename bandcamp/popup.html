@@ -8,7 +8,7 @@
 		outline: none;
 	}
 
-	#release {
+	body {
 		width: 300px;
 	}
 	</style>
@@ -16,12 +16,18 @@
 <body>
 	<button id="changeColor">Get release</button>
 	<button id="exportCsv">Save csv file</button>
-	<div id="release">
-		<h2 id="release-artist"></h2>
-		<h3><span id="release-title"></span> / <span id="release-year"></span></h3>
-		<h4>Tracklist:</h4>
-		<ul id="release-tracklist">
-		</ul>
+	<div id="releases">
+		<details>
+			<summary class="release">
+				<span id="release-artist"></span> - <span id="release-year"></span> - <span id="release-title"></span>
+			</summary>
+			<div>
+				<img id="release-cover" src="" width="100" height="100">
+				<h4>Tracklist:</h4>
+				<ul id="release-tracklist">
+				</ul>
+			</div>
+		</details>
 	</div>
 	<script src="../app/helpers.js"></script>
 	<script src="../app/classes.js"></script>

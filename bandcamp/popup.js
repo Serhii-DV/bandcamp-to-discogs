@@ -51,12 +51,13 @@ exportCsv.onclick = function () {
 function outputRelease(release) {
 	console.log(release);
 
-	let album = document.getElementById('release');
+	let releaseCover = document.getElementById('release-cover');
 	let releaseArtist = document.getElementById('release-artist');
 	let releaseTitle = document.getElementById('release-title');
 	let releaseDate = document.getElementById('release-year');
 	let releaseTracklist = document.getElementById('release-tracklist');
 
+	releaseCover.src = release.coverSrc.small;
 	releaseArtist.innerHTML = release.artist;
 	releaseTitle.innerHTML = release.title;
 	releaseDate.innerHTML = release.date.getFullYear();

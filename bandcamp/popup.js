@@ -44,7 +44,7 @@ exportCsv.onclick = function () {
 		]);
 
 		let csvContent = csvContentFromArray(rows);
-		downloadCsvContent(csvContent, 'discogs');
+		downloadCsvContent(csvContent, `discogs-${release.artist}-${release.title}`);
 	});
 };
 

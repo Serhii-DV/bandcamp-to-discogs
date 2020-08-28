@@ -19,7 +19,12 @@ function downloadCsvContent(csvContent, csvFileName) {
 	let encodedUri = encodeURI(csvContent);
 	let link = document.createElement('a');
 	link.setAttribute('href', encodedUri);
-	link.setAttribute('download', csvFileName + '.csv');
+	link.setAttribute('download', safeFilename(csvFileName) + '.csv');
 	// document.body.appendChild(link);
 	link.click();
+}
+
+/* @see https://stackoverflow.com/a/8485137/3227570 */
+function safeFilename(value) {
+	return value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
 }

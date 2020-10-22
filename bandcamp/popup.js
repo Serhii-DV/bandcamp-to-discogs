@@ -20,6 +20,7 @@ exportCsv.onclick = function () {
 			'genre',
 			'style',
 			'tracks',
+			'notes',
 			'date',
 			'images',
 		]);
@@ -39,6 +40,7 @@ exportCsv.onclick = function () {
 			'Electronic',
 			'"Industrial, Dark Ambient"',
 			`"${tracks}"`,
+			`"${release.about}"`,
 			release.date.getFullYear(),
 			release.coverSrc.big,
 		]);

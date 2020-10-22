@@ -16,18 +16,18 @@ exportCsv.onclick = function () {
 			'title',
 			'label',
 			'catno',
-			'format',
+			// 'format',
 			'genre',
 			'style',
 			'tracks',
 			'date',
-			'image',
+			'images',
 		]);
 
 		let tracks = '';
 
 		release.trackinfo.forEach(track => {
-			tracks += track.title + "\n";
+			tracks += track.title + "\r";
 		});
 
 		rows.push([
@@ -35,12 +35,12 @@ exportCsv.onclick = function () {
 			release.title,
 			`Not On Label (${release.artist} Self-released)`,
 			'none',
-			'',
+			// '',
 			'Electronic',
-			'Industrial,Dark Ambient',
-			tracks,
+			'"Industrial, Dark Ambient"',
+			`"${tracks}"`,
 			release.date.getFullYear(),
-			release.coverSrc.big
+			release.coverSrc.big,
 		]);
 
 		let csvContent = csvContentFromArray(rows);

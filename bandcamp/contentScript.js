@@ -20,26 +20,19 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 function main () {
 	let release = {
-		artist: TralbumData.current.artist,
+		artist: TralbumData.artist,
 		title: TralbumData.current.title,
-		release_date: TralbumData.current.release_date,
+		release_date: TralbumData.album_release_date,
 		trackinfo: [],
 		url: TralbumData.url,
 		about: TralbumData.current.about,
 		credits: TralbumData.current.credits,
 		type: TralbumData.current.type,
 		coverSrc: {
-			small: '',
-			big: '',
+			small: document.querySelector('link[rel~="shortcut"]').href,
+			big: document.querySelector('link[rel="image_src"]').href,
 		}
 	}
-
-	// Get cover
-	let imgCoverBig = document.querySelector('img[itemprop="image"]');
-	release.coverSrc.big = imgCoverBig.src;
-
-	let imgCoverSmall = document.querySelector('link[rel~="shortcut"]');
-	release.coverSrc.small = imgCoverSmall.getAttribute('href');
 
 	TralbumData.trackinfo.forEach(track => {
 		release.trackinfo.push({

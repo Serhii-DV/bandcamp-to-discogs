@@ -28,7 +28,7 @@ exportCsv.onclick = function () {
 		let tracks = '';
 
 		release.trackinfo.forEach(track => {
-			tracks += track.title + "\r";
+			tracks += track.title + ' ' + track.durationText + "\r";
 		});
 
 		// escape " symbols

@@ -33,7 +33,11 @@ exportCsv.onclick = function () {
 
 		// escape " symbols
 		let notes = release.about.replace('"', '""');
-		let date = [release.date.getFullYear(), d.getMonth().toString().padStart(2, 0), d.getDate().toString().padStart(2, 0)].join('-');
+		let date = [
+			release.date.getFullYear(),
+			release.date.getMonth().toString().padStart(2, 0),
+			release.date.getDate().toString().padStart(2, 0)
+		].join('-');
 
 		rows.push([
 			release.artist,

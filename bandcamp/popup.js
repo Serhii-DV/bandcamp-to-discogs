@@ -31,6 +31,9 @@ exportCsv.onclick = function () {
 			tracks += track.title + "\r";
 		});
 
+		// escape " symbols
+		let notes = release.about.replace('"', '""');
+
 		rows.push([
 			release.artist,
 			release.title,
@@ -40,7 +43,7 @@ exportCsv.onclick = function () {
 			'Electronic',
 			'"Industrial, Dark Ambient"',
 			`"${tracks}"`,
-			`"${release.about}"`,
+			`"${notes}"`,
 			release.date.getFullYear(),
 			release.coverSrc.big,
 		]);

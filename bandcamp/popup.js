@@ -41,7 +41,7 @@ exportCsv.onclick = function () {
 
 		rows.push([
 			release.artist,
-			release.title,
+			`"${release.title}"`,
 			`Not On Label (${release.artist} Self-released)`,
 			'none',
 			'File',

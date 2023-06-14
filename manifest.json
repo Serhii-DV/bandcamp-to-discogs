@@ -1,32 +1,31 @@
 {
-	"name": "Bandcamp2Discogs",
-	"version": "0.1",
-	"description": "Helper for adding bandcamp release to discogs",
-	"permissions": ["activeTab", "declarativeContent", "storage"],
-	"background": {
-		"scripts": ["background.js"],
-		"persistent": false
-	},
-	"content_scripts": [
-		{
-			"matches": ["https://*.bandcamp.com/*"],
-			"js": ["bandcamp/contentScript.js"]
-		}
-	],
-	"page_action": {
-		"default_popup": "bandcamp/popup.html",
-		"default_icon": {
-			"16": "images/get_started16.png",
-			"32": "images/get_started32.png",
-			"48": "images/get_started48.png",
-			"128": "images/get_started128.png"
-		}
-	},
-	"icons": {
-		"16": "images/get_started16.png",
-		"32": "images/get_started32.png",
-		"48": "images/get_started48.png",
-		"128": "images/get_started128.png"
-	},
-	"manifest_version": 2
+  "manifest_version": 3,
+  "name": "Bandcamp2Discogs",
+  "version": "0.1",
+  "description": "Generates a CSV file from the Bandcamp page. The CSV file can be imported into Discogs.",
+  "permissions": ["activeTab", "declarativeContent", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "js": ["bandcamp/content.js"],
+      "matches": ["https://*.bandcamp.com/*"]
+    }
+  ],
+  "action": {
+    "default_popup": "bandcamp/popup.html",
+    "default_icon": {
+      "16": "images/get_started16.png",
+      "32": "images/get_started32.png",
+      "48": "images/get_started48.png",
+      "128": "images/get_started128.png"
+    }
+  },
+  "icons": {
+    "16": "images/get_started16.png",
+    "32": "images/get_started32.png",
+    "48": "images/get_started48.png",
+    "128": "images/get_started128.png"
+  }
 }

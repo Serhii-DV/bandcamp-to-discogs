@@ -4,21 +4,17 @@
   <link type="text/css" rel="stylesheet" href="../main.css">
 </head>
 <body>
-  <button id="changeColor">Get release</button>
-  <button id="exportCsv">Save csv file</button>
+  <button id="get-release">Get release</button>
+  <button id="export-csv">Save csv file</button>
   <a id="discogsCsvToDraft" href="https://www.discogs.com/release/csv_to_draft" target="_blank">Discogs csv to draft</a>
   <div id="releases">
-    <details>
-      <summary class="release">
-        <span id="release-artist"></span> - <span id="release-year"></span> - <span id="release-title"></span>
-      </summary>
-      <div>
-        <img id="release-cover" src="" width="100" height="100">
-        <h4>Tracklist:</h4>
-        <ul id="release-tracklist">
-        </ul>
-      </div>
-    </details>
+    <h2><span id="release-artist"></span> - <span id="release-year"></span> - <span id="release-title"></span></h2>
+    <div>
+      <img id="release-cover" src="" width="100" height="100">
+      <h4>Tracklist:</h4>
+      <ul id="release-tracklist">
+      </ul>
+    </div>
   </div>
   <script src="../app/helpers.js"></script>
   <script src="../app/classes.js"></script>

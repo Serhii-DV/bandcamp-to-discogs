@@ -1,9 +1,7 @@
-let changeColor = document.getElementById('changeColor');
-let exportCsv = document.getElementById('exportCsv');
-
-changeColor.onclick = function(element) {
+document.getElementById('get-release').onclick = function(element) {
   getRelease();
 };
+let exportCsv = document.getElementById('export-csv');
 
 exportCsv.onclick = function () {
   chrome.storage.local.get(['release'], function(result) {

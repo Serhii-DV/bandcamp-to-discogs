@@ -1,14 +1,14 @@
 body {
-	background: #212121;
-	color: #ccc;
+  background: #212121;
+  color: #ccc;
 }
 
 button {
-	height: 30px;
-	/* width: 30px; */
-	outline: none;
+  height: 30px;
+  /* width: 30px; */
+  outline: none;
 }
 
 body {
-	width: 300px;
+  width: 300px;
 }

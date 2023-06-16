@@ -1,6 +1,6 @@
-// Classes
+import {durationToSeconds} from '../../src/modules/helpers.js';
 
-class Release {
+export class Release {
   constructor(release) {
     this.artist = release.artist;
     this.title = release.title;
@@ -19,7 +19,7 @@ class Release {
   }
 }
 
-class Track {
+export class Track {
   constructor(data) {
     this.num = data.num;
     this.title = data.title;

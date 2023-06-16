@@ -1,3 +1,6 @@
+import {csvContentFromArray, downloadCsvContent} from '../src/modules/csv.js';
+import {Release} from '../src/modules/classes.js';
+
 document.getElementById('get-release').onclick = function(element) {
   createRelease();
 };

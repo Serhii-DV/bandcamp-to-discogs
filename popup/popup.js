@@ -1,5 +1,5 @@
 document.getElementById('get-release').onclick = function(element) {
-  getRelease();
+  createRelease();
 };
 let exportCsv = document.getElementById('export-csv');
 
@@ -57,8 +57,6 @@ exportCsv.onclick = function () {
 };
 
 function outputRelease(release) {
-  console.log(release);
-
   let releaseCover = document.getElementById('release-cover');
   let releaseArtist = document.getElementById('release-artist');
   let releaseTitle = document.getElementById('release-title');
@@ -79,10 +77,53 @@ function outputRelease(release) {
   releaseTracklist.innerHTML = trackinfo;
 }
 
-function getRelease() {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, {type:'getRelease'}, function (response) {
-      outputRelease(new Release(response));
+function createRelease(TralbumData, coverSrc) {
+  let release = {
+    artist: TralbumData.artist,
+    title: TralbumData.current.title,
+    release_date: TralbumData.album_release_date,
+    trackinfo: [],
+    url: TralbumData.url,
+    about: TralbumData.current.about,
+    credits: TralbumData.current.credits,
+    type: TralbumData.current.type,
+    coverSrc: coverSrc
+  }
+
+  TralbumData.trackinfo.forEach(track => {
+    release.trackinfo.push({
+      num: track.track_num,
+      title: track.title,
+      duration: track.duration,
+    });
+  });
+
+  return new Release(release);
+}
+
+
+async function getCurrentTab() {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab;
+};
+
+async function getRelease() {
+  let tabPromise = getCurrentTab();
+
+  tabPromise.then((tab) => {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        document.querySelector('#menubar').style.backgroundColor = "red";
+      }
+    });
+
+    chrome.tabs.sendMessage(tab.id, {type:'getRelease'}, (response) => {
+      outputRelease(createRelease(
+        response.TralbumData,
+        response.coverSrc
+      ));
     });
   });
 }

@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html data-bs-theme="dark">
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <link type="text/css" rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <button id="get-release">Get release</button>
-  <button id="export-csv">Save csv file</button>
-  <a id="discogsCsvToDraft" href="https://www.discogs.com/release/csv_to_draft" target="_blank">Discogs csv to draft</a>
-  <div id="releases">
-    <h2><span id="release-artist"></span> - <span id="release-year"></span> - <span id="release-title"></span></h2>
-    <div>
-      <img id="release-cover" src="" width="100" height="100">
-      <h4>Tracklist:</h4>
-      <ul id="release-tracklist">
-      </ul>
+  <div id="release" class="card rounded-0 position-relative">
+    <img id="release-cover" class="card-img opacity-25" src="" alt="">
+    <div class="card-img-overlay">
+      <h1 class="display-3"><span id="release-artist"></span></h1>
+      <h2 class="display-6"><span id="release-title"></span></h2>
+      <h3 class="display-6"><span id="release-year"></span></h3>
+      <div id="release-tracklist" class="card-text overflow-auto position-absolute bottom-0 start-0 end-0"></div>
     </div>
+  </div>
+  <div class="d-grid gap-0" role="group" aria-label="Release controls">
+    <button id="export-csv" class="btn btn-dark rounded-0" type="button">Save as Discogs csv</button>
+    <a id="discogsCsvToDraft" class="btn btn-dark rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button">Discogs draft import</a>
   </div>
   <script type="module" src="popup.js"></script>
 </body>

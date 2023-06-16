@@ -1,14 +1,11 @@
 body {
   background: #212121;
   color: #ccc;
+  width: 400px;
+  padding: 0;
 }
 
-button {
-  height: 30px;
-  /* width: 30px; */
-  outline: none;
-}
-
-body {
-  width: 300px;
+#release-tracklist {
+  height: 200px;
+  padding: 0 var(--bs-card-img-overlay-padding);
 }

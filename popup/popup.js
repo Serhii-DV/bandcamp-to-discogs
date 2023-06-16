@@ -1,9 +1,6 @@
 import {csvContentFromArray, downloadCsvContent} from '../src/modules/csv.js';
 import {Release} from '../src/modules/classes.js';
 
-document.getElementById('get-release').onclick = function(element) {
-  createRelease();
-};
 let exportCsv = document.getElementById('export-csv');
 
 exportCsv.onclick = function () {
@@ -66,7 +63,7 @@ function outputRelease(release) {
   let releaseDate = document.getElementById('release-year');
   let releaseTracklist = document.getElementById('release-tracklist');
 
-  releaseCover.src = release.coverSrc.small;
+  releaseCover.src = release.coverSrc.big;
   releaseArtist.innerHTML = release.artist;
   releaseTitle.innerHTML = release.title;
   releaseDate.innerHTML = release.date.getFullYear();
@@ -74,7 +71,7 @@ function outputRelease(release) {
   let trackinfo = '';
 
   release.trackinfo.forEach(track => {
-    trackinfo += `<li>${track.num} ${track.title} (${track.durationText})</li>`;
+    trackinfo += `${track.num}. ${track.title} (${track.durationText})<br>`;
   });
 
   releaseTracklist.innerHTML = trackinfo;

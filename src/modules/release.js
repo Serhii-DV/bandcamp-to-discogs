@@ -1,4 +1,4 @@
-import {durationToSeconds} from '../../src/modules/helpers.js';
+import {durationToSeconds} from './helpers.js';
 
 export class Release {
   constructor(release) {

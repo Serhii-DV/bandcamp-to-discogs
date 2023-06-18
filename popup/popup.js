@@ -1,18 +1,19 @@
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
-import { Release } from '../src/modules/classes.js';
+import { Release } from '../src/modules/release.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;
 let saveCsvBtn = document.getElementById('save-csv');
 
 saveCsvBtn.onclick = () => {
+  let csvObject = releaseToCsvObject(release);
   downloadCsv(
-    releaseToCsv(release),
+    objectToCsv(csvObject),
     `discogs-${release.artist}-${release.title}`
   );
 };
 
-function releaseToCsv(release) {
+function releaseToCsvObject(release) {
   let tracks = '';
 
   release.trackinfo.forEach(track => {

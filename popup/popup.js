@@ -1,5 +1,5 @@
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
-import { Release } from '../src/modules/release.js';
+import { Release, releaseToCsvObject } from '../src/modules/release.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;
@@ -12,38 +12,6 @@ saveCsvBtn.onclick = () => {
     `discogs-${release.artist}-${release.title}`
   );
 };
-
-function releaseToCsvObject(release) {
-  let tracks = '';
-
-  release.trackinfo.forEach(track => {
-    tracks += track.title + ' ' + track.durationText + "\r";
-  });
-
-  // escape " symbols
-  let notes = release.about ? release.about.replace('"', '""') : '';
-  let date = [
-    release.date.getFullYear(),
-    release.date.getMonth().toString().padStart(2, 0),
-    release.date.getDate().toString().padStart(2, 0)
-  ].join('-');
-
-  let csvObject = {
-    artist: release.artist,
-    title: `"${release.title}"`,
-    label: `Not On Label (${release.artist} Self-released)`,
-    catno: 'none',
-    format: 'File',
-    genre: 'Electronic',
-    style: 'Industrial, Dark Ambient',
-    tracks: `"${tracks}"`,
-    notes: `"${notes}"`,
-    date: date,
-    images: release.coverSrc.big
-  };
-
-  return objectToCsv(csvObject);
-}
 
 function outputRelease(release) {
   let releaseCover = document.getElementById('release-cover');

@@ -27,3 +27,35 @@ export class Track {
     this.durationText = durationToSeconds(Math.trunc(this.duration));
   }
 }
+
+export function releaseToCsvObject(release) {
+  let tracks = '';
+
+  release.trackinfo.forEach(track => {
+    tracks += track.title + ' ' + track.durationText + "\r";
+  });
+
+  // escape " symbols
+  let notes = release.about ? release.about.replace('"', '""') : '';
+  let date = [
+    release.date.getFullYear(),
+    release.date.getMonth().toString().padStart(2, 0),
+    release.date.getDate().toString().padStart(2, 0)
+  ].join('-');
+
+  let csvObject = {
+    artist: release.artist,
+    title: `"${release.title}"`,
+    label: `Not On Label (${release.artist} Self-released)`,
+    catno: 'none',
+    format: 'File',
+    genre: 'Electronic',
+    style: 'Industrial, Dark Ambient',
+    tracks: `"${tracks}"`,
+    notes: `"${notes}"`,
+    date: date,
+    images: release.coverSrc.big
+  };
+
+  return csvObject;
+}

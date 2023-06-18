@@ -6,6 +6,25 @@ body {
 }
 
 #release-tracklist {
-  height: 200px;
   padding: 0 var(--bs-card-img-overlay-padding);
 }
+
+.artist-lines-1.title-lines-1 #release-tracklist { height: 240px; }
+.artist-lines-1.title-lines-2 #release-tracklist { height: 240px; }
+.artist-lines-1.title-lines-3 #release-tracklist { height: 240px; }
+
+.artist-lines-2.title-lines-1 #release-tracklist { height: 200px; }
+.artist-lines-2.title-lines-2 #release-tracklist { height: 200px; }
+.artist-lines-2.title-lines-3 #release-tracklist { height: 200px; }
+
+.artist-lines-3.title-lines-1 #release-tracklist { height: 190px; }
+.artist-lines-3.title-lines-2 #release-tracklist { height: 190px; }
+.artist-lines-3.title-lines-3 #release-tracklist { height: 190px; }
+
+.artist-lines-4.title-lines-1 #release-tracklist { height: 190px; }
+.artist-lines-4.title-lines-2 #release-tracklist { height: 190px; }
+.artist-lines-4.title-lines-3 #release-tracklist { height: 190px; }
+
+.artist-lines-5.title-lines-1 #release-tracklist { height: 190px; }
+.artist-lines-5.title-lines-2 #release-tracklist { height: 190px; }
+.artist-lines-5.title-lines-3 #release-tracklist { height: 190px; }

@@ -14,7 +14,14 @@ saveCsvBtn.onclick = () => {
   );
 };
 
+function countLines(el) {
+  let divHeight = el.offsetHeight
+  let lineHeight = parseInt(getComputedStyle(el).lineHeight);
+  return Math.round(divHeight / lineHeight);
+}
+
 function outputRelease(release) {
+  let releaseEl = document.getElementById('release');
   let releaseCover = document.getElementById('release-cover');
   let releaseArtist = document.getElementById('release-artist');
   let releaseTitle = document.getElementById('release-title');
@@ -25,6 +32,22 @@ function outputRelease(release) {
   releaseArtist.innerHTML = release.artist;
   releaseTitle.innerHTML = release.title;
   releaseDate.innerHTML = release.date.getFullYear();
+
+  let countArtistLines = countLines(releaseArtist);
+  let countTitleLines = countLines(releaseTitle);
+
+  switch (countArtistLines) {
+    case 3:
+    case 4:
+    case 5:
+      releaseArtist.classList.add('display-6');
+      break;
+  }
+
+  releaseEl.classList.add(
+    'artist-lines-' + countArtistLines,
+    'title-lines-' + countTitleLines
+  );
 
   let trackinfo = '';
 

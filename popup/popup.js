@@ -1,5 +1,6 @@
-import {objectToCsv, downloadCsv} from '../src/modules/csv.js';
-import {Release} from '../src/modules/classes.js';
+import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
+import { Release } from '../src/modules/classes.js';
+import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;
 let saveCsvBtn = document.getElementById('save-csv');
@@ -87,12 +88,6 @@ function createRelease(TralbumData, coverSrc) {
 
   return new Release(release);
 }
-
-async function getCurrentTab() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
-  return tab;
-};
 
 async function loadRelease() {
   getCurrentTab().then((tab) => {

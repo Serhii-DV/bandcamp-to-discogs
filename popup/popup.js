@@ -1,60 +1,47 @@
-import {csvContentFromArray, downloadCsvContent} from '../src/modules/csv.js';
+import {objectToCsv, downloadCsv} from '../src/modules/csv.js';
 import {Release} from '../src/modules/classes.js';
 
-let exportCsv = document.getElementById('export-csv');
+let release;
+let saveCsvBtn = document.getElementById('save-csv');
 
-exportCsv.onclick = function () {
-  chrome.storage.local.get(['release'], function(result) {
-    let release = new Release(result.release);
-
-    let rows =[];
-
-    rows.push([
-      'artist',
-      'title',
-      'label',
-      'catno',
-      'format',
-      'genre',
-      'style',
-      'tracks',
-      'notes',
-      'date',
-      'images',
-    ]);
-
-    let tracks = '';
-
-    release.trackinfo.forEach(track => {
-      tracks += track.title + ' ' + track.durationText + "\r";
-    });
-
-    // escape " symbols
-    let notes = release.about ? release.about.replace('"', '""') : '';
-    let date = [
-      release.date.getFullYear(),
-      release.date.getMonth().toString().padStart(2, 0),
-      release.date.getDate().toString().padStart(2, 0)
-    ].join('-');
-
-    rows.push([
-      release.artist,
-      `"${release.title}"`,
-      `Not On Label (${release.artist} Self-released)`,
-      'none',
-      'File',
-      'Electronic',
-      '"Industrial, Dark Ambient"',
-      `"${tracks}"`,
-      `"${notes}"`,
-      date,
-      release.coverSrc.big,
-    ]);
-
-    let csvContent = csvContentFromArray(rows);
-    downloadCsvContent(csvContent, `discogs-${release.artist}-${release.title}`);
-  });
+saveCsvBtn.onclick = () => {
+  downloadCsv(
+    releaseToCsv(release),
+    `discogs-${release.artist}-${release.title}`
+  );
 };
+
+function releaseToCsv(release) {
+  let tracks = '';
+
+  release.trackinfo.forEach(track => {
+    tracks += track.title + ' ' + track.durationText + "\r";
+  });
+
+  // escape " symbols
+  let notes = release.about ? release.about.replace('"', '""') : '';
+  let date = [
+    release.date.getFullYear(),
+    release.date.getMonth().toString().padStart(2, 0),
+    release.date.getDate().toString().padStart(2, 0)
+  ].join('-');
+
+  let csvObject = {
+    artist: release.artist,
+    title: `"${release.title}"`,
+    label: `Not On Label (${release.artist} Self-released)`,
+    catno: 'none',
+    format: 'File',
+    genre: 'Electronic',
+    style: 'Industrial, Dark Ambient',
+    tracks: `"${tracks}"`,
+    notes: `"${notes}"`,
+    date: date,
+    images: release.coverSrc.big
+  };
+
+  return objectToCsv(csvObject);
+}
 
 function outputRelease(release) {
   let releaseCover = document.getElementById('release-cover');
@@ -108,7 +95,7 @@ async function getCurrentTab() {
   return tab;
 };
 
-async function getRelease() {
+async function loadRelease() {
   let tabPromise = getCurrentTab();
 
   tabPromise.then((tab) => {
@@ -120,12 +107,13 @@ async function getRelease() {
     });
 
     chrome.tabs.sendMessage(tab.id, {type:'getRelease'}, (response) => {
-      outputRelease(createRelease(
+      release = createRelease(
         response.TralbumData,
         response.coverSrc
-      ));
+      );
+      outputRelease(release);
     });
   });
 }
 
-getRelease();
+loadRelease();

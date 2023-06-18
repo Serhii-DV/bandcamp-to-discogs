@@ -4,8 +4,6 @@ let TralbumData = {};
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.type === 'getRelease') {
-    console.log('CONTENT LISTENER RELEASE');
-    console.log(TralbumData);
     sendResponse({
       TralbumData: TralbumData,
       coverSrc: {

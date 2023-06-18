@@ -88,7 +88,6 @@ function createRelease(TralbumData, coverSrc) {
   return new Release(release);
 }
 
-
 async function getCurrentTab() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
@@ -96,16 +95,7 @@ async function getCurrentTab() {
 };
 
 async function loadRelease() {
-  let tabPromise = getCurrentTab();
-
-  tabPromise.then((tab) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: () => {
-        document.querySelector('#menubar').style.backgroundColor = "red";
-      }
-    });
-
+  getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, {type:'getRelease'}, (response) => {
       release = createRelease(
         response.TralbumData,

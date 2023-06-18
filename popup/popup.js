@@ -1,5 +1,6 @@
+import { tralbumDataToRelease } from '../src/modules/bandcamp.js';
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
-import { Release, releaseToCsvObject } from '../src/modules/release.js';
+import { releaseToCsvObject } from '../src/modules/release.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;
@@ -34,34 +35,10 @@ function outputRelease(release) {
   releaseTracklist.innerHTML = trackinfo;
 }
 
-function createRelease(TralbumData, coverSrc) {
-  let release = {
-    artist: TralbumData.artist,
-    title: TralbumData.current.title,
-    release_date: TralbumData.album_release_date,
-    trackinfo: [],
-    url: TralbumData.url,
-    about: TralbumData.current.about,
-    credits: TralbumData.current.credits,
-    type: TralbumData.current.type,
-    coverSrc: coverSrc
-  }
-
-  TralbumData.trackinfo.forEach(track => {
-    release.trackinfo.push({
-      num: track.track_num,
-      title: track.title,
-      duration: track.duration,
-    });
-  });
-
-  return new Release(release);
-}
-
 async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, {type:'getRelease'}, (response) => {
-      release = createRelease(
+      release = tralbumDataToRelease(
         response.TralbumData,
         response.coverSrc
       );

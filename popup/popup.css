@@ -9,22 +9,22 @@ body {
   padding: 0 var(--bs-card-img-overlay-padding);
 }
 
-.artist-lines-1.title-lines-1 #release-tracklist { height: 240px; }
-.artist-lines-1.title-lines-2 #release-tracklist { height: 240px; }
-.artist-lines-1.title-lines-3 #release-tracklist { height: 240px; }
+.lines-a1-t1 #release-tracklist { height: 240px; }
+.lines-a1-t2 #release-tracklist { height: 210px; }
+.lines-a1-t3 #release-tracklist { height: 210px; }
 
-.artist-lines-2.title-lines-1 #release-tracklist { height: 200px; }
-.artist-lines-2.title-lines-2 #release-tracklist { height: 200px; }
-.artist-lines-2.title-lines-3 #release-tracklist { height: 200px; }
+.lines-a2-t1 #release-tracklist { height: 200px; }
+.lines-a2-t2 #release-tracklist { height: 200px; }
+.lines-a2-t3 #release-tracklist { height: 200px; }
 
-.artist-lines-3.title-lines-1 #release-tracklist { height: 190px; }
-.artist-lines-3.title-lines-2 #release-tracklist { height: 190px; }
-.artist-lines-3.title-lines-3 #release-tracklist { height: 190px; }
+.lines-a3-t1 #release-tracklist { height: 220px; }
+.lines-a3-t2 #release-tracklist { height: 190px; }
+.lines-a3-t3 #release-tracklist { height: 190px; }
 
-.artist-lines-4.title-lines-1 #release-tracklist { height: 190px; }
-.artist-lines-4.title-lines-2 #release-tracklist { height: 190px; }
-.artist-lines-4.title-lines-3 #release-tracklist { height: 190px; }
+.lines-a4-t1 #release-tracklist { height: 190px; }
+.lines-a4-t2 #release-tracklist { height: 190px; }
+.lines-a4-t3 #release-tracklist { height: 190px; }
 
-.artist-lines-5.title-lines-1 #release-tracklist { height: 190px; }
-.artist-lines-5.title-lines-2 #release-tracklist { height: 190px; }
-.artist-lines-5.title-lines-3 #release-tracklist { height: 190px; }
+.lines-a5-t1 #release-tracklist { height: 190px; }
+.lines-a5-t2 #release-tracklist { height: 190px; }
+.lines-a5-t3 #release-tracklist { height: 190px; }

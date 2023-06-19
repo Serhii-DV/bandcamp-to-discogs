@@ -44,10 +44,7 @@ function outputRelease(release) {
       break;
   }
 
-  releaseEl.classList.add(
-    'artist-lines-' + countArtistLines,
-    'title-lines-' + countTitleLines
-  );
+  releaseEl.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
 
   let trackinfo = '';
 

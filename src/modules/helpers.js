@@ -23,3 +23,14 @@ function transliterate(word) {
     return a[char] || char;
   }).join("");
 }
+
+/** @see https://flexiple.com/javascript/javascript-capitalize-first-letter/ */
+export function eachWordFirstLetterToUpperCase(str) {
+  const arr = str.split(" ");
+
+  for (var i = 0; i < arr.length; i++) {
+      arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+  }
+
+  return arr.join(" ");
+}

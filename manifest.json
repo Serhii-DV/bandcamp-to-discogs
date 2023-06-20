@@ -38,7 +38,7 @@
   "web_accessible_resources": [
     {
       "resources": [ "bandcamp/script.js" ],
-      "matches": [ "https://*/*" ]
+      "matches": ["https://*.bandcamp.com/*"]
     }
   ]
 }

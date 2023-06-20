@@ -83,7 +83,7 @@ async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, {type:'getRelease'}, (response) => {
 
-      if (response === undefined) {
+      if (response === undefined || Object.keys(response).length === 0) {
         hideRelease();
         disableButtons();
         showMessage();

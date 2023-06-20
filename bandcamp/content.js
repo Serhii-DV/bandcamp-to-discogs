@@ -2,16 +2,22 @@
 
 let TralbumData = {};
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.type === 'getRelease') {
-    sendResponse({
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  let response;
+
+  if (TralbumData !== undefined && request.type === 'getRelease') {
+    response = {
       TralbumData: TralbumData,
       coverSrc: {
         small: document.querySelector('link[rel~="shortcut"]').href,
         big: document.querySelector('link[rel="image_src"]').href,
       }
-    });
+    };
   }
+
+  sendResponse(response);
+
+  return true;
 });
 
 // Injecting script.js

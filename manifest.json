@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Bandcamp2Discogs",
+  "name": "Bandcamp To Discogs (B2D)",
   "version": "0.1",
-  "description": "Generates a CSV file from the Bandcamp page. The CSV file can be imported into Discogs.",
+  "description": "Generates a CSV file for the Bandcamp artist release. The CSV file can be imported into Discogs as a draft.",
   "permissions": [
     "tabs",
     "activeTab",

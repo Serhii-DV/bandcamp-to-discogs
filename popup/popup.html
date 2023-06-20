@@ -14,10 +14,26 @@
       <div id="release-tracklist" class="card-text overflow-auto position-absolute bottom-0 start-0 end-0"></div>
     </div>
   </div>
-  <div class="d-grid gap-0" role="group" aria-label="Release controls">
-    <button id="save-csv" class="btn btn-dark rounded-0" type="button">Save as Discogs csv</button>
-    <a id="discogsCsvToDraft" class="btn btn-dark rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button">Discogs draft import</a>
+  <!-- <div class="d-grid gap-0" role="group" aria-label="Release controls"> -->
+  <div class="btn-group d-flex">
+    <button id="save-csv" class="btn btn-dark rounded-0" type="button" title="Save as Discogs CSV file">Save draft</button>
+    <a id="discogsCsvToDraft" class="btn btn-dark rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">Import draft</a>
+    <button id="about" class="btn btn-dark rounded-0" type="button" data-bs-toggle="modal" data-bs-target="#modal-about" title="About the extension">About</button>
   </div>
+  <div class="modal fade modal-fullscreen" id="modal-about" tabindex="-1" aria-labelledby="modal-about" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content rounded-0">
+        <div class="modal-header">
+          <h5 class="modal-title">About B2D</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Bandcamp to Discogs (B2D) - is a Google Chrome extension that helps to convert a Bandcamp artist release page into Discogs draft csv file.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../assets/bootstrap/bootstrap.bundle.5.3.0.min.js"></script>
   <script type="module" src="popup.js"></script>
 </body>
 </html>

@@ -5,6 +5,13 @@ import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;
 let saveCsvBtn = document.getElementById('save-csv');
+let releaseEl = document.getElementById('release');
+let releaseCover = document.getElementById('release-cover');
+let releaseArtist = document.getElementById('release-artist');
+let releaseTitle = document.getElementById('release-title');
+let releaseDate = document.getElementById('release-year');
+let releaseTracklist = document.getElementById('release-tracklist');
+let message = document.getElementById('message');
 
 saveCsvBtn.onclick = () => {
   let csvObject = releaseToCsvObject(release);
@@ -21,13 +28,6 @@ function countLines(el) {
 }
 
 function outputRelease(release) {
-  let releaseEl = document.getElementById('release');
-  let releaseCover = document.getElementById('release-cover');
-  let releaseArtist = document.getElementById('release-artist');
-  let releaseTitle = document.getElementById('release-title');
-  let releaseDate = document.getElementById('release-year');
-  let releaseTracklist = document.getElementById('release-tracklist');
-
   releaseCover.src = release.coverSrc.big;
   releaseArtist.innerHTML = release.artist;
   releaseTitle.innerHTML = release.title;
@@ -55,14 +55,50 @@ function outputRelease(release) {
   releaseTracklist.innerHTML = trackinfo;
 }
 
+function hideRelease() {
+  releaseEl.classList.add('visually-hidden');
+}
+
+function showRelease() {
+  releaseEl.classList.remove('visually-hidden');
+}
+
+function showMessage() {
+  message.classList.remove('visually-hidden');
+}
+
+function hideMessage() {
+  message.classList.add('visually-hidden');
+}
+
+function disableButtons() {
+  saveCsvBtn.classList.add('disabled');
+}
+
+function enableButtons() {
+  saveCsvBtn.classList.remove('disabled');
+}
+
 async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, {type:'getRelease'}, (response) => {
+
+      if (response === undefined) {
+        hideRelease();
+        disableButtons();
+        showMessage();
+        return;
+      }
+
       release = tralbumDataToRelease(
         response.TralbumData,
         response.coverSrc
       );
+
       outputRelease(release);
+      showRelease();
+      enableButtons();
+      hideMessage();
     });
   });
 }

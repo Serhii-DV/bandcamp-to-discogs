@@ -36,7 +36,7 @@ export function releaseToCsvObject(release) {
   });
 
   // escape " symbols
-  let notes = release.about ? release.about.replace('"', '""') : '';
+  let notes = release.about ? release.about.replaceAll('"', '""') : '';
   let date = [
     release.date.getFullYear(),
     release.date.getMonth().toString().padStart(2, 0),

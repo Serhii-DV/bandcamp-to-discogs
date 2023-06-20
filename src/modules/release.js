@@ -29,11 +29,13 @@ export class Track {
 }
 
 export function releaseToCsvObject(release) {
-  let tracks = '';
+  let tracks = [];
 
   release.trackinfo.forEach(track => {
-    tracks += track.title + ' ' + track.durationText + "\r";
+    tracks.push(track.title + ' ' + track.durationText);
   });
+
+  let tracksStr = tracks.join("\r");
 
   // escape " symbols
   let notes = release.about ? release.about.replaceAll('"', '""') : '';
@@ -50,8 +52,8 @@ export function releaseToCsvObject(release) {
     catno: 'none',
     format: 'File',
     genre: 'Electronic',
-    style: 'Industrial, Dark Ambient',
-    tracks: `"${tracks}"`,
+    style: '"Industrial, Dark Ambient"',
+    tracks: `"${tracksStr}"`,
     notes: `"${notes}"`,
     date: date,
     images: release.coverSrc.big

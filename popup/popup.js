@@ -1,6 +1,6 @@
 import { tralbumDataToRelease } from '../src/modules/bandcamp.js';
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
-import { releaseToCsvObject } from '../src/modules/release.js';
+import { releaseToCsvObject } from '../src/modules/discogs.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;

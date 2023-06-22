@@ -1,4 +1,4 @@
-import { tralbumDataToRelease } from '../src/modules/bandcamp.js';
+import { bandcampDataToRelease } from '../src/modules/bandcamp.js';
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
 import { releaseToCsvObject } from '../src/modules/discogs.js';
 import { getCurrentTab } from '../src/modules/tab.js';
@@ -90,8 +90,9 @@ async function loadRelease() {
         return;
       }
 
-      release = tralbumDataToRelease(
+      release = bandcampDataToRelease(
         response.TralbumData,
+        response.BandData,
         response.coverSrc
       );
 

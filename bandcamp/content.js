@@ -1,6 +1,6 @@
 'use strict';
 
-let TralbumData = {};
+let TralbumData, BandData = {};
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let response;
@@ -8,10 +8,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (TralbumData !== undefined && request.type === 'getBandcampData') {
     response = {
       TralbumData: TralbumData,
+      BandData: BandData,
       coverSrc: {
         small: document.querySelector('link[rel~="shortcut"]').href,
         big: document.querySelector('link[rel="image_src"]').href,
-      }
+      },
     };
   }
 
@@ -28,7 +29,8 @@ s.onload = () => {
   s.remove();
 };
 
-window.addEventListener('BC_TralbumData', (e) => {
+window.addEventListener('BC_Data', (e) => {
   // Getting data from script.js
-  TralbumData = e.detail;
+  TralbumData = e.detail.TralbumData;
+  BandData = e.detail.BandData;
 });

@@ -1,9 +1,10 @@
 import { Release } from "./release.js";
 
-export function tralbumDataToRelease(TralbumData, coverSrc) {
+export function bandcampDataToRelease(TralbumData, BandData, coverSrc) {
   let release = {
     artist: TralbumData.artist,
     title: TralbumData.current.title,
+    label: BandData.name,
     release_date: TralbumData.album_release_date,
     trackinfo: [],
     url: TralbumData.url,

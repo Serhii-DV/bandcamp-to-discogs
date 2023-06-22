@@ -4,6 +4,7 @@ export class Release {
   constructor(release) {
     this.artist = release.artist;
     this.title = release.title;
+    this.label = release.label;
     this.date = new Date(release.release_date);
     this.trackinfo = [];
 

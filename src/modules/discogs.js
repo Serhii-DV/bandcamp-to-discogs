@@ -14,9 +14,9 @@ export function releaseToCsvObject(release) {
   let date = release.date.toISOString().split('T')[0];
 
   let csvObject = {
-    artist: release.artist,
+    artist: `"${release.artist}"`,
     title: `"${release.title}"`,
-    label: `Not On Label (${release.artist} Self-released)`,
+    label: `"${release.label}"`,
     catno: 'none',
     format: 'File',
     genre: 'Electronic',

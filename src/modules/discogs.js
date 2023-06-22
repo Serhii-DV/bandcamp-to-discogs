@@ -11,11 +11,7 @@ export function releaseToCsvObject(release) {
 
   // escape " symbols
   let notes = release.about ? release.about.replaceAll('"', '""') : '';
-  let date = [
-    release.date.getFullYear(),
-    release.date.getMonth().toString().padStart(2, 0),
-    release.date.getDate().toString().padStart(2, 0)
-  ].join('-');
+  let date = release.date.toISOString().split('T')[0];
 
   let csvObject = {
     artist: release.artist,

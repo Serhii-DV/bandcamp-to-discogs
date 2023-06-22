@@ -5,7 +5,7 @@ let TralbumData = {};
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let response;
 
-  if (TralbumData !== undefined && request.type === 'getRelease') {
+  if (TralbumData !== undefined && request.type === 'getBandcampData') {
     response = {
       TralbumData: TralbumData,
       coverSrc: {

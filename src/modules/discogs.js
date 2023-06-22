@@ -29,3 +29,25 @@ export function releaseToCsvObject(release) {
 
   return csvObject;
 }
+
+export function csvObjectToHtmlTableElement(csvObject) {
+  const table = document.createElement("table");
+  table.classList.add("table", "table-striped", "table-bordered");
+
+  for (const [key, value] of Object.entries(csvObject)) {
+    const row = document.createElement("tr");
+    const keyCell = document.createElement("th");
+    const valueCell = document.createElement("td");
+
+    keyCell.textContent = key;
+    valueCell.innerHTML = value
+      .replaceAll("\n\r", "<br/>")
+      .replaceAll("\r", "<br/>");
+
+    row.appendChild(keyCell);
+    row.appendChild(valueCell);
+    table.appendChild(row);
+  }
+
+  return table;
+}

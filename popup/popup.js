@@ -1,17 +1,27 @@
 import { bandcampDataToRelease } from '../src/modules/bandcamp.js';
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
-import { releaseToCsvObject } from '../src/modules/discogs.js';
+import { csvObjectToHtmlTableElement, releaseToCsvObject } from '../src/modules/discogs.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;
-let downloadCsvBtn = document.getElementById('download-csv');
-let releaseEl = document.getElementById('release');
-let releaseCover = document.getElementById('release-cover');
-let releaseArtist = document.getElementById('release-artist');
-let releaseTitle = document.getElementById('release-title');
-let releaseDate = document.getElementById('release-year');
-let releaseTracklist = document.getElementById('release-tracklist');
-let message = document.getElementById('message');
+const previewDataBtn = document.getElementById('preview-data');
+const modalPreviewData = document.getElementById('modal-preview-data');
+const downloadCsvBtn = document.getElementById('download-csv');
+const releaseEl = document.getElementById('release');
+const releaseCover = document.getElementById('release-cover');
+const releaseArtist = document.getElementById('release-artist');
+const releaseTitle = document.getElementById('release-title');
+const releaseDate = document.getElementById('release-year');
+const releaseTracklist = document.getElementById('release-tracklist');
+const message = document.getElementById('message');
+
+previewDataBtn.onclick = () => {
+  const csvObject = releaseToCsvObject(release);
+  const tableElement = csvObjectToHtmlTableElement(csvObject);
+  const modalBody = modalPreviewData.getElementsByClassName('modal-body')[0];
+
+  modalBody.appendChild(tableElement);
+};
 
 downloadCsvBtn.onclick = () => {
   let csvObject = releaseToCsvObject(release);

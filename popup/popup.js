@@ -1,6 +1,6 @@
-import { bandcampDataToRelease } from '../src/modules/bandcamp.js';
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
 import { csvObjectToHtmlTableElement, releaseToCsvObject } from '../src/modules/discogs.js';
+import { Release } from '../src/modules/release.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;
@@ -15,23 +15,23 @@ const releaseDate = document.getElementById('release-year');
 const releaseTracklist = document.getElementById('release-tracklist');
 const message = document.getElementById('message');
 
-previewDataBtn.onclick = () => {
+previewDataBtn.addEventListener('click', () => {
   const csvObject = releaseToCsvObject(release);
   const tableElement = csvObjectToHtmlTableElement(csvObject);
-  const modalBody = modalPreviewData.getElementsByClassName('modal-body')[0];
+  const modalBody = modalPreviewData.querySelector('.modal-body');
 
   modalBody.appendChild(tableElement);
-};
+});
 
-downloadCsvBtn.onclick = () => {
+downloadCsvBtn.addEventListener('click', () => {
   let csvObject = releaseToCsvObject(release);
   downloadCsv(
     objectToCsv(csvObject),
     `discogs-${release.artist}-${release.title}`
   );
-};
+});
 
-function countLines(el) {
+function countLinesInHtmlElement(el) {
   let divHeight = el.offsetHeight
   let lineHeight = parseInt(getComputedStyle(el).lineHeight);
   return Math.round(divHeight / lineHeight);
@@ -43,22 +43,15 @@ function outputRelease(release) {
   releaseTitle.innerHTML = release.title;
   releaseDate.innerHTML = release.date.getFullYear();
 
-  let countArtistLines = countLines(releaseArtist);
-  let countTitleLines = countLines(releaseTitle);
+  let countArtistLines = countLinesInHtmlElement(releaseArtist);
+  let countTitleLines = countLinesInHtmlElement(releaseTitle);
 
-  switch (countArtistLines) {
-    case 3:
-    case 4:
-    case 5:
-      releaseArtist.classList.add('display-6');
-      break;
-  }
-
+  releaseArtist.classList.toggle('display-6', countArtistLines >= 3 && countArtistLines <= 5);
   releaseEl.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
 
   let trackinfo = '';
 
-  release.trackinfo.forEach(track => {
+  release.tracks.forEach(track => {
     trackinfo += `${track.num}. ${track.title} (${track.durationText})<br>`;
   });
 
@@ -100,7 +93,7 @@ async function loadRelease() {
         return;
       }
 
-      release = bandcampDataToRelease(
+      release = Release.fromBandcampData(
         response.TralbumData,
         response.BandData,
         response.coverSrc

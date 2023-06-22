@@ -3,7 +3,7 @@ import { eachWordFirstLetterToUpperCase } from "./helpers.js";
 export function releaseToCsvObject(release) {
   let tracks = [];
 
-  release.trackinfo.forEach(track => {
+  release.tracks.forEach(track => {
     tracks.push(eachWordFirstLetterToUpperCase(track.title) + ' ' + track.durationText);
   });
 

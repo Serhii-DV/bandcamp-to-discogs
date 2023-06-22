@@ -1,30 +1,56 @@
-import {durationToSeconds} from './helpers.js';
+import { str_pad_left } from './helpers.js';
 
 export class Release {
-  constructor(release) {
-    this.artist = release.artist;
-    this.title = release.title;
-    this.label = release.label;
-    this.date = new Date(release.release_date);
-    this.trackinfo = [];
+  constructor(artist, title, label, releaseDate, tracks, url, about, credits, type, coverSrc) {
+    this.artist = artist;
+    this.title = title;
+    this.label = label;
+    this.date = new Date(releaseDate);
+    this.tracks = tracks;
+    this.url = url;
+    this.about = about;
+    this.credits = credits;
+    this.type = type;
+    this.coverSrc = coverSrc;
+  }
 
-    release.trackinfo.forEach(track => {
-      this.trackinfo.push(new Track(track));
-    });
+  static fromBandcampData(TralbumData, BandData, coverSrc) {
+    const { artist, current, album_release_date, url } = TralbumData;
+    const { title, about, credits, type } = current;
 
-    this.url = release.url;
-    this.about = release.about;
-    this.credits = release.credits;
-    this.type = release.type;
-    this.coverSrc = release.coverSrc;
+    let tracks = TralbumData.trackinfo.map(track => new Track(
+      track.track_num,
+      track.title,
+      track.duration
+    ));
+
+    return new Release(
+      artist,
+      title,
+      BandData.name,
+      album_release_date,
+      tracks,
+      url,
+      about,
+      credits,
+      type,
+      coverSrc
+    );
   }
 }
 
 export class Track {
-  constructor(data) {
-    this.num = data.num;
-    this.title = data.title;
-    this.duration = data.duration;
-    this.durationText = durationToSeconds(Math.trunc(this.duration));
+  constructor(num, title, duration) {
+    this.num = num;
+    this.title = title;
+    this.duration = duration;
+    this.durationText = Track.durationToSeconds(Math.trunc(this.duration));
+  }
+
+  static durationToSeconds(duration) {
+    let minutes = Math.floor(duration / 60);
+    let seconds = duration % 60;
+
+    return str_pad_left(minutes, '0', 2) + ':' + str_pad_left(seconds, '0', 2);
   }
 }

@@ -4,7 +4,7 @@ import { releaseToCsvObject } from '../src/modules/discogs.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;
-let saveCsvBtn = document.getElementById('save-csv');
+let downloadCsvBtn = document.getElementById('download-csv');
 let releaseEl = document.getElementById('release');
 let releaseCover = document.getElementById('release-cover');
 let releaseArtist = document.getElementById('release-artist');
@@ -13,7 +13,7 @@ let releaseDate = document.getElementById('release-year');
 let releaseTracklist = document.getElementById('release-tracklist');
 let message = document.getElementById('message');
 
-saveCsvBtn.onclick = () => {
+downloadCsvBtn.onclick = () => {
   let csvObject = releaseToCsvObject(release);
   downloadCsv(
     objectToCsv(csvObject),
@@ -72,11 +72,11 @@ function hideMessage() {
 }
 
 function disableButtons() {
-  saveCsvBtn.classList.add('disabled');
+  downloadCsvBtn.classList.add('disabled');
 }
 
 function enableButtons() {
-  saveCsvBtn.classList.remove('disabled');
+  downloadCsvBtn.classList.remove('disabled');
 }
 
 async function loadRelease() {

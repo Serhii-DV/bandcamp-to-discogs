@@ -71,6 +71,18 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <ul class="nav nav-tabs" id="preview-data-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="discogs-csv-tab" data-bs-toggle="tab" data-bs-target="#discogs-csv-tab-pane" type="button" role="tab" aria-controls="discogs-csv-tab-pane" aria-selected="true">Discogs CSV</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="bandcamp-data-tab" data-bs-toggle="tab" data-bs-target="#bandcamp-data-tab-pane" type="button" role="tab" aria-controls="bandcamp-data-tab-pane" aria-selected="false">Bandcamp Data</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="preview-data-tab-content">
+            <div class="tab-pane fade show active" id="discogs-csv-tab-pane" role="tabpanel" aria-labelledby="discogs-csv-tab" tabindex="0"></div>
+            <div class="tab-pane fade" id="bandcamp-data-tab-pane" role="tabpanel" aria-labelledby="bandcamp-data-tab" tabindex="0"></div>
+          </div>
         </div>
       </div>
     </div>

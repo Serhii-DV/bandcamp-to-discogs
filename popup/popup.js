@@ -1,5 +1,5 @@
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
-import { objectToHtmlTableElement, releaseToCsvObject } from '../src/modules/discogs.js';
+import { objectToHtmlElement, releaseToCsvObject } from '../src/modules/discogs.js';
 import { Release } from '../src/modules/release.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
@@ -16,11 +16,15 @@ const releaseTracklist = document.getElementById('release-tracklist');
 const message = document.getElementById('message');
 
 previewDataBtn.addEventListener('click', () => {
-  const csvObject = releaseToCsvObject(release);
-  const tableElement = objectToHtmlTableElement(csvObject);
-  const modalBody = modalPreviewData.querySelector('.modal-body');
+  const discogsCsvTabPane = modalPreviewData.querySelector('#discogs-csv-tab-pane');
+  const bandcampDataTabPane = modalPreviewData.querySelector('#bandcamp-data-tab-pane');
 
-  modalBody.appendChild(tableElement);
+  const csvObject = releaseToCsvObject(release);
+  const tableElement = objectToHtmlElement(csvObject);
+  discogsCsvTabPane.appendChild(tableElement);
+
+  const tableReleaseElement = objectToHtmlElement(release);
+  bandcampDataTabPane.appendChild(tableReleaseElement);
 });
 
 downloadCsvBtn.addEventListener('click', () => {

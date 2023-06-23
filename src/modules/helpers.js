@@ -1,3 +1,9 @@
+/**
+ * @param {String} string
+ * @param {String} pad
+ * @param {Number} length
+ * @returns {String}
+ */
 export function padStringLeft(string, pad, length) {
   const padding = string.length >= length ? '' : pad.repeat(length - string.length);
   return padding + string;

@@ -65,6 +65,11 @@ export class Release {
 }
 
 export class Track {
+  /**
+   * @param {String} num
+   * @param {String} title
+   * @param {String} duration
+   */
   constructor(num, title, duration) {
     this.num = num;
     this.title = title;
@@ -72,10 +77,14 @@ export class Track {
     this.durationText = Track.durationToSeconds(Math.trunc(this.duration));
   }
 
+  /**
+   * @param {Number} duration
+   * @returns {String}
+   */
   static durationToSeconds(duration) {
     let minutes = Math.floor(duration / 60);
     let seconds = duration % 60;
 
-    return padStringLeft(minutes, '0', 2) + ':' + padStringLeft(seconds, '0', 2);
+    return padStringLeft(minutes.toString(), '0', 2) + ':' + padStringLeft(seconds.toString(), '0', 2);
   }
 }

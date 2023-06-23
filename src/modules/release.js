@@ -1,11 +1,25 @@
 import { padStringLeft } from './helpers.js';
 
 export class Release {
-  constructor(artist, title, label, releaseDate, tracks, url, about, credits, type, coverSrc, keywords) {
+  /**
+   *
+   * @param {String} artist
+   * @param {String} title
+   * @param {String} label
+   * @param {Date} date
+   * @param {Array} tracks
+   * @param {String} url
+   * @param {String} about
+   * @param {String} credits
+   * @param {String} type
+   * @param {Object} coverSrc
+   * @param {Array} keywords
+   */
+  constructor(artist, title, label, date, tracks, url, about, credits, type, coverSrc, keywords) {
     this.artist = artist;
     this.title = title;
     this.label = label;
-    this.date = new Date(releaseDate);
+    this.date = date;
     this.tracks = tracks;
     this.url = url;
     this.about = about;
@@ -15,6 +29,13 @@ export class Release {
     this.keywords = keywords;
   }
 
+  /**
+   * @param {Object} TralbumData
+   * @param {Object} BandData
+   * @param {Object} SchemaData
+   * @param {Object} coverSrc
+   * @returns {Release}
+   */
   static fromBandcampData(TralbumData, BandData, SchemaData, coverSrc) {
     const { artist, current, album_release_date, url } = TralbumData;
     const { title, about, credits, type } = current;
@@ -30,7 +51,7 @@ export class Release {
       artist,
       title,
       BandData.name,
-      album_release_date,
+      new Date(album_release_date),
       tracks,
       url,
       about,

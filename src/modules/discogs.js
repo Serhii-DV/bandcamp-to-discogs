@@ -30,11 +30,11 @@ export function releaseToCsvObject(release) {
   return csvObject;
 }
 
-export function csvObjectToHtmlTableElement(csvObject) {
+export function objectToHtmlTableElement(data) {
   const table = document.createElement("table");
-  table.classList.add("table", "table-striped", "table-bordered");
+  table.classList.add("table", "table-sm", "table-striped", "table-bordered");
 
-  for (const [key, value] of Object.entries(csvObject)) {
+  for (const [key, value] of Object.entries(data)) {
     const row = document.createElement("tr");
     const keyCell = document.createElement("th");
     const valueCell = document.createElement("td");

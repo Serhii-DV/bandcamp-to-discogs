@@ -1,5 +1,5 @@
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
-import { csvObjectToHtmlTableElement, releaseToCsvObject } from '../src/modules/discogs.js';
+import { objectToHtmlTableElement, releaseToCsvObject } from '../src/modules/discogs.js';
 import { Release } from '../src/modules/release.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
@@ -17,7 +17,7 @@ const message = document.getElementById('message');
 
 previewDataBtn.addEventListener('click', () => {
   const csvObject = releaseToCsvObject(release);
-  const tableElement = csvObjectToHtmlTableElement(csvObject);
+  const tableElement = objectToHtmlTableElement(csvObject);
   const modalBody = modalPreviewData.querySelector('.modal-body');
 
   modalBody.appendChild(tableElement);

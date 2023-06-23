@@ -52,10 +52,14 @@ export function objectToHtmlElement(data) {
       valueCell.appendChild(objectToHtmlElement(value));
     } else if (isArray(value)) {
       value.forEach(item => {
-        valueCell.appendChild(objectToHtmlElement(item));
+        if (isString(item)) {
+          valueCell.textContent += ` ${item},`;
+        } else {
+          valueCell.appendChild(objectToHtmlElement(item));
+        }
       });
     } else {
-      valueCell.innerHTML = typeof value === 'string'
+      valueCell.innerHTML = isString(value)
         ? value
           .replaceAll("\n\r", "<br/>")
           .replaceAll("\r", "<br/>")
@@ -68,6 +72,10 @@ export function objectToHtmlElement(data) {
   }
 
   return table;
+}
+
+function isString(value) {
+  return typeof value === 'string';
 }
 
 function isObject(value) {

@@ -40,17 +40,18 @@ export class Release {
     const { artist, current, album_release_date, url } = TralbumData;
     const { title, about, credits, type } = current;
     const { keywords} = SchemaData;
-
-    let tracks = TralbumData.trackinfo.map(track => new Track(
+    const tracks = TralbumData.trackinfo.map(track => new Track(
       track.track_num,
       track.title,
       track.duration
     ));
+    const labelName = BandData.name;
+    const label = artist === labelName ? `Not On Label (${labelName} Self-released)` : labelName;
 
     return new Release(
       artist,
       title,
-      BandData.name,
+      label,
       new Date(album_release_date),
       tracks,
       url,

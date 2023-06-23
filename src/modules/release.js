@@ -1,4 +1,4 @@
-import { str_pad_left } from './helpers.js';
+import { padStringLeft } from './helpers.js';
 
 export class Release {
   constructor(artist, title, label, releaseDate, tracks, url, about, credits, type, coverSrc) {
@@ -51,6 +51,6 @@ export class Track {
     let minutes = Math.floor(duration / 60);
     let seconds = duration % 60;
 
-    return str_pad_left(minutes, '0', 2) + ':' + str_pad_left(seconds, '0', 2);
+    return padStringLeft(minutes, '0', 2) + ':' + padStringLeft(seconds, '0', 2);
   }
 }

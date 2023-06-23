@@ -5,22 +5,21 @@ export function arrayToCsv(rows) {
 }
 
 export function objectToCsv(obj) {
-    let csvRows = [];
-
-    let headers = Object.keys(obj);
-    csvRows.push(headers.join(','));
-
-    let values = Object.values(obj).join(',');
-    csvRows.push(values)
-
-    return csvRows.join('\n')
+  const headers = Object.keys(obj);
+  const values = Object.values(obj);
+  const csvRows = [
+    headers.join(','),
+    values.join(',')
+  ];
+  return csvRows.join('\n');
 }
 
 export function downloadCsv(csv, csvFileName) {
-  let blob = new Blob([csv], {type: 'text/csv'});
-  let url = window.URL.createObjectURL(blob);
-  let a = document.createElement('a');
-  a.setAttribute('href', url);
-  a.setAttribute('download', safeFilename(csvFileName) + '.csv');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${safeFilename(csvFileName)}.csv`;
   a.click();
+  URL.revokeObjectURL(url);
 }

@@ -1,10 +1,10 @@
-import { eachWordFirstLetterToUpperCase } from "./helpers.js";
+import { capitalizeEachWord } from "./helpers.js";
 
 export function releaseToCsvObject(release) {
   let tracks = [];
 
   release.tracks.forEach(track => {
-    tracks.push(eachWordFirstLetterToUpperCase(track.title) + ' ' + track.durationText);
+    tracks.push(capitalizeEachWord(track.title) + ' ' + track.durationText);
   });
 
   let tracksStr = tracks.join("\r");

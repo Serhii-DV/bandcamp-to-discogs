@@ -1,12 +1,13 @@
 import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
-import { objectToHtmlElement, releaseToCsvObject } from '../src/modules/discogs.js';
+import { getSearchDiscogsReleaseUrl, objectToHtmlElement, releaseToCsvObject } from '../src/modules/discogs.js';
 import { Release } from '../src/modules/release.js';
 import { getCurrentTab } from '../src/modules/tab.js';
 
 let release;
 const previewDataBtn = document.getElementById('preview-data');
 const modalPreviewData = document.getElementById('modal-preview-data');
-const downloadCsvBtn = document.getElementById('download-csv');
+const btnDownloadCsv = document.getElementById('download-csv');
+const aDiscogsSearchArtist = document.getElementById('discogs-search-artist');
 const releaseEl = document.getElementById('release');
 const releaseCover = document.getElementById('release-cover');
 const releaseArtist = document.getElementById('release-artist');
@@ -29,7 +30,7 @@ previewDataBtn.addEventListener('click', () => {
   bandcampDataTabPane.appendChild(tableReleaseElement);
 });
 
-downloadCsvBtn.addEventListener('click', () => {
+btnDownloadCsv.addEventListener('click', () => {
   let csvObject = releaseToCsvObject(release);
   downloadCsv(
     objectToCsv(csvObject),
@@ -43,6 +44,9 @@ function countLinesInHtmlElement(el) {
   return Math.round(divHeight / lineHeight);
 }
 
+/**
+ * @param {Release} release
+ */
 function outputRelease(release) {
   releaseCover.src = release.coverSrc.big;
   releaseArtist.innerHTML = release.artist;
@@ -62,6 +66,7 @@ function outputRelease(release) {
   });
 
   releaseTracklist.innerHTML = trackinfo;
+  aDiscogsSearchArtist.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
 }
 
 function hideRelease() {
@@ -81,11 +86,13 @@ function hideMessage() {
 }
 
 function disableButtons() {
-  downloadCsvBtn.classList.add('disabled');
+  btnDownloadCsv.classList.add('disabled');
+  aDiscogsSearchArtist.classList.add('disabled');
 }
 
 function enableButtons() {
-  downloadCsvBtn.classList.remove('disabled');
+  btnDownloadCsv.classList.remove('disabled');
+  aDiscogsSearchArtist.classList.remove('disabled');
 }
 
 async function loadRelease() {

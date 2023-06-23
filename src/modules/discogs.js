@@ -30,6 +30,14 @@ export function releaseToCsvObject(release) {
   return csvObject;
 }
 
+export function getSearchDiscogsArtistUrl(artist) {
+  return `https://www.discogs.com/search?q=${encodeURIComponent(artist)}&type=artist`;
+}
+
+export function getSearchDiscogsReleaseUrl(artist, release) {
+  return `https://www.discogs.com/search?q=${encodeURIComponent(artist)}+${encodeURIComponent(release)}&type=release`;
+}
+
 export function objectToHtmlElement(data) {
   if (!isObject(data)) {
     return document.createTextNode(data);

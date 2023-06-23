@@ -30,7 +30,11 @@ export function releaseToCsvObject(release) {
   return csvObject;
 }
 
-export function objectToHtmlTableElement(data) {
+export function objectToHtmlElement(data) {
+  if (!isObject(data)) {
+    return document.createTextNode(data);
+  }
+
   const table = document.createElement("table");
   table.classList.add("table", "table-sm", "table-striped", "table-bordered");
 
@@ -39,10 +43,24 @@ export function objectToHtmlTableElement(data) {
     const keyCell = document.createElement("th");
     const valueCell = document.createElement("td");
 
+    keyCell.classList.add("w-25");
+    valueCell.classList.add("w-auto");
+
     keyCell.textContent = key;
-    valueCell.innerHTML = value
-      .replaceAll("\n\r", "<br/>")
-      .replaceAll("\r", "<br/>");
+
+    if (isObject(value)) {
+      valueCell.appendChild(objectToHtmlElement(value));
+    } else if (isArray(value)) {
+      value.forEach(item => {
+        valueCell.appendChild(objectToHtmlElement(item));
+      });
+    } else {
+      valueCell.innerHTML = typeof value === 'string'
+        ? value
+          .replaceAll("\n\r", "<br/>")
+          .replaceAll("\r", "<br/>")
+        : value;
+    }
 
     row.appendChild(keyCell);
     row.appendChild(valueCell);
@@ -50,4 +68,12 @@ export function objectToHtmlTableElement(data) {
   }
 
   return table;
+}
+
+function isObject(value) {
+  return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+function isArray(value) {
+  return Array.isArray(value);
 }

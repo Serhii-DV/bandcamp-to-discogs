@@ -1,7 +1,7 @@
 import { padStringLeft } from './helpers.js';
 
 export class Release {
-  constructor(artist, title, label, releaseDate, tracks, url, about, credits, type, coverSrc) {
+  constructor(artist, title, label, releaseDate, tracks, url, about, credits, type, coverSrc, keywords) {
     this.artist = artist;
     this.title = title;
     this.label = label;
@@ -12,11 +12,13 @@ export class Release {
     this.credits = credits;
     this.type = type;
     this.coverSrc = coverSrc;
+    this.keywords = keywords;
   }
 
-  static fromBandcampData(TralbumData, BandData, coverSrc) {
+  static fromBandcampData(TralbumData, BandData, SchemaData, coverSrc) {
     const { artist, current, album_release_date, url } = TralbumData;
     const { title, about, credits, type } = current;
+    const { keywords} = SchemaData;
 
     let tracks = TralbumData.trackinfo.map(track => new Track(
       track.track_num,
@@ -34,7 +36,8 @@ export class Release {
       about,
       credits,
       type,
-      coverSrc
+      coverSrc,
+      keywords
     );
   }
 }

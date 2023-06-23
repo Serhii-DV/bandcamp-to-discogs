@@ -94,8 +94,9 @@ async function loadRelease() {
       }
 
       release = Release.fromBandcampData(
-        response.TralbumData,
-        response.BandData,
+        response.tralbumData,
+        response.bandData,
+        response.schemaData,
         response.coverSrc
       );
 

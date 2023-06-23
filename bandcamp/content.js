@@ -7,8 +7,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (TralbumData !== undefined && request.type === 'getBandcampData') {
     response = {
-      TralbumData: TralbumData,
-      BandData: BandData,
+      tralbumData: TralbumData,
+      bandData: BandData,
+      schemaData: getSchemaData(),
       coverSrc: {
         small: document.querySelector('link[rel~="shortcut"]').href,
         big: document.querySelector('link[rel="image_src"]').href,
@@ -20,6 +21,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   return true;
 });
+
+function getSchemaData() {
+  const scriptElement = document.querySelector('script[type="application/ld+json"]');
+  const scriptContent = scriptElement.textContent;
+  return JSON.parse(scriptContent);
+}
 
 // Injecting script.js
 var s = document.createElement('script');

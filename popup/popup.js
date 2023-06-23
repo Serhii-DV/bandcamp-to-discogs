@@ -21,9 +21,11 @@ previewDataBtn.addEventListener('click', () => {
 
   const csvObject = releaseToCsvObject(release);
   const tableElement = objectToHtmlElement(csvObject);
+  discogsCsvTabPane.textContent = '';
   discogsCsvTabPane.appendChild(tableElement);
 
   const tableReleaseElement = objectToHtmlElement(release);
+  bandcampDataTabPane.textContent = '';
   bandcampDataTabPane.appendChild(tableReleaseElement);
 });
 

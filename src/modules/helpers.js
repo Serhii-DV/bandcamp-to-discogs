@@ -35,3 +35,30 @@ export function capitalizeEachWord(str) {
 
   return capitalizedWords.join(" ");
 }
+
+export function convertToAlias(str) {
+  const slug = str.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const trimmedSlug = slug.replace(/^-+|-+$/g, '');
+  return trimmedSlug;
+}
+
+export function isEmptyObject(obj) {
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function isString(value) {
+  return typeof value === 'string';
+}
+
+export function isObject(value) {
+  return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+export function isArray(value) {
+  return Array.isArray(value);
+}

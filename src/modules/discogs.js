@@ -1,33 +1,13 @@
-import { capitalizeEachWord } from "./helpers.js";
+import { DiscogsCsv } from "./discogs-csv.js";
+import { isArray, isObject, isString } from "./helpers.js";
+import { Release } from "./release.js";
 
+/**
+ * @param {Release} release
+ * @returns {Object}
+ */
 export function releaseToCsvObject(release) {
-  let tracks = [];
-
-  release.tracks.forEach(track => {
-    tracks.push(capitalizeEachWord(track.title) + ' ' + track.durationText);
-  });
-
-  let tracksStr = tracks.join("\r");
-
-  // escape " symbols
-  let notes = release.about ? release.about.replaceAll('"', '""') : '';
-  let date = release.date.toISOString().split('T')[0];
-
-  let csvObject = {
-    artist: `"${release.artist}"`,
-    title: `"${release.title}"`,
-    label: `"${release.label}"`,
-    catno: 'none',
-    format: 'File',
-    genre: 'Electronic',
-    style: '"Industrial, Dark Ambient"',
-    tracks: `"${tracksStr}"`,
-    notes: `"${notes}"`,
-    date: date,
-    images: release.coverSrc.big
-  };
-
-  return csvObject;
+  return DiscogsCsv.fromRelease(release).toCsvObject();
 }
 
 export function getSearchDiscogsArtistUrl(artist) {
@@ -80,16 +60,4 @@ export function objectToHtmlElement(data) {
   }
 
   return table;
-}
-
-function isString(value) {
-  return typeof value === 'string';
-}
-
-function isObject(value) {
-  return Object.prototype.toString.call(value) === '[object Object]';
-}
-
-function isArray(value) {
-  return Array.isArray(value);
 }

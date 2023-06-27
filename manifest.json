@@ -11,17 +11,17 @@
     "storage"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background.js"
   },
   "content_scripts": [
     {
-      "js": ["bandcamp/content.js"],
+      "js": ["src/bandcamp/content.js"],
       "matches": ["https://*.bandcamp.com/*"],
       "run_at": "document_end"
     }
   ],
   "action": {
-    "default_popup": "popup/popup.html",
+    "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "images/b2d_logo_16.png",
       "32": "images/b2d_logo_32.png",
@@ -37,7 +37,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [ "bandcamp/script.js" ],
+      "resources": [ "src/bandcamp/script.js" ],
       "matches": ["https://*.bandcamp.com/*"]
     }
   ]

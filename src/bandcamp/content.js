@@ -30,7 +30,7 @@ function getSchemaData() {
 
 // Injecting script.js
 var s = document.createElement('script');
-s.src = chrome.runtime.getURL('bandcamp/script.js');
+s.src = chrome.runtime.getURL('src/bandcamp/script.js');
 (document.head||document.documentElement).appendChild(s);
 s.onload = () => {
   s.remove();

@@ -1,7 +1,7 @@
-import { objectToCsv, downloadCsv } from "../src/modules/csv.js";
-import { getSearchDiscogsReleaseUrl, objectToHtmlElement, releaseToCsvObject } from "../src/discogs/discogs.js";
-import { Release } from "../src/app/release.js";
-import { getCurrentTab } from "../src/modules/tab.js";
+import { objectToCsv, downloadCsv } from "../modules/csv.js";
+import { getSearchDiscogsReleaseUrl, objectToHtmlElement, releaseToCsvObject } from "../discogs/discogs.js";
+import { Release } from "../app/release.js";
+import { getCurrentTab } from "../modules/tab.js";
 
 let release;
 const previewDataBtn = document.getElementById('preview-data');
@@ -98,8 +98,7 @@ function enableButtons() {
 async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, {type:'getBandcampData'}, (response) => {
-
-      if (response === undefined || Object.keys(response).length === 0) {
+      if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0) {
         hideRelease();
         disableButtons();
         showMessage();

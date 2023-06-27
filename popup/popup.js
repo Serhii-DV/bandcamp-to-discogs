@@ -1,7 +1,7 @@
-import { objectToCsv, downloadCsv } from '../src/modules/csv.js';
-import { getSearchDiscogsReleaseUrl, objectToHtmlElement, releaseToCsvObject } from '../src/modules/discogs.js';
-import { Release } from '../src/modules/release.js';
-import { getCurrentTab } from '../src/modules/tab.js';
+import { objectToCsv, downloadCsv } from "../src/modules/csv.js";
+import { getSearchDiscogsReleaseUrl, objectToHtmlElement, releaseToCsvObject } from "../src/discogs/discogs.js";
+import { Release } from "../src/app/release.js";
+import { getCurrentTab } from "../src/modules/tab.js";
 
 let release;
 const previewDataBtn = document.getElementById('preview-data');

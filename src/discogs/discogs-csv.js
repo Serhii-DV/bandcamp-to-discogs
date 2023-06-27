@@ -1,6 +1,6 @@
-import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "./bandcamp.js";
-import { capitalizeEachWord } from "./helpers.js";
-import { Release, Track } from "./release.js";
+import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../bandcamp/bandcamp.js";
+import { capitalizeEachWord } from "../modules/helpers.js";
+import { Release, Track } from "../app/release.js";
 
 export class DiscogsCsv {
   /**

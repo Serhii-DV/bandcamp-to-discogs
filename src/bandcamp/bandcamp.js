@@ -1,4 +1,4 @@
-import { isArray } from "./helpers.js";
+import { isArray } from "../modules/helpers.js";
 
 /**
  * @param {String} keyword

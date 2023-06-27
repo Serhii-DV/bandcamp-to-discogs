@@ -1,6 +1,6 @@
 import { DiscogsCsv } from "./discogs-csv.js";
-import { isArray, isObject, isString } from "./helpers.js";
-import { Release } from "./release.js";
+import { isArray, isObject, isString } from "../modules/helpers.js";
+import { Release } from "../app/release.js";
 
 /**
  * @param {Release} release

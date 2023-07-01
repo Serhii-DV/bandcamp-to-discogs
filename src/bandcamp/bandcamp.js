@@ -1,10 +1,13 @@
-import { isArray } from "../modules/helpers.js";
+import { isArray, isString } from "../modules/helpers.js";
+import { Style, getMapping } from "./mapping.js";
 
 /**
  * @param {String} keyword
  * @returns {Array<String>}
  */
 export function keywordToDiscogsGenre(keyword) {
+  const keywordMapping = getMapping();
+
   if (keyword in keywordMapping) {
     const keywordMapData = keywordMapping[keyword];
 
@@ -29,6 +32,8 @@ export function keywordToDiscogsGenre(keyword) {
  * @returns {Array<String>}
  */
 export function keywordToDiscogsStyles(keyword) {
+  const keywordMapping = getMapping();
+
   if (keyword in keywordMapping) {
     const keywordMapData = keywordMapping[keyword];
 
@@ -69,6 +74,8 @@ function arrayUnique(arr) {
  * @returns {Array<String>}
  */
 export function keywordsToDiscogsGenres(keywords) {
+  console.log('keywordsToDiscogsGenres');
+  console.log(arrayUnique(keywords.map(keywordToDiscogsGenre)));
   return arrayUnique(keywords.map(keywordToDiscogsGenre));
 }
 
@@ -79,50 +86,3 @@ export function keywordsToDiscogsGenres(keywords) {
 export function keywordsToDiscogsStyles(keywords) {
   return arrayUnique(keywords.map(keywordToDiscogsStyles));
 }
-
-class Style {
-  constructor(genre, style) {
-    this.genre = genre;
-    this.style = style;
-  }
-}
-
-const keywordMapping = {
-  "ambient": new Style("Electronic","Ambient"),
-  "drone": new Style("Electronic","Drone"),
-  "dark ambient": new Style("Electronic","Dark Ambient"),
-  "darkwave": new Style("Electronic","Darkwave"),
-  "experimental": new Style("Electronic","Experimental"),
-  "folk": new Style("Folk, World, & Country","Folk"),
-  "industrial": new Style("Electronic","Industrial"),
-  "martial": new Style("Brass & Military","Military"),
-  "neoclassical": new Style("Classical","Neo-Classical"),
-  "neofolk": new Style("Electronic","Neofolk"),
-  "nordic": new Style("Folk, World, & Country","Nordic"),
-  // Combined tags
-  "bombastic": ["martial industrial", "neoclassical"],
-  "martial industrial": ["martial", "industrial"],
-  "martial folk": ["martial", "neofolk"],
-  // Aliases
-  "darkambient": "dark ambient",
-  "martial-industrial": "martial industrial",
-  "neo-folk": "neofolk",
-  "neoklassik": "neoclassical",
-  "neo-classical": "neoclassical",
-  // Unknown?
-  // "apocalyptic folk",
-  // "atmospheric",
-  // "cinematic",
-  // "darkfolk",
-  // "dark folk",
-  // "dark horror",
-  // "death industrial",
-  // "field recordings",
-  // "martial pop",
-  // "modern classical",
-  // "orchestral",
-  // "post-industrial",
-  // "power electronics",
-  // "ritual",
-  // "ritual dark ambient",
-};

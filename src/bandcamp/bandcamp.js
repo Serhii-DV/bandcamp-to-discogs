@@ -7,9 +7,10 @@ import { Style, getMapping } from "./mapping.js";
  */
 export function keywordToDiscogsGenre(keyword) {
   const keywordMapping = getMapping();
+  const key = keyword.toLowerCase();
 
-  if (keyword in keywordMapping) {
-    const keywordMapData = keywordMapping[keyword];
+  if (key in keywordMapping) {
+    const keywordMapData = keywordMapping[key];
 
     if (keywordMapData instanceof Style) {
       return [keywordMapData.genre];
@@ -33,9 +34,10 @@ export function keywordToDiscogsGenre(keyword) {
  */
 export function keywordToDiscogsStyles(keyword) {
   const keywordMapping = getMapping();
+  const key = keyword.toLowerCase();
 
-  if (keyword in keywordMapping) {
-    const keywordMapData = keywordMapping[keyword];
+  if (key in keywordMapping) {
+    const keywordMapData = keywordMapping[key];
 
     if (keywordMapData instanceof Style) {
       return [keywordMapData.style];
@@ -74,8 +76,6 @@ function arrayUnique(arr) {
  * @returns {Array<String>}
  */
 export function keywordsToDiscogsGenres(keywords) {
-  console.log('keywordsToDiscogsGenres');
-  console.log(arrayUnique(keywords.map(keywordToDiscogsGenre)));
   return arrayUnique(keywords.map(keywordToDiscogsGenre));
 }
 

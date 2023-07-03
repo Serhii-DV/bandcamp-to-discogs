@@ -1,4 +1,5 @@
 import { getGenreByStyle } from "../discogs/genres.js";
+import { isObject } from "../modules/helpers.js";
 
 export function getMapping() {
   return keywordMapping;
@@ -7,7 +8,11 @@ export function getMapping() {
 export class Style {
   constructor(style) {
     this.style = style;
-    this.genre = getGenreByStyle(this.style);
+    this._genre = null;
+  }
+
+  get genre() {
+    return this._genre = (isObject(this._genre) ? this._genre : getGenreByStyle(this.style));
   }
 }
 

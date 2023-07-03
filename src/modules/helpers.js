@@ -62,3 +62,19 @@ export function isObject(value) {
 export function isArray(value) {
   return Array.isArray(value);
 }
+
+/**
+ * @param {Array<Array<String>>}
+ * @return {Array<String>}
+ */
+export function arrayToFlat(arr) {
+  return [].concat(...arr);
+}
+
+/**
+ * @param {Array<Array<String>|String>}
+ * @return {Array<String>}
+ */
+export function arrayUnique(arr) {
+  return [...new Set(arrayToFlat(arr))];
+}

@@ -1,4 +1,4 @@
-import { isArray, isString } from "../modules/helpers.js";
+import { arrayUnique, isArray, isString } from "../modules/helpers.js";
 import { Style, getMapping } from "./mapping.js";
 
 /**
@@ -53,22 +53,6 @@ export function keywordToDiscogsStyles(keyword) {
   }
 
   return [];
-}
-
-/**
- * @param {Array<Array<String>>}
- * @return {Array<String>}
- */
-function arrayToFlat(arr) {
-  return [].concat(...arr);
-}
-
-/**
- * @param {Array<Array<String>|String>}
- * @return {Array<String>}
- */
-function arrayUnique(arr) {
-  return [...new Set(arrayToFlat(arr))];
 }
 
 /**

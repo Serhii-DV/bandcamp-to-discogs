@@ -10,25 +10,15 @@ export function getGenreByStyle(style) {
 const GENRES_URL = '../../assets/discogs/genres.json';
 let genres = {};
 
-loadJSONFromURL(GENRES_URL)
-.then((value) => {
-  genres = value;
-}).catch((reason) => {
-  genres = {};
-});
-
-async function loadJSONFromURL(url) {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    return null;
-  }
+export async function loadDiscogsGenres() {
+  return fetch(GENRES_URL)
+    .then(response => response.json())
+    .then(data => {
+      genres = data;
+      return genres;
+    }).catch(reason => {
+      genres = {};
+    });
 }
 
 function getPropertyByElement(obj, element) {

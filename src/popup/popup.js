@@ -2,6 +2,7 @@ import { objectToCsv, downloadCsv } from "../modules/csv.js";
 import { getSearchDiscogsReleaseUrl, objectToHtmlElement, releaseToCsvObject } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
 import { getCurrentTab } from "../modules/tab.js";
+import { loadDiscogsGenres } from "../discogs/genres.js";
 
 let release;
 const previewDataBtn = document.getElementById('preview-data');
@@ -105,17 +106,19 @@ async function loadRelease() {
         return;
       }
 
-      release = Release.fromBandcampData(
-        response.tralbumData,
-        response.bandData,
-        response.schemaData,
-        response.coverSrc
-      );
+      loadDiscogsGenres().then(genres => {
+        release = Release.fromBandcampData(
+          response.tralbumData,
+          response.bandData,
+          response.schemaData,
+          response.coverSrc
+        );
 
-      outputRelease(release);
-      showRelease();
-      enableButtons();
-      hideMessage();
+        outputRelease(release);
+        showRelease();
+        enableButtons();
+        hideMessage();
+      });
     });
   });
 }

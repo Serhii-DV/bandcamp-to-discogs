@@ -45,7 +45,7 @@ export class DiscogsCsv {
       keywordsToDiscogsGenres(release.keywords),
       keywordsToDiscogsStyles(release.keywords),
       release.tracks,
-      release.about ? release.about.replaceAll('"', '""') : '',
+      release.about ?? '',
       release.date.toISOString().split('T')[0],
       release.coverSrc.big
     );

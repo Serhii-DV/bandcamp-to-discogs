@@ -42,8 +42,6 @@ export class DiscogsCsv {
       release.label,
       'none',
       'File',
-      // ["Electronic"],
-      // ["Industrial, Dark Ambient"],
       keywordsToDiscogsGenres(release.keywords),
       keywordsToDiscogsStyles(release.keywords),
       release.tracks,
@@ -84,7 +82,7 @@ export class DiscogsCsv {
    * @returns String
    */
   getGenre() {
-    return this.genres.join(', ');
+    return this.genres.filter(genre => genre != 'Folk, World, & Country').join(', ');
   }
 
   /**

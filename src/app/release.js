@@ -39,7 +39,7 @@ export class Release {
   static fromBandcampData(TralbumData, BandData, SchemaData, coverSrc) {
     const { artist, current, album_release_date, url } = TralbumData;
     const { title, about, credits, type } = current;
-    const { keywords} = SchemaData;
+    const { keywords } = SchemaData;
     const tracks = TralbumData.trackinfo.map(track => new Track(
       track.track_num,
       track.title,

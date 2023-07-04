@@ -98,7 +98,7 @@ function enableButtons() {
 
 async function loadRelease() {
   getCurrentTab().then((tab) => {
-    chrome.tabs.sendMessage(tab.id, {type:'getBandcampData'}, (response) => {
+    chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0) {
         hideRelease();
         disableButtons();

@@ -5,8 +5,8 @@ import { getCurrentTab } from "../modules/tab.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 
 let release;
-const previewDataBtn = document.getElementById('preview-data');
-const modalPreviewData = document.getElementById('modal-preview-data');
+const tabCsvData = document.getElementById('csvData-tab');
+const tabBandcampData = document.getElementById('bandcampData-tab');
 const btnDownloadCsv = document.getElementById('download-csv');
 const aDiscogsSearchArtist = document.getElementById('discogs-search-artist');
 const releaseEl = document.getElementById('release');
@@ -17,18 +17,19 @@ const releaseDate = document.getElementById('release-year');
 const releaseTracklist = document.getElementById('release-tracklist');
 const message = document.getElementById('message');
 
-previewDataBtn.addEventListener('click', () => {
-  const discogsCsvTabPane = modalPreviewData.querySelector('#discogs-csv-tab-pane');
-  const bandcampDataTabPane = modalPreviewData.querySelector('#bandcamp-data-tab-pane');
-
+tabCsvData.addEventListener('click', () => {
+  const discogsCsvTabPane = document.querySelector('#csvData .content');
   const csvObject = releaseToCsvObject(release);
-  const tableElement = objectToHtmlElement(csvObject);
+  const tableEl = objectToHtmlElement(csvObject);
   discogsCsvTabPane.textContent = '';
-  discogsCsvTabPane.appendChild(tableElement);
+  discogsCsvTabPane.appendChild(tableEl);
+});
 
-  const tableReleaseElement = objectToHtmlElement(release);
+tabBandcampData.addEventListener('click', () => {
+  const bandcampDataTabPane = document.querySelector('#bandcampData .content');
+  const tableEl = objectToHtmlElement(release);
   bandcampDataTabPane.textContent = '';
-  bandcampDataTabPane.appendChild(tableReleaseElement);
+  bandcampDataTabPane.appendChild(tableEl);
 });
 
 btnDownloadCsv.addEventListener('click', () => {

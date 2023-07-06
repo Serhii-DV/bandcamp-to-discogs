@@ -6,7 +6,7 @@
 </head>
 <body>
 
-  <div class="btn-group d-flex" role="tablist">
+  <div id="mainNav" class="btn-group d-flex" role="tablist">
     <button class="btn btn-dark rounded-0 active" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
         <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
@@ -48,7 +48,7 @@
     </button>
   </div>
 
-  <div class="card rounded-0 position-relative">
+  <div id="releaseCard" class="card rounded-0 position-relative">
     <img id="release-cover" class="card-img rounded-0 opacity-25" src="" alt="">
     <div class="card-img-overlay overflow-auto">
 
@@ -80,7 +80,7 @@
     </div>
   </div>
 
-  <div id="message" class="card rounded-0 visually-hidden">
+  <div id="warningMessage" class="card rounded-0 visually-hidden">
     <div class="card-body">
       <p class="text-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">

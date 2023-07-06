@@ -15,13 +15,15 @@ const btnsDisableEnable = [
   btnDiscogsSearch,
   btnBandcampData
 ];
-const releaseEl = document.getElementById('release');
+const elRelease = document.getElementById('release');
 const releaseCover = document.getElementById('release-cover');
 const releaseArtist = document.getElementById('release-artist');
 const releaseTitle = document.getElementById('release-title');
 const releaseDate = document.getElementById('release-year');
 const releaseTracklist = document.getElementById('release-tracklist');
-const message = document.getElementById('message');
+const elMainNav = document.getElementById('mainNav');
+const elReleaseCard = document.querySelector('#releaseCard');
+const elWarningMessage = document.getElementById('warningMessage');
 
 btnCsvData.addEventListener('click', () => {
   const discogsCsvTabPane = document.querySelector('#csvData .content');
@@ -65,7 +67,7 @@ function outputRelease(release) {
   let countTitleLines = countLinesInHtmlElement(releaseTitle);
 
   releaseArtist.classList.toggle('display-6', countArtistLines >= 3 && countArtistLines <= 5);
-  releaseEl.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
+  elRelease.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
 
   let trackinfo = '';
 
@@ -77,20 +79,28 @@ function outputRelease(release) {
   btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
 }
 
-function hideRelease() {
-  releaseEl.classList.add('visually-hidden');
+function hideReleaseContent() {
+  elReleaseCard.classList.add('visually-hidden');
 }
 
-function showRelease() {
-  releaseEl.classList.remove('visually-hidden');
+function showReleaseContent() {
+  elReleaseCard.classList.remove('visually-hidden');
 }
 
-function showMessage() {
-  message.classList.remove('visually-hidden');
+function showWarningMessage() {
+  elWarningMessage.classList.remove('visually-hidden');
 }
 
-function hideMessage() {
-  message.classList.add('visually-hidden');
+function hideWarningMessage() {
+  elWarningMessage.classList.add('visually-hidden');
+}
+
+function showMainNav() {
+  elMainNav.classList.remove('visually-hidden');
+}
+
+function hideMainNav() {
+  elMainNav.classList.add('visually-hidden');
 }
 
 function disableButtons() {
@@ -105,9 +115,9 @@ async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0) {
-        hideRelease();
-        disableButtons();
-        showMessage();
+        hideReleaseContent();
+        hideMainNav();
+        showWarningMessage();
         return;
       }
 
@@ -120,9 +130,9 @@ async function loadRelease() {
         );
 
         outputRelease(release);
-        showRelease();
-        enableButtons();
-        hideMessage();
+        showReleaseContent();
+        showMainNav();
+        hideWarningMessage();
       });
     });
   });

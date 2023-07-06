@@ -5,10 +5,16 @@ import { getCurrentTab } from "../modules/tab.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 
 let release;
-const tabCsvData = document.getElementById('csvData-tab');
-const tabBandcampData = document.getElementById('bandcampData-tab');
+const btnCsvData = document.getElementById('csvData-tab');
+const btnBandcampData = document.getElementById('bandcampData-tab');
 const btnDownloadCsv = document.getElementById('download-csv');
-const aDiscogsSearchArtist = document.getElementById('discogs-search-artist');
+const btnDiscogsSearch = document.getElementById('discogs-search-artist');
+const btnsDisableEnable = [
+  btnCsvData,
+  btnDownloadCsv,
+  btnDiscogsSearch,
+  btnBandcampData
+];
 const releaseEl = document.getElementById('release');
 const releaseCover = document.getElementById('release-cover');
 const releaseArtist = document.getElementById('release-artist');
@@ -17,7 +23,7 @@ const releaseDate = document.getElementById('release-year');
 const releaseTracklist = document.getElementById('release-tracklist');
 const message = document.getElementById('message');
 
-tabCsvData.addEventListener('click', () => {
+btnCsvData.addEventListener('click', () => {
   const discogsCsvTabPane = document.querySelector('#csvData .content');
   const csvObject = releaseToCsvObject(release);
   const tableEl = objectToHtmlElement(csvObject);
@@ -25,7 +31,7 @@ tabCsvData.addEventListener('click', () => {
   discogsCsvTabPane.appendChild(tableEl);
 });
 
-tabBandcampData.addEventListener('click', () => {
+btnBandcampData.addEventListener('click', () => {
   const bandcampDataTabPane = document.querySelector('#bandcampData .content');
   const tableEl = objectToHtmlElement(release);
   bandcampDataTabPane.textContent = '';
@@ -68,7 +74,7 @@ function outputRelease(release) {
   });
 
   releaseTracklist.innerHTML = trackinfo;
-  aDiscogsSearchArtist.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
+  btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
 }
 
 function hideRelease() {
@@ -88,13 +94,11 @@ function hideMessage() {
 }
 
 function disableButtons() {
-  btnDownloadCsv.classList.add('disabled');
-  aDiscogsSearchArtist.classList.add('disabled');
+  btnsDisableEnable.forEach(button => button.classList.add('disabled'));
 }
 
 function enableButtons() {
-  btnDownloadCsv.classList.remove('disabled');
-  aDiscogsSearchArtist.classList.remove('disabled');
+  btnsDisableEnable.forEach(button => button.classList.remove('disabled'));
 }
 
 async function loadRelease() {

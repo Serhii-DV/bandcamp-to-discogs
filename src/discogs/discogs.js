@@ -18,6 +18,11 @@ export function getSearchDiscogsReleaseUrl(artist, release) {
   return `https://www.discogs.com/search?q=${encodeURIComponent(artist)}+${encodeURIComponent(release)}&type=release`;
 }
 
+/**
+ * Converts a JavaScript object to an HTML element representing a table.
+ * @param {Object} data - The JavaScript object to convert.
+ * @returns {Node} - The HTML element representing the converted table.
+ */
 export function objectToHtmlElement(data) {
   if (!isObject(data)) {
     return document.createTextNode(data);
@@ -39,18 +44,12 @@ export function objectToHtmlElement(data) {
     if (isObject(value)) {
       valueCell.appendChild(objectToHtmlElement(value));
     } else if (isArray(value)) {
-      value.forEach(item => {
-        if (isString(item)) {
-          valueCell.textContent += ` ${item},`;
-        } else {
-          valueCell.appendChild(objectToHtmlElement(item));
-        }
-      });
+      valueCell.innerHTML = value
+        .map(item => (isString(item) ? item : objectToHtmlElement(item).innerHTML))
+        .join(", ");
     } else {
       valueCell.innerHTML = isString(value)
-        ? value
-          .replaceAll("\n\r", "<br/>")
-          .replaceAll("\r", "<br/>")
+        ? value.replace(/[\r\n]+/g, "<br/>")
         : value;
     }
 

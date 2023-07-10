@@ -1,8 +1,21 @@
 import { getGenreByStyle } from "../discogs/genres.js";
-import { isObject } from "../modules/helpers.js";
+import { isEmptyObject, isObject, isString } from "../modules/helpers.js";
+
+let mapping = {};
 
 export function getMapping() {
-  return keywordMapping;
+  if (!isEmptyObject(mapping)) {
+    return mapping;
+  }
+
+  for (const key in keywordMapping) {
+    if (keywordMapping.hasOwnProperty(key)) {
+      const value = keywordMapping[key];
+      mapping[key] = isString(value) ? new Style(value) : value;
+    }
+  }
+
+  return mapping;
 }
 
 export class Style {
@@ -17,27 +30,27 @@ export class Style {
 }
 
 const keywordMapping = {
-  "ambient": new Style("Ambient"),
-  "drone": new Style("Drone"),
-  "dark ambient": new Style("Dark Ambient"),
-  "darkwave": new Style("Darkwave"),
-  "experimental": new Style("Experimental"),
-  "folk": new Style("Folk"),
-  "industrial": new Style("Industrial"),
-  "martial": new Style("Military"),
-  "neoclassical": new Style("Neo-Classical"),
-  "neofolk": new Style("Neofolk"),
-  "nordic": new Style("Nordic"),
+  "ambient": "Ambient",
+  "drone": "Drone",
+  "dark ambient": "Dark Ambient",
+  "darkwave": "Darkwave",
+  "experimental": "Experimental",
+  "folk": "Folk",
+  "industrial": "Industrial",
+  "martial": "Military",
+  "neoclassical": "Neo-Classical",
+  "neofolk": "Neofolk",
+  "nordic": "Nordic",
   // Combined tags
   "bombastic": ["martial industrial", "neoclassical"],
   "martial industrial": ["martial", "industrial"],
   "martial folk": ["martial", "neofolk"],
   // Aliases
-  "darkambient": "dark ambient",
-  "martial-industrial": "martial industrial",
-  "neo-folk": "neofolk",
-  "neoklassik": "neoclassical",
-  "neo-classical": "neoclassical",
+  "darkambient": ["dark ambient"],
+  "martial-industrial": ["martial industrial"],
+  "neo-folk": ["neofolk"],
+  "neoklassik": ["neoclassical"],
+  "neo-classical": ["neoclassical"],
   // Unknown?
   // "apocalyptic folk",
   // "atmospheric",

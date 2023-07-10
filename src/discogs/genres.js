@@ -7,7 +7,7 @@ export function getGenreByStyle(style) {
 }
 
 // const GENRES_URL = 'https://gist.githubusercontent.com/Serhii-DV/14d7ec13fd15e30db1a2a8dff047abbf/raw/02fe41ab5ea493202bb423fef3640d5d8394af63/discogs_genres_and_styles.json';
-const GENRES_URL = '../../assets/discogs/genres.json';
+const GENRES_URL = '../data/discogs_genres.json';
 let genres = {};
 
 export async function loadDiscogsGenres() {

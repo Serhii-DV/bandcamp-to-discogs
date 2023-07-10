@@ -5,6 +5,10 @@ body {
   padding: 0;
 }
 
+#release-cover {
+  min-height: 400px;
+}
+
 #release-tracklist {
   padding: 0 var(--bs-card-img-overlay-padding);
 }

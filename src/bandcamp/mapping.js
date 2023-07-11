@@ -4,9 +4,11 @@ import { isEmptyObject, isObject, isString } from "../modules/helpers.js";
 let mapping = {};
 
 export function getMapping() {
-  if (!isEmptyObject(mapping)) {
-    return mapping;
-  }
+  return mapping = isEmptyObject(mapping) ? createMapping(keywordMapping) : mapping;
+}
+
+function createMapping(keywordMapping) {
+  let mapping = {};
 
   for (const key in keywordMapping) {
     if (keywordMapping.hasOwnProperty(key)) {
@@ -29,42 +31,16 @@ export class Style {
   }
 }
 
-const keywordMapping = {
-  "ambient": "Ambient",
-  "drone": "Drone",
-  "dark ambient": "Dark Ambient",
-  "darkwave": "Darkwave",
-  "experimental": "Experimental",
-  "folk": "Folk",
-  "industrial": "Industrial",
-  "martial": "Military",
-  "neoclassical": "Neo-Classical",
-  "neofolk": "Neofolk",
-  "nordic": "Nordic",
-  // Combined tags
-  "bombastic": ["martial industrial", "neoclassical"],
-  "martial industrial": ["martial", "industrial"],
-  "martial folk": ["martial", "neofolk"],
-  // Aliases
-  "darkambient": ["dark ambient"],
-  "martial-industrial": ["martial industrial"],
-  "neo-folk": ["neofolk"],
-  "neoklassik": ["neoclassical"],
-  "neo-classical": ["neoclassical"],
-  // Unknown?
-  // "apocalyptic folk",
-  // "atmospheric",
-  // "cinematic",
-  // "darkfolk",
-  // "dark folk",
-  // "dark horror",
-  // "death industrial",
-  // "field recordings",
-  // "martial pop",
-  // "modern classical",
-  // "orchestral",
-  // "post-industrial",
-  // "power electronics",
-  // "ritual",
-  // "ritual dark ambient",
-};
+const KEYWORD_MAPPING_URL = '../data/keyword_mapping.json';
+let keywordMapping = {};
+
+export async function loadKeywordMapping() {
+  return fetch(KEYWORD_MAPPING_URL)
+    .then(response => response.json())
+    .then(data => {
+      keywordMapping = data;
+      return keywordMapping;
+    }).catch(reason => {
+      keywordMapping = {};
+    });
+}

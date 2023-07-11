@@ -4,6 +4,7 @@ import { Release } from "../app/release.js";
 import { getCurrentTab } from "../modules/tab.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
+import config from "../config.js";
 
 let release;
 const btnCsvData = document.getElementById('csvData-tab');
@@ -131,8 +132,8 @@ async function loadRelease() {
         return;
       }
 
-      loadDiscogsGenres().then(genres => {
-        loadKeywordMapping().then(keywordsMapping => {
+      loadDiscogsGenres(config.genres_url).then(genres => {
+        loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
           setupRelease(
             response.tralbumData,
             response.bandData,

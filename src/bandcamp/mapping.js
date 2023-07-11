@@ -31,11 +31,10 @@ export class Style {
   }
 }
 
-const KEYWORD_MAPPING_URL = '../data/keyword_mapping.json';
 let keywordMapping = {};
 
-export async function loadKeywordMapping() {
-  return fetch(KEYWORD_MAPPING_URL)
+export async function loadKeywordMapping(url) {
+  return fetch(url)
     .then(response => response.json())
     .then(data => {
       keywordMapping = data;

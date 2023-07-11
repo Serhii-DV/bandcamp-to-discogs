@@ -1,5 +1,5 @@
 import { DiscogsCsv } from "./discogs-csv.js";
-import { isArray, isObject, isString } from "../modules/helpers.js";
+import { isArray, isObject, isString } from "../modules/utils.js";
 import { Release } from "../app/release.js";
 
 /**

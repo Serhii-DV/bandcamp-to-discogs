@@ -1,5 +1,5 @@
 import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../bandcamp/bandcamp.js";
-import { capitalizeEachWord } from "../modules/helpers.js";
+import { capitalizeEachWord } from "../modules/utils.js";
 import { Release, Track } from "../app/release.js";
 
 /**

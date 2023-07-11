@@ -1,4 +1,4 @@
-import { padStringLeft } from '../modules/helpers.js';
+import { padStringLeft } from '../modules/utils.js';
 
 export class Release {
   /**

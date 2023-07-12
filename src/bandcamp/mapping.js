@@ -8,12 +8,14 @@ export function getMapping() {
 }
 
 function createMapping(keywordMapping) {
-  let mapping = {};
+  const mapping = {};
 
   for (const key in keywordMapping) {
     if (keywordMapping.hasOwnProperty(key)) {
       const value = keywordMapping[key];
-      mapping[key] = isString(value) ? new Style(value) : value;
+      if (value !== "") {
+        mapping[key] = isString(value) ? new Style(value) : value;
+      }
     }
   }
 

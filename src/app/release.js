@@ -85,6 +85,6 @@ export class Track {
     let minutes = Math.floor(duration / 60);
     let seconds = duration % 60;
 
-    return padStringLeft(minutes.toString(), '0', 2) + ':' + padStringLeft(seconds.toString(), '0', 2);
+    return minutes.toString() + ':' + padStringLeft(seconds.toString(), '0', 2);
   }
 }

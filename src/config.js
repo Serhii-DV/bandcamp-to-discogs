@@ -3,4 +3,5 @@ export default {
   genres_url: '../data/discogs_genres.json',
   // keyword_mapping_url: '../data/keyword_mapping.json',
   keyword_mapping_url: 'https://gist.githubusercontent.com/Serhii-DV/44181f307548aabac2703147d3c730ba/raw/b40b0eab42aa16f9ad4ea13570421a5e7945c117/mapping.json',
+  about_url: '../data/about.html',
 };

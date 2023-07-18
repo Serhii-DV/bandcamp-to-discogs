@@ -5,11 +5,14 @@ import { getCurrentTab } from "../modules/tab.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
+import { hasClass, loadHTMLContent } from "../modules/utils.js";
 
 let release;
 const btnCsvData = document.getElementById('csvData-tab');
 const btnDownloadCsv = document.getElementById('download-csv');
 const btnDiscogsSearch = document.getElementById('discogs-search-artist');
+const btnAbout = document.getElementById('about-tab');
+const elAbout = document.getElementById('about');
 const btnsDisableEnable = [
   btnCsvData,
   btnDownloadCsv,
@@ -28,6 +31,14 @@ const elWarningMessage = document.getElementById('warningMessage');
 btnCsvData.addEventListener('click', () => {
   outputDiscogsCsvData(release);
   outputBandcampData(release);
+});
+
+btnAbout.addEventListener('click', () => {
+  if (hasClass(elAbout, 'loaded')) return;
+  const promise = loadHTMLContent(config.about_url, elAbout);
+  promise.then(() => {
+    elAbout.classList.add('loaded');
+  });
 });
 
 /**

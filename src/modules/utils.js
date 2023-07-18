@@ -78,3 +78,26 @@ export function arrayToFlat(arr) {
 export function arrayUnique(arr) {
   return [...new Set(arrayToFlat(arr))];
 }
+
+/**
+ * @param {Element} element
+ * @param {String} className
+ * @returns {Boolean}
+ */
+export function hasClass(element, className) {
+  return element.classList.contains(className);
+}
+
+/**
+ * @param {String} url
+ * @param {Element} targetElement
+ * @returns {Promise}
+ */
+export function loadHTMLContent(url, targetElement) {
+  return fetch(url)
+      .then(response => response.text())
+      .then(htmlContent => {
+          targetElement.innerHTML = htmlContent;
+      })
+      .catch(error => console.error('Error loading HTML content:', error));
+}

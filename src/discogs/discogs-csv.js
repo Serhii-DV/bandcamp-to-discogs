@@ -62,7 +62,7 @@ export class DiscogsCsv {
       genres: keywordsToDiscogsGenres(release.keywords),
       styles: keywordsToDiscogsStyles(release.keywords),
       tracks: release.tracks,
-      notes: release.about ?? '',
+      notes: '',
       date: release.date.toISOString().split('T')[0],
       images: release.coverSrc.big
     });

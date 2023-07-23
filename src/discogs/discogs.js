@@ -24,7 +24,7 @@ export function getSearchDiscogsReleaseUrl(artist, release) {
  * @returns {Node} - The HTML element representing the converted table.
  */
 export function objectToHtmlElement(data) {
-  if (!isObject(data)) {
+  if (!isObject(data) && !isArray(data)) {
     return document.createTextNode(data);
   }
 
@@ -45,7 +45,7 @@ export function objectToHtmlElement(data) {
       valueCell.appendChild(objectToHtmlElement(value));
     } else if (isArray(value)) {
       valueCell.innerHTML = value
-        .map(item => (isString(item) ? item : objectToHtmlElement(item).innerHTML))
+        .map(item => (isString(item) ? item : objectToHtmlElement(item).outerHTML))
         .join(", ");
     } else {
       valueCell.innerHTML = isString(value)

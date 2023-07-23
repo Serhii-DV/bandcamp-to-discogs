@@ -8,6 +8,7 @@ import config from "../config.js";
 import { hasClass, loadHTMLContent } from "../modules/utils.js";
 
 let release;
+let tralbumData;
 const btnCsvData = document.getElementById('csvData-tab');
 const btnDownloadCsv = document.getElementById('download-csv');
 const btnDiscogsSearch = document.getElementById('discogs-search-artist');
@@ -29,8 +30,11 @@ const elReleaseCard = document.querySelector('#releaseCard');
 const elWarningMessage = document.getElementById('warningMessage');
 
 btnCsvData.addEventListener('click', () => {
-  outputDiscogsCsvData(release);
-  outputBandcampData(release);
+  const csvDataTabPane = document.getElementById('csvData');
+
+  appendObjectData(releaseToCsvObject(release), 'Discogs CSV data', csvDataTabPane);
+  appendObjectData(release, 'Generated release data', csvDataTabPane);
+  appendObjectData(tralbumData, 'Bandcamp TralbumData object', csvDataTabPane);
 });
 
 btnAbout.addEventListener('click', () => {
@@ -41,25 +45,12 @@ btnAbout.addEventListener('click', () => {
   });
 });
 
-/**
- * @param {Release} release
- */
-function outputDiscogsCsvData(release) {
-  const discogsCsvTabPane = document.querySelector('#csvData .content');
-  const csvObject = releaseToCsvObject(release);
-  const tableEl = objectToHtmlElement(csvObject);
-  discogsCsvTabPane.textContent = '';
-  discogsCsvTabPane.appendChild(tableEl);
-}
-
-/**
- * @param {Release} release
- */
-function outputBandcampData(release) {
-  const bandcampDataTabPane = document.querySelector('#bandcampData .content');
-  const tableEl = objectToHtmlElement(release);
-  bandcampDataTabPane.textContent = '';
-  bandcampDataTabPane.appendChild(tableEl);
+function appendObjectData(obj, headline, el) {
+  const headlineEl = document.createElement('h2');
+  headlineEl.classList.add('display-6');
+  headlineEl.innerText = headline;
+  el.appendChild(headlineEl);
+  el.appendChild(objectToHtmlElement(obj));
 }
 
 btnDownloadCsv.addEventListener('click', () => {
@@ -145,8 +136,10 @@ async function loadRelease() {
 
       loadDiscogsGenres(config.genres_url).then(genres => {
         loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
+          tralbumData = response.tralbumData;
+
           setupRelease(
-            response.tralbumData,
+            tralbumData,
             response.bandData,
             response.schemaData,
             response.coverSrc

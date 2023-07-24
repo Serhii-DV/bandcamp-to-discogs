@@ -1,11 +1,11 @@
 import { objectToCsv, downloadCsv } from "../modules/csv.js";
-import { getSearchDiscogsReleaseUrl, objectToDetailsElement, objectToHtmlElement, releaseToCsvObject } from "../discogs/discogs.js";
+import { getSearchDiscogsReleaseUrl, releaseToCsvObject } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
 import { getCurrentTab } from "../modules/tab.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
-import { hasClass, loadHTMLContent } from "../modules/utils.js";
+import { hasClass, loadHTMLContent, objectToDetailsElement, objectToHtmlElement } from "../modules/utils.js";
 
 let release;
 let tralbumData;

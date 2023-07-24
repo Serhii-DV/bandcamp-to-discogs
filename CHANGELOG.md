@@ -6,6 +6,7 @@
 - Discogs notes field is empty by default. It should not be automatically filled
 - Use bandcamp "publish_date" as a release date
 - Output generated "Submission notes" value
+- Output current extension version in the "About" section
 
 ## Fixed
 

@@ -1,7 +1,7 @@
 import { objectToCsv, downloadCsv } from "../modules/csv.js";
 import { generateSubmissionNotes, getSearchDiscogsReleaseUrl, releaseToCsvObject } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
-import { getCurrentTab } from "../modules/chrome.js";
+import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
@@ -40,10 +40,17 @@ btnCsvData.addEventListener('click', () => {
   csvDataTabPane.appendChild(objectToDetailsElement(tralbumData, 'Bandcamp TralbumData object'));
 });
 
+/**
+ * Output about tab pane
+ */
 btnAbout.addEventListener('click', () => {
   if (hasClass(elAbout, 'loaded')) return;
   const promise = loadHTMLContent(config.about_url, elAbout);
-  promise.then(() => {
+  promise.then(targetElement => {
+    const manifest = getExtensionManifest();
+    targetElement.querySelector('.version').textContent = manifest.version;
+  })
+  .then(() => {
     elAbout.classList.add('loaded');
   });
 });

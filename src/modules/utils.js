@@ -98,6 +98,7 @@ export function loadHTMLContent(url, targetElement) {
       .then(response => response.text())
       .then(htmlContent => {
           targetElement.innerHTML = htmlContent;
+          return targetElement;
       })
       .catch(error => console.error('Error loading HTML content:', error));
 }

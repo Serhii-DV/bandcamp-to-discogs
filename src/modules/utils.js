@@ -158,26 +158,6 @@ export function objectToDetailsElement(obj, title = '') {
   summaryElement.textContent = title;
   detailsElement.appendChild(summaryElement);
 
-  /**
-   * Creates a <details> element with a key-value pair.
-   *
-   * @param {string} key - The key (property name) of the object property.
-   * @param {*} value - The value associated with the key.
-   * @returns {HTMLElement} The generated <details> element representing the key-value pair.
-   */
-  const createKeyValueDetails = (key, value) => {
-    const keyValueDetails = document.createElement('details');
-    const summaryElement = document.createElement('summary');
-    summaryElement.textContent = key;
-    keyValueDetails.appendChild(summaryElement);
-
-    const valueElement = document.createElement('div');
-    valueElement.textContent = value instanceof Date ? value.toISOString() : value;
-    keyValueDetails.appendChild(valueElement);
-
-    return keyValueDetails;
-  };
-
   Object.entries(obj).forEach(([key, value]) => {
     if ((isObject(value) || isArray(value)) && value !== null) {
       const nestedDetails = objectToDetailsElement(value, key);
@@ -189,4 +169,30 @@ export function objectToDetailsElement(obj, title = '') {
   });
 
   return detailsElement;
+}
+
+/**
+ * Creates a <details> element with a key-value pair.
+ *
+ * @param {string} key - The key (property name) of the object property.
+ * @param {*} value - The value associated with the key.
+ * @returns {HTMLElement} The generated <details> element representing the key-value pair.
+ */
+export function createKeyValueDetails(key, value) {
+  const keyValueDetails = document.createElement('details');
+  const summaryElement = document.createElement('summary');
+  summaryElement.textContent = key;
+  keyValueDetails.appendChild(summaryElement);
+
+  const valueElement = document.createElement('div');
+
+  if (value instanceof HTMLElement) {
+    valueElement.appendChild(value);
+  } else {
+    valueElement.textContent = value instanceof Date ? value.toISOString() : value;
+  }
+
+  keyValueDetails.appendChild(valueElement);
+
+  return keyValueDetails;
 }

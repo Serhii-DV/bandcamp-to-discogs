@@ -32,3 +32,19 @@ body {
 .lines-a5-t1 #release-tracklist { height: 190px; }
 .lines-a5-t2 #release-tracklist { height: 190px; }
 .lines-a5-t3 #release-tracklist { height: 190px; }
+
+
+/* Style for the tree view */
+details {
+  margin-left: 10px;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Hide the default arrow icon */
+details summary::-webkit-details-marker {
+  display: none;
+}

@@ -60,3 +60,49 @@ export function objectToHtmlElement(data) {
 
   return table;
 }
+
+/**
+ * Converts an object into a nested HTML <details> element with key-value pairs.
+ *
+ * @param {Object} obj - The input object to be converted into a details element.
+ * @param {string} [title=''] - An optional title for the top-level <summary> element.
+ * @returns {HTMLElement} The generated <details> element representing the object's structure.
+ */
+export function objectToDetailsElement(obj, title = '') {
+  const detailsElement = document.createElement('details');
+  const summaryElement = document.createElement('summary');
+  summaryElement.textContent = title;
+  detailsElement.appendChild(summaryElement);
+
+  /**
+   * Creates a <details> element with a key-value pair.
+   *
+   * @param {string} key - The key (property name) of the object property.
+   * @param {*} value - The value associated with the key.
+   * @returns {HTMLElement} The generated <details> element representing the key-value pair.
+   */
+  const createKeyValueDetails = (key, value) => {
+    const keyValueDetails = document.createElement('details');
+    const summaryElement = document.createElement('summary');
+    summaryElement.textContent = key;
+    keyValueDetails.appendChild(summaryElement);
+
+    const valueElement = document.createElement('div');
+    valueElement.textContent = value instanceof Date ? value.toISOString() : value;
+    keyValueDetails.appendChild(valueElement);
+
+    return keyValueDetails;
+  };
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if ((isObject(value) || isArray(value)) && value !== null) {
+      const nestedDetails = objectToDetailsElement(value, key);
+      detailsElement.appendChild(nestedDetails);
+    } else {
+      const keyValueDetails = createKeyValueDetails(key, value);
+      detailsElement.appendChild(keyValueDetails);
+    }
+  });
+
+  return detailsElement;
+}

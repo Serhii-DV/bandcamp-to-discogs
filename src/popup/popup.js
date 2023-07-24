@@ -1,5 +1,5 @@
 import { objectToCsv, downloadCsv } from "../modules/csv.js";
-import { getSearchDiscogsReleaseUrl, objectToHtmlElement, releaseToCsvObject } from "../discogs/discogs.js";
+import { getSearchDiscogsReleaseUrl, objectToDetailsElement, objectToHtmlElement, releaseToCsvObject } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
 import { getCurrentTab } from "../modules/tab.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
@@ -31,10 +31,11 @@ const elWarningMessage = document.getElementById('warningMessage');
 
 btnCsvData.addEventListener('click', () => {
   const csvDataTabPane = document.getElementById('csvData');
+  csvDataTabPane.innerHTML = '';
 
   appendObjectData(releaseToCsvObject(release), 'Discogs CSV data', csvDataTabPane);
-  appendObjectData(release, 'Generated release data', csvDataTabPane);
-  appendObjectData(tralbumData, 'Bandcamp TralbumData object', csvDataTabPane);
+  csvDataTabPane.appendChild(objectToDetailsElement(release, 'Generated release data'));
+  csvDataTabPane.appendChild(objectToDetailsElement(tralbumData, 'Bandcamp TralbumData object'));
 });
 
 btnAbout.addEventListener('click', () => {

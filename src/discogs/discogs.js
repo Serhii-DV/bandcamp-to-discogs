@@ -16,3 +16,11 @@ export function getSearchDiscogsArtistUrl(artist) {
 export function getSearchDiscogsReleaseUrl(artist, release) {
   return `https://www.discogs.com/search?q=${encodeURIComponent(artist)}+${encodeURIComponent(release)}&type=release`;
 }
+
+/**
+ * @param {Release} release
+ * @returns {String}
+ */
+export function generateSubmissionNotes(release) {
+  return `This draft was created via CSV upload and Bandcamp To Discogs Google Chrome extension (https://chrome.google.com/webstore/detail/bandcamp-to-discogs-b2d/hipnkehalkffbdjnbbeoefmoondaciok).\n\nRelease url: ${release.url}`;
+}

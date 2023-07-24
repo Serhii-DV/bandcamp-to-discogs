@@ -1,11 +1,11 @@
 import { objectToCsv, downloadCsv } from "../modules/csv.js";
-import { getSearchDiscogsReleaseUrl, releaseToCsvObject } from "../discogs/discogs.js";
+import { generateSubmissionNotes, getSearchDiscogsReleaseUrl, releaseToCsvObject } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
 import { getCurrentTab } from "../modules/tab.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
-import { hasClass, loadHTMLContent, objectToDetailsElement, objectToHtmlElement } from "../modules/utils.js";
+import { createKeyValueDetails, hasClass, loadHTMLContent, objectToDetailsElement, objectToHtmlElement } from "../modules/utils.js";
 
 let release;
 let tralbumData;
@@ -34,6 +34,8 @@ btnCsvData.addEventListener('click', () => {
   csvDataTabPane.innerHTML = '';
 
   appendObjectData(releaseToCsvObject(release), 'Discogs CSV data', csvDataTabPane);
+  appendSubmissionNotesDetails(release, csvDataTabPane);
+
   csvDataTabPane.appendChild(objectToDetailsElement(release, 'Generated release data'));
   csvDataTabPane.appendChild(objectToDetailsElement(tralbumData, 'Bandcamp TralbumData object'));
 });
@@ -52,6 +54,17 @@ function appendObjectData(obj, headline, el) {
   headlineEl.innerText = headline;
   el.appendChild(headlineEl);
   el.appendChild(objectToHtmlElement(obj));
+}
+
+function appendSubmissionNotesDetails(release, parentElement) {
+  const submissionNotesTextareaElement = document.createElement('textarea');
+  submissionNotesTextareaElement.classList.add('form-control');
+  submissionNotesTextareaElement.value = generateSubmissionNotes(release);
+
+  const detailsElement = createKeyValueDetails('Submission notes', submissionNotesTextareaElement);
+  detailsElement.open = true;
+
+  parentElement.appendChild(detailsElement);
 }
 
 btnDownloadCsv.addEventListener('click', () => {

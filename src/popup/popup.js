@@ -1,7 +1,7 @@
 import { objectToCsv, downloadCsv } from "../modules/csv.js";
 import { generateSubmissionNotes, getSearchDiscogsReleaseUrl, releaseToCsvObject } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
-import { getCurrentTab } from "../modules/tab.js";
+import { getCurrentTab } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";

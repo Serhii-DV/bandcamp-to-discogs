@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Bandcamp To Discogs",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Generates a CSV file for the Bandcamp artist release. The CSV file can be imported into Discogs as a draft.",
   "permissions": [],
   "background": {
@@ -11,6 +11,11 @@
     {
       "js": ["src/bandcamp/content.js"],
       "matches": ["https://*.bandcamp.com/*"],
+      "run_at": "document_end"
+    },
+    {
+      "js": ["src/discogs/content.js"],
+      "matches": ["https://www.discogs.com/release/edit/*"],
       "run_at": "document_end"
     }
   ],
@@ -33,6 +38,10 @@
     {
       "resources": [ "src/bandcamp/script.js" ],
       "matches": ["https://*.bandcamp.com/*"]
+    },
+    {
+      "resources": [ "src/discogs/script.js" ],
+      "matches": ["https://www.discogs.com/*"]
     }
   ]
 }

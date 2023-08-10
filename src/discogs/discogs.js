@@ -12,11 +12,11 @@ export function releaseToCsvObject(release) {
 }
 
 export function getSearchDiscogsArtistUrl(artist) {
-  return `https://www.discogs.com/search?q=${encodeURIComponent(artist)}&type=artist`;
+  return replaceTokens(config.discogs_search_artist_url, {artist: artist});
 }
 
 export function getSearchDiscogsReleaseUrl(artist, release) {
-  return `https://www.discogs.com/search?q=${encodeURIComponent(artist)}+${encodeURIComponent(release)}&type=release`;
+  return replaceTokens(config.discogs_search_release_url, {artist: artist, release: release});
 }
 
 /**

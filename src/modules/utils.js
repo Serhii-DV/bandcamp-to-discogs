@@ -197,3 +197,18 @@ export function createKeyValueDetails(key, value) {
 
   return keyValueDetails;
 }
+
+/**
+ * Replace tokens in a template string with their corresponding values.
+ * @param {string} template - The template string with tokens to be replaced.
+ * @param {object} replacements - An object containing key-value pairs for replacements.
+ * @returns {string} - The template string with tokens replaced by their values.
+ */
+export function replaceTokens(template, replacements) {
+  for (const key in replacements) {
+    if (replacements.hasOwnProperty(key)) {
+      template = template.replace(`{${key}}`, replacements[key]);
+    }
+  }
+  return template;
+}

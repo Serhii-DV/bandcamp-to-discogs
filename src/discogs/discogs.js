@@ -1,5 +1,7 @@
 import { DiscogsCsv } from "./discogs-csv.js";
 import { Release } from "../app/release.js";
+import config from "../config.js";
+import { replaceTokens } from "../modules/utils.js";
 
 /**
  * @param {Release} release
@@ -22,5 +24,8 @@ export function getSearchDiscogsReleaseUrl(artist, release) {
  * @returns {String}
  */
 export function generateSubmissionNotes(release) {
-  return `This draft was created via CSV upload and Bandcamp To Discogs Google Chrome extension (https://chrome.google.com/webstore/detail/bandcamp-to-discogs-b2d/hipnkehalkffbdjnbbeoefmoondaciok).\n\nRelease url: ${release.url}`;
+  return replaceTokens(config.text.notes, {
+    extension_url: config.extension_url,
+    release_url: release.url
+  });
 }

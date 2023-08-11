@@ -14,11 +14,6 @@ const btnDownloadCsv = document.getElementById('download-csv');
 const btnDiscogsSearch = document.getElementById('discogs-search-artist');
 const btnAbout = document.getElementById('about-tab');
 const elAbout = document.getElementById('about');
-const btnsDisableEnable = [
-  btnCsvData,
-  btnDownloadCsv,
-  btnDiscogsSearch
-];
 const elRelease = document.getElementById('release');
 const releaseCover = document.getElementById('release-cover');
 const releaseArtist = document.getElementById('release-artist');
@@ -135,14 +130,6 @@ function showMainNav() {
 
 function hideMainNav() {
   elMainNav.classList.add('visually-hidden');
-}
-
-function disableButtons() {
-  btnsDisableEnable.forEach(button => button.classList.add('disabled'));
-}
-
-function enableButtons() {
-  btnsDisableEnable.forEach(button => button.classList.remove('disabled'));
 }
 
 async function loadRelease() {

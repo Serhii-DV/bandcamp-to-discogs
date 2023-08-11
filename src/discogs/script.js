@@ -20,7 +20,8 @@
     selectFormatFileType(releaseData.format.fileType);
     selectFormatDescription(releaseData.format.description);
     fillDurations();
-    setSubmissionNotes(releaseData.submissionNotes);
+    setInputValue(submissionNotesTextarea, releaseData.submissionNotes);
+    setInputValue(notesTextarea, '');
   }, 2000);
 
   function detectElements() {
@@ -88,13 +89,6 @@
       setInputValue(trackTitleInput, title);
       setInputValue(durationInput, duration);
     });
-  }
-
-  /**
-   * @param {String} value
-   */
-  function setSubmissionNotes(value) {
-    setInputValue(submissionNotesTextarea, value);
   }
 })(document);
 

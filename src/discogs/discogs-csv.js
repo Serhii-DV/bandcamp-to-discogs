@@ -1,6 +1,9 @@
 import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../bandcamp/bandcamp.js";
 import { capitalizeEachWord } from "../modules/utils.js";
 import { Release, Track } from "../app/release.js";
+import { generateSubmissionNotes } from "./discogs.js";
+import config from "../config.js";
+import { getExtensionManifest } from "../modules/chrome.js";
 
 /**
  * Represents a Discogs CSV entry.
@@ -53,6 +56,12 @@ export class DiscogsCsv {
    * @return {DiscogsCsv} - The converted DiscogsCsv instance.
    */
   static fromRelease(release) {
+    const manifest = getExtensionManifest();
+    let b2dData = {
+      version: manifest.version,
+      submissionNotes: generateSubmissionNotes(release)
+    };
+
     return new DiscogsCsv({
       artist: release.artist,
       title: release.title,
@@ -62,7 +71,7 @@ export class DiscogsCsv {
       genres: keywordsToDiscogsGenres(release.keywords),
       styles: keywordsToDiscogsStyles(release.keywords),
       tracks: release.tracks,
-      notes: '',
+      notes: JSON.stringify(b2dData),
       date: release.date.toISOString().split('T')[0],
       images: release.coverSrc.big
     });

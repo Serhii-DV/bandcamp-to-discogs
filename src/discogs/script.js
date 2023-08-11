@@ -5,13 +5,22 @@
   let trackNumInputs;
   let trackTitleInputs;
   let trackDurationInputs;
+  let notesTextarea;
+  let submissionNotesTextarea;
 
   setTimeout(() => {
     detectElements();
+    const releaseData = unserializeReleaseData();
+
+    if (!isObject(releaseData)) {
+      return;
+    }
+
     updateQuantity(trackNumInputs.length);
     selectFormatFileType('FLAC');
     selectFormatDescription('Album');
     fillDurations();
+    setSubmissionNotes(releaseData.submissionNotes);
   }, 2000);
 
   function detectElements() {
@@ -19,6 +28,18 @@
     trackNumInputs = document.querySelectorAll('.track-number-input');
     trackTitleInputs = document.querySelectorAll('.track_input');
     trackDurationInputs = document.querySelectorAll('input[aria-label="Track duration"]');
+    notesTextarea = document.querySelector('textarea#release-notes-textarea');
+    submissionNotesTextarea = document.querySelector('textarea#release-submission-notes-textarea');
+  }
+
+  function unserializeReleaseData() {
+    const jsonString = notesTextarea.value;
+    try {
+      return JSON.parse(jsonString);
+    } catch (error) {
+      console.error('B2D: Invalid JSON in Notes');
+    }
+    return null;
   }
 
   /**
@@ -69,6 +90,13 @@
       setInputValue(durationInput, duration);
     });
   }
+
+  /**
+   * @param {String} value
+   */
+  function setSubmissionNotes(value) {
+    setInputValue(submissionNotesTextarea, value);
+  }
 })(document);
 
 /**
@@ -112,4 +140,8 @@ function checkInput(inputElement) {
 function triggerInputEvent(element) {
   const inputEvent = new Event("input", { bubbles: true, cancelable: true });
   element.dispatchEvent(inputEvent);
+}
+
+function isObject(value) {
+  return Object.prototype.toString.call(value) === '[object Object]';
 }

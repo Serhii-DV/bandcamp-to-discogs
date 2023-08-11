@@ -2,7 +2,6 @@
 
 ((document) => {
   let qtyInput;
-  let trackNumInputs;
   let trackTitleInputs;
   let trackDurationInputs;
   let notesTextarea;
@@ -10,22 +9,22 @@
 
   setTimeout(() => {
     detectElements();
+    // @see DiscogsCsv::fromRelease
     const releaseData = unserializeReleaseData();
 
     if (!isObject(releaseData)) {
       return;
     }
 
-    updateQuantity(trackNumInputs.length);
-    selectFormatFileType('FLAC');
-    selectFormatDescription('Album');
+    updateQuantity(releaseData.format.qty);
+    selectFormatFileType(releaseData.format.fileType);
+    selectFormatDescription(releaseData.format.description);
     fillDurations();
     setSubmissionNotes(releaseData.submissionNotes);
   }, 2000);
 
   function detectElements() {
     qtyInput = document.querySelector('input[aria-label="Quantity of format"]');
-    trackNumInputs = document.querySelectorAll('.track-number-input');
     trackTitleInputs = document.querySelectorAll('.track_input');
     trackDurationInputs = document.querySelectorAll('input[aria-label="Track duration"]');
     notesTextarea = document.querySelector('textarea#release-notes-textarea');

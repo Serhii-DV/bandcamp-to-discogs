@@ -1,6 +1,15 @@
-# v0.1.3
+# Change log
 
-## Feature
+## 0.2.x (2023-08-XX)
+
+### Features
+
+- Save release metadata as JSON value in notes field
+- Outofill release fields from metadata on Discogs draft page
+
+## 0.1.3
+
+### Features
 
 - Added "How to use" information to the "About" section
 - Discogs notes field is empty by default. It should not be automatically filled
@@ -8,6 +17,6 @@
 - Output generated "Submission notes" value
 - Output current extension version in the "About" section
 
-## Fixed
+### Fixes
 
 - Always load `about.html` from the source code and not from the Gist

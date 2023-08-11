@@ -1,3 +1,5 @@
+import { generateSubmissionNotes } from '../discogs/discogs.js';
+import { getExtensionManifest } from '../modules/chrome.js';
 import { padStringLeft } from '../modules/utils.js';
 
 export class Release {
@@ -21,6 +23,7 @@ export class Release {
     this.label = label;
     this.date = date;
     this.tracks = tracks;
+    this.tracksQty = tracks.length;
     this.url = url;
     this.about = about;
     this.credits = credits;
@@ -37,7 +40,7 @@ export class Release {
    * @returns {Release}
    */
   static fromBandcampData(TralbumData, BandData, SchemaData, coverSrc) {
-    const { artist, current, album_release_date, url } = TralbumData;
+    const { artist, current, url } = TralbumData;
     const { title, about, credits, publish_date, type } = current;
     const { keywords } = SchemaData;
     const tracks = TralbumData.trackinfo.map(track => new Track(
@@ -61,6 +64,24 @@ export class Release {
       coverSrc,
       keywords
     );
+  }
+
+  /**
+   * Returns release json metadata
+   * @param {Release} release
+   * @returns Object
+   */
+  toMetadata() {
+    const manifest = getExtensionManifest();
+    return {
+      version: manifest.version,
+      format: {
+        qty: this.tracksQty,
+        fileType: 'FLAC',
+        description: 'Album'
+      },
+      submissionNotes: generateSubmissionNotes(this)
+    };
   }
 }
 

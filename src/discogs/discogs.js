@@ -5,10 +5,10 @@ import { replaceTokens } from "../modules/utils.js";
 
 /**
  * @param {Release} release
- * @returns {Object}
+ * @returns {DiscogsCsv}
  */
-export function releaseToCsvObject(release) {
-  return DiscogsCsv.fromRelease(release).toCsvObject();
+export function releaseToDiscogsCsv(release) {
+  return DiscogsCsv.fromRelease(release);
 }
 
 export function getSearchDiscogsArtistUrl(artist) {

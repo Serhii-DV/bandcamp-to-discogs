@@ -1,5 +1,5 @@
 import { objectToCsv, downloadCsv } from "../modules/csv.js";
-import { generateSubmissionNotes, getSearchDiscogsReleaseUrl, releaseToCsvObject } from "../discogs/discogs.js";
+import { generateSubmissionNotes, getSearchDiscogsReleaseUrl, releaseToDiscogsCsv } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
 import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
@@ -28,8 +28,11 @@ btnCsvData.addEventListener('click', () => {
   const csvDataTabPane = document.getElementById('csvData');
   csvDataTabPane.innerHTML = '';
 
-  appendObjectData(releaseToCsvObject(release), 'Discogs CSV data', csvDataTabPane);
-  appendSubmissionNotesDetails(release, csvDataTabPane);
+  const discogsCsv = releaseToDiscogsCsv(release);
+
+  appendObjectData(discogsCsv.toCsvObject(), 'Discogs CSV data', csvDataTabPane);
+  appendTextareaDetails('B2D Release JSON Data', discogsCsv.notes, csvDataTabPane);
+  appendTextareaDetails('Submission notes', generateSubmissionNotes(release), csvDataTabPane);
 
   csvDataTabPane.appendChild(objectToDetailsElement(release, 'Generated release data'));
   csvDataTabPane.appendChild(objectToDetailsElement(tralbumData, 'Bandcamp TralbumData object'));
@@ -58,21 +61,20 @@ function appendObjectData(obj, headline, el) {
   el.appendChild(objectToHtmlElement(obj));
 }
 
-function appendSubmissionNotesDetails(release, parentElement) {
-  const submissionNotesTextareaElement = document.createElement('textarea');
-  submissionNotesTextareaElement.classList.add('form-control');
-  submissionNotesTextareaElement.value = generateSubmissionNotes(release);
-
-  const detailsElement = createKeyValueDetails('Submission notes', submissionNotesTextareaElement);
+function appendTextareaDetails(title, value, parentElement) {
+  const textarea = document.createElement('textarea');
+  textarea.classList.add('form-control');
+  textarea.value = value;
+  const detailsElement = createKeyValueDetails(title, textarea);
   detailsElement.open = true;
 
   parentElement.appendChild(detailsElement);
 }
 
 btnDownloadCsv.addEventListener('click', () => {
-  let csvObject = releaseToCsvObject(release);
+  const discogsCsv = releaseToDiscogsCsv(release);
   downloadCsv(
-    objectToCsv(csvObject),
+    objectToCsv(discogsCsv.toCsvObject()),
     `discogs-${release.artist}-${release.title}`
   );
 });

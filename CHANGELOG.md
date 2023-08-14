@@ -1,11 +1,12 @@
 # Change log
 
-## 0.2.x (2023-08-XX)
+## 0.2.0 (2023-08-14)
 
 ### Features
 
 - Save release metadata as JSON value in notes field
 - Outofill release fields from metadata on Discogs draft page
+- Updated "About extension" information
 
 ## 0.1.3
 

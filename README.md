@@ -6,14 +6,14 @@ Bandcamp to Discogs (B2D) - is a Google Chrome extension designed to assist in c
 
 ## Features
 
- * Exports Bandcamp artists release information into a CSV file
- * The CSV file can be imported into Discogs as a draft ([CSV to Draft page](https://www.discogs.com/release/csv_to_draft))
- * Limit amount of Bandcamp keywords that can be transformed into the Discogs genres and styles (TODO)
-
+* Exports Bandcamp artists release information into a CSV file
+* The CSV file can be imported into Discogs as a draft ([CSV to Draft page](https://www.discogs.com/release/csv_to_draft))
+* Limit amount of Bandcamp keywords that can be transformed into the Discogs genres and styles (TODO)
 
 ### Chrome Webstore Link
 
-[TODO]
+[Bandcamp to Discogs Extension](https://chrome.google.com/webstore/detail/bandcamp-to-discogs-b2d/hipnkehalkffbdjnbbeoefmoondaciok)
+
 ## Author
 
 **Serhii Diahovchenko** - [Serhii-DV](https://github.com/Serhii-DV)

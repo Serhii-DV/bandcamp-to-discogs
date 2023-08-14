@@ -46,7 +46,9 @@ btnAbout.addEventListener('click', () => {
   const promise = loadHTMLContent(config.about_url, elAbout);
   promise.then(targetElement => {
     const manifest = getExtensionManifest();
-    targetElement.querySelector('.version').textContent = manifest.version;
+    targetElement.querySelectorAll('.version').forEach(el => {
+      el.textContent = manifest.version;
+    });
   })
   .then(() => {
     elAbout.classList.add('loaded');

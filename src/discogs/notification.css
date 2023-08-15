@@ -1,0 +1,63 @@
+.notification-stack {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 1000;
+}
+
+.notification {
+  position: relative; /* Add position relative to contain the close button */
+  margin: 5px 0;
+  padding: 10px 40px 10px 20px; /* Add extra padding for the close button */
+  background-color: #333;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notification .header {
+  font-weight: bold;
+  color:#000 !important;
+}
+
+.notification-close {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-weight: bold !important;
+  font-size: 24px;
+  color:#000 !important;
+}
+
+.de-dark-theme .notification-close {
+  color:#000 !important;
+}
+
+.notification.error {
+  background-color: #d9534f !important;
+}
+
+.notification.warning {
+  background-color: #f0ad4e !important;
+  color:#000 !important;
+}
+
+.notification.info {
+  background-color: #5bc0de !important;
+  color:#000 !important;
+}
+
+.notification.success {
+  background-color: #5cb85c !important;
+  color:#000 !important;
+}
+
+.notification.debug {
+  background-color: #989898 !important;
+  color:#000 !important;
+}

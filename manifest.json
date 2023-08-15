@@ -40,7 +40,10 @@
       "matches": ["https://*.bandcamp.com/*"]
     },
     {
-      "resources": [ "src/discogs/script.js" ],
+      "resources": [
+        "src/discogs/script.js",
+        "src/discogs/notification.css"
+      ],
       "matches": ["https://www.discogs.com/*"]
     }
   ]

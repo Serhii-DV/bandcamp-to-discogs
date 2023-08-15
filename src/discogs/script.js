@@ -14,6 +14,7 @@
     const releaseData = unserializeReleaseData();
 
     if (!isObject(releaseData)) {
+      showNotificationWarning('Release metadata was not found');
       return;
     }
 
@@ -26,6 +27,8 @@
 
     // Focus on artist name input
     artistNameInput.focus();
+
+    showNotificationInfo('Release metadata was found and applied');
   }, 2000);
 
   function detectElements() {
@@ -95,7 +98,42 @@
       setInputValue(durationInput, duration);
     });
   }
+
+  // Notifications
+
+  const notificationStack = createNotificationStack();
+
+  function createNotificationStack() {
+    const stack = document.createElement('div');
+    stack.className = 'notification-stack';
+    document.body.appendChild(stack);
+    return stack;
+  }
+
+  function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `<div class="header">Bandcamp to Discogs</div>${message}<span class="notification-close">×</span>`;
+
+    const closeButton = notification.querySelector('.notification-close');
+    closeButton.addEventListener('click', function () {
+      notificationStack.removeChild(notification);
+    });
+
+    notificationStack.appendChild(notification);
+
+    setTimeout(function () {
+      notificationStack.removeChild(notification);
+    }, 5000); // Remove notification after 5 seconds
+  }
+
+  function showNotificationDebug(message) { showNotification(message, 'debug'); }
+  function showNotificationInfo(message) { showNotification(message, 'info'); }
+  function showNotificationWarning(message) { showNotification(message, 'warning'); }
+  function showNotificationError(message) { showNotification(message, 'error'); }
+
 })(document);
+
 
 /**
  * @param {String} str
@@ -142,4 +180,20 @@ function triggerInputEvent(element) {
 
 function isObject(value) {
   return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+function addToast(parentElement) {
+  const toastBody =
+`<div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>`;
+  const toastEl = document.createElement('div');
+  toastEl.innerHTML = toastBody;
+console.log(toastEl.firstChild);
+  parentElement.appendChild(toastEl.firstChild);
 }

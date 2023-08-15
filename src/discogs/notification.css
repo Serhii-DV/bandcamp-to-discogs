@@ -20,7 +20,6 @@
 
 .notification .header {
   font-weight: bold;
-  color:#000 !important;
 }
 
 .notification-close {
@@ -31,33 +30,37 @@
   cursor: pointer;
   font-weight: bold !important;
   font-size: 24px;
-  color:#000 !important;
+  color:#fff !important;
 }
 
 .de-dark-theme .notification-close {
-  color:#000 !important;
+  color:#fff !important;
 }
 
 .notification.error {
-  background-color: #d9534f !important;
-}
-
-.notification.warning {
-  background-color: #f0ad4e !important;
-  color:#000 !important;
+  background-color: #721c24 !important;
 }
 
 .notification.info {
-  background-color: #5bc0de !important;
-  color:#000 !important;
+  background-color: #1e4b7a !important;
 }
 
 .notification.success {
-  background-color: #5cb85c !important;
-  color:#000 !important;
+  background-color: #155724 !important;
+}
+
+.notification.warning {
+  background-color: #856404 !important;
 }
 
 .notification.debug {
-  background-color: #989898 !important;
-  color:#000 !important;
+  background-color: #5a6268 !important;
+}
+
+.notification.error,
+.notification.info,
+.notification.success,
+.notification.warning,
+.notification.debug {
+  color: #fff;
 }

@@ -25,10 +25,10 @@
     setInputValue(submissionNotesTextarea, releaseData.submissionNotes);
     setInputValue(notesTextarea, '');
 
+    showNotificationInfo('Release metadata was applied');
+
     // Focus on artist name input
     artistNameInput.focus();
-
-    showNotificationInfo('Release metadata was found and applied');
   }, 2000);
 
   function detectElements() {

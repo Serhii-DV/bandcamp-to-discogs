@@ -1,6 +1,7 @@
 'use strict';
 
 ((document) => {
+  let artistNameInput;
   let qtyInput;
   let trackTitleInputs;
   let trackDurationInputs;
@@ -22,9 +23,13 @@
     fillDurations();
     setInputValue(submissionNotesTextarea, releaseData.submissionNotes);
     setInputValue(notesTextarea, '');
+
+    // Focus on artist name input
+    artistNameInput.focus();
   }, 2000);
 
   function detectElements() {
+    artistNameInput = document.getElementById('#artist-name-input');
     qtyInput = document.querySelector('input[aria-label="Quantity of format"]');
     trackTitleInputs = document.querySelectorAll('.track_input');
     trackDurationInputs = document.querySelectorAll('input[aria-label="Track duration"]');

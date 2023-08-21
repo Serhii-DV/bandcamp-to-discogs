@@ -1,7 +1,7 @@
 import { objectToCsv, downloadCsv } from "../modules/csv.js";
 import { generateSubmissionNotes, getSearchDiscogsReleaseUrl, releaseToDiscogsCsv } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
-import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
+import { getCurrentTab, getExtensionManifest, openTabs } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
@@ -189,15 +189,39 @@ function setupRelease(tralbumData, bandData, schemaData, coverSrc) {
 
 function processBandcampReleasesListData(releases) {
   const releaseForm = document.getElementById("releasesForm");
+  fillReleasesForm(releases, releaseForm)
 
+  document.getElementById("submitBandcampReleases").addEventListener("click", async () => {
+    const checkedCheckboxes = Array.from(releaseForm.querySelectorAll('input[type="checkbox"]:checked'));
+    const checkedUrls = checkedCheckboxes.map((checkbox) => checkbox.value);
+
+    await openTabs(checkedUrls, (tab) => {
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: extractBandcampData
+      });
+    });
+  });
+}
+
+function extractBandcampData() {
+  // Implement your logic to extract data and save to local storage
+
+  setTimeout(function() {
+    window.close();
+  }, 5000);
+}
+
+function fillReleasesForm(releases, form) {
   for (const release of releases) {
     const checkbox = createBootstrapCheckbox(
       convertToAlias(release.title),
+      release.url,
       release.artist + " - " + release.title,
       true
     );
 
-    releaseForm.querySelector('.checkboxes').appendChild(checkbox);
+    form.querySelector('.checkboxes').appendChild(checkbox);
   }
 }
 

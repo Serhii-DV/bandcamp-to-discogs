@@ -56,7 +56,7 @@ function extractReleasesListData() {
     const title = titleParts[0];
     const url = element.querySelector('a').getAttribute('href');
     releases.push({
-      url: url,
+      url: window.location.origin + url,
       artist: artist,
       title: title
     });
@@ -66,8 +66,6 @@ function extractReleasesListData() {
 
 function isOnReleasesListPage() {
   const location = window.location;
-  console.log(location);
-  console.log(location.pathname);
   return location.pathname === '/' || location.pathname === '/music';
 }
 

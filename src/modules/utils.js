@@ -221,12 +221,13 @@ export function hide(el) {
   isArray(el) ? el.forEach(hide) : el.classList.add('visually-hidden');
 }
 
-export function createBootstrapCheckbox(id, labelText, checked) {
+export function createBootstrapCheckbox(id, value, labelText, checked) {
   // Create the checkbox input element
   const checkboxInput = document.createElement("input");
   checkboxInput.classList.add("form-check-input");
   checkboxInput.type = "checkbox";
   checkboxInput.id = id;
+  checkboxInput.value = value;
   checkboxInput.checked = checked;
 
   // Create the label element

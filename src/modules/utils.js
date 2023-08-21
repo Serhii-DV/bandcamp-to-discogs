@@ -212,3 +212,34 @@ export function replaceTokens(template, replacements) {
   }
   return template;
 }
+
+export function show(el) {
+  isArray(el) ? el.forEach(show) : el.classList.remove('visually-hidden');
+}
+
+export function hide(el) {
+  isArray(el) ? el.forEach(hide) : el.classList.add('visually-hidden');
+}
+
+export function createBootstrapCheckbox(id, labelText, checked) {
+  // Create the checkbox input element
+  const checkboxInput = document.createElement("input");
+  checkboxInput.classList.add("form-check-input");
+  checkboxInput.type = "checkbox";
+  checkboxInput.id = id;
+  checkboxInput.checked = checked;
+
+  // Create the label element
+  const label = document.createElement("label");
+  label.classList.add("form-check-label");
+  label.htmlFor = id;
+  label.textContent = labelText;
+
+  // Create the div container for the checkbox and label
+  const container = document.createElement("div");
+  container.classList.add("form-check");
+  container.appendChild(checkboxInput);
+  container.appendChild(label);
+
+  return container;
+}

@@ -5,7 +5,7 @@ import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
-import { createKeyValueDetails, hasClass, loadHTMLContent, objectToDetailsElement, objectToHtmlElement } from "../modules/utils.js";
+import { convertToAlias, createBootstrapCheckbox, createKeyValueDetails, hasClass, hide, loadHTMLContent, objectToDetailsElement, objectToHtmlElement, show } from "../modules/utils.js";
 
 let release;
 let tralbumData;
@@ -23,6 +23,7 @@ const releaseTracklist = document.getElementById('release-tracklist');
 const elMainNav = document.getElementById('mainNav');
 const elReleaseCard = document.querySelector('#releaseCard');
 const elWarningMessage = document.getElementById('warningMessage');
+const bandcampReleasesElement = document.getElementById('bandcampReleases');
 
 btnCsvData.addEventListener('click', () => {
   const csvDataTabPane = document.getElementById('csvData');
@@ -146,18 +147,28 @@ async function loadRelease() {
         return;
       }
 
-      loadDiscogsGenres(config.genres_url).then(genres => {
-        loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
-          tralbumData = response.tralbumData;
+      if (response.type === 'release') {
+        processBandcampReleaseData(response.data);
+      } else if (response.type === 'list') {
+        hide([elReleaseCard, elWarningMessage]);
+        show(bandcampReleasesElement);
+        processBandcampReleasesListData(response.data);
+      }
+    });
+  });
+}
 
-          setupRelease(
-            tralbumData,
-            response.bandData,
-            response.schemaData,
-            response.coverSrc
-          );
-        });
-      });
+function processBandcampReleaseData(data) {
+  loadDiscogsGenres(config.genres_url).then(genres => {
+    loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
+      tralbumData = data.tralbumData;
+
+      setupRelease(
+        tralbumData,
+        data.bandData,
+        data.schemaData,
+        data.coverSrc
+      );
     });
   });
 }
@@ -174,6 +185,20 @@ function setupRelease(tralbumData, bandData, schemaData, coverSrc) {
   showReleaseContent();
   showMainNav();
   hideWarningMessage();
+}
+
+function processBandcampReleasesListData(releases) {
+  const releaseForm = document.getElementById("releasesForm");
+
+  for (const release of releases) {
+    const checkbox = createBootstrapCheckbox(
+      convertToAlias(release.title),
+      release.artist + " - " + release.title,
+      true
+    );
+
+    releaseForm.querySelector('.checkboxes').appendChild(checkbox);
+  }
 }
 
 loadRelease();

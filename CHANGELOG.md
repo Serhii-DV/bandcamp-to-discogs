@@ -1,5 +1,15 @@
 # Change log
 
+## 0.3.0 (2023-XX-YY)
+
+### Features
+
+- Introduced notifications on Discogs release edit page. It shows messages regarding actions on the page.
+
+### Fixed
+
+- Each word in release title must be capitalized
+
 ## 0.2.0 (2023-08-14)
 
 ### Features

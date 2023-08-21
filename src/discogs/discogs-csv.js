@@ -126,7 +126,7 @@ export class DiscogsCsv {
 
     return {
       artist: `"${this.artist}"`,
-      title: `"${this.title}"`,
+      title: `"${capitalizeEachWord(this.title)}"`,
       label: `"${this.label}"`,
       catno: this.catno,
       format: this.format,

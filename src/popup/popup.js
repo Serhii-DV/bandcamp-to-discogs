@@ -139,8 +139,8 @@ function hideMainNav() {
 
 async function loadRelease() {
   getCurrentTab().then((tab) => {
-    chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
-      if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0) {
+    chrome.tabs.sendMessage(tab.id, { type: 'getBandcampRelease' }, (response) => {
+      if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
         hideReleaseContent();
         hideMainNav();
         showWarningMessage();
@@ -161,30 +161,14 @@ async function loadRelease() {
 function processBandcampReleaseData(data) {
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
-      tralbumData = data.tralbumData;
+      const release = Release.fromJSON(data);
 
-      setupRelease(
-        tralbumData,
-        data.bandData,
-        data.schemaData,
-        data.coverSrc
-      );
+      outputRelease(release);
+      showReleaseContent();
+      showMainNav();
+      hideWarningMessage();
     });
   });
-}
-
-function setupRelease(tralbumData, bandData, schemaData, coverSrc) {
-  release = Release.fromBandcampData(
-    tralbumData,
-    bandData,
-    schemaData,
-    coverSrc
-  );
-
-  outputRelease(release);
-  showReleaseContent();
-  showMainNav();
-  hideWarningMessage();
 }
 
 function processBandcampReleasesListData(releases) {

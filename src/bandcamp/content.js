@@ -5,21 +5,28 @@ let TralbumData, BandData = {};
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let response;
 
-  if (TralbumData !== undefined && request.type === 'getBandcampData') {
+  if (request.type === 'getBandcampRelease') {
     if (isOnReleasesListPage()) {
       response = {
         type: 'list',
         data: extractReleasesListData()
-      }
+      };
+
+      sendResponse(response);
     } else {
-      response = {
-        type: 'release',
-        data: extractReleaseData()
-      }
+      const currentTabUrl = window.location.href;
+      chrome.storage.local.get([currentTabUrl], (result) => {
+        if (result[currentTabUrl] && result[currentTabUrl]['release']) {
+          response = {
+            type: 'release',
+            data: result[currentTabUrl]['release']
+          };
+        }
+
+        sendResponse(response);
+      });
     }
   }
-
-  sendResponse(response);
 
   return true;
 });

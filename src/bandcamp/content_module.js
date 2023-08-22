@@ -12,6 +12,8 @@ export function main () {
     const currentTabUrl = window.location.href;
     const storage = chrome.storage.local;
 
+    // storage.clear();
+
     storage.get([currentTabUrl], (result) => {
       if (!result[currentTabUrl] || !result[currentTabUrl]['release']) {
         const { tralbumData, bandData, schemaData, coverSrc } = extractReleaseData();
@@ -22,7 +24,7 @@ export function main () {
           coverSrc
         );
 
-        storage.set({ [currentTabUrl]: {release: release} }, () => {
+        storage.set({ [currentTabUrl]: { release: release.toJSON() } }, () => {
           console.log("B2D: Release data was saved in local storage");
         });
       } else {

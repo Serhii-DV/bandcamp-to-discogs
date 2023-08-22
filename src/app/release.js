@@ -66,6 +66,45 @@ export class Release {
     );
   }
 
+  toJSON() {
+    return {
+      artist: this.artist,
+      title: this.title,
+      label: this.label,
+      date: this.date.toISOString(),
+      tracks: this.tracks,
+      url: this.url,
+      about: this.about,
+      credits: this.credits,
+      type: this.type,
+      coverSrc: this.coverSrc,
+      keywords: this.keywords
+    };
+  }
+
+  /**
+   * Create an instance of the Release class from a parsed JSON object.
+   * @param {Object} jsonParsedObject - The parsed JSON object.
+   * @returns {Release} An instance of the Release class.
+   */
+  static fromJSON(jsonParsedObject) {
+    const tracks = jsonParsedObject.tracks.map(trackData => Track.fromJSON(trackData));
+
+    return new Release(
+      jsonParsedObject.artist,
+      jsonParsedObject.title,
+      jsonParsedObject.label,
+      new Date(jsonParsedObject.date),
+      tracks,
+      jsonParsedObject.url,
+      jsonParsedObject.about,
+      jsonParsedObject.credits,
+      jsonParsedObject.type,
+      jsonParsedObject.coverSrc,
+      jsonParsedObject.keywords
+    );
+  }
+
   /**
    * Returns release json metadata
    * @param {Release} release
@@ -107,5 +146,18 @@ export class Track {
     let seconds = duration % 60;
 
     return minutes.toString() + ':' + padStringLeft(seconds.toString(), '0', 2);
+  }
+
+  /**
+   * Create an instance of the Track class from a parsed JSON object.
+   * @param {Object} jsonParsedObject - The parsed JSON object.
+   * @returns {Track} An instance of the Track class.
+   */
+  static fromJSON(jsonParsedObject) {
+    return new Track(
+      jsonParsedObject.num,
+      jsonParsedObject.title,
+      jsonParsedObject.duration
+    );
   }
 }

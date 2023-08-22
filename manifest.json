@@ -43,7 +43,19 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [ "src/bandcamp/script.js" ],
+      "resources": [
+        "src/bandcamp/script.js",
+        "src/bandcamp/content_module.js",
+        "src/app/release.js",
+        "src/discogs/discogs.js",
+        "src/modules/chrome.js",
+        "src/modules/utils.js",
+        "src/discogs/discogs-csv.js",
+        "src/config.js",
+        "src/bandcamp/bandcamp.js",
+        "src/bandcamp/mapping.js",
+        "src/discogs/genres.js"
+      ],
       "matches": ["https://*.bandcamp.com/*"]
     },
     {

@@ -244,3 +244,21 @@ export function createBootstrapCheckbox(id, value, labelText, checked) {
 
   return container;
 }
+
+/**
+ * @param {String} cssUrl
+ */
+export function injectCSSFile(cssUrl) {
+  const linkElement = document.createElement('link');
+  linkElement.rel = 'stylesheet';
+  linkElement.href = cssUrl;
+
+  document.head.appendChild(linkElement);
+}
+
+export function injectJSFile(url, callback) {
+  const s = document.createElement('script');
+  s.src = url;
+  s.onload = callback;
+  (document.head||document.documentElement).appendChild(s);
+}

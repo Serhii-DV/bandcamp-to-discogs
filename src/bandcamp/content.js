@@ -69,16 +69,8 @@ function isOnReleasesListPage() {
   return location.pathname === '/' || location.pathname === '/music';
 }
 
-// Injecting script.js
-var s = document.createElement('script');
-s.src = chrome.runtime.getURL('src/bandcamp/script.js');
-(document.head||document.documentElement).appendChild(s);
-s.onload = () => {
-  s.remove();
-};
-
-window.addEventListener('BC_Data', (e) => {
-  // Getting data from script.js
-  TralbumData = e.detail.TralbumData;
-  BandData = e.detail.BandData;
-});
+(async () => {
+  const src = chrome.runtime.getURL("src/bandcamp/content_module.js");
+  const contentMain = await import(src);
+  contentMain.main();
+})();

@@ -204,6 +204,18 @@ function processBandcampReleasesListData(releases) {
   });
 }
 
+document.getElementById("showData").addEventListener("click", () => {
+  // Retrieve all saved data from local storage
+  chrome.storage.local.get(null, (data) => {
+    // Display the data in the console
+    console.log(data);
+
+    // Display the data in the popup
+    const dataOutput = document.getElementById("dataOutput");
+    dataOutput.textContent = JSON.stringify(data, null, 2);
+  });
+});
+
 function extractBandcampData() {
   // Implement your logic to extract data and save to local storage
 

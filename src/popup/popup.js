@@ -113,16 +113,13 @@ function outputRelease(release) {
   btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
 }
 
-function hideReleaseContent() {
-  elReleaseCard.classList.add('visually-hidden');
-}
-
 function showReleaseContent() {
   elReleaseCard.classList.remove('visually-hidden');
 }
 
 function showWarningMessage() {
-  elWarningMessage.classList.remove('visually-hidden');
+  hide([elReleaseCard, elMainNav]);
+  show(elWarningMessage);
 }
 
 function hideWarningMessage() {
@@ -133,16 +130,10 @@ function showMainNav() {
   elMainNav.classList.remove('visually-hidden');
 }
 
-function hideMainNav() {
-  elMainNav.classList.add('visually-hidden');
-}
-
 async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampRelease' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
-        hideReleaseContent();
-        hideMainNav();
         showWarningMessage();
         return;
       }

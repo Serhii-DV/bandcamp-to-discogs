@@ -152,7 +152,8 @@ async function loadRelease() {
 function processBandcampReleaseData(data) {
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
-      const release = Release.fromJSON(data);
+      // Set global `release` value
+      release = Release.fromJSON(data);
 
       outputRelease(release);
       showReleaseContent();

@@ -1,15 +1,12 @@
 import { fillReleasesForm, isValidBandcampURL } from "./helpers.js";
 
 /**
- *
- * @param {String} tabPaneId
- * @param {String} btnClearSelector
+ * @param {Element} form
+ * @param {Element} btnExport
+ * @param {Element} btnClear
  */
-export function setupStorage(tabPaneId, btnClearSelector) {
-  const tabPane = document.getElementById(tabPaneId);
-  const form = document.getElementById('storageDataForm');
+export function setupStorage(form, btnExport, btnClear) {
   const storage = chrome.storage.local;
-  const btnClearStorage = document.querySelector(btnClearSelector);
 
   storage.get(null, (data) => {
     // Display the data in the console
@@ -29,11 +26,44 @@ export function setupStorage(tabPaneId, btnClearSelector) {
       }
     }
 
-    fillReleasesForm(releases, form);
+    updateReleases(releases);
   });
 
-  btnClearStorage.addEventListener('click', () => {
+  btnClear.addEventListener('click', () => {
     storage.clear();
-    fillReleasesForm([], form);
+    updateReleases([]);
+  });
+
+  function updateReleases(releases) {
+    fillReleasesForm(releases, form);
+    setupExportButton(form, btnExport);
+  }
+}
+
+/**
+ *
+ * @param {Element} form
+ * @param {Element} btnExport
+ */
+function setupExportButton(form, btnExport) {
+  const checkboxes = document.querySelectorAll('#storageDataForm input[type="checkbox"]');
+console.log(checkboxes);
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('click', () => { console.log('click'); });
+    checkbox.addEventListener('click', updateButtonState);
+  });
+
+  updateButtonState();
+
+  function updateButtonState() {
+    console.log('updateButtonState');
+    const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+    console.log(anyCheckboxChecked);
+    btnExport.disabled = !anyCheckboxChecked;
+  }
+
+  btnExport.addEventListener('click', () => {
+    const selectedValues = Array.from(checkboxes).map(checkbox => checkbox.value);
+    console.log(selectedValues);
   });
 }

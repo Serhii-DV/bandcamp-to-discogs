@@ -204,6 +204,7 @@ function extractBandcampData() {
 
 loadRelease();
 setupStorageData(
-  'storageData',
-  '#storageDataClear'
+  document.getElementById('storageDataForm'),
+  document.getElementById('storageExport'),
+  document.getElementById('storageDataClear')
 );

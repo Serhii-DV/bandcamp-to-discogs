@@ -18,6 +18,12 @@
         <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
       </svg>
     </button>
+    <button class="btn btn-dark rounded-0" id="storageData-tab" data-bs-toggle="tab" data-bs-target="#storageData" role="tab" aria-controls="storageData" aria-selected="true" type="button" title="Releases in storage">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+        <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+      </svg>
+    </button>
     <button id="download-csv" class="btn btn-dark rounded-0" type="button" title="Download Discogs CSV file">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
         <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
@@ -56,11 +62,17 @@
           <div id="release-tracklist" class="card-text overflow-auto position-absolute bottom-0 start-0 end-0"></div>
         </div>
         <!-- CSV data -->
-        <div class="tab-pane fade small" id="csvData" role="tabpanel" aria-labelledby="csvData-tab" tabindex="0">
+        <div class="tab-pane fade small" id="csvData" role="tabpanel" aria-labelledby="csvData-tab" tabindex="0"></div>
+        <!-- Storage data -->
+        <div class="tab-pane fade small" id="storageData" role="tabpanel" aria-labelledby="storageData-tab" tabindex="0">
+          <form id="storageDataForm">
+            <div class="checkboxes">
+            </div>
+          </form>
+          <button id="storageDataClear" type="button" class="btn btn-warning" title="Clear storage data">Clear data</button>
         </div>
         <!-- About -->
-        <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab" tabindex="0">
-        </div>
+        <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab" tabindex="0"></div>
       </div>
 
     </div>

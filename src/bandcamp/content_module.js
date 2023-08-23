@@ -5,6 +5,11 @@ export function main () {
   console.log('B2D: CONTENT AS MODULE');
 
   window.addEventListener('BC_Data', (e) => {
+    if (isOnReleasesListPage()) {
+      // Do nothing
+      return;
+    }
+
     // Getting data from script.js
     TralbumData = e.detail.TralbumData;
     BandData = e.detail.BandData;

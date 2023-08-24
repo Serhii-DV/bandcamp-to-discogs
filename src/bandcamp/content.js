@@ -5,7 +5,7 @@ let TralbumData, BandData = {};
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let response;
 
-  if (request.type === 'getBandcampRelease') {
+  if (request.type === 'getBandcampData') {
     if (isOnReleasesListPage()) {
       response = {
         type: 'list',

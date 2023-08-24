@@ -5,12 +5,14 @@ import { getCurrentTab, getExtensionManifest, openTabs } from "../modules/chrome
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
-import { createKeyValueDetails, hasClass, hide, loadHTMLContent, objectToDetailsElement, objectToHtmlElement, show } from "../modules/utils.js";
+import { createKeyValueDetails, disable, hasClass, hide, loadHTMLContent, objectToDetailsElement, objectToHtmlElement, show } from "../modules/utils.js";
 import { setupStorage as setupStorageData } from "./storage_data.js";
-import { fillReleasesForm } from "./helpers.js";
+import { fillReleasesForm, triggerClick } from "./helpers.js";
 
 let release;
 let tralbumData;
+const btnReleaseTab = document.getElementById("release-tab");
+const btnReleasesTab = document.getElementById("releases-tab");
 const btnCsvData = document.getElementById('csvData-tab');
 const btnDownloadCsv = document.getElementById('download-csv');
 const btnDiscogsSearch = document.getElementById('discogs-search-artist');
@@ -31,14 +33,16 @@ btnCsvData.addEventListener('click', () => {
   const csvDataTabPane = document.getElementById('csvData');
   csvDataTabPane.innerHTML = '';
 
-  const discogsCsv = releaseToDiscogsCsv(release);
+  if (release instanceof Release) {
+    const discogsCsv = releaseToDiscogsCsv(release);
 
-  appendObjectData(discogsCsv.toCsvObject(), 'Discogs CSV data', csvDataTabPane);
-  appendTextareaDetails('B2D Release JSON Data', discogsCsv.notes, csvDataTabPane);
-  appendTextareaDetails('Submission notes', generateSubmissionNotes(release), csvDataTabPane);
+    appendObjectData(discogsCsv.toCsvObject(), 'Discogs CSV data', csvDataTabPane);
+    appendTextareaDetails('B2D Release JSON Data', discogsCsv.notes, csvDataTabPane);
+    appendTextareaDetails('Submission notes', generateSubmissionNotes(release), csvDataTabPane);
 
-  csvDataTabPane.appendChild(objectToDetailsElement(release, 'Generated release data'));
-  csvDataTabPane.appendChild(objectToDetailsElement(tralbumData, 'Bandcamp TralbumData object'));
+    csvDataTabPane.appendChild(objectToDetailsElement(release, 'Generated release data'));
+    csvDataTabPane.appendChild(objectToDetailsElement(tralbumData, 'Bandcamp TralbumData object'));
+  }
 });
 
 /**
@@ -134,7 +138,7 @@ function showMainNav() {
 
 async function loadRelease() {
   getCurrentTab().then((tab) => {
-    chrome.tabs.sendMessage(tab.id, { type: 'getBandcampRelease' }, (response) => {
+    chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
         showWarningMessage();
         return;
@@ -143,8 +147,6 @@ async function loadRelease() {
       if (response.type === 'release') {
         processBandcampReleaseData(response.data);
       } else if (response.type === 'list') {
-        hide([elReleaseCard, elWarningMessage]);
-        show(bandcampReleasesElement);
         processBandcampReleasesListData(response.data);
       }
     });
@@ -152,6 +154,9 @@ async function loadRelease() {
 }
 
 function processBandcampReleaseData(data) {
+  triggerClick(btnReleaseTab);
+  disable(btnReleasesTab);
+
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
       // Set global `release` value
@@ -166,6 +171,11 @@ function processBandcampReleaseData(data) {
 }
 
 function processBandcampReleasesListData(releases) {
+  hide(elWarningMessage);
+  triggerClick(btnReleasesTab);
+  disable(btnReleaseTab);
+
+  // releaseCover.src =
   const releaseForm = document.getElementById("releasesForm");
   fillReleasesForm(releases, releaseForm, true)
 

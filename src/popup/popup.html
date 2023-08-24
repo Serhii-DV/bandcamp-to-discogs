@@ -7,10 +7,15 @@
 <body>
 
   <div id="mainNav" class="btn-group d-flex" role="tablist">
-    <button class="btn btn-dark rounded-0 active" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
+    <button class="btn btn-dark rounded-0" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
         <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
         <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
+      </svg>
+    </button>
+    <button class="btn btn-dark rounded-0" id="releases-tab" data-bs-toggle="tab" data-bs-target="#releases" role="tab" aria-controls="releases" aria-selected="true" type="button" title="List of artist releases">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-view-list" viewBox="0 0 16 16">
+        <path d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2zm0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14z"/>
       </svg>
     </button>
     <button class="btn btn-dark rounded-0" id="csvData-tab" data-bs-toggle="tab" data-bs-target="#csvData" role="tab" aria-controls="csvData" aria-selected="true" type="button" title="Preview Discogs CSV data">
@@ -55,11 +60,26 @@
 
       <div class="tab-content">
         <!-- Release -->
-        <div class="tab-pane fade active show" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">
+        <div class="tab-pane fade" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">
           <h1 id="release-artist" class="display-3"></h1>
           <h2 id="release-title" class="display-6"></h2>
           <h3 id="release-year" class="display-6"></h3>
           <div id="release-tracklist" class="card-text overflow-auto position-absolute bottom-0 start-0 end-0"></div>
+        </div>
+        <!-- Releases -->
+        <div class="tab-pane fade small" id="releases" role="tabpanel" aria-labelledby="releases-tab" tabindex="0">
+          <div id="bandcampReleases" class="card rounded-0">
+            <div class="card-body">
+              <form id="releasesForm">
+                <div class="checkboxes">
+                </div>
+              </form>
+              <button id="submitBandcampReleases" type="button" class="btn btn-primary">Save Discogs Draft CSV</button>
+
+              <button id="showData">Show Data</button>
+              <pre id="dataOutput"></pre>
+            </div>
+          </div>
         </div>
         <!-- CSV data -->
         <div class="tab-pane fade small" id="csvData" role="tabpanel" aria-labelledby="csvData-tab" tabindex="0"></div>
@@ -88,19 +108,6 @@
         </svg>
       </p>
       <p class="card-text">Unfortunatelly, retrieving data from the Bandcamp release page is not feasible. Please ensure that you are currently on the artist's release page before proceeding.</p>
-    </div>
-  </div>
-
-  <div id="bandcampReleases" class="card rounded-0 visually-hidden">
-    <div class="card-body">
-      <form id="releasesForm">
-        <div class="checkboxes">
-        </div>
-      </form>
-      <button id="submitBandcampReleases" type="button" class="btn btn-primary">Save Discogs Draft CSV</button>
-
-      <button id="showData">Show Data</button>
-      <pre id="dataOutput"></pre>
     </div>
   </div>
 

@@ -221,6 +221,14 @@ export function hide(el) {
   isArray(el) ? el.forEach(hide) : el.classList.add('visually-hidden');
 }
 
+export function disable(el) {
+  if (isArray(el)) {
+    el.forEach(disable);
+  } else {
+    el.disabled = true;
+  }
+}
+
 /**
  * @param {String} cssUrl
  */

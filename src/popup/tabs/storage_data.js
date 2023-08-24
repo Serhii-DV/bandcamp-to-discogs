@@ -1,3 +1,6 @@
+import { DiscogsCsv } from "../../discogs/discogs-csv.js";
+import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
+import { getReleasesFromStorage } from "../../modules/storage.js";
 import { fillReleasesForm, isValidBandcampURL } from "../helpers.js";
 
 /**
@@ -47,23 +50,29 @@ export function setupStorage(form, btnExport, btnClear) {
  */
 function setupExportButton(form, btnExport) {
   const checkboxes = document.querySelectorAll('#storageDataForm input[type="checkbox"]');
-console.log(checkboxes);
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('click', () => { console.log('click'); });
-    checkbox.addEventListener('click', updateButtonState);
-  });
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', updateButtonState));
 
   updateButtonState();
 
   function updateButtonState() {
-    console.log('updateButtonState');
     const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-    console.log(anyCheckboxChecked);
     btnExport.disabled = !anyCheckboxChecked;
   }
 
   btnExport.addEventListener('click', () => {
-    const selectedValues = Array.from(checkboxes).map(checkbox => checkbox.value);
-    console.log(selectedValues);
+    const selectedValues = getSelectedValues(checkboxes);
+
+    getReleasesFromStorage(selectedValues, releases => {
+      const firstRelease = releases[0];
+      const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
+      const csv = objectsToCsv(csvObjects);
+      downloadCsv(csv, `discogs-selected-releases-${firstRelease.artist}`);
+    });
   });
+}
+
+function getSelectedValues(checkboxes) {
+  return Array.from(checkboxes)
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.value);
 }

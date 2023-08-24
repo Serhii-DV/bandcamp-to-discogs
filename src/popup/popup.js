@@ -8,7 +8,7 @@ import { createKeyValueDetails, disable, hasClass, hide, loadHTMLContent, object
 import { setupStorage as setupStorageData } from "./tabs/storage_data.js";
 import { triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
-import { setupDownloadCsvSingleRelease as setupDownloadReleaseCsv } from "./tabs/download_csv.js";
+import { setupDownloadReleasesAsCsv } from "./tabs/download_csv.js";
 
 let release;
 let tralbumData;
@@ -156,7 +156,7 @@ function processBandcampReleaseData(data) {
       release = Release.fromJSON(data);
 
       outputRelease(release);
-      setupDownloadReleaseCsv(btnDownloadCsv, release);
+      setupDownloadReleasesAsCsv(btnDownloadCsv, [release]);
       showReleaseContent();
       showMainNav();
       hideWarningMessage();

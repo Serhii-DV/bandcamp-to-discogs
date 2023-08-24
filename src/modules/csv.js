@@ -4,16 +4,6 @@ export function arrayToCsv(rows) {
   return rows.map(e => e.join(",")).join("\n");
 }
 
-export function objectToCsv(obj) {
-  const headers = Object.keys(obj);
-  const values = Object.values(obj);
-  const csvRows = [
-    headers.join(','),
-    values.join(',')
-  ];
-  return csvRows.join('\n');
-}
-
 export function objectsToCsv(objects) {
   if (!objects || objects.length === 0) {
     return ''; // Return an empty string if the array is empty or not provided

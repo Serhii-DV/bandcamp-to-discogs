@@ -1,7 +1,7 @@
 import { Release } from "../../app/release.js";
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
-import { isArray } from "../../modules/utils.js";
+import { disable, enable, isArray } from "../../modules/utils.js";
 
 /**
  * @param {Element} btnDownload
@@ -9,8 +9,11 @@ import { isArray } from "../../modules/utils.js";
  */
 export function setupDownloadReleasesAsCsv(btnDownload, releases) {
   if (!isArray(releases)) {
+    disable(btnDownload);
     return;
   }
+
+  enable(btnDownload);
 
   btnDownload.addEventListener('click', () => {
     const firstRelease = releases[0];

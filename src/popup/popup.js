@@ -164,16 +164,17 @@ function processBandcampReleaseData(data) {
   });
 }
 
-function processBandcampReleasesListData(releases) {
+function processBandcampReleasesListData(releasesList) {
   hide(elWarningMessage);
   triggerClick(btnReleasesTab);
-  disable(btnReleaseTab);
+  disable([btnReleaseTab, btnDownloadCsv]);
 
   // releaseCover.src =
   setupReleasesTab(
-    releases,
+    releasesList,
     document.getElementById("releasesForm"),
-    document.getElementById("submitBandcampReleases")
+    document.getElementById("submitBandcampReleases"),
+    btnDownloadCsv
   );
 }
 

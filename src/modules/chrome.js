@@ -10,7 +10,20 @@ export function getExtensionManifest() {
 }
 
 export async function openTabs(urls, callback) {
+  const tabPromises = [];
+
   for (const url of urls) {
-    await chrome.tabs.create({ url, active: false }, callback);
+    const tabPromise = new Promise((resolve) => {
+      chrome.tabs.create({ url, active: false }, (tab) => {
+        if (callback) {
+          callback(tab);
+        }
+        resolve(tab);
+      });
+    });
+
+    tabPromises.push(tabPromise);
   }
+
+  return Promise.all(tabPromises);
 }

@@ -1,8 +1,10 @@
 import { openTabs } from "../../modules/chrome.js";
+import { getReleasesFromStorage } from "../../modules/storage.js";
 import { fillReleasesForm } from "../helpers.js";
+import { setupDownloadReleasesAsCsv } from "./download_csv.js";
 
-export function setupReleasesTab(releases, releaseForm, btnSubmitReleases) {
-  fillReleasesForm(releases, releaseForm, true)
+export function setupReleasesTab(releaseList, releaseForm, btnSubmitReleases, btnDownload) {
+  fillReleasesForm(releaseList, releaseForm, true);
 
   btnSubmitReleases.addEventListener("click", async () => {
     const checkedCheckboxes = Array.from(releaseForm.querySelectorAll('input[type="checkbox"]:checked'));
@@ -12,14 +14,22 @@ export function setupReleasesTab(releases, releaseForm, btnSubmitReleases) {
       chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: waitForBandcampData
-      }).then(() => {
-        // Let's wait 1 second
-        setTimeout(() => console.log('After executing the script'), 1000);
-      });
+      }).then(() => {});
+    }).then(() => {
+      setTimeout(() => {
+        setupDownloadButton(checkedUrls, btnDownload);
+      }, 1000);
     });
   });
 }
 
 function waitForBandcampData() {
   setTimeout(() => window.close(), 1000);
+}
+
+function setupDownloadButton(urls, btnDownload) {
+  // Read data from the storage
+  getReleasesFromStorage(urls, releases => {
+    setupDownloadReleasesAsCsv(btnDownload, releases);
+  });
 }

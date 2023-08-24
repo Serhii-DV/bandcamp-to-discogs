@@ -229,6 +229,14 @@ export function disable(el) {
   }
 }
 
+export function enable(el) {
+  if (isArray(el)) {
+    el.forEach(enable);
+  } else {
+    el.disabled = false;
+  }
+}
+
 /**
  * @param {String} cssUrl
  */

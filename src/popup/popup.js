@@ -6,7 +6,7 @@ import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
 import { createKeyValueDetails, disable, hasClass, hide, loadHTMLContent, objectToDetailsElement, objectToHtmlElement, show } from "../modules/utils.js";
-import { setupStorage as setupStorageData } from "./storage_data.js";
+import { setupStorage as setupStorageData } from "./tabs/storage_data.js";
 import { fillReleasesForm, triggerClick } from "./helpers.js";
 
 let release;

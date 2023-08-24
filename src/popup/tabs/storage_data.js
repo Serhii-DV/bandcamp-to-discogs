@@ -1,4 +1,4 @@
-import { fillReleasesForm, isValidBandcampURL } from "./helpers.js";
+import { fillReleasesForm, isValidBandcampURL } from "../helpers.js";
 
 /**
  * @param {Element} form

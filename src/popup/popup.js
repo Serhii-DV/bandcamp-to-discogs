@@ -195,11 +195,9 @@ document.getElementById("showData").addEventListener("click", () => {
 });
 
 function extractBandcampData() {
-  // Implement your logic to extract data and save to local storage
-
   setTimeout(function() {
     window.close();
-  }, 5000);
+  }, 1000);
 }
 
 loadRelease();

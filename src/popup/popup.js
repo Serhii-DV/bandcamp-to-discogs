@@ -8,6 +8,7 @@ import config from "../config.js";
 import { createKeyValueDetails, disable, hasClass, hide, loadHTMLContent, objectToDetailsElement, objectToHtmlElement, show } from "../modules/utils.js";
 import { setupStorage as setupStorageData } from "./tabs/storage_data.js";
 import { fillReleasesForm, triggerClick } from "./helpers.js";
+import { setupReleasesTab } from "./tabs/releases_tab.js";
 
 let release;
 let tralbumData;
@@ -176,20 +177,11 @@ function processBandcampReleasesListData(releases) {
   disable(btnReleaseTab);
 
   // releaseCover.src =
-  const releaseForm = document.getElementById("releasesForm");
-  fillReleasesForm(releases, releaseForm, true)
-
-  document.getElementById("submitBandcampReleases").addEventListener("click", async () => {
-    const checkedCheckboxes = Array.from(releaseForm.querySelectorAll('input[type="checkbox"]:checked'));
-    const checkedUrls = checkedCheckboxes.map((checkbox) => checkbox.value);
-
-    await openTabs(checkedUrls, (tab) => {
-      chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: extractBandcampData
-      });
-    });
-  });
+  setupReleasesTab(
+    releases,
+    document.getElementById("releasesForm"),
+    document.getElementById("submitBandcampReleases")
+  );
 }
 
 document.getElementById("showData").addEventListener("click", () => {
@@ -203,12 +195,6 @@ document.getElementById("showData").addEventListener("click", () => {
     dataOutput.textContent = JSON.stringify(data, null, 2);
   });
 });
-
-function extractBandcampData() {
-  setTimeout(function() {
-    window.close();
-  }, 1000);
-}
 
 loadRelease();
 setupStorageData(

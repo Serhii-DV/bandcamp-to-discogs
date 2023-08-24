@@ -1,4 +1,3 @@
-import { objectToCsv, downloadCsv } from "../modules/csv.js";
 import { generateSubmissionNotes, getSearchDiscogsReleaseUrl, releaseToDiscogsCsv } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
 import { getCurrentTab, getExtensionManifest, openTabs } from "../modules/chrome.js";
@@ -7,8 +6,9 @@ import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
 import { createKeyValueDetails, disable, hasClass, hide, loadHTMLContent, objectToDetailsElement, objectToHtmlElement, show } from "../modules/utils.js";
 import { setupStorage as setupStorageData } from "./tabs/storage_data.js";
-import { fillReleasesForm, triggerClick } from "./helpers.js";
+import { triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
+import { setupDownloadCsvSingleRelease as setupDownloadReleaseCsv } from "./tabs/download_csv.js";
 
 let release;
 let tralbumData;
@@ -80,14 +80,6 @@ function appendTextareaDetails(title, value, parentElement) {
 
   parentElement.appendChild(detailsElement);
 }
-
-btnDownloadCsv.addEventListener('click', () => {
-  const discogsCsv = releaseToDiscogsCsv(release);
-  downloadCsv(
-    objectToCsv(discogsCsv.toCsvObject()),
-    `discogs-${release.artist}-${release.title}`
-  );
-});
 
 function countLinesInHtmlElement(el) {
   let divHeight = el.offsetHeight
@@ -164,6 +156,7 @@ function processBandcampReleaseData(data) {
       release = Release.fromJSON(data);
 
       outputRelease(release);
+      setupDownloadReleaseCsv(btnDownloadCsv, release);
       showReleaseContent();
       showMainNav();
       hideWarningMessage();

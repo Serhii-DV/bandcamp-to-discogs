@@ -17,8 +17,6 @@ const btnReleasesTab = document.getElementById("releases-tab");
 const btnCsvData = document.getElementById('csvData-tab');
 const btnDownloadCsv = document.getElementById('download-csv');
 const btnDiscogsSearch = document.getElementById('discogs-search-artist');
-const btnAbout = document.getElementById('about-tab');
-const elAbout = document.getElementById('about');
 const elRelease = document.getElementById('release');
 const releaseCover = document.getElementById('release-cover');
 const releaseArtist = document.getElementById('release-artist');
@@ -44,23 +42,6 @@ btnCsvData.addEventListener('click', () => {
     csvDataTabPane.appendChild(objectToDetailsElement(release, 'Generated release data'));
     csvDataTabPane.appendChild(objectToDetailsElement(tralbumData, 'Bandcamp TralbumData object'));
   }
-});
-
-/**
- * Output about tab pane
- */
-btnAbout.addEventListener('click', () => {
-  if (hasClass(elAbout, 'loaded')) return;
-  const promise = loadHTMLContent(config.about_url, elAbout);
-  promise.then(targetElement => {
-    const manifest = getExtensionManifest();
-    targetElement.querySelectorAll('.version').forEach(el => {
-      el.textContent = manifest.version;
-    });
-  })
-  .then(() => {
-    elAbout.classList.add('loaded');
-  });
 });
 
 function appendObjectData(obj, headline, el) {
@@ -178,9 +159,20 @@ function processBandcampReleasesListData(releasesList) {
   );
 }
 
-loadRelease();
-setupStorageData(
-  document.getElementById('storageDataForm'),
-  document.getElementById('storageExport'),
-  document.getElementById('storageDataClear')
-);
+function main() {
+  loadRelease();
+  setupStorageData(
+    document.getElementById('storageDataForm'),
+    document.getElementById('storageExport'),
+    document.getElementById('storageDataClear')
+  );
+
+  const manifest = getExtensionManifest();
+
+  // Set extension version
+  document.querySelectorAll('.version').forEach(el => {
+    el.textContent = manifest.version;
+  });
+}
+
+document.addEventListener('DOMContentLoaded', main);

@@ -1,7 +1,7 @@
 import { openTabs } from "../../modules/chrome.js";
 import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/storage.js";
 import { fillReleasesForm } from "../helpers.js";
-import { setupDownloadReleasesAsCsv } from "./download_tab.js";
+import { downloadReleasesCsv, setupDownloadReleasesAsCsv } from "./download_tab.js";
 
 export function setupReleasesTab(releaseList, releaseForm, btnSubmitReleases, btnDownload) {
   fillReleasesForm(releaseList, releaseForm, true);
@@ -19,7 +19,7 @@ export function setupReleasesTab(releaseList, releaseForm, btnSubmitReleases, bt
       }).then(() => {
         setTimeout(() => {
           setupDownloadButton(checkedUrls, btnDownload);
-        }, 1000);
+        }, 3000);
       });
     });
   });
@@ -32,6 +32,9 @@ function waitForBandcampData() {
 function setupDownloadButton(urls, btnDownload) {
   // Read data from the storage
   findReleasesInStorage(urls, releases => {
+    console.log('findReleasesInStorage');
+    console.log(releases);
     setupDownloadReleasesAsCsv(btnDownload, releases);
+    downloadReleasesCsv(releases);
   });
 }

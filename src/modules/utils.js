@@ -215,10 +215,12 @@ export function replaceTokens(template, replacements) {
 
 export function show(el) {
   isArray(el) ? el.forEach(show) : el.classList.remove('visually-hidden');
+  return el;
 }
 
 export function hide(el) {
   isArray(el) ? el.forEach(hide) : el.classList.add('visually-hidden');
+  return el;
 }
 
 export function disable(el) {
@@ -227,6 +229,7 @@ export function disable(el) {
   } else {
     el.disabled = true;
   }
+  return el;
 }
 
 export function enable(el) {
@@ -235,6 +238,7 @@ export function enable(el) {
   } else {
     el.disabled = false;
   }
+  return el;
 }
 
 /**

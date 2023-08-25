@@ -13,13 +13,13 @@ export function setupDownloadReleasesAsCsv(btnDownload, releases) {
     return;
   }
 
-  enable(btnDownload);
+  enable(btnDownload).addEventListener('click', () => downloadReleasesCsv(releases));
+}
 
-  btnDownload.addEventListener('click', () => {
-    const firstRelease = releases[0];
-    const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
-    const csv = objectsToCsv(csvObjects);
+export function downloadReleasesCsv(releases) {
+  const firstRelease = releases[0];
+  const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
+  const csv = objectsToCsv(csvObjects);
 
-    downloadCsv(csv, `discogs-selected-releases-${firstRelease.artist}`);
-  });
+  downloadCsv(csv, `discogs-selected-releases-${firstRelease.artist}`);
 }

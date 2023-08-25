@@ -1,4 +1,4 @@
-import { generateSubmissionNotes, getSearchDiscogsReleaseUrl, releaseToDiscogsCsv } from "../discogs/discogs.js";
+import { generateSubmissionNotes, releaseToDiscogsCsv } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
 import { getCurrentTab, getExtensionManifest, openTabs } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
@@ -9,6 +9,7 @@ import { setupStorage as setupStorageData } from "./tabs/storage_tab.js";
 import { triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupDownloadReleasesAsCsv } from "./tabs/download_tab.js";
+import { setupReleaseTab } from "./tabs/release_tab.js";
 
 let release;
 let tralbumData;
@@ -16,17 +17,9 @@ const btnReleaseTab = document.getElementById("release-tab");
 const btnReleasesTab = document.getElementById("releases-tab");
 const btnCsvData = document.getElementById('csvData-tab');
 const btnDownloadCsv = document.getElementById('download-csv');
-const btnDiscogsSearch = document.getElementById('discogs-search-artist');
-const elRelease = document.getElementById('release');
-const releaseCover = document.getElementById('release-cover');
-const releaseArtist = document.getElementById('release-artist');
-const releaseTitle = document.getElementById('release-title');
-const releaseDate = document.getElementById('release-year');
-const releaseTracklist = document.getElementById('release-tracklist');
 const elMainNav = document.getElementById('mainNav');
 const elReleaseCard = document.querySelector('#releaseCard');
 const elWarningMessage = document.getElementById('warningMessage');
-const bandcampReleasesElement = document.getElementById('bandcampReleases');
 
 btnCsvData.addEventListener('click', () => {
   const csvDataTabPane = document.getElementById('csvData');
@@ -60,37 +53,6 @@ function appendTextareaDetails(title, value, parentElement) {
   detailsElement.open = true;
 
   parentElement.appendChild(detailsElement);
-}
-
-function countLinesInHtmlElement(el) {
-  let divHeight = el.offsetHeight
-  let lineHeight = parseInt(getComputedStyle(el).lineHeight);
-  return Math.round(divHeight / lineHeight);
-}
-
-/**
- * @param {Release} release
- */
-function outputRelease(release) {
-  releaseCover.src = release.coverSrc.big;
-  releaseArtist.innerHTML = release.artist;
-  releaseTitle.innerHTML = release.title;
-  releaseDate.innerHTML = release.date.getFullYear();
-
-  let countArtistLines = countLinesInHtmlElement(releaseArtist);
-  let countTitleLines = countLinesInHtmlElement(releaseTitle);
-
-  releaseArtist.classList.toggle('display-6', countArtistLines >= 3 && countArtistLines <= 5);
-  elRelease.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
-
-  let trackinfo = '';
-
-  release.tracks.forEach(track => {
-    trackinfo += `${track.num}. ${track.title} (${track.durationText})<br>`;
-  });
-
-  releaseTracklist.innerHTML = trackinfo;
-  btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
 }
 
 function showReleaseContent() {
@@ -136,7 +98,7 @@ function processBandcampReleaseData(data) {
       // Set global `release` value
       release = Release.fromJSON(data);
 
-      outputRelease(release);
+      setupReleaseTab(release);
       setupDownloadReleasesAsCsv(btnDownloadCsv, [release]);
       showReleaseContent();
       showMainNav();

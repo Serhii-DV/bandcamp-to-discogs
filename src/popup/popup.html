@@ -40,34 +40,17 @@
       <div class="tab-content">
         <!-- Release -->
         <div class="tab-pane fade" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">
-          <h1 id="release-artist" class="display-3"></h1>
-          <h2 id="release-title" class="display-6"></h2>
-          <h3 id="release-year" class="display-6"></h3>
-          <div id="release-tracklist" class="card-text overflow-auto position-absolute bottom-0 start-0 end-0"></div>
+          <external-content href="content/release_tab.html"></external-content>
         </div>
         <!-- Releases -->
         <div class="tab-pane fade small" id="releases" role="tabpanel" aria-labelledby="releases-tab" tabindex="0">
-          <div id="bandcampReleases">
-            <form id="releasesForm">
-              <div class="checkboxes">
-              </div>
-            </form>
-            <button id="submitBandcampReleases" type="button" class="btn btn-primary btn-sm">
-              <b2d-icon name="download"></b2d-icon>
-              Download as Discogs CSV
-            </button>
-          </div>
+          <external-content href="content/releases_tab.html"></external-content>
         </div>
         <!-- CSV data -->
         <div class="tab-pane fade small" id="csvData" role="tabpanel" aria-labelledby="csvData-tab" tabindex="0"></div>
         <!-- Storage data -->
         <div class="tab-pane fade small" id="storageData" role="tabpanel" aria-labelledby="storageData-tab" tabindex="0">
-          <form id="storageDataForm">
-            <div class="checkboxes">
-            </div>
-          </form>
-          <button id="storageExport" type="button" class="btn btn-primary" title="Export selected releases to Discogs CSV">Export data to CSV</button>
-          <button id="storageDataClear" type="button" class="btn btn-warning" title="Clear storage data">Clear data</button>
+          <external-content href="content/storage_tab.html"></external-content>
         </div>
         <!-- About -->
         <div class="tab-pane fade" id="about" role="tabpanel" aria-labelledby="about-tab" tabindex="0"></div>
@@ -78,15 +61,13 @@
 
   <div id="warningMessage" class="card rounded-0 visually-hidden">
     <div class="card-body">
-      <p class="text-center">
-        <b2d-icon name="exclamation-triangle" />
-      </p>
-      <p class="card-text">Unfortunatelly, retrieving data from the Bandcamp release page is not feasible. Please ensure that you are currently on the artist's release page before proceeding.</p>
+      <external-content href="content/warning_message.html"></external-content>
     </div>
   </div>
 
   <script src="../../assets/bootstrap/bootstrap.bundle.5.3.0.min.js"></script>
-  <script type="module" src="popup.js"></script>
   <script src="icon.js"></script>
+  <script src="external-content.js"></script>
+  <script type="module" src="popup.js"></script>
 </body>
 </html>

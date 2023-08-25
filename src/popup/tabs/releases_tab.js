@@ -1,5 +1,5 @@
 import { openTabs } from "../../modules/chrome.js";
-import { getReleasesFromStorage } from "../../modules/storage.js";
+import { findReleasesInStorage } from "../../modules/storage.js";
 import { fillReleasesForm } from "../helpers.js";
 import { setupDownloadReleasesAsCsv } from "./download_tab.js";
 
@@ -29,7 +29,7 @@ function waitForBandcampData() {
 
 function setupDownloadButton(urls, btnDownload) {
   // Read data from the storage
-  getReleasesFromStorage(urls, releases => {
+  findReleasesInStorage(urls, releases => {
     setupDownloadReleasesAsCsv(btnDownload, releases);
   });
 }

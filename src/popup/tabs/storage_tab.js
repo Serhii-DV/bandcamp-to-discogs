@@ -1,6 +1,6 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
-import { getReleasesFromStorage } from "../../modules/storage.js";
+import { findReleasesInStorage } from "../../modules/storage.js";
 import { fillReleasesForm, isValidBandcampURL } from "../helpers.js";
 
 /**
@@ -62,7 +62,7 @@ function setupExportButton(form, btnExport) {
   btnExport.addEventListener('click', () => {
     const selectedValues = getSelectedValues(checkboxes);
 
-    getReleasesFromStorage(selectedValues, releases => {
+    findReleasesInStorage(selectedValues, releases => {
       const firstRelease = releases[0];
       const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
       const csv = objectsToCsv(csvObjects);

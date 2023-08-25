@@ -3,7 +3,7 @@ import { isArray } from "./utils.js";
 
 const storage = chrome.storage.local;
 
-export function getReleaseFromStorage(url, onGet) {
+export function findReleaseInStorage(url, onGet) {
   storage.get([url], (result) => {
     if (result[url] && result[url]['release']) {
       const release = createReleaseFromStorageItem(result[url]);
@@ -15,7 +15,7 @@ export function getReleaseFromStorage(url, onGet) {
 
 }
 
-export function getReleasesFromStorage(urls, onGet) {
+export function findReleasesInStorage(urls, onGet) {
   storage.get(urls, result => {
     let releases = Object.values(result).map(item => createReleaseFromStorageItem(item));
     onGet(releases);

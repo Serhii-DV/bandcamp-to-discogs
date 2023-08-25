@@ -1,10 +1,9 @@
-import { generateSubmissionNotes, releaseToDiscogsCsv } from "../discogs/discogs.js";
 import { Release } from "../app/release.js";
 import { getCurrentTab, getExtensionManifest, openTabs } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
-import { createKeyValueDetails, disable, hasClass, hide, loadHTMLContent, objectToDetailsElement, objectToHtmlElement, show } from "../modules/utils.js";
+import { disable, hide, show } from "../modules/utils.js";
 import { setupStorage as setupStorageData } from "./tabs/storage_tab.js";
 import { triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
@@ -18,31 +17,15 @@ const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnReleasesTab = document.getElementById("releases-tab");
 const btnDownloadCsv = document.getElementById('download-csv');
 const elMainNav = document.getElementById('mainNav');
-const elReleaseCard = document.querySelector('#releaseCard');
+const elReleaseCard = document.getElementById('releaseCard');
 const elWarningMessage = document.getElementById('warningMessage');
-
-function showReleaseContent() {
-  elReleaseCard.classList.remove('visually-hidden');
-}
-
-function showWarningMessage() {
-  hide([elReleaseCard, elMainNav]);
-  show(elWarningMessage);
-}
-
-function hideWarningMessage() {
-  elWarningMessage.classList.add('visually-hidden');
-}
-
-function showMainNav() {
-  elMainNav.classList.remove('visually-hidden');
-}
 
 async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
-        showWarningMessage();
+        hide([elReleaseCard, elMainNav]);
+        show(elWarningMessage);
         return;
       }
 
@@ -67,9 +50,9 @@ function processBandcampReleaseData(data) {
       setupReleaseTab(release);
       setupCsvDataTab(release, btnCsvDataTab);
       setupDownloadReleasesAsCsv(btnDownloadCsv, [release]);
-      showReleaseContent();
-      showMainNav();
-      hideWarningMessage();
+
+      show([elReleaseCard, elMainNav]);
+      hide(elWarningMessage);
     });
   });
 }
@@ -88,6 +71,15 @@ function processBandcampReleasesListData(releasesList) {
   );
 }
 
+function replaceVersion() {
+  const manifest = getExtensionManifest();
+
+  // Set extension version
+  document.querySelectorAll('.version').forEach(el => {
+    el.textContent = manifest.version;
+  });
+}
+
 function main() {
   loadRelease();
   setupStorageData(
@@ -96,12 +88,7 @@ function main() {
     document.getElementById('storageDataClear')
   );
 
-  const manifest = getExtensionManifest();
-
-  // Set extension version
-  document.querySelectorAll('.version').forEach(el => {
-    el.textContent = manifest.version;
-  });
+  replaceVersion();
 }
 
 document.addEventListener('DOMContentLoaded', main);

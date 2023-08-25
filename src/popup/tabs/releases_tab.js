@@ -1,7 +1,7 @@
 import { openTabs } from "../../modules/chrome.js";
 import { getReleasesFromStorage } from "../../modules/storage.js";
 import { fillReleasesForm } from "../helpers.js";
-import { setupDownloadReleasesAsCsv } from "./download_csv.js";
+import { setupDownloadReleasesAsCsv } from "./download_tab.js";
 
 export function setupReleasesTab(releaseList, releaseForm, btnSubmitReleases, btnDownload) {
   fillReleasesForm(releaseList, releaseForm, true);

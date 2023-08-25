@@ -5,10 +5,10 @@ import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
 import { createKeyValueDetails, disable, hasClass, hide, loadHTMLContent, objectToDetailsElement, objectToHtmlElement, show } from "../modules/utils.js";
-import { setupStorage as setupStorageData } from "./tabs/storage_data.js";
+import { setupStorage as setupStorageData } from "./tabs/storage_tab.js";
 import { triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
-import { setupDownloadReleasesAsCsv } from "./tabs/download_csv.js";
+import { setupDownloadReleasesAsCsv } from "./tabs/download_tab.js";
 
 let release;
 let tralbumData;

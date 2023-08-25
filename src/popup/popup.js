@@ -10,7 +10,6 @@ import { setupDownloadReleasesAsCsv } from "./tabs/download_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 
-let release;
 const btnReleaseTab = document.getElementById("release-tab");
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnReleasesTab = document.getElementById("releases-tab");
@@ -44,7 +43,7 @@ function processBandcampReleaseData(data) {
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
       // Set global `release` value
-      release = Release.fromJSON(data);
+      const release = Release.fromJSON(data);
 
       setupReleaseTab(release);
       setupCsvDataTab(release, btnCsvDataTab);

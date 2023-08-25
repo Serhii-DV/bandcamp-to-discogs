@@ -3,9 +3,8 @@ import { getCurrentTab, getExtensionManifest, openTabs } from "../modules/chrome
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
-import { disable, hide, show } from "../modules/utils.js";
 import { setupStorage as setupStorageData } from "./tabs/storage_tab.js";
-import { triggerClick } from "./helpers.js";
+import { disable, hide, show, triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupDownloadReleasesAsCsv } from "./tabs/download_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";

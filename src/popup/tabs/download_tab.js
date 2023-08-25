@@ -1,7 +1,8 @@
 import { Release } from "../../app/release.js";
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
-import { disable, enable, isArray } from "../../modules/utils.js";
+import { isArray } from "../../modules/utils.js";
+import { disable, enable } from "../helpers.js";
 
 /**
  * @param {Element} btnDownload

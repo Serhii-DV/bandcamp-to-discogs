@@ -10,50 +10,16 @@ import { triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupDownloadReleasesAsCsv } from "./tabs/download_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
+import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 
 let release;
-let tralbumData;
 const btnReleaseTab = document.getElementById("release-tab");
+const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnReleasesTab = document.getElementById("releases-tab");
-const btnCsvData = document.getElementById('csvData-tab');
 const btnDownloadCsv = document.getElementById('download-csv');
 const elMainNav = document.getElementById('mainNav');
 const elReleaseCard = document.querySelector('#releaseCard');
 const elWarningMessage = document.getElementById('warningMessage');
-
-btnCsvData.addEventListener('click', () => {
-  const csvDataTabPane = document.getElementById('csvData');
-  csvDataTabPane.innerHTML = '';
-
-  if (release instanceof Release) {
-    const discogsCsv = releaseToDiscogsCsv(release);
-
-    appendObjectData(discogsCsv.toCsvObject(), 'Discogs CSV data', csvDataTabPane);
-    appendTextareaDetails('B2D Release JSON Data', discogsCsv.notes, csvDataTabPane);
-    appendTextareaDetails('Submission notes', generateSubmissionNotes(release), csvDataTabPane);
-
-    csvDataTabPane.appendChild(objectToDetailsElement(release, 'Generated release data'));
-    csvDataTabPane.appendChild(objectToDetailsElement(tralbumData, 'Bandcamp TralbumData object'));
-  }
-});
-
-function appendObjectData(obj, headline, el) {
-  const headlineEl = document.createElement('h2');
-  headlineEl.classList.add('display-6');
-  headlineEl.innerText = headline;
-  el.appendChild(headlineEl);
-  el.appendChild(objectToHtmlElement(obj));
-}
-
-function appendTextareaDetails(title, value, parentElement) {
-  const textarea = document.createElement('textarea');
-  textarea.classList.add('form-control');
-  textarea.value = value;
-  const detailsElement = createKeyValueDetails(title, textarea);
-  detailsElement.open = true;
-
-  parentElement.appendChild(detailsElement);
-}
 
 function showReleaseContent() {
   elReleaseCard.classList.remove('visually-hidden');
@@ -99,6 +65,7 @@ function processBandcampReleaseData(data) {
       release = Release.fromJSON(data);
 
       setupReleaseTab(release);
+      setupCsvDataTab(release, btnCsvDataTab);
       setupDownloadReleasesAsCsv(btnDownloadCsv, [release]);
       showReleaseContent();
       showMainNav();

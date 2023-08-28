@@ -5,6 +5,7 @@
 ### Features
 
 - Introduced notifications on Discogs release edit page. It shows messages regarding actions on the page.
+- It's possible now to save the list of releases to the single Discogs CSV draft file. Feature works on label bandcamp page.
 
 ### Fixed
 

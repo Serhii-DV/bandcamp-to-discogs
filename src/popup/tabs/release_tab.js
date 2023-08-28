@@ -1,5 +1,6 @@
 import { Release } from "../../app/release.js";
 import { getSearchDiscogsReleaseUrl } from "../../discogs/discogs.js";
+import { hide, show } from "../helpers.js";
 
 let btnDiscogsSearch;
 let elRelease;

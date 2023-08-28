@@ -10,9 +10,6 @@
     <button class="btn btn-dark rounded-0" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
       <b2d-icon name="card-text" />
     </button>
-    <button class="btn btn-dark rounded-0" id="releases-tab" data-bs-toggle="tab" data-bs-target="#releases" role="tab" aria-controls="releases" aria-selected="true" type="button" title="List of artist releases">
-      <b2d-icon name="view-list" />
-    </button>
     <button class="btn btn-dark rounded-0" id="csvData-tab" data-bs-toggle="tab" data-bs-target="#csvData" role="tab" aria-controls="csvData" aria-selected="true" type="button" title="Preview Discogs CSV data">
       <b2d-icon name="table" />
     </button>
@@ -40,11 +37,8 @@
       <div class="tab-content">
         <!-- Release -->
         <div class="tab-pane fade" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">
-          <external-content href="content/release_tab.html"></external-content>
-        </div>
-        <!-- Releases -->
-        <div class="tab-pane fade small" id="releases" role="tabpanel" aria-labelledby="releases-tab" tabindex="0">
-          <external-content href="content/releases_tab.html"></external-content>
+          <external-content href="content/release_tab.html" id="releaseTabContent"></external-content>
+          <external-content href="content/releases_tab.html" id="releasesTabContent"></external-content>
         </div>
         <!-- CSV data -->
         <div class="tab-pane fade small" id="csvData" role="tabpanel" aria-labelledby="csvData-tab" tabindex="0"></div>

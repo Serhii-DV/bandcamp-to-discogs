@@ -1,5 +1,5 @@
 import { Release } from "../app/release.js";
-import { getCurrentTab, getExtensionManifest, openTabs } from "../modules/chrome.js";
+import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
@@ -12,7 +12,6 @@ import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 
 const btnReleaseTab = document.getElementById("release-tab");
 const btnCsvDataTab = document.getElementById('csvData-tab');
-const btnReleasesTab = document.getElementById("releases-tab");
 const btnDownloadCsv = document.getElementById('download-csv');
 const elMainNav = document.getElementById('mainNav');
 const elReleaseCard = document.getElementById('releaseCard');
@@ -27,19 +26,40 @@ async function loadRelease() {
         return;
       }
 
-      if (response.type === 'release') {
-        processBandcampReleaseData(response.data);
-      } else if (response.type === 'list') {
-        processBandcampReleasesListData(response.data);
-      }
+      processBandcampResponse(response);
     });
   });
 }
 
-function processBandcampReleaseData(data) {
-  triggerClick(btnReleaseTab);
-  disable(btnReleasesTab);
+function processBandcampResponse(response) {
+  const isRelease = response.type === 'release';
+  const isList = response.type === 'list';
 
+  if (!isRelease && !isList) {
+    // todo: Show error?
+    return;
+  }
+
+  const elReleaseTabContent = document.getElementById('releaseTabContent');
+  const elReleasesTabContent = document.getElementById('releasesTabContent');
+
+  hide(elWarningMessage);
+  triggerClick(btnReleaseTab);
+
+  if (isRelease) {
+    hide(elReleasesTabContent);
+    show(elReleaseTabContent);
+
+    processBandcampReleaseData(response.data);
+  } else {
+    hide(elReleaseTabContent);
+    show(elReleasesTabContent);
+
+    processBandcampReleasesListData(response.data);
+  }
+}
+
+function processBandcampReleaseData(data) {
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
       // Set global `release` value
@@ -56,9 +76,7 @@ function processBandcampReleaseData(data) {
 }
 
 function processBandcampReleasesListData(releasesList) {
-  hide(elWarningMessage);
-  triggerClick(btnReleasesTab);
-  disable([btnReleaseTab, btnDownloadCsv]);
+  disable(btnDownloadCsv);
 
   // releaseCover.src =
   setupReleasesTab(

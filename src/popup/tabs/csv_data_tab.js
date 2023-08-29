@@ -1,5 +1,5 @@
 import { Release } from "../../app/release.js";
-import { generateSubmissionNotes, releaseToDiscogsCsv } from "../../discogs/discogs.js";
+import { releaseToDiscogsCsv } from "../../discogs/discogs.js";
 import { createKeyValueDetails, objectToDetailsElement, objectToHtmlElement } from "../helpers.js";
 
 export function setupCsvDataTab(release, btnCsvData) {
@@ -11,18 +11,15 @@ export function setupCsvDataTab(release, btnCsvData) {
     if (release instanceof Release) {
       const discogsCsv = releaseToDiscogsCsv(release);
 
-      appendObjectData(discogsCsv.toCsvObject(), 'Discogs CSV data', csvDataTabPane);
+      appendObjectDataAsTable('Discogs CSV data', discogsCsv.toCsvObject(), csvDataTabPane);
       appendTextareaDetails('B2D Release JSON Data', discogsCsv.notes, csvDataTabPane);
-      appendTextareaDetails('Submission notes', generateSubmissionNotes(release), csvDataTabPane);
-
-      csvDataTabPane.appendChild(objectToDetailsElement(release, 'Generated release data'));
-      // csvDataTabPane.appendChild(objectToDetailsElement(tralbumData, 'Bandcamp TralbumData object'));
+      appendObjectDataAsTree('Generated release data', release, csvDataTabPane);
     }
   });
 
 }
 
-function appendObjectData(obj, headline, el) {
+function appendObjectDataAsTable(headline, obj, el) {
   const headlineEl = document.createElement('h2');
   headlineEl.classList.add('display-6');
   headlineEl.innerText = headline;
@@ -30,12 +27,16 @@ function appendObjectData(obj, headline, el) {
   el.appendChild(objectToHtmlElement(obj));
 }
 
+function appendObjectDataAsTree(headline, obj, el) {
+  el.appendChild(objectToDetailsElement(obj, headline))
+}
+
 function appendTextareaDetails(title, value, parentElement) {
   const textarea = document.createElement('textarea');
   textarea.classList.add('form-control');
   textarea.value = value;
   const detailsElement = createKeyValueDetails(title, textarea);
-  detailsElement.open = true;
+  // detailsElement.open = true;
 
   parentElement.appendChild(detailsElement);
 }

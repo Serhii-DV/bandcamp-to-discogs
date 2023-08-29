@@ -1,12 +1,26 @@
+:root {
+  --main-bg-color: #212121;
+  --main-text-color: #ccc;
+  --popup-height: 400px;
+  --popup-width: 400px;
+}
+
 body {
-  background: #212121;
-  color: #ccc;
-  width: 400px;
+  background: var(--main-bg-color);
+  color: var(--main-text-color);
+  width: var(--popup-width);
   padding: 0;
 }
 
 #release-cover {
-  min-height: 400px;
+  min-height: var(--popup-height);
+}
+
+.tab-content {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  overflow: auto;
+  min-height: var(--popup-height);
 }
 
 #release-tracklist {

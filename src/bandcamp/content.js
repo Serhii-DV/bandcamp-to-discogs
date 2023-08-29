@@ -7,12 +7,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
   if (request.type === 'getBandcampData') {
     if (isOnReleasesListPage()) {
-      response = {
-        type: 'list',
-        data: extractReleasesListData()
-      };
-
-      sendResponse(response);
+      sendResponse(generateListResponse());
     } else {
       const currentTabUrl = window.location.href;
       chrome.storage.local.get([currentTabUrl], (result) => {
@@ -49,9 +44,11 @@ function getSchemaData() {
   return JSON.parse(scriptContent);
 }
 
-function extractReleasesListData() {
+function generateListResponse() {
   const releases = [];
   const releaseElements = document.querySelectorAll('#music-grid .music-grid-item');
+  const imgBandPhoto = document.querySelector('.band-photo');
+
   releaseElements.forEach(element => {
     let artist = element.querySelector('.artist-override')?.innerText;
 
@@ -68,7 +65,14 @@ function extractReleasesListData() {
       title: title
     });
   });
-  return releases;
+
+  return {
+    type: 'list',
+    data: releases,
+    popup: {
+      imageSrc: imgBandPhoto.src,
+    }
+  };
 }
 
 function isOnReleasesListPage() {

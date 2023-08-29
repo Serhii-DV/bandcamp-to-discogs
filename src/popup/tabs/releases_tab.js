@@ -3,7 +3,10 @@ import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/s
 import { fillReleasesForm } from "../helpers.js";
 import { downloadReleasesCsv, setupDownloadReleasesAsCsv } from "./download_tab.js";
 
-export function setupReleasesTab(releaseList, releaseForm, btnSubmitReleases, btnDownload) {
+export function setupReleasesTab(releaseList, bgImageSrc, releaseForm, btnSubmitReleases, btnDownload) {
+  const imgReleaseCover = document.getElementById('release-cover')
+  imgReleaseCover.src = bgImageSrc;
+
   fillReleasesForm(releaseList, releaseForm, true);
 
   btnSubmitReleases.addEventListener("click", async () => {

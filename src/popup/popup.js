@@ -55,7 +55,7 @@ function processBandcampResponse(response) {
     hide(elReleaseTabContent);
     show(elReleasesTabContent);
 
-    processBandcampReleasesListData(response.data);
+    processBandcampReleasesListData(response);
   }
 }
 
@@ -75,12 +75,11 @@ function processBandcampReleaseData(data) {
   });
 }
 
-function processBandcampReleasesListData(releasesList) {
+function processBandcampReleasesListData(response) {
   disable(btnDownloadCsv);
-
-  // releaseCover.src =
   setupReleasesTab(
-    releasesList,
+    response.data,
+    response.popup.imageSrc,
     document.getElementById("releasesForm"),
     document.getElementById("submitBandcampReleases"),
     btnDownloadCsv

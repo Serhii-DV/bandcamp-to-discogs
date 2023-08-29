@@ -2,7 +2,7 @@ import { Release } from "../../app/release.js";
 import { releaseToDiscogsCsv } from "../../discogs/discogs.js";
 import { createKeyValueDetails, objectToDetailsElement, objectToHtmlElement } from "../helpers.js";
 
-export function setupCsvDataTab(release, btnCsvData) {
+export function setupCsvDataTab(release, keywordsMapping, btnCsvData) {
 
   btnCsvData.addEventListener('click', () => {
     const csvDataTabPane = document.getElementById('csvData');
@@ -14,6 +14,7 @@ export function setupCsvDataTab(release, btnCsvData) {
       appendObjectDataAsTable('Discogs CSV data', discogsCsv.toCsvObject(), csvDataTabPane);
       appendTextareaDetails('B2D Release JSON Data', discogsCsv.notes, csvDataTabPane);
       appendObjectDataAsTree('Generated release data', release, csvDataTabPane);
+      appendObjectDataAsTree('Bandcamp keywords to Discogs styles mapping', keywordsMapping, csvDataTabPane);
     }
   });
 

@@ -66,7 +66,7 @@ function processBandcampReleaseData(data) {
       const release = Release.fromJSON(data);
 
       setupReleaseTab(release);
-      setupCsvDataTab(release, btnCsvDataTab);
+      setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
       setupDownloadReleasesAsCsv(btnDownloadCsv, [release]);
 
       show([elReleaseCard, elMainNav]);

@@ -18,9 +18,12 @@ body {
 
 .tab-content {
   background-color: rgba(0, 0, 0, 0.5);
-  padding: 10px 20px;
   overflow: auto;
   min-height: var(--popup-height);
+}
+
+.content-text {
+  padding: 10px 20px;
 }
 
 #release-tracklist {

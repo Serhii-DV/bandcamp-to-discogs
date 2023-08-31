@@ -1,8 +1,7 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { findReleasesInStorage } from "../../modules/storage.js";
-import { convertToAlias } from "../../modules/utils.js";
-import { createElementFromHTML, isValidBandcampURL, updateButtonState } from "../helpers.js";
+import { createElementFromHTML, isValidBandcampURL, setupReleasesData, updateButtonState } from "../helpers.js";
 
 /**
  * @param {Element} form
@@ -88,22 +87,7 @@ function getSelectedValues(checkboxes) {
  * @param {Array} releases
  */
 function setupReleasesList(releasesList, releases) {
-  const data = [];
-
-  releases.forEach(release => {
-    const releaseLink = document.createElement("a");
-    releaseLink.href = release.url;
-    releaseLink.target = '_blank';
-    releaseLink.innerHTML = `<b2d-icon name="box-arrow-up-right"></b2d-icon>`;
-
-    data.push({
-      title: release.artist + " - " + release.title + ' ' + releaseLink.outerHTML,
-      value: release.url,
-      id: convertToAlias(release.title)
-    });
-  });
-
-  releasesList.populateData(data);
+  setupReleasesData(releasesList, releases);
 
   const btnExport = createElementFromHTML('<button id="storageExport" type="button" class="btn btn-primary" title="Export selected releases to Discogs CSV">Export to CSV</button>');
   const btnClearSelected = createElementFromHTML('<button id="storageDataClearSelected" type="button" class="btn btn-warning" title="Clear selected storage data">Clear selected</button>');

@@ -209,3 +209,26 @@ export function updateButtonState(button, checkboxes) {
   const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
   button.disabled = !anyCheckboxChecked;
 }
+
+/**
+ * @param {ReleasesList} releasesList
+ * @param {Array} releases
+ */
+export function setupReleasesData(releasesList, releases) {
+  const data = [];
+
+  releases.forEach(release => {
+    const releaseLink = document.createElement("a");
+    releaseLink.href = release.url;
+    releaseLink.target = '_blank';
+    releaseLink.innerHTML = `<b2d-icon name="box-arrow-up-right"></b2d-icon>`;
+
+    data.push({
+      title: release.artist + " - " + release.title + ' ' + releaseLink.outerHTML,
+      value: release.url,
+      id: convertToAlias(release.title)
+    });
+  });
+
+  releasesList.populateData(data);
+}

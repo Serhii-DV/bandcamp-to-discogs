@@ -1,7 +1,6 @@
 import { openTabs } from "../../modules/chrome.js";
 import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/storage.js";
-import { convertToAlias } from "../../modules/utils.js";
-import { createElementFromHTML } from "../helpers.js";
+import { createElementFromHTML, setupReleasesData } from "../helpers.js";
 import { downloadReleasesCsv, setupDownloadReleasesAsCsv } from "./download_tab.js";
 
 export function setupReleasesTab(releaseList, bgImageSrc, releaseForm, btnSubmitReleases, btnDownload) {
@@ -50,22 +49,7 @@ function setupDownloadButton(urls, btnDownload) {
  * @param {Array} releases
  */
 function setupReleasesList(releasesList, items) {
-  const data = [];
-console.log(items);
-  items.forEach(release => {
-    const releaseLink = document.createElement("a");
-    releaseLink.href = release.url;
-    releaseLink.target = '_blank';
-    releaseLink.innerHTML = `<b2d-icon name="box-arrow-up-right"></b2d-icon>`;
-
-    data.push({
-      title: release.artist + " - " + release.title + ' ' + releaseLink.outerHTML,
-      value: release.url,
-      id: convertToAlias(release.title)
-    });
-  });
-
-  releasesList.populateData(data);
+  setupReleasesData(releasesList, items);
 
   const btnDownload = createElementFromHTML(`
 <button id="submitBandcampReleases" type="button" class="btn btn-primary btn-sm">

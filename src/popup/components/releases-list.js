@@ -8,7 +8,7 @@ class ReleasesList extends HTMLElement {
           <thead>
             <tr>
               <th><input type="checkbox" id="selectAllCheckbox"></th>
-              <th>Releases</th>
+              <th><label for="selectAllCheckbox">Select All</label></th>
             </tr>
           </thead>
           <tbody>

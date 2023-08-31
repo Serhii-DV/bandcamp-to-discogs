@@ -14,7 +14,7 @@ class ReleasesList extends HTMLElement {
           <tbody>
           </tbody>
         </table>
-        <div class="buttons"></div>
+        <div class="fixed-bottom buttons"></div>
     `;
 
     this.appendChild(template.content.cloneNode(true));

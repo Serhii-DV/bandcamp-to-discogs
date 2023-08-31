@@ -72,3 +72,7 @@ details summary::-webkit-details-marker {
 .table-transparent tr.selected {
   background-color: var(--main-bg-color);
 }
+
+releases-list .table {
+  margin-bottom: 40px;
+}

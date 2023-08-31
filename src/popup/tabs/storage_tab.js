@@ -1,7 +1,8 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { findReleasesInStorage } from "../../modules/storage.js";
-import { fillReleasesForm, isValidBandcampURL } from "../helpers.js";
+import { convertToAlias } from "../../modules/utils.js";
+import { createElementFromHTML, isValidBandcampURL, updateButtonState } from "../helpers.js";
 
 /**
  * @param {Element} form
@@ -32,34 +33,24 @@ export function setupStorage(form, btnExport, btnClear) {
     updateReleases(releases);
   });
 
-  btnClear.addEventListener('click', () => {
-    storage.clear();
-    updateReleases([]);
-  });
+  const releasesList = document.querySelector('#storageReleasesLIst');
 
   function updateReleases(releases) {
-    fillReleasesForm(releases, form);
-    setupExportButton(form, btnExport);
+    setupReleasesList(releasesList, releases);
   }
 }
 
 /**
- *
- * @param {Element} form
- * @param {Element} btnExport
+ * @param {Element} button
  */
-function setupExportButton(form, btnExport) {
-  const checkboxes = document.querySelectorAll('#storageDataForm input[type="checkbox"]');
-  checkboxes.forEach(checkbox => checkbox.addEventListener('click', updateButtonState));
+function setupExportButton(button, checkboxes) {
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', () => {
+    updateButtonState(button, checkboxes);
+  }));
 
-  updateButtonState();
+  updateButtonState(button, checkboxes);
 
-  function updateButtonState() {
-    const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-    btnExport.disabled = !anyCheckboxChecked;
-  }
-
-  btnExport.addEventListener('click', () => {
+  button.addEventListener('click', () => {
     const selectedValues = getSelectedValues(checkboxes);
 
     findReleasesInStorage(selectedValues, releases => {
@@ -71,8 +62,56 @@ function setupExportButton(form, btnExport) {
   });
 }
 
+function setupClearAllButton(button) {
+  button.addEventListener('click', () => {
+    storage.clear();
+    updateReleases([]);
+  });
+}
+
+function setupClearSelectedButton(button, checkboxes) {
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', event => {
+    updateButtonState(button, checkboxes);
+  }));
+
+  updateButtonState(button, checkboxes);
+}
+
 function getSelectedValues(checkboxes) {
   return Array.from(checkboxes)
     .filter(checkbox => checkbox.checked)
     .map(checkbox => checkbox.value);
+}
+
+/**
+ * @param {ReleasesList} releasesList
+ * @param {Array} releases
+ */
+function setupReleasesList(releasesList, releases) {
+  const data = [];
+
+  releases.forEach(release => {
+    const releaseLink = document.createElement("a");
+    releaseLink.href = release.url;
+    releaseLink.target = '_blank';
+    releaseLink.innerHTML = `<b2d-icon name="box-arrow-up-right"></b2d-icon>`;
+
+    data.push({
+      title: release.artist + " - " + release.title + ' ' + releaseLink.outerHTML,
+      value: release.url,
+      id: convertToAlias(release.title)
+    });
+  });
+
+  releasesList.populateData(data);
+
+  const btnExport = createElementFromHTML('<button id="storageExport" type="button" class="btn btn-primary" title="Export selected releases to Discogs CSV">Export to CSV</button>');
+  const btnClearSelected = createElementFromHTML('<button id="storageDataClearSelected" type="button" class="btn btn-warning" title="Clear selected storage data">Clear selected</button>');
+  const btnClearAll = createElementFromHTML('<button id="storageDataClear" type="button" class="btn btn-warning" title="Clear storage data">Clear all</button>');
+
+  setupExportButton(btnExport, releasesList.getCheckboxes());
+  setupClearSelectedButton(btnClearSelected, releasesList.getCheckboxes());
+  setupClearAllButton(btnClearAll);
+
+  releasesList.appendButton(btnExport, btnClearSelected, btnClearAll);
 }

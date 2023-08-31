@@ -190,3 +190,22 @@ export function createKeyValueDetails(key, value) {
 
   return keyValueDetails;
 }
+
+/**
+ * @param {String} htmlString
+ * @returns {Element}
+ */
+export function createElementFromHTML(htmlString) {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = htmlString.trim();
+  return tempDiv.firstChild;
+}
+
+/**
+ * @param {Element} button
+ * @param {Array<Element>} checkboxes
+ */
+export function updateButtonState(button, checkboxes) {
+  const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+  button.disabled = !anyCheckboxChecked;
+}

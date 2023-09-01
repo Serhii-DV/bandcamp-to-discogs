@@ -217,14 +217,17 @@ export function updateButtonState(button, checkboxes) {
 export function transformReleasesToReleasesListData(releases) {
   const data = [];
 
-  releases.forEach(release => {
+  function getViewLinkHtml(url) {
     const releaseLink = document.createElement("a");
-    releaseLink.href = release.url;
+    releaseLink.href = url;
     releaseLink.target = '_blank';
     releaseLink.innerHTML = `<b2d-icon name="box-arrow-up-right"></b2d-icon>`;
+    return releaseLink.outerHTML;
+  }
 
+  releases.forEach(release => {
     data.push({
-      title: release.artist + " - " + release.title + ' ' + releaseLink.outerHTML,
+      title: `${release.artist} - ${release.title} ${getViewLinkHtml(release.url)}`,
       value: release.url,
       id: convertToAlias(release.title)
     });

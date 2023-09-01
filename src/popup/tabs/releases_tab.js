@@ -1,6 +1,6 @@
 import { openTabs } from "../../modules/chrome.js";
 import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/storage.js";
-import { createElementFromHTML, setupReleasesData } from "../helpers.js";
+import { createElementFromHTML, transformReleasesToReleasesListData } from "../helpers.js";
 import { downloadReleasesCsv, setupDownloadReleasesAsCsv } from "./download_tab.js";
 
 export function setupReleasesTab(releaseList, bgImageSrc, releaseForm, btnSubmitReleases, btnDownload) {
@@ -49,7 +49,9 @@ function setupDownloadButton(urls, btnDownload) {
  * @param {Array} releases
  */
 function setupReleasesList(releasesList, items) {
-  setupReleasesData(releasesList, items);
+  releasesList.populateData(
+    transformReleasesToReleasesListData(items)
+  );
 
   const btnDownload = createElementFromHTML(`
 <button id="submitBandcampReleases" type="button" class="btn btn-primary btn-sm">

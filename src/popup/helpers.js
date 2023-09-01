@@ -211,10 +211,10 @@ export function updateButtonState(button, checkboxes) {
 }
 
 /**
- * @param {ReleasesList} releasesList
  * @param {Array} releases
+ * @return {Array}
  */
-export function setupReleasesData(releasesList, releases) {
+export function transformReleasesToReleasesListData(releases) {
   const data = [];
 
   releases.forEach(release => {
@@ -230,5 +230,5 @@ export function setupReleasesData(releasesList, releases) {
     });
   });
 
-  releasesList.populateData(data);
+  return data;
 }

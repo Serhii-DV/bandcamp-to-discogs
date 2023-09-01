@@ -1,7 +1,7 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { findReleasesInStorage } from "../../modules/storage.js";
-import { createElementFromHTML, isValidBandcampURL, setupReleasesData, updateButtonState } from "../helpers.js";
+import { createElementFromHTML, isValidBandcampURL, transformReleasesToReleasesListData, updateButtonState } from "../helpers.js";
 
 /**
  * @param {Element} form
@@ -87,7 +87,9 @@ function getSelectedValues(checkboxes) {
  * @param {Array} releases
  */
 function setupReleasesList(releasesList, releases) {
-  setupReleasesData(releasesList, releases);
+  releasesList.populateData(
+    transformReleasesToReleasesListData(releases)
+  );
 
   const btnExport = createElementFromHTML('<button id="storageExport" type="button" class="btn btn-primary" title="Export selected releases to Discogs CSV">Export to CSV</button>');
   const btnClearSelected = createElementFromHTML('<button id="storageDataClearSelected" type="button" class="btn btn-warning" title="Clear selected storage data">Clear selected</button>');

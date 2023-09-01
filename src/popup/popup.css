@@ -79,3 +79,8 @@ details summary::-webkit-details-marker {
 releases-list .table {
   margin-bottom: 40px;
 }
+
+releases-list .buttons {
+  background-color: var(--main-bg-color);
+  padding: 5px 10px;
+}

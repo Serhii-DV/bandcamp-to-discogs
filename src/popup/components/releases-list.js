@@ -15,7 +15,10 @@ class ReleasesList extends HTMLElement {
           <tbody>
           </tbody>
         </table>
-        <div class="fixed-bottom buttons"></div>
+        <div class="fixed-bottom buttons">
+          <div class="control-buttons btn-group btn-group-sm" role="group" aria-label="Control buttons">
+          </div>
+        </div>
     `;
 
     this.appendChild(template.content.cloneNode(true));
@@ -56,8 +59,8 @@ class ReleasesList extends HTMLElement {
    * @param {Element|Array<Element>} button
    */
   appendButton(...button) {
-    const buttons = this.querySelector(".buttons");
-    button.forEach(el => buttons.appendChild(el));
+    const controlButtons = this.querySelector(".control-buttons");
+    button.forEach(el => controlButtons.appendChild(el));
   }
 
   selectCheckbox(checkbox, checked) {

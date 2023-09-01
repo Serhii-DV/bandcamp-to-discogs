@@ -2,13 +2,14 @@ class ReleasesList extends HTMLElement {
   constructor() {
     super();
 
+    const selectAllCheckboxId = this.getPrefixed('selectAllCheckbox');
     const template = document.createElement('template');
     template.innerHTML = `
         <table class="table table-hover table-sm table-transparent">
           <thead>
             <tr>
-              <th><input type="checkbox" id="selectAllCheckbox"></th>
-              <th><label for="selectAllCheckbox">Select All</label></th>
+              <th><input type="checkbox" id="${selectAllCheckboxId}"></th>
+              <th><label for="${selectAllCheckboxId}">Select All</label></th>
             </tr>
           </thead>
           <tbody>
@@ -19,7 +20,7 @@ class ReleasesList extends HTMLElement {
 
     this.appendChild(template.content.cloneNode(true));
 
-    const selectAllCheckbox = this.querySelector("#selectAllCheckbox");
+    const selectAllCheckbox = this.querySelector("#"+selectAllCheckboxId);
     selectAllCheckbox.addEventListener("change", () => {
       this.selectAllCheckboxes(selectAllCheckbox.checked);
     });
@@ -41,6 +42,14 @@ class ReleasesList extends HTMLElement {
         this.selectCheckbox(target, target.checked);
       }
     });
+  }
+
+  getPrefix() {
+    return this.id;
+  }
+
+  getPrefixed(str) {
+    return this.getPrefix() + '__' + str ?? '';
   }
 
   /**
@@ -83,9 +92,10 @@ class ReleasesList extends HTMLElement {
 
     data.forEach((item, index) => {
       const row = document.createElement("tr");
+      const checkboxId = this.getPrefixed('checkbox_'+index);
       row.innerHTML = `
-        <td><input type="checkbox" value="${item.value}" id="checkbox${index}" class="release-checkbox"></td>
-        <td><label for="checkbox${index}">${item.title}</label></td>
+        <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
+        <td><label for="${checkboxId}">${item.title}</label></td>
       `;
       tableBody.appendChild(row);
     });

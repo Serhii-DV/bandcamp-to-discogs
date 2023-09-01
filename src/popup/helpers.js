@@ -1,3 +1,4 @@
+import { getSearchDiscogsReleaseUrl } from "../discogs/discogs.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
 
 /**
@@ -217,21 +218,23 @@ export function updateButtonState(button, checkboxes) {
 export function transformReleasesToReleasesListData(releases) {
   const data = [];
 
-  function getViewLinkHtml(url) {
-    const releaseLink = document.createElement("a");
-    releaseLink.href = url;
-    releaseLink.target = '_blank';
-    releaseLink.innerHTML = `<b2d-icon name="box-arrow-up-right"></b2d-icon>`;
-    return releaseLink.outerHTML;
-  }
-
   releases.forEach(release => {
+    const viewLink = getIconLinkHtml(release.url, 'box-arrow-up-right');
+    const searchLink = getIconLinkHtml(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search');
     data.push({
-      title: `${release.artist} - ${release.title} ${getViewLinkHtml(release.url)}`,
+      title: `${release.artist} - ${release.title} ${viewLink} ${searchLink}`,
       value: release.url,
       id: convertToAlias(release.title)
     });
   });
 
   return data;
+}
+
+export function getIconLinkHtml(url, icon) {
+  const releaseLink = document.createElement("a");
+  releaseLink.href = url;
+  releaseLink.target = '_blank';
+  releaseLink.innerHTML = `<b2d-icon name="${icon}"></b2d-icon>`;
+  return releaseLink.outerHTML;
 }

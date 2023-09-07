@@ -80,8 +80,6 @@ function processBandcampReleasesListData(response) {
   setupReleasesTab(
     response.data,
     response.popup.imageSrc,
-    document.getElementById("releasesForm"),
-    document.getElementById("submitBandcampReleases"),
     btnDownloadCsv
   );
 }

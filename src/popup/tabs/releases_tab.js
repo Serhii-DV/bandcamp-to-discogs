@@ -3,16 +3,39 @@ import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/s
 import { createElementFromHTML, transformReleasesToReleasesListData } from "../helpers.js";
 import { downloadReleasesCsv, setupDownloadReleasesAsCsv } from "./download_tab.js";
 
-export function setupReleasesTab(releaseList, bgImageSrc, releaseForm, btnSubmitReleases, btnDownload) {
+export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
   const imgReleaseCover = document.getElementById('release-cover')
   imgReleaseCover.src = bgImageSrc;
 
   const releasesList = document.querySelector('#releasesTabLIst');
-  setupReleasesList(releasesList, releaseList);
+  setupReleasesList(releasesList, releaseList, btnNavDownload);
+}
 
-  btnSubmitReleases.addEventListener("click", async () => {
-    const checkedCheckboxes = Array.from(releaseForm.querySelectorAll('input[type="checkbox"]:checked'));
-    const checkedUrls = checkedCheckboxes.map((checkbox) => checkbox.value);
+/**
+ * @param {ReleasesList} releasesList
+ * @param {Array} releases
+ * @param {Element} btnNavDownload
+ */
+function setupReleasesList(releasesList, items, btnNavDownload) {
+  releasesList.populateData(
+    transformReleasesToReleasesListData(items)
+  );
+
+  const btnDownload = createElementFromHTML(`
+<button id="submitBandcampReleases" type="button" class="btn btn-primary btn-sm">
+  <b2d-icon name="download"></b2d-icon>
+  Download as Discogs CSV
+</button>
+`);
+
+  // setupExportButton(btnExport, releasesList.getCheckboxes());
+  // setupClearSelectedButton(btnClearSelected, releasesList.getCheckboxes());
+  // setupClearAllButton(btnClearAll);
+
+  releasesList.appendButton(btnDownload);
+
+  btnDownload.addEventListener("click", async () => {
+    const checkedUrls = releasesList.getSelectedValues();
 
     findMissingKeysInStorage(checkedUrls, missingKeys => {
       openTabs(missingKeys, (tab) => {
@@ -36,33 +59,7 @@ function waitForBandcampData() {
 function setupDownloadButton(urls, btnDownload) {
   // Read data from the storage
   findReleasesInStorage(urls, releases => {
-    console.log('findReleasesInStorage');
-    console.log(releases);
     setupDownloadReleasesAsCsv(btnDownload, releases);
     downloadReleasesCsv(releases);
   });
-}
-
-
-/**
- * @param {ReleasesList} releasesList
- * @param {Array} releases
- */
-function setupReleasesList(releasesList, items) {
-  releasesList.populateData(
-    transformReleasesToReleasesListData(items)
-  );
-
-  const btnDownload = createElementFromHTML(`
-<button id="submitBandcampReleases" type="button" class="btn btn-primary btn-sm">
-  <b2d-icon name="download"></b2d-icon>
-  Download as Discogs CSV
-</button>
-`);
-
-  // setupExportButton(btnExport, releasesList.getCheckboxes());
-  // setupClearSelectedButton(btnClearSelected, releasesList.getCheckboxes());
-  // setupClearAllButton(btnClearAll);
-
-  releasesList.appendButton(btnDownload);
 }

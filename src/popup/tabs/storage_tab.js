@@ -13,7 +13,7 @@ export function setupStorage(form, btnExport, btnClear) {
 
   storage.get(null, (data) => {
     // Display the data in the console
-    console.log(data);
+    console.log('storage.get', data);
 
     const releases = [];
 

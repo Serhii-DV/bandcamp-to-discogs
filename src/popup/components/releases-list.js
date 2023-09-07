@@ -9,7 +9,7 @@ class ReleasesList extends HTMLElement {
           <thead>
             <tr>
               <th><input type="checkbox" id="${selectAllCheckboxId}"></th>
-              <th><label for="${selectAllCheckboxId}">Select All</label></th>
+              <th><label for="${selectAllCheckboxId}">Select All</label><span id="${selectAllCheckboxId}-info" data-format=" (selected: {amount})"></span></th>
             </tr>
           </thead>
           <tbody>
@@ -43,8 +43,18 @@ class ReleasesList extends HTMLElement {
       const target = event.target;
       if (target.type === 'checkbox') {
         this.selectCheckbox(target, target.checked);
+        this.setSelectedAmount(this.getSelectedValues().length);
       }
     });
+  }
+
+  setSelectedAmount(amount) {
+    const self = this;
+    const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
+    const selectedAmountInfo = document.getElementById(`${selectAllCheckboxId}-info`);
+    const updatedText = amount ? selectedAmountInfo.getAttribute("data-format").replace("{amount}", amount) : '';
+    selectedAmountInfo.textContent = updatedText;
+    return self;
   }
 
   getPrefix() {
@@ -123,6 +133,9 @@ class ReleasesList extends HTMLElement {
     return this.querySelectorAll("input.release-checkbox[type='checkbox']" + (onlyChecked ? ":checked" : ""));
   }
 
+  /**
+   * @returns {Array}
+   */
   getSelectedValues() {
     return Array.from(this.getCheckboxes(true)).map(checkbox => checkbox.value);
   }

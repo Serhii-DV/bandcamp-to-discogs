@@ -57,15 +57,22 @@ class ReleasesList extends HTMLElement {
 
   /**
    * @param {Element|Array<Element>} button
+   * @returns {ReleasesList}
    */
   appendButton(...button) {
     const controlButtons = this.querySelector(".control-buttons");
     button.forEach(el => controlButtons.appendChild(el));
+    return this;
   }
 
+  /**
+   * @param {Element} checkbox
+   * @param {Boolean} checked
+   * @returns {ReleasesList}
+   */
   selectCheckbox(checkbox, checked) {
     if (checkbox.type !== 'checkbox') {
-      return;
+      return this;
     }
 
     checkbox.checked = checked;
@@ -126,6 +133,7 @@ class ReleasesList extends HTMLElement {
 
   /**
    * @param {Element} button
+   * @returns {ReleasesList}
    */
   setupButtonState(button) {
     const self = this;
@@ -141,6 +149,7 @@ class ReleasesList extends HTMLElement {
 
   /**
    * @param {Element} btn
+   * @returns {ReleasesList}
    */
   updateButtonState(button) {
     const self = this;
@@ -153,6 +162,7 @@ class ReleasesList extends HTMLElement {
   /**
    * @param {Element} button
    * @param {CallableFunction} onClick
+   * @returns {ReleasesList}
    */
   setupButton(button, onClick) {
     const self = this;

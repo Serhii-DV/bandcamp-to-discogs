@@ -1,15 +1,15 @@
 import { Release } from "../../app/release.js";
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
-import { isArray } from "../../modules/utils.js";
+import { isEmptyArray } from "../../modules/utils.js";
 import { disable, enable } from "../helpers.js";
 
 /**
  * @param {Element} btnDownload
  * @param {Array<Release>} releases
  */
-export function setupDownloadReleasesAsCsv(btnDownload, releases) {
-  if (!isArray(releases)) {
+export function setupBtnToDownloadReleasesAsCsv(btnDownload, releases) {
+  if (isEmptyArray(releases)) {
     disable(btnDownload);
     return;
   }
@@ -17,7 +17,14 @@ export function setupDownloadReleasesAsCsv(btnDownload, releases) {
   enable(btnDownload).addEventListener('click', () => downloadReleasesCsv(releases));
 }
 
+/**
+ * @param {Array<Release>} releases
+ */
 export function downloadReleasesCsv(releases) {
+  if (isEmptyArray(releases)) {
+    return;
+  }
+
   const firstRelease = releases[0];
   const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
   const csv = objectsToCsv(csvObjects);

@@ -1,7 +1,7 @@
 import { openTabs } from "../../modules/chrome.js";
 import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/storage.js";
 import { createElementFromHTML, transformReleasesToReleasesListData } from "../helpers.js";
-import { downloadReleasesCsv, setupDownloadReleasesAsCsv } from "./download_tab.js";
+import { downloadReleasesCsv, setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 
 export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
   const imgReleaseCover = document.getElementById('release-cover')
@@ -45,7 +45,11 @@ function setupReleasesList(releasesList, items, btnNavDownload) {
         }).then(() => {});
       }).then(() => {
         setTimeout(() => {
-          setupDownloadButton(checkedUrls, btnDownload);
+          // Read data from the storage
+          findReleasesInStorage(checkedUrls, releases => {
+            setupBtnToDownloadReleasesAsCsv(btnDownload, releases);
+            downloadReleasesCsv(releases);
+          });
         }, 3000);
       });
     });
@@ -54,12 +58,4 @@ function setupReleasesList(releasesList, items, btnNavDownload) {
 
 function waitForBandcampData() {
   setTimeout(() => window.close(), 1000);
-}
-
-function setupDownloadButton(urls, btnDownload) {
-  // Read data from the storage
-  findReleasesInStorage(urls, releases => {
-    setupDownloadReleasesAsCsv(btnDownload, releases);
-    downloadReleasesCsv(releases);
-  });
 }

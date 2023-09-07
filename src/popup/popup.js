@@ -6,7 +6,7 @@ import config from "../config.js";
 import { setupStorage as setupStorageData } from "./tabs/storage_tab.js";
 import { disable, hide, show, triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
-import { setupDownloadReleasesAsCsv } from "./tabs/download_tab.js";
+import { setupBtnToDownloadReleasesAsCsv } from "./tabs/download_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 
@@ -67,7 +67,7 @@ function processBandcampReleaseData(data) {
 
       setupReleaseTab(release);
       setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
-      setupDownloadReleasesAsCsv(btnDownloadCsv, [release]);
+      setupBtnToDownloadReleasesAsCsv(btnDownloadCsv, [release]);
 
       show([elReleaseCard, elMainNav]);
       hide(elWarningMessage);

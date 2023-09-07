@@ -64,6 +64,14 @@ export function isArray(value) {
 }
 
 /**
+ * @param {Array} value
+ * @returns {Boolean}
+ */
+export function isEmptyArray(value) {
+  return !isArray(releases) || releases.length === 0;
+}
+
+/**
  * @param {Array<Array<String>>}
  * @return {Array<String>}
  */

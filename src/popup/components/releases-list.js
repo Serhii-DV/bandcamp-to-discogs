@@ -75,7 +75,7 @@ class ReleasesList extends HTMLElement {
       return this;
     }
 
-    checkbox.checked = checked;
+    checkbox.click();
 
     if (checkbox.classList.contains('release-checkbox')) {
       const tr = checkbox.closest('tr');

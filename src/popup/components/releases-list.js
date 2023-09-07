@@ -35,7 +35,7 @@ class ReleasesList extends HTMLElement {
         const parentTr = target.parentElement;
         const checkbox = parentTr.querySelector("input[type='checkbox']");
         if (checkbox && !target.matches("label")) {
-          this.selectCheckbox(checkbox, !checkbox.checked);
+          checkbox.click();
         }
       }
     });
@@ -85,7 +85,7 @@ class ReleasesList extends HTMLElement {
       return this;
     }
 
-    checkbox.click();
+    checkbox.checked = checked;
 
     if (checkbox.classList.contains('release-checkbox')) {
       const tr = checkbox.closest('tr');

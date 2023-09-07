@@ -22,19 +22,15 @@ function setupReleasesList(releasesList, items, btnNavDownload) {
   );
 
   const btnDownload = createElementFromHTML(`
-<button id="submitBandcampReleases" type="button" class="btn btn-primary btn-sm">
+<button id="submitBandcampReleases" type="button" class="btn btn-primary btn-sm" title="Download selected releases as Discogs Draft CSV file">
   <b2d-icon name="download"></b2d-icon>
-  Download as Discogs CSV
+  Save to CSV
 </button>
 `);
 
-  // setupExportButton(btnExport, releasesList.getCheckboxes());
-  // setupClearSelectedButton(btnClearSelected, releasesList.getCheckboxes());
-  // setupClearAllButton(btnClearAll);
-
-  releasesList.appendButton(btnDownload);
-
-  btnDownload.addEventListener("click", async () => {
+  releasesList
+  .appendButton(btnDownload)
+  .setupButton(btnDownload, async () => {
     const checkedUrls = releasesList.getSelectedValues();
 
     findMissingKeysInStorage(checkedUrls, missingKeys => {

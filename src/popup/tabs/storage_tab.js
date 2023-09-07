@@ -55,9 +55,19 @@ function setupReleasesList(releasesList, releases) {
     transformReleasesToReleasesListData(releases)
   );
 
-  const btnExport = createElementFromHTML('<button id="storageExport" type="button" class="btn btn-primary" title="Export selected releases to Discogs CSV">Export to CSV</button>');
-  const btnClearSelected = createElementFromHTML('<button id="storageDataClearSelected" type="button" class="btn btn-warning" title="Clear selected storage data">Clear selected</button>');
-  const btnClearAll = createElementFromHTML('<button id="storageDataClear" type="button" class="btn btn-warning" title="Clear storage data">Clear all</button>');
+  const btnExport = createElementFromHTML(`
+<button id="storageExport" type="button" class="btn btn-primary" title="Download selected releases as Discogs Draft CSV">
+  <b2d-icon name="download"></b2d-icon>
+  Save to CSV
+</button>`);
+  const btnClearSelected = createElementFromHTML(`
+<button id="storageDataClearSelected" type="button" class="btn" title="Clear selected storage data">
+  <b2d-icon name="database-dash"></b2d-icon>
+</button>`);
+  const btnClearAll = createElementFromHTML(`
+<button id="storageDataClear" type="button" class="btn btn-danger" title="Remove all items from the storage">
+  <b2d-icon name="database-x"></b2d-icon>
+</button>`);
 
   function downloadCsvFile() {
     const selectedValues = releasesList.getSelectedValues();

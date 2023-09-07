@@ -123,6 +123,43 @@ class ReleasesList extends HTMLElement {
   getSelectedTitles() {
     return Array.from(this.getCheckboxes(true)).map(checkbox => checkbox.nextElementSibling.textContent);
   }
+
+  /**
+   * @param {Element} button
+   */
+  setupButtonState(button) {
+    const self = this;
+    const checkboxes = self.getCheckboxes();
+
+    checkboxes.forEach(checkbox => checkbox.addEventListener('click', () => {
+      self.updateButtonState(button);
+    }));
+    self.updateButtonState(button);
+
+    return self;
+  }
+
+  /**
+   * @param {Element} btn
+   */
+  updateButtonState(button) {
+    const self = this;
+    const checkboxes = self.getCheckboxes();
+    const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+    button.disabled = !anyCheckboxChecked;
+    return self;
+  }
+
+  /**
+   * @param {Element} button
+   * @param {CallableFunction} onClick
+   */
+  setupButton(button, onClick) {
+    const self = this;
+    self.setupButtonState(button);
+    button.addEventListener('click', onClick);
+    return self;
+  }
 }
 
 customElements.define('releases-list', ReleasesList);

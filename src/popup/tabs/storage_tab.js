@@ -1,7 +1,7 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { findReleasesInStorage } from "../../modules/storage.js";
-import { createElementFromHTML, isValidBandcampURL, transformReleasesToReleasesListData, updateButtonState } from "../helpers.js";
+import { createElementFromHTML, isValidBandcampURL, transformReleasesToReleasesListData } from "../helpers.js";
 
 /**
  * @param {Element} form
@@ -39,47 +39,11 @@ export function setupStorage(form, btnExport, btnClear) {
   }
 }
 
-/**
- * @param {Element} button
- */
-function setupExportButton(button, checkboxes) {
-  checkboxes.forEach(checkbox => checkbox.addEventListener('click', () => {
-    updateButtonState(button, checkboxes);
-  }));
-
-  updateButtonState(button, checkboxes);
-
-  button.addEventListener('click', () => {
-    const selectedValues = getSelectedValues(checkboxes);
-
-    findReleasesInStorage(selectedValues, releases => {
-      const firstRelease = releases[0];
-      const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
-      const csv = objectsToCsv(csvObjects);
-      downloadCsv(csv, `discogs-selected-releases-${firstRelease.artist}`);
-    });
-  });
-}
-
 function setupClearAllButton(button) {
   button.addEventListener('click', () => {
     storage.clear();
     updateReleases([]);
   });
-}
-
-function setupClearSelectedButton(button, checkboxes) {
-  checkboxes.forEach(checkbox => checkbox.addEventListener('click', event => {
-    updateButtonState(button, checkboxes);
-  }));
-
-  updateButtonState(button, checkboxes);
-}
-
-function getSelectedValues(checkboxes) {
-  return Array.from(checkboxes)
-    .filter(checkbox => checkbox.checked)
-    .map(checkbox => checkbox.value);
 }
 
 /**
@@ -95,8 +59,22 @@ function setupReleasesList(releasesList, releases) {
   const btnClearSelected = createElementFromHTML('<button id="storageDataClearSelected" type="button" class="btn btn-warning" title="Clear selected storage data">Clear selected</button>');
   const btnClearAll = createElementFromHTML('<button id="storageDataClear" type="button" class="btn btn-warning" title="Clear storage data">Clear all</button>');
 
-  setupExportButton(btnExport, releasesList.getCheckboxes());
-  setupClearSelectedButton(btnClearSelected, releasesList.getCheckboxes());
+  function downloadCsvFile() {
+    const selectedValues = releasesList.getSelectedValues();
+
+    findReleasesInStorage(selectedValues, releases => {
+      const firstRelease = releases[0];
+      const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
+      const csv = objectsToCsv(csvObjects);
+      downloadCsv(csv, `discogs-selected-releases-${firstRelease.artist}`);
+    });
+  }
+
+  releasesList.setupButton(btnExport, downloadCsvFile);
+  releasesList.setupButton(btnClearSelected, () => {
+    console.log('Clear selected releases');
+  });
+
   setupClearAllButton(btnClearAll);
 
   releasesList.appendButton(btnExport, btnClearSelected, btnClearAll);

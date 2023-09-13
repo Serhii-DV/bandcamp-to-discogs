@@ -68,7 +68,7 @@ export function isArray(value) {
  * @returns {Boolean}
  */
 export function isEmptyArray(value) {
-  return !isArray(releases) || releases.length === 0;
+  return !isArray(value) || value.length === 0;
 }
 
 /**

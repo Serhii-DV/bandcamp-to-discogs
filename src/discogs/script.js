@@ -8,7 +8,10 @@
   let notesTextarea;
   let submissionNotesTextarea;
 
-  setTimeout(() => {
+  // Initialize script after some period of time. We have to wait for elements initializing on the page.
+  setTimeout(initialize, 2000);
+
+  function initialize() {
     detectElements();
     // @see DiscogsCsv::fromRelease
     const releaseData = unserializeReleaseData();
@@ -27,9 +30,11 @@
 
     showNotificationInfo('Release metadata was applied');
 
-    // Focus on artist name input
-    artistNameInput.focus();
-  }, 2000);
+    if (artistNameInput) {
+      // Focus on artist name input
+      artistNameInput.focus();
+    }
+  }
 
   function detectElements() {
     artistNameInput = document.getElementById('#artist-name-input');

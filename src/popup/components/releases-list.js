@@ -2,14 +2,15 @@ class ReleasesList extends HTMLElement {
   constructor() {
     super();
 
-    const selectAllCheckboxId = this.getPrefixed('selectAllCheckbox');
+    const self = this;
+    const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
     const template = document.createElement('template');
     template.innerHTML = `
         <table class="table table-hover table-sm table-transparent">
           <thead>
             <tr>
               <th><input type="checkbox" id="${selectAllCheckboxId}"></th>
-              <th><label for="${selectAllCheckboxId}">Select All</label><span id="${selectAllCheckboxId}-info" data-format=" (selected: {amount})"></span></th>
+              <th><label for="${selectAllCheckboxId}">Select All</label><span id="${selectAllCheckboxId}-info" data-format=" (selected: {selected}/{total})"></span></th>
             </tr>
           </thead>
           <tbody>
@@ -21,14 +22,14 @@ class ReleasesList extends HTMLElement {
         </div>
     `;
 
-    this.appendChild(template.content.cloneNode(true));
+    self.appendChild(template.content.cloneNode(true));
 
-    const selectAllCheckbox = this.querySelector("#"+selectAllCheckboxId);
+    const selectAllCheckbox = self.querySelector("#"+selectAllCheckboxId);
     selectAllCheckbox.addEventListener("change", () => {
-      this.selectAllCheckboxes(selectAllCheckbox.checked);
+      self.selectAllCheckboxes(selectAllCheckbox.checked);
     });
 
-    const table = this.querySelector(".table");
+    const table = self.querySelector(".table");
     table.addEventListener("click", event => {
       const target = event.target;
       if (target.nodeName === 'TD') {
@@ -42,18 +43,36 @@ class ReleasesList extends HTMLElement {
     table.addEventListener('change', event => {
       const target = event.target;
       if (target.type === 'checkbox') {
-        this.selectCheckbox(target, target.checked);
-        this.setSelectedAmount(this.getSelectedValues().length);
+        self.selectCheckbox(target, target.checked)
+          .setSelectedItemsAmount(this.getSelectedValues().length);
       }
     });
   }
 
-  setSelectedAmount(amount) {
+  setSelectedItemsAmount(value) {
+    const self = this;
+    self.setAttribute('data-selected', value);
+    self.updateItemsInfo();
+    return self;
+  }
+
+  setTotalItemsAmount(value) {
+    const self = this;
+    self.setAttribute('data-total', value);
+    self.updateItemsInfo();
+    return self;
+  }
+
+  updateItemsInfo() {
     const self = this;
     const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
     const selectedAmountInfo = document.getElementById(`${selectAllCheckboxId}-info`);
-    const updatedText = amount ? selectedAmountInfo.getAttribute("data-format").replace("{amount}", amount) : '';
-    selectedAmountInfo.textContent = updatedText;
+    const total = this.getAttribute('data-total');
+    const selected = this.getAttribute('data-selected');
+    const infoText = selectedAmountInfo.getAttribute("data-format")
+      .replace("{total}", total)
+      .replace("{selected}", selected ?? 0);
+    selectedAmountInfo.textContent = infoText;
     return self;
   }
 
@@ -106,20 +125,28 @@ class ReleasesList extends HTMLElement {
     this.populateData(data);
   }
 
+  /**
+   * @param {Array} data
+   * @returns {Self}
+   */
   populateData(data) {
-    const tableBody = this.querySelector("tbody");
+    const self = this;
+    const tableBody = self.querySelector("tbody");
     tableBody.innerHTML = ""; // Clear existing data
 
     data.forEach((item, index) => {
       const row = document.createElement("tr");
-      const checkboxId = this.getPrefixed('checkbox_'+index);
+      const checkboxId = self.getPrefixed('checkbox_'+index);
       row.innerHTML = `
         <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
         <td><label for="${checkboxId}">${item.title}</label></td>
       `;
       tableBody.appendChild(row);
     });
-    return this;
+
+    self.setTotalItemsAmount(data.length);
+
+    return self;
   }
 
   selectAllCheckboxes(checked) {

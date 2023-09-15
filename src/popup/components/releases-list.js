@@ -4,13 +4,22 @@ class ReleasesList extends HTMLElement {
 
     const self = this;
     const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
+    const searchInputId = self.getPrefixed('searchInput');
     const template = document.createElement('template');
     template.innerHTML = `
+        <input type="text" id="${searchInputId}" class="form-control form-control-sm rounded-0" placeholder="Search...">
         <table class="table table-hover table-sm table-transparent">
           <thead>
             <tr>
-              <th><input type="checkbox" id="${selectAllCheckboxId}"></th>
-              <th><label for="${selectAllCheckboxId}">Select All</label><span id="${selectAllCheckboxId}-info" data-format=" (selected: {selected}/{total})"></span></th>
+              <th><input type="checkbox" id="${selectAllCheckboxId}" title="Select all"></th>
+              <th>
+                <label for="${selectAllCheckboxId}">
+                  <span id="${selectAllCheckboxId}-info" class="selected-info" data-format="Selected: {selected}/{filtered}; Viewed: {filtered}/{total}"></span>
+                </label>
+              </th>
+            </tr>
+            <tr>
+              <td colspan="2"></td>
             </tr>
           </thead>
           <tbody>
@@ -43,36 +52,41 @@ class ReleasesList extends HTMLElement {
     table.addEventListener('change', event => {
       const target = event.target;
       if (target.type === 'checkbox') {
-        self.selectCheckbox(target, target.checked)
-          .setSelectedItemsAmount(this.getSelectedValues().length);
+        self
+          .selectCheckbox(target, target.checked)
+          .refreshItemsStatus();
       }
     });
+
+    const searchInput = document.getElementById(searchInputId);
+    searchInput.addEventListener("input", filterTable);
+
+    function filterTable() {
+      const input = searchInput.value.toLowerCase();
+      const rows = table.querySelectorAll("tbody tr");
+
+      rows.forEach((row) => {
+        const label = row.querySelector("td label").textContent.toLowerCase();
+        row.classList[label.includes(input) ? 'remove' : 'add']('visually-hidden');
+      });
+
+      self.refreshItemsStatus();
+    }
   }
 
-  setSelectedItemsAmount(value) {
+  refreshItemsStatus() {
     const self = this;
-    self.setAttribute('data-selected', value);
-    self.updateItemsInfo();
-    return self;
-  }
-
-  setTotalItemsAmount(value) {
-    const self = this;
-    self.setAttribute('data-total', value);
-    self.updateItemsInfo();
-    return self;
-  }
-
-  updateItemsInfo() {
-    const self = this;
+    const total = self.querySelectorAll('tr.release-item').length;
+    const selected = self.getSelectedValues().length;
+    const filtered = self.querySelectorAll('tr.release-item:not(.visually-hidden)').length;
     const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
     const selectedAmountInfo = document.getElementById(`${selectAllCheckboxId}-info`);
-    const total = this.getAttribute('data-total');
-    const selected = this.getAttribute('data-selected');
     const infoText = selectedAmountInfo.getAttribute("data-format")
-      .replace("{total}", total)
-      .replace("{selected}", selected ?? 0);
+      .replace(new RegExp("{total}", "g"), total)
+      .replace(new RegExp("{selected}", "g"), selected)
+      .replace(new RegExp("{filtered}", "g"), filtered);
     selectedAmountInfo.textContent = infoText;
+
     return self;
   }
 
@@ -137,6 +151,7 @@ class ReleasesList extends HTMLElement {
     data.forEach((item, index) => {
       const row = document.createElement("tr");
       const checkboxId = self.getPrefixed('checkbox_'+index);
+      row.classList.add('release-item');
       row.innerHTML = `
         <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
         <td><label for="${checkboxId}">${item.title}</label></td>
@@ -144,20 +159,21 @@ class ReleasesList extends HTMLElement {
       tableBody.appendChild(row);
     });
 
-    self.setTotalItemsAmount(data.length);
+    self.refreshItemsStatus();
 
     return self;
   }
 
   selectAllCheckboxes(checked) {
-    this.getCheckboxes().forEach(checkbox => {
-      this.selectCheckbox(checkbox, checked);
+    const self = this;
+    self.getCheckboxes().forEach(checkbox => {
+      self.selectCheckbox(checkbox, checked);
     });
-    return this;
+    return self;
   }
 
   getCheckboxes(onlyChecked = false) {
-    return this.querySelectorAll("input.release-checkbox[type='checkbox']" + (onlyChecked ? ":checked" : ""));
+    return this.querySelectorAll(".release-item:not(.visually-hidden) input.release-checkbox[type='checkbox']" + (onlyChecked ? ":checked" : ""));
   }
 
   /**

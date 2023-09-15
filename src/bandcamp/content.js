@@ -60,7 +60,7 @@ function generateListResponse() {
     const title = titleParts[0];
     const url = element.querySelector('a').getAttribute('href');
     releases.push({
-      url: window.location.origin + url,
+      url: (url[0] === '/' ? window.location.origin : '') + url,
       artist: artist,
       title: title
     });

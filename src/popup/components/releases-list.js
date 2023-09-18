@@ -54,7 +54,7 @@ class ReleasesList extends HTMLElement {
       if (target.type === 'checkbox') {
         self
           .selectCheckbox(target, target.checked)
-          .refreshItemsStatus();
+          .refreshStatus();
       }
     });
 
@@ -70,8 +70,16 @@ class ReleasesList extends HTMLElement {
         row.classList[label.includes(input) ? 'remove' : 'add']('visually-hidden');
       });
 
-      self.refreshItemsStatus();
+      self.refreshStatus();
     }
+  }
+
+  refreshStatus() {
+    const self = this;
+    self
+      .updateButtonsState()
+      .refreshItemsStatus();
+    return self;
   }
 
   refreshItemsStatus() {
@@ -159,7 +167,7 @@ class ReleasesList extends HTMLElement {
       tableBody.appendChild(row);
     });
 
-    self.refreshItemsStatus();
+    self.refreshStatus();
 
     return self;
   }
@@ -190,40 +198,18 @@ class ReleasesList extends HTMLElement {
   /**
    * @param {Element} button
    * @returns {ReleasesList}
-   */
-  setupButtonState(button) {
-    const self = this;
-    const checkboxes = self.getCheckboxes();
-
-    checkboxes.forEach(checkbox => checkbox.addEventListener('click', () => {
-      self.updateButtonState(button);
-    }));
-    self.updateButtonState(button);
-
-    return self;
+  */
+ updateButtonState(button) {
+   const self = this;
+   const checkboxes = self.getCheckboxes();
+   const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+   button.disabled = !anyCheckboxChecked;
+   return self;
   }
 
-  /**
-   * @param {Element} btn
-   * @returns {ReleasesList}
-   */
-  updateButtonState(button) {
+  updateButtonsState() {
     const self = this;
-    const checkboxes = self.getCheckboxes();
-    const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-    button.disabled = !anyCheckboxChecked;
-    return self;
-  }
-
-  /**
-   * @param {Element} button
-   * @param {CallableFunction} onClick
-   * @returns {ReleasesList}
-   */
-  setupButton(button, onClick) {
-    const self = this;
-    self.setupButtonState(button);
-    button.addEventListener('click', onClick);
+    self.querySelectorAll('[data-status-update]').forEach(button => self.updateButtonState(button));
     return self;
   }
 }

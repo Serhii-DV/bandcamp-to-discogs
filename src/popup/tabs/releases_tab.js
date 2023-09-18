@@ -8,29 +8,35 @@ export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
   imgReleaseCover.src = bgImageSrc;
 
   const releasesList = document.querySelector('#releasesTabLIst');
+  releasesList.populateData(
+    transformReleasesToReleasesListData(releaseList)
+  );
+  populateReleasesList(releaseList);
   setupReleasesList(releasesList, releaseList, btnNavDownload);
 }
 
 /**
- * @param {ReleasesList} releasesList
  * @param {Array} releases
  * @param {Element} btnNavDownload
  */
-function setupReleasesList(releasesList, items, btnNavDownload) {
+function populateReleasesList(releasesList, items) {
   releasesList.populateData(
     transformReleasesToReleasesListData(items)
   );
+}
 
+/**
+ * @param {ReleasesList} releasesList
+ */
+function setupReleasesList(releasesList, items, btnNavDownload) {
   const btnDownload = createElementFromHTML(`
-<button id="submitBandcampReleases" type="button" class="btn btn-primary btn-sm" title="Download selected releases as Discogs Draft CSV file">
+<button id="submitBandcampReleases" type="button" class="btn btn-primary btn-sm" data-status-update title="Download selected releases as Discogs Draft CSV file">
   <b2d-icon name="download"></b2d-icon>
   Save to CSV
 </button>
 `);
 
-  releasesList
-  .appendButton(btnDownload)
-  .setupButton(btnDownload, async () => {
+  btnDownload.addEventListener('click', async () => {
     const checkedUrls = releasesList.getSelectedValues();
 
     findMissingKeysInStorage(checkedUrls, missingKeys => {
@@ -50,6 +56,8 @@ function setupReleasesList(releasesList, items, btnNavDownload) {
       });
     });
   });
+
+  releasesList.appendButton(btnDownload);
 }
 
 function waitForBandcampData() {

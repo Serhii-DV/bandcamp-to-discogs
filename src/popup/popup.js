@@ -3,7 +3,7 @@ import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
-import { setupStorage as setupStorageData } from "./tabs/storage_tab.js";
+import { setupStorageTab } from "./tabs/storage_tab.js";
 import { disable, hide, show, triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupBtnToDownloadReleasesAsCsv } from "./tabs/download_tab.js";
@@ -95,12 +95,7 @@ function replaceVersion() {
 
 function main() {
   loadRelease();
-  setupStorageData(
-    document.getElementById('storageDataForm'),
-    document.getElementById('storageExport'),
-    document.getElementById('storageDataClear')
-  );
-
+  setupStorageTab();
   replaceVersion();
 }
 

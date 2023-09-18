@@ -1,48 +1,24 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
-import { findReleasesInStorage } from "../../modules/storage.js";
-import { createElementFromHTML, isValidBandcampURL, transformReleasesToReleasesListData } from "../helpers.js";
+import { clearStorage, clearStorageByKey, findAllReleasesInStorage, findReleasesInStorage } from "../../modules/storage.js";
+import { createElementFromHTML, transformReleasesToReleasesListData } from "../helpers.js";
 
 /**
  * @param {Element} form
  * @param {Element} btnExport
  * @param {Element} btnClear
  */
-export function setupStorage(form, btnExport, btnClear) {
-  const storage = chrome.storage.local;
-
-  storage.get(null, (data) => {
-    // Display the data in the console
-    console.log('storage.get', data);
-
-    const releases = [];
-
-    for (const key in data) {
-      if (!isValidBandcampURL(key) || !data.hasOwnProperty(key)) {
-        continue;
-      }
-
-      const releaseObject = data[key];
-
-      if (releaseObject.release) {
-        releases.push(releaseObject.release);
-      }
-    }
-
-    updateReleases(releases);
-  });
-
+export function setupStorageTab() {
   const releasesList = document.querySelector('#storageReleasesLIst');
-
-  function updateReleases(releases) {
-    setupReleasesList(releasesList, releases);
-  }
+  setupReleasesList(releasesList);
+  updateReleasesListData(releasesList);
 }
 
-function setupClearAllButton(button) {
-  button.addEventListener('click', () => {
-    storage.clear();
-    updateReleases([]);
+function updateReleasesListData(releasesList) {
+  findAllReleasesInStorage((releases) => {
+    releasesList.populateData(
+      transformReleasesToReleasesListData(releases)
+    );
   });
 }
 
@@ -51,17 +27,13 @@ function setupClearAllButton(button) {
  * @param {Array} releases
  */
 function setupReleasesList(releasesList, releases) {
-  releasesList.populateData(
-    transformReleasesToReleasesListData(releases)
-  );
-
   const btnExport = createElementFromHTML(`
-<button id="storageExport" type="button" class="btn btn-primary" title="Download selected releases as Discogs Draft CSV">
+<button id="storageExport" type="button" class="btn btn-primary" data-status-update title="Download selected releases as Discogs Draft CSV">
   <b2d-icon name="download"></b2d-icon>
   Save to CSV
 </button>`);
   const btnClearSelected = createElementFromHTML(`
-<button id="storageDataClearSelected" type="button" class="btn" title="Clear selected storage data">
+<button id="storageDataClearSelected" type="button" class="btn" data-status-update title="Clear selected storage data">
   <b2d-icon name="database-dash"></b2d-icon>
 </button>`);
   const btnClearAll = createElementFromHTML(`
@@ -80,12 +52,17 @@ function setupReleasesList(releasesList, releases) {
     });
   }
 
-  releasesList.setupButton(btnExport, downloadCsvFile);
-  releasesList.setupButton(btnClearSelected, () => {
-    console.log('Clear selected releases');
+  btnExport.addEventListener('click', downloadCsvFile);
+  btnClearSelected.addEventListener('click', () => {
+    const selectedValues = releasesList.getSelectedValues();
+    clearStorageByKey(selectedValues, () => {
+      updateReleasesListData(releasesList);
+    });
   });
-
-  setupClearAllButton(btnClearAll);
+  btnClearAll.addEventListener('click', () => {
+    clearStorage();
+    updateReleasesListData(releasesList);
+  });
 
   releasesList.appendButton(btnExport, btnClearSelected, btnClearAll);
 }

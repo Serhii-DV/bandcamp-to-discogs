@@ -1,12 +1,36 @@
 import { Release } from "../app/release.js";
+import { isValidBandcampURL } from "../popup/helpers.js";
 import { isArray } from "./utils.js";
 
 const storage = chrome.storage.local;
+
+export function findAllReleasesInStorage(onFind) {
+  storage.get(null, (data) => {
+    console.log('storage.get', data);
+
+    const releases = [];
+
+    for (const key in data) {
+      if (!isValidBandcampURL(key) || !data.hasOwnProperty(key)) {
+        continue;
+      }
+
+      const releaseObject = data[key];
+
+      if (releaseObject.release) {
+        releases.push(releaseObject.release);
+      }
+    }
+
+    onFind(releases);
+  });
+}
 
 export function findReleaseInStorage(url, onFind) {
   storage.get([url], (result) => {
     if (result[url] && result[url]['release']) {
       const release = createReleaseFromStorageItem(result[url]);
+
       onFind(release);
     } else {
       console.log("B2D: Release data doesn't exists", url);
@@ -35,4 +59,22 @@ function createReleaseFromStorageItem(storageItem) {
     throw new Error('Storage items is not Release object');
   }
   return Release.fromJSON(storageItem.release);
+}
+
+export function clearStorage() {
+  storage.clear();
+}
+
+export function clearStorageByKey(key, onDone) {
+  isArray(key)
+    ? key.forEach(clearStorage)
+    : storage.remove(key, () => {
+      if (chrome.runtime.lastError) {
+        console.error(`Error clearing local storage item with key "${key}": ${chrome.runtime.lastError}`);
+      }
+
+      if (typeof onDone === "function") {
+        onDone();
+      }
+    });
 }

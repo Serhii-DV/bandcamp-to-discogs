@@ -67,7 +67,7 @@ export function clearStorage() {
 
 export function clearStorageByKey(key, onDone) {
   isArray(key)
-    ? key.forEach(clearStorage)
+    ? key.forEach(k => clearStorageByKey(k, onDone))
     : storage.remove(key, () => {
       if (chrome.runtime.lastError) {
         console.error(`Error clearing local storage item with key "${key}": ${chrome.runtime.lastError}`);

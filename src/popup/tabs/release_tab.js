@@ -7,7 +7,7 @@ let elRelease;
 let releaseArtist;
 let releaseTitle;
 let releaseDate;
-let releaseTracklist;
+let releaseContent;
 
 /**
  * @param {Release} release
@@ -18,7 +18,7 @@ export function setupReleaseTab(release) {
   releaseArtist = document.getElementById('release-artist');
   releaseTitle = document.getElementById('release-title');
   releaseDate = document.getElementById('release-year');
-  releaseTracklist = document.getElementById('release-tracklist');
+  releaseContent = document.querySelector('.release-content');
 
   outputRelease(release);
 }
@@ -44,7 +44,7 @@ function outputRelease(release) {
     trackinfo += `${track.num}. ${track.title} (${track.durationText})<br>`;
   });
 
-  releaseTracklist.innerHTML = trackinfo;
+  releaseContent.innerHTML = trackinfo;
   btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
 }
 

@@ -127,7 +127,7 @@ class ReleasesList extends HTMLElement {
 
     if (checkbox.classList.contains('release-checkbox')) {
       const tr = checkbox.closest('tr');
-      const className = 'selected';
+      const className = 'table-active';
 
       if (checkbox.checked) {
         tr.classList.add(className);

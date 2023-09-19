@@ -94,8 +94,8 @@ details summary::-webkit-details-marker {
   background-color: transparent;
 }
 
-.table-transparent tr.selected {
-  background-color: var(--main-bg-color);
+.table-transparent tr.table-active {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 releases-list .content-header {

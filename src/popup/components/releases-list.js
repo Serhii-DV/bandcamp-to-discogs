@@ -8,7 +8,7 @@ class ReleasesList extends HTMLElement {
     const template = document.createElement('template');
     template.innerHTML = `
         <input type="text" id="${searchInputId}" class="form-control form-control-sm rounded-0" placeholder="Search...">
-        <table class="table table-hover table-sm table-transparent">
+        <table class="table table-hover table-sm table-transparent table-borderless">
           <thead>
             <tr>
               <th><input type="checkbox" id="${selectAllCheckboxId}" title="Select all"></th>

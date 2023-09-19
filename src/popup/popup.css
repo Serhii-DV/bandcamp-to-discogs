@@ -102,7 +102,3 @@ releases-list .content-header {
   background-color: var(--main-bg-color);
   padding: 5px 10px;
 }
-
-releases-list .content-header .control-buttons {
-  padding: 5px 0 0;
-}

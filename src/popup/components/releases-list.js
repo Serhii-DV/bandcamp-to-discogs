@@ -7,8 +7,8 @@ class ReleasesList extends HTMLElement {
     const searchInputId = self.getPrefixed('searchInput');
     const template = document.createElement('template');
     template.innerHTML = `
-        <div class="content-header sticky-top">
-          <input type="text" id="${searchInputId}" class="form-control form-control-sm rounded-0" placeholder="Search...">
+        <div class="content-header input-group input-group-sm sticky-top">
+          <input type="text" id="${searchInputId}" class="form-control form-control-sm" placeholder="Search...">
           <div class="control-buttons btn-group btn-group-sm" role="group" aria-label="Control buttons">
           </div>
         </div>

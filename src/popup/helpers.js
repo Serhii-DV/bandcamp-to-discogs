@@ -243,3 +243,10 @@ export function setBackgroundImage(element, imageUrl) {
   if (!element instanceof HTMLElement) return;
   element.style.backgroundImage = `url(${imageUrl})`;
 }
+
+export function removeAllClickHandlers(button) {
+  var parent = button.parentNode;
+  var newButton = button.cloneNode(true);
+  parent.replaceChild(newButton, button);
+  return newButton;
+}

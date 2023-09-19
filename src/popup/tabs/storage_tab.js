@@ -1,16 +1,14 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { clearStorage, clearStorageByKey, findAllReleasesInStorage, findReleasesInStorage } from "../../modules/storage.js";
-import { createElementFromHTML, transformReleasesToReleasesListData } from "../helpers.js";
+import { createElementFromHTML, removeAllClickHandlers, transformReleasesToReleasesListData } from "../helpers.js";
 
 /**
- * @param {Element} form
- * @param {Element} btnExport
- * @param {Element} btnClear
+ * @param {Element} btnDownloadCsv
  */
-export function setupStorageTab() {
+export function setupStorageTab(btnDownloadCsv) {
   const releasesList = document.querySelector('#storageReleasesLIst');
-  setupReleasesList(releasesList);
+  setupReleasesList(releasesList, btnDownloadCsv);
   updateReleasesListData(releasesList);
 }
 
@@ -24,9 +22,8 @@ function updateReleasesListData(releasesList) {
 
 /**
  * @param {ReleasesList} releasesList
- * @param {Array} releases
  */
-function setupReleasesList(releasesList, releases) {
+function setupReleasesList(releasesList, btnDownloadCsv) {
   const btnExport = createElementFromHTML(`
 <button id="storageExport" type="button" class="btn btn-primary" data-status-update title="Download selected releases as Discogs Draft CSV">
   <b2d-icon name="download"></b2d-icon>
@@ -52,7 +49,10 @@ function setupReleasesList(releasesList, releases) {
     });
   }
 
-  btnExport.addEventListener('click', downloadCsvFile);
+  btnDownloadCsv = removeAllClickHandlers(btnDownloadCsv);
+  btnDownloadCsv.addEventListener('click', downloadCsvFile);
+  releasesList.addStateButton(btnDownloadCsv);
+
   btnClearSelected.addEventListener('click', () => {
     const selectedValues = releasesList.getSelectedValues();
     clearStorageByKey(selectedValues, () => {
@@ -64,5 +64,5 @@ function setupReleasesList(releasesList, releases) {
     updateReleasesListData(releasesList);
   });
 
-  releasesList.appendButton(btnExport, btnClearSelected, btnClearAll);
+  releasesList.appendButton(btnClearSelected, btnClearAll);
 }

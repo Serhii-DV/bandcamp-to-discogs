@@ -5,16 +5,16 @@ import { isEmptyArray } from "../../modules/utils.js";
 import { disable, enable } from "../helpers.js";
 
 /**
- * @param {Element} btnDownload
+ * @param {Element} button
  * @param {Array<Release>} releases
  */
-export function setupBtnToDownloadReleasesAsCsv(btnDownload, releases) {
+export function setupBtnToDownloadReleasesAsCsv(button, releases) {
   if (isEmptyArray(releases)) {
-    disable(btnDownload);
+    disable(button);
     return;
   }
 
-  enable(btnDownload).addEventListener('click', () => downloadReleasesCsv(releases));
+  enable(button).addEventListener('click', () => downloadReleasesCsv(releases));
 }
 
 /**

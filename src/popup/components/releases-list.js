@@ -3,6 +3,8 @@ class ReleasesList extends HTMLElement {
     super();
 
     const self = this;
+    self.stateButtons = [];
+
     const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
     const searchInputId = self.getPrefixed('searchInput');
     const template = document.createElement('template');
@@ -113,6 +115,12 @@ class ReleasesList extends HTMLElement {
     return this;
   }
 
+  addStateButton(...button) {
+    const self = this;
+    button.forEach(btn => self.stateButtons.push(btn));
+    return self;
+  }
+
   /**
    * @param {Element} checkbox
    * @param {Boolean} checked
@@ -207,6 +215,7 @@ class ReleasesList extends HTMLElement {
   updateButtonsState() {
     const self = this;
     self.querySelectorAll('[data-status-update]').forEach(button => self.updateButtonState(button));
+    self.stateButtons.forEach(button => self.updateButtonState(button));
     return self;
   }
 }

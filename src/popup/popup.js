@@ -11,8 +11,12 @@ import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 
 const btnReleaseTab = document.getElementById("release-tab");
+const btnReleasesTab = document.getElementById("releases-tab");
 const btnCsvDataTab = document.getElementById('csvData-tab');
-const btnDownloadCsv = document.getElementById('download-csv');
+const btnStorageTab = document.getElementById('storageData-tab');
+const btnDownloadRelease = document.getElementById('download-csv');
+const btnDownloadReleases = document.getElementById('downloadReleases');
+const btnDownloadStorage = document.getElementById('downloadStorage');
 const elMainNav = document.getElementById('mainNav');
 const elMainContainer = document.getElementById('mainContainer');
 const elWarningMessage = document.getElementById('warningMessage');
@@ -40,26 +44,20 @@ function processBandcampResponse(response) {
     return;
   }
 
-  const elReleaseTabContent = document.getElementById('releaseTabContent');
-  const elReleasesTabContent = document.getElementById('releasesTabContent');
-
   hide(elWarningMessage);
-  triggerClick(btnReleaseTab);
 
   if (isRelease) {
-    hide(elReleasesTabContent);
-    show(elReleaseTabContent);
-
     processBandcampReleaseData(response.data);
   } else {
-    hide(elReleaseTabContent);
-    show(elReleasesTabContent);
-
     processBandcampReleasesListData(response);
   }
 }
 
 function processBandcampReleaseData(data) {
+  hide(btnReleasesTab);
+  show(btnReleaseTab);
+  triggerClick(btnReleaseTab);
+
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
       // Set global `release` value
@@ -67,7 +65,7 @@ function processBandcampReleaseData(data) {
 
       setupReleaseTab(release);
       setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
-      setupBtnToDownloadReleasesAsCsv(btnDownloadCsv, [release]);
+      setupBtnToDownloadReleasesAsCsv(btnDownloadRelease, [release]);
 
       show([elMainNav]);
       hide(elWarningMessage);
@@ -76,11 +74,14 @@ function processBandcampReleaseData(data) {
 }
 
 function processBandcampReleasesListData(response) {
-  disable(btnDownloadCsv);
+  hide(btnReleaseTab);
+  show(btnReleasesTab);
+  triggerClick(btnReleasesTab);
+
   setupReleasesTab(
     response.data,
     response.popup.imageSrc,
-    btnDownloadCsv
+    btnDownloadReleases
   );
 }
 
@@ -93,9 +94,26 @@ function replaceVersion() {
   });
 }
 
+function setupNavigation() {
+  btnReleaseTab.addEventListener('click', () => {
+    console.log('click');
+    hide([btnDownloadReleases, btnDownloadStorage]);
+    show(btnDownloadRelease);
+  });
+  btnReleasesTab.addEventListener('click', () => {
+    hide([btnDownloadRelease, btnDownloadStorage]);
+    show(btnDownloadReleases);
+  });
+  btnStorageTab.addEventListener('click', () => {
+    hide([btnDownloadRelease, btnDownloadReleases]);
+    show(btnDownloadStorage);
+  });
+}
+
 function main() {
+  setupNavigation();
   loadRelease();
-  setupStorageTab();
+  setupStorageTab(btnDownloadStorage);
   replaceVersion();
 }
 

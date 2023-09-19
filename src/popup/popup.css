@@ -22,6 +22,7 @@ body {
 }
 
 .tab-content {
+  position: relative;
   background-color: rgba(0, 0, 0, 0.75);
   overflow: auto;
   min-height: var(--popup-height);
@@ -31,8 +32,12 @@ body {
   padding: 10px 20px;
 }
 
+.tab-pane {
+  position: absolute;
+  width: 100%;
+}
+
 #release {
-  position: relative;
   height: var(--popup-height);
 }
 
@@ -93,11 +98,11 @@ details summary::-webkit-details-marker {
   background-color: var(--main-bg-color);
 }
 
-releases-list .table {
-  margin-bottom: 40px;
-}
-
-releases-list .buttons {
+releases-list .content-header {
   background-color: var(--main-bg-color);
   padding: 5px 10px;
+}
+
+releases-list .content-header .control-buttons {
+  padding: 5px 0 0;
 }

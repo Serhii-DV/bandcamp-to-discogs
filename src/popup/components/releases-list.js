@@ -7,7 +7,11 @@ class ReleasesList extends HTMLElement {
     const searchInputId = self.getPrefixed('searchInput');
     const template = document.createElement('template');
     template.innerHTML = `
-        <input type="text" id="${searchInputId}" class="form-control form-control-sm rounded-0" placeholder="Search...">
+        <div class="content-header sticky-top">
+          <input type="text" id="${searchInputId}" class="form-control form-control-sm rounded-0" placeholder="Search...">
+          <div class="control-buttons btn-group btn-group-sm" role="group" aria-label="Control buttons">
+          </div>
+        </div>
         <table class="table table-hover table-sm table-transparent table-borderless">
           <thead>
             <tr>
@@ -18,17 +22,10 @@ class ReleasesList extends HTMLElement {
                 </label>
               </th>
             </tr>
-            <tr>
-              <td colspan="2"></td>
-            </tr>
           </thead>
           <tbody>
           </tbody>
         </table>
-        <div class="buttons">
-          <div class="control-buttons btn-group btn-group-sm" role="group" aria-label="Control buttons">
-          </div>
-        </div>
     `;
 
     self.appendChild(template.content.cloneNode(true));

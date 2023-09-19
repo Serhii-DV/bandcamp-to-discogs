@@ -5,23 +5,11 @@ import { downloadReleasesCsv, setupBtnToDownloadReleasesAsCsv } from "./download
 
 export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
-
   const releasesList = document.querySelector('#releasesTabLIst');
   releasesList.populateData(
     transformReleasesToReleasesListData(releaseList)
   );
-  populateReleasesList(releaseList);
   setupReleasesList(releasesList, releaseList, btnNavDownload);
-}
-
-/**
- * @param {Array} releases
- * @param {Element} btnNavDownload
- */
-function populateReleasesList(releasesList, items) {
-  releasesList.populateData(
-    transformReleasesToReleasesListData(items)
-  );
 }
 
 /**

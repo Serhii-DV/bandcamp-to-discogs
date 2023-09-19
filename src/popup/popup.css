@@ -12,12 +12,17 @@ body {
   padding: 0;
 }
 
-#release-cover {
-  min-height: var(--popup-height);
+#mainContainer {
+  max-height: var(--popup-height);
+}
+
+.bg-image {
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .tab-content {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.75);
   overflow: auto;
   min-height: var(--popup-height);
 }

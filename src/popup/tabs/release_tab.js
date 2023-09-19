@@ -1,10 +1,9 @@
 import { Release } from "../../app/release.js";
 import { getSearchDiscogsReleaseUrl } from "../../discogs/discogs.js";
-import { hide, show } from "../helpers.js";
+import { hide, setBackgroundImage, show } from "../helpers.js";
 
 let btnDiscogsSearch;
 let elRelease;
-let releaseCover;
 let releaseArtist;
 let releaseTitle;
 let releaseDate;
@@ -16,7 +15,6 @@ let releaseTracklist;
 export function setupReleaseTab(release) {
   btnDiscogsSearch = document.getElementById('discogs-search-artist');
   elRelease = document.getElementById('release');
-  releaseCover = document.getElementById('release-cover');
   releaseArtist = document.getElementById('release-artist');
   releaseTitle = document.getElementById('release-title');
   releaseDate = document.getElementById('release-year');
@@ -29,7 +27,7 @@ export function setupReleaseTab(release) {
  * @param {Release} release
  */
 function outputRelease(release) {
-  releaseCover.src = release.coverSrc.big;
+  setBackgroundImage(document.querySelector('.bg-image'), release.coverSrc.big);
   releaseArtist.innerHTML = release.artist;
   releaseTitle.innerHTML = release.title;
   releaseDate.innerHTML = release.date.getFullYear();

@@ -5,61 +5,60 @@
   <link type="text/css" rel="stylesheet" href="popup.css">
 </head>
 <body>
+  <header>
+    <nav id="mainNav" class="btn-group d-flex" role="tablist">
+      <button class="btn btn-dark rounded-0" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
+        <b2d-icon name="card-text"></b2d-icon>
+      </button>
+      <button class="btn btn-dark rounded-0" id="csvData-tab" data-bs-toggle="tab" data-bs-target="#csvData" role="tab" aria-controls="csvData" aria-selected="true" type="button" title="Preview Discogs CSV data">
+        <b2d-icon name="table"></b2d-icon>
+      </button>
+      <button class="btn btn-dark rounded-0" id="storageData-tab" data-bs-toggle="tab" data-bs-target="#storageData" role="tab" aria-controls="storageData" aria-selected="true" type="button" title="Releases in storage">
+        <b2d-icon name="database"></b2d-icon>
+      </button>
+      <button id="download-csv" class="btn btn-primary rounded-0" type="button" title="Download Discogs CSV file">
+        <b2d-icon name="download"></b2d-icon>
+      </button>
+      <a id="discogsCsvToDraft" class="btn btn-dark rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
+        <b2d-icon name="box-arrow-up-right"></b2d-icon>
+      </a>
+      <a id="discogs-search-artist" class="btn btn-dark rounded-0" href="https://www.discogs.com/search" target="_blank" role="button" title="Search for Discogs artist release">
+        <b2d-icon name="search"></b2d-icon>
+      </a>
+      <button class="btn btn-dark rounded-0" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" role="tab" aria-controls="about" aria-selected="true" type="button" title="About the extension">
+        <b2d-icon name="question-square"></b2d-icon>
+      </button>
+    </nav>
+  </header>
+  <div id="mainContainer" class="container-fluid p-0 overflow-auto bg-image">
 
-  <div id="mainNav" class="btn-group d-flex" role="tablist">
-    <button class="btn btn-dark rounded-0" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
-      <b2d-icon name="card-text"></b2d-icon>
-    </button>
-    <button class="btn btn-dark rounded-0" id="csvData-tab" data-bs-toggle="tab" data-bs-target="#csvData" role="tab" aria-controls="csvData" aria-selected="true" type="button" title="Preview Discogs CSV data">
-      <b2d-icon name="table"></b2d-icon>
-    </button>
-    <button class="btn btn-dark rounded-0" id="storageData-tab" data-bs-toggle="tab" data-bs-target="#storageData" role="tab" aria-controls="storageData" aria-selected="true" type="button" title="Releases in storage">
-      <b2d-icon name="database"></b2d-icon>
-    </button>
-    <button id="download-csv" class="btn btn-primary rounded-0" type="button" title="Download Discogs CSV file">
-      <b2d-icon name="download"></b2d-icon>
-    </button>
-    <a id="discogsCsvToDraft" class="btn btn-dark rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
-      <b2d-icon name="box-arrow-up-right"></b2d-icon>
-    </a>
-    <a id="discogs-search-artist" class="btn btn-dark rounded-0" href="https://www.discogs.com/search" target="_blank" role="button" title="Search for Discogs artist release">
-      <b2d-icon name="search"></b2d-icon>
-    </a>
-    <button class="btn btn-dark rounded-0" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" role="tab" aria-controls="about" aria-selected="true" type="button" title="About the extension">
-      <b2d-icon name="question-square"></b2d-icon>
-    </button>
-  </div>
-
-  <div id="releaseCard" class="card rounded-0 position-relative">
-    <img id="release-cover" class="card-img rounded-0 opacity-25" src="" alt="">
-    <div class="card-img-overlay overflow-auto p-0 rounded-0">
-
-      <div class="tab-content">
-        <!-- Release -->
-        <div class="tab-pane fade" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">
-          <external-content href="content/release_tab.html" id="releaseTabContent"></external-content>
-          <external-content href="content/releases_tab.html" id="releasesTabContent"></external-content>
-        </div>
-        <!-- CSV data -->
-        <div class="tab-pane fade small" id="csvData" role="tabpanel" aria-labelledby="csvData-tab" tabindex="0"></div>
-        <!-- Storage data -->
-        <div class="tab-pane fade small" id="storageData" role="tabpanel" aria-labelledby="storageData-tab" tabindex="0">
-          <external-content href="content/storage_tab.html"></external-content>
-        </div>
-        <!-- About -->
-        <div class="tab-pane fade content-text" id="about" role="tabpanel" aria-labelledby="about-tab" tabindex="0">
-          <external-content href="content/about.html"></external-content>
-        </div>
+    <div class="tab-content">
+      <!-- Release -->
+      <div class="tab-pane fade" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">
+        <external-content href="content/release_tab.html" id="releaseTabContent"></external-content>
+        <external-content href="content/releases_tab.html" id="releasesTabContent"></external-content>
       </div>
+      <!-- CSV data -->
+      <div class="tab-pane fade small" id="csvData" role="tabpanel" aria-labelledby="csvData-tab" tabindex="0"></div>
+      <!-- Storage data -->
+      <div class="tab-pane fade small" id="storageData" role="tabpanel" aria-labelledby="storageData-tab" tabindex="0">
+        <external-content href="content/storage_tab.html"></external-content>
+      </div>
+      <!-- About -->
+      <div class="tab-pane fade content-text" id="about" role="tabpanel" aria-labelledby="about-tab" tabindex="0">
+        <external-content href="content/about.html"></external-content>
+      </div>
+    </div>
 
+    <div id="warningMessage" class="card rounded-0 visually-hidden">
+      <div class="card-body">
+        <external-content href="content/warning_message.html"></external-content>
+      </div>
     </div>
   </div>
-
-  <div id="warningMessage" class="card rounded-0 visually-hidden">
-    <div class="card-body">
-      <external-content href="content/warning_message.html"></external-content>
-    </div>
-  </div>
+  <footer class="bd-footer">
+    footer
+  </footer>
 
   <script src="../../assets/bootstrap/bootstrap.bundle.5.3.0.min.js"></script>
   <script src="components/icon.js"></script>

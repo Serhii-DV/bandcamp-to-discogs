@@ -238,3 +238,8 @@ export function getIconLinkHtml(url, icon) {
   releaseLink.innerHTML = `<b2d-icon name="${icon}"></b2d-icon>`;
   return releaseLink.outerHTML;
 }
+
+export function setBackgroundImage(element, imageUrl) {
+  if (!element instanceof HTMLElement) return;
+  element.style.backgroundImage = `url(${imageUrl})`;
+}

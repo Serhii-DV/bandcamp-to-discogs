@@ -14,14 +14,14 @@ const btnReleaseTab = document.getElementById("release-tab");
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnDownloadCsv = document.getElementById('download-csv');
 const elMainNav = document.getElementById('mainNav');
-const elReleaseCard = document.getElementById('releaseCard');
+const elMainContainer = document.getElementById('mainContainer');
 const elWarningMessage = document.getElementById('warningMessage');
 
 async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
-        hide([elReleaseCard, elMainNav]);
+        hide([elMainNav]);
         show(elWarningMessage);
         return;
       }
@@ -69,7 +69,7 @@ function processBandcampReleaseData(data) {
       setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
       setupBtnToDownloadReleasesAsCsv(btnDownloadCsv, [release]);
 
-      show([elReleaseCard, elMainNav]);
+      show([elMainNav]);
       hide(elWarningMessage);
     });
   });

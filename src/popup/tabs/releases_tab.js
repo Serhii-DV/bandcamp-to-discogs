@@ -1,11 +1,10 @@
 import { openTabs } from "../../modules/chrome.js";
 import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/storage.js";
-import { createElementFromHTML, transformReleasesToReleasesListData } from "../helpers.js";
+import { createElementFromHTML, setBackgroundImage, transformReleasesToReleasesListData } from "../helpers.js";
 import { downloadReleasesCsv, setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 
 export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
-  const imgReleaseCover = document.getElementById('release-cover')
-  imgReleaseCover.src = bgImageSrc;
+  setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
 
   const releasesList = document.querySelector('#releasesTabLIst');
   releasesList.populateData(

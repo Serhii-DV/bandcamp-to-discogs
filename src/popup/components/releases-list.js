@@ -25,7 +25,7 @@ class ReleasesList extends HTMLElement {
           <tbody>
           </tbody>
         </table>
-        <div class="fixed-bottom buttons">
+        <div class="buttons">
           <div class="control-buttons btn-group btn-group-sm" role="group" aria-label="Control buttons">
           </div>
         </div>

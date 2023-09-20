@@ -1,7 +1,7 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { clearStorage, clearStorageByKey, findAllReleasesInStorage, findReleasesInStorage } from "../../modules/storage.js";
-import { createElementFromHTML, hasDataAttribute, setDataAttribute, transformReleasesToReleasesListData } from "../helpers.js";
+import { createElementFromHTML, hasDataAttribute, removeButtonLoadingState, setButtonInLoadingState, setDataAttribute, transformReleasesToReleasesListData } from "../helpers.js";
 
 /**
  * @param {Element} btnDownloadCsv
@@ -39,7 +39,9 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
   <b2d-icon name="database-x"></b2d-icon>
 </button>`);
 
-  function downloadCsvFile() {
+  const downloadCsvFile = (event) => {
+    const button = event.target;
+    setButtonInLoadingState(button);
     const selectedValues = releasesList.getSelectedValues();
 
     findReleasesInStorage(selectedValues, releases => {
@@ -47,6 +49,7 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
       const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
       const csv = objectsToCsv(csvObjects);
       downloadCsv(csv, `discogs-selected-releases-${firstRelease.artist}`);
+      removeButtonLoadingState(button);
     });
   }
 

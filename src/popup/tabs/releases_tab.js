@@ -1,6 +1,6 @@
 import { openTabs } from "../../modules/chrome.js";
 import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/storage.js";
-import { setBackgroundImage, transformReleasesToReleasesListData } from "../helpers.js";
+import { removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState, transformReleasesToReleasesListData } from "../helpers.js";
 import { downloadReleasesCsv } from "./download_tab.js";
 
 export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
@@ -10,7 +10,10 @@ export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
     transformReleasesToReleasesListData(releaseList)
   );
 
-  const saveToCsv = async () => {
+  const downloadCsvFile = async (event) => {
+    const button = event.target;
+    setButtonInLoadingState(button);
+
     const checkedUrls = releasesList.getSelectedValues();
     findMissingKeysInStorage(checkedUrls, missingKeys => {
       openTabs(missingKeys, (tab) => {
@@ -23,13 +26,14 @@ export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
           // Read data from the storage
           findReleasesInStorage(checkedUrls, releases => {
             downloadReleasesCsv(releases);
+            removeButtonLoadingState(button);
           });
         }, 3000);
       });
     });
   };
 
-  btnNavDownload.addEventListener('click', saveToCsv);
+  btnNavDownload.addEventListener('click', downloadCsvFile);
   releasesList.addStateButton(btnNavDownload);
 }
 

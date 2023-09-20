@@ -239,3 +239,25 @@ export function hasDataAttribute(element, attributeName) {
 export function setDataAttribute(element, attributeName, attributeValue = '') {
   element.setAttribute(`data-${attributeName}`, attributeValue);
 }
+
+export function getDataAttribute(element, attributeName) {
+  return element.getAttribute(`data-${attributeName}`);
+}
+
+export function setButtonInLoadingState(button) {
+  disable(button);
+  setDataAttribute(button, 'original-content', button.innerHTML);
+  button.innerHTML = `
+  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+  <span class="visually-hidden" role="status">Loading...</span>
+`;
+  return button;
+}
+
+export function removeButtonLoadingState(button) {
+  enable(button);
+  if (hasDataAttribute(button, 'original-content')) {
+    button.innerHTML = getDataAttribute(button, 'original-content');
+  }
+  return button;
+}

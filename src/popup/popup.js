@@ -4,7 +4,7 @@ import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
 import { setupStorageTab } from "./tabs/storage_tab.js";
-import { hide, show, triggerClick } from "./helpers.js";
+import { disable, enable, hide, show, triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
@@ -101,10 +101,12 @@ function setupNavigation() {
   btnReleaseTab.addEventListener('click', () => {
     hide(btnDownloadReleases, btnDownloadStorage);
     show(btnDownloadRelease);
+    enable(btnCsvDataTab);
   });
   btnReleasesTab.addEventListener('click', () => {
     hide(btnDownloadRelease, btnDownloadStorage);
     show(btnDownloadReleases);
+    disable(btnCsvDataTab);
   });
   btnStorageTab.addEventListener('click', () => {
     hide(btnDownloadRelease, btnDownloadReleases);

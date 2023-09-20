@@ -69,32 +69,20 @@ export function triggerClick(element) {
   element.dispatchEvent(event);
 }
 
-export function show(el) {
-  isArray(el) ? el.forEach(show) : el.classList.remove('visually-hidden');
-  return el;
+export function show(...element) {
+  element.forEach(el => isArray(el) ? show(...el) : el.classList.remove('visually-hidden'));
 }
 
-export function hide(el) {
-  isArray(el) ? el.forEach(hide) : el.classList.add('visually-hidden');
-  return el;
+export function hide(...element) {
+  element.forEach(el => isArray(el) ? hide(...el) : el.classList.add('visually-hidden'));
 }
 
-export function disable(el) {
-  if (isArray(el)) {
-    el.forEach(disable);
-  } else {
-    el.disabled = true;
-  }
-  return el;
+export function disable(...element) {
+  element.forEach(el => isArray(el) ? disable(...el) : (el.disabled = true));
 }
 
-export function enable(el) {
-  if (isArray(el)) {
-    el.forEach(enable);
-  } else {
-    el.disabled = false;
-  }
-  return el;
+export function enable(...element) {
+  element.forEach(el => isArray(el) ? enable(...el) : (el.disabled = false));
 }
 
 /**

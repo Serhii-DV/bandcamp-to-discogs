@@ -14,7 +14,8 @@ export function setupBtnToDownloadReleasesAsCsv(button, releases) {
     return;
   }
 
-  enable(button).addEventListener('click', () => downloadReleasesCsv(releases));
+  enable(button);
+  button.addEventListener('click', () => downloadReleasesCsv(releases));
 }
 
 /**

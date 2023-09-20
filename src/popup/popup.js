@@ -4,7 +4,7 @@ import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
 import { setupStorageTab } from "./tabs/storage_tab.js";
-import { disable, hide, show, triggerClick } from "./helpers.js";
+import { hide, show, triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupBtnToDownloadReleasesAsCsv } from "./tabs/download_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
@@ -49,7 +49,7 @@ function processBandcampResponse(response) {
   if (isRelease) {
     processBandcampReleaseData(response.data);
   } else {
-    processBandcampReleasesListData(response);
+    processBandcampReleasesData(response);
   }
 }
 
@@ -73,7 +73,7 @@ function processBandcampReleaseData(data) {
   });
 }
 
-function processBandcampReleasesListData(response) {
+function processBandcampReleasesData(response) {
   hide(btnReleaseTab);
   show(btnReleasesTab);
   triggerClick(btnReleasesTab);
@@ -96,24 +96,23 @@ function replaceVersion() {
 
 function setupNavigation() {
   btnReleaseTab.addEventListener('click', () => {
-    console.log('click');
-    hide([btnDownloadReleases, btnDownloadStorage]);
+    hide(btnDownloadReleases, btnDownloadStorage);
     show(btnDownloadRelease);
   });
   btnReleasesTab.addEventListener('click', () => {
-    hide([btnDownloadRelease, btnDownloadStorage]);
+    hide(btnDownloadRelease, btnDownloadStorage);
     show(btnDownloadReleases);
   });
   btnStorageTab.addEventListener('click', () => {
-    hide([btnDownloadRelease, btnDownloadReleases]);
+    hide(btnDownloadRelease, btnDownloadReleases);
     show(btnDownloadStorage);
+    setupStorageTab(btnDownloadStorage);
   });
 }
 
 function main() {
   setupNavigation();
   loadRelease();
-  setupStorageTab(btnDownloadStorage);
   replaceVersion();
 }
 

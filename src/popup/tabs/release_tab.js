@@ -1,6 +1,6 @@
 import { Release } from "../../app/release.js";
 import { getSearchDiscogsReleaseUrl } from "../../discogs/discogs.js";
-import { hide, setBackgroundImage, show } from "../helpers.js";
+import { setBackgroundImage } from "../helpers.js";
 
 let btnDiscogsSearch;
 let elRelease;

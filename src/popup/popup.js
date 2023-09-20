@@ -6,7 +6,6 @@ import config from "../config.js";
 import { setupStorageTab } from "./tabs/storage_tab.js";
 import { hide, show, triggerClick } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
-import { setupBtnToDownloadReleasesAsCsv } from "./tabs/download_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 
@@ -17,6 +16,7 @@ const btnStorageTab = document.getElementById('storageData-tab');
 const btnDownloadRelease = document.getElementById('downloadRelease');
 const btnDownloadReleases = document.getElementById('downloadReleases');
 const btnDownloadStorage = document.getElementById('downloadStorage');
+const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
 const elMainNav = document.getElementById('mainNav');
 const elMainContainer = document.getElementById('mainContainer');
 const elWarningMessage = document.getElementById('warningMessage');
@@ -60,14 +60,17 @@ function processBandcampReleaseData(data) {
 
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
-      // Set global `release` value
       const release = Release.fromJSON(data);
 
-      setupReleaseTab(release);
+      setupReleaseTab(
+        document.getElementById('release'),
+        release,
+        btnDownloadRelease,
+        btnDiscogsSearchArtist
+      );
       setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
-      setupBtnToDownloadReleasesAsCsv(btnDownloadRelease, [release]);
 
-      show([elMainNav]);
+      show(elMainNav);
       hide(elWarningMessage);
     });
   });

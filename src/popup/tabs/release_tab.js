@@ -1,32 +1,30 @@
 import { Release } from "../../app/release.js";
 import { getSearchDiscogsReleaseUrl } from "../../discogs/discogs.js";
 import { setBackgroundImage } from "../helpers.js";
-
-let btnDiscogsSearch;
-let elRelease;
-let releaseArtist;
-let releaseTitle;
-let releaseDate;
-let releaseContent;
+import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 
 /**
+ * @param {Element} tab
  * @param {Release} release
+ * @param {Element} btnDownloadRelease
+ * @param {Element} btnDiscogsSearch
  */
-export function setupReleaseTab(release) {
-  btnDiscogsSearch = document.getElementById('discogs-search-artist');
-  elRelease = document.getElementById('release');
-  releaseArtist = document.getElementById('release-artist');
-  releaseTitle = document.getElementById('release-title');
-  releaseDate = document.getElementById('release-year');
-  releaseContent = document.querySelector('.release-content');
-
-  outputRelease(release);
+export function setupReleaseTab(tab, release, btnDownloadRelease, btnDiscogsSearch) {
+  outputRelease(tab, release);
+  btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
+  setupBtnToDownloadReleasesAsCsv(btnDownloadRelease, [release]);
 }
 
 /**
+ * @param {Element} tab
  * @param {Release} release
  */
-function outputRelease(release) {
+function outputRelease(tab, release) {
+  const releaseArtist = tab.querySelector('#release-artist');
+  const releaseTitle = tab.querySelector('#release-title');
+  const releaseDate = tab.querySelector('#release-year');
+  const releaseContent = tab.querySelector('.release-content');
+
   setBackgroundImage(document.querySelector('.bg-image'), release.coverSrc.big);
   releaseArtist.innerHTML = release.artist;
   releaseTitle.innerHTML = release.title;
@@ -36,7 +34,7 @@ function outputRelease(release) {
   let countTitleLines = countLinesInHtmlElement(releaseTitle);
 
   releaseArtist.classList.toggle('display-6', countArtistLines >= 3 && countArtistLines <= 5);
-  elRelease.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
+  tab.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
 
   let trackinfo = '';
 
@@ -45,7 +43,6 @@ function outputRelease(release) {
   });
 
   releaseContent.innerHTML = trackinfo;
-  btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
 }
 
 function countLinesInHtmlElement(el) {

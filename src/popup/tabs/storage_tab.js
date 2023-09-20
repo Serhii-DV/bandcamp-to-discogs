@@ -1,15 +1,19 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { clearStorage, clearStorageByKey, findAllReleasesInStorage, findReleasesInStorage } from "../../modules/storage.js";
-import { createElementFromHTML, transformReleasesToReleasesListData } from "../helpers.js";
+import { createElementFromHTML, hasDataAttribute, setDataAttribute, transformReleasesToReleasesListData } from "../helpers.js";
 
 /**
  * @param {Element} btnDownloadCsv
  */
-export function setupStorageTab(btnDownloadCsv) {
+export function setupStorageTab(tab, btnDownloadCsv) {
   const releasesList = document.querySelector('#storageReleasesLIst');
-  setupReleasesList(releasesList, btnDownloadCsv);
   updateReleasesListData(releasesList);
+
+  if (!hasDataAttribute(tab, 'buttons-initialized')) {
+    setupReleasesList(releasesList, btnDownloadCsv);
+    setDataAttribute(tab, 'buttons-initialized');
+  }
 }
 
 function updateReleasesListData(releasesList) {

@@ -106,7 +106,10 @@ function setupNavigation() {
   btnStorageTab.addEventListener('click', () => {
     hide(btnDownloadRelease, btnDownloadReleases);
     show(btnDownloadStorage);
-    setupStorageTab(btnDownloadStorage);
+    setupStorageTab(
+      document.getElementById('storageData'),
+      btnDownloadStorage
+    );
   });
 }
 

@@ -231,3 +231,11 @@ export function setBackgroundImage(element, imageUrl) {
   if (!element instanceof HTMLElement) return;
   element.style.backgroundImage = `url(${imageUrl})`;
 }
+
+export function hasDataAttribute(element, attributeName) {
+  return element.hasAttribute(`data-${attributeName}`);
+}
+
+export function setDataAttribute(element, attributeName, attributeValue = '') {
+  element.setAttribute(`data-${attributeName}`, attributeValue);
+}

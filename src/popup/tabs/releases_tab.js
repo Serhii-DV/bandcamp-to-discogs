@@ -6,10 +6,6 @@ import { downloadReleasesCsv } from "./download_tab.js";
 export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
   const releasesList = document.querySelector('#releasesTabLIst');
-  releasesList.populateData(
-    transformReleasesToReleasesListData(releaseList)
-  );
-
   const downloadCsvFile = async (event) => {
     const button = event.target;
     setButtonInLoadingState(button);
@@ -34,7 +30,16 @@ export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
   };
 
   btnNavDownload.addEventListener('click', downloadCsvFile);
-  releasesList.addStateButton(btnNavDownload);
+  releasesList
+    .addStateButton(btnNavDownload)
+    .addStatusElement(
+      document.getElementById('selectedStatusInfo'),
+      document.getElementById('viewedStatusInfo')
+    );
+
+  releasesList.populateData(
+    transformReleasesToReleasesListData(releaseList)
+  );
 }
 
 function waitForBandcampData() {

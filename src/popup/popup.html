@@ -68,8 +68,12 @@
       </div>
     </div>
   </div>
-  <footer id="mainFooter">
-    <span>Version: 0.3.0</span>
+  <footer id="mainFooter" class="small">
+    <div class="badges-status">
+      <span class="badge bg-dark">Version: <span class="version"></span></span>
+      <span class="badge bg-dark" id="selectedStatusInfo" data-format="Selected: {selected}/{filtered}"></span>
+      <span class="badge bg-dark" id="viewedStatusInfo" data-format="Viewed: {filtered}/{total}"></span>
+    </div>
   </footer>
 
   <script src="../../assets/bootstrap/bootstrap.bundle.5.3.0.min.js"></script>

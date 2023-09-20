@@ -8,12 +8,13 @@ import { createElementFromHTML, hasDataAttribute, removeButtonLoadingState, setB
  */
 export function setupStorageTab(tab, btnDownloadCsv) {
   const releasesList = document.querySelector('#storageReleasesLIst');
-  updateReleasesListData(releasesList);
 
   if (!hasDataAttribute(tab, 'buttons-initialized')) {
     setupReleasesList(tab, releasesList, btnDownloadCsv);
     setDataAttribute(tab, 'buttons-initialized');
   }
+
+  updateReleasesListData(releasesList);
 }
 
 function updateReleasesListData(releasesList) {
@@ -69,4 +70,8 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
   });
 
   releasesList.appendButton(btnClearSelected, btnClearAll);
+  releasesList.addStatusElement(
+    document.getElementById('selectedStatusInfo'),
+    document.getElementById('viewedStatusInfo')
+  );
 }

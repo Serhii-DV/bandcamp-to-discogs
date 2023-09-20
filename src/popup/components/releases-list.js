@@ -4,6 +4,7 @@ class ReleasesList extends HTMLElement {
 
     const self = this;
     self.stateButtons = [];
+    self.statusElements = [];
 
     const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
     const searchInputId = self.getPrefixed('searchInput');
@@ -20,7 +21,7 @@ class ReleasesList extends HTMLElement {
               <th><input type="checkbox" id="${selectAllCheckboxId}" title="Select all"></th>
               <th>
                 <label for="${selectAllCheckboxId}">
-                  <span id="${selectAllCheckboxId}-info" class="selected-info" data-format="Selected: {selected}/{filtered}; Viewed: {filtered}/{total}"></span>
+                  <span id="${selectAllCheckboxId}-info" class="selected-info">Releases</span>
                 </label>
               </th>
             </tr>
@@ -83,17 +84,24 @@ class ReleasesList extends HTMLElement {
 
   refreshItemsStatus() {
     const self = this;
-    const total = self.querySelectorAll('tr.release-item').length;
-    const selected = self.getSelectedValues().length;
-    const filtered = self.querySelectorAll('tr.release-item:not(.visually-hidden)').length;
-    const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
-    const selectedAmountInfo = document.getElementById(`${selectAllCheckboxId}-info`);
-    const infoText = selectedAmountInfo.getAttribute("data-format")
-      .replace(new RegExp("{total}", "g"), total)
-      .replace(new RegExp("{selected}", "g"), selected)
-      .replace(new RegExp("{filtered}", "g"), filtered);
-    selectedAmountInfo.textContent = infoText;
+    const refreshStatusElement = (element) => {
+      const total = self.querySelectorAll('tr.release-item').length;
+      const selected = self.getSelectedValues().length;
+      const filtered = self.querySelectorAll('tr.release-item:not(.visually-hidden)').length;
+      const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
+      const statusText = element.getAttribute("data-format")
+        .replace(new RegExp("{total}", "g"), total)
+        .replace(new RegExp("{selected}", "g"), selected)
+        .replace(new RegExp("{filtered}", "g"), filtered);
+      element.textContent = statusText;
+    };
+    self.statusElements.forEach(refreshStatusElement);
+    return self;
+  }
 
+  addStatusElement(...element) {
+    const self = this;
+    element.forEach(el => self.statusElements.push(el));
     return self;
   }
 

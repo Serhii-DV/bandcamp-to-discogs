@@ -11,7 +11,7 @@ export function setupStorageTab(tab, btnDownloadCsv) {
   updateReleasesListData(releasesList);
 
   if (!hasDataAttribute(tab, 'buttons-initialized')) {
-    setupReleasesList(releasesList, btnDownloadCsv);
+    setupReleasesList(tab, releasesList, btnDownloadCsv);
     setDataAttribute(tab, 'buttons-initialized');
   }
 }
@@ -25,20 +25,17 @@ function updateReleasesListData(releasesList) {
 }
 
 /**
+ * @param {Element} tab
  * @param {ReleasesList} releasesList
+ * @param {Element} btnDownloadCsv
  */
-function setupReleasesList(releasesList, btnDownloadCsv) {
-  const btnExport = createElementFromHTML(`
-<button id="storageExport" type="button" class="btn btn-primary" data-status-update title="Download selected releases as Discogs Draft CSV">
-  <b2d-icon name="download"></b2d-icon>
-  Save to CSV
-</button>`);
+function setupReleasesList(tab, releasesList, btnDownloadCsv) {
   const btnClearSelected = createElementFromHTML(`
-<button id="storageDataClearSelected" type="button" class="btn" data-status-update title="Clear selected storage data">
+<button id="storageDataClearSelected" type="button" class="btn btn-danger" data-status-update title="Clear selected storage data">
   <b2d-icon name="database-dash"></b2d-icon>
 </button>`);
   const btnClearAll = createElementFromHTML(`
-<button id="storageDataClear" type="button" class="btn btn-danger" title="Remove all items from the storage">
+<button id="storageDataClear" type="button" class="btn btn-dark" title="Remove all items from the storage" data-bs-toggle="modal" data-bs-target="#storageTabDeleteAllModal">
   <b2d-icon name="database-x"></b2d-icon>
 </button>`);
 
@@ -62,7 +59,8 @@ function setupReleasesList(releasesList, btnDownloadCsv) {
       updateReleasesListData(releasesList);
     });
   });
-  btnClearAll.addEventListener('click', () => {
+
+  tab.querySelector('#storageTabDeleteAllModal_btnYes').addEventListener('click', () => {
     clearStorage();
     updateReleasesListData(releasesList);
   });

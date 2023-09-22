@@ -1,13 +1,16 @@
 # Change log
 
-## 0.3.0 (2023-XX-YY)
+## 0.4.0 (2023-09-22)
 
 ### Features
 
 - Introduced notifications on Discogs release edit page. It shows messages regarding actions on the page
 - Show the list of releases on the artist or label page
-- It's possible now to save the list of releases to the single Discogs CSV draft file. Feature works on label bandcamp page
+- It's possible now to save the list of releases to the single Discogs CSV draft file. Feature works on label's bandcamp pages
+- Show the list of releases from the local storage
 - Added the ability to filter the list of releases
+- Added button to remove items from the storage
+- Added button to clear the storage
 
 ### Fixed
 

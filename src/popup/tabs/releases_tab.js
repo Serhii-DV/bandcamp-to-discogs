@@ -3,9 +3,9 @@ import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/s
 import { removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState, transformReleasesToReleasesListData } from "../helpers.js";
 import { downloadReleasesCsv } from "./download_tab.js";
 
-export function setupReleasesTab(releaseList, bgImageSrc, btnNavDownload) {
+export function setupReleasesTab(tab, releaseList, bgImageSrc, btnNavDownload) {
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
-  const releasesList = document.querySelector('#releasesTabLIst');
+  const releasesList = tab.querySelector('#releasesTabLIst');
   const downloadCsvFile = async (event) => {
     const button = event.target;
     setButtonInLoadingState(button);

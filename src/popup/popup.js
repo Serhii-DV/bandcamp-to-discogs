@@ -18,6 +18,7 @@ const btnDownloadRelease = document.getElementById('downloadRelease');
 const btnDownloadReleases = document.getElementById('downloadReleases');
 const btnDownloadStorage = document.getElementById('downloadStorage');
 const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
+const tabReleases = document.getElementById('releases');
 
 async function loadRelease() {
   getCurrentTab().then((tab) => {
@@ -83,6 +84,7 @@ function processBandcampReleasesData(response) {
   click(btnReleasesTab);
 
   setupReleasesTab(
+    tabReleases,
     response.data,
     response.popup.imageSrc,
     btnDownloadReleases
@@ -108,6 +110,9 @@ function setupNavigation() {
     hide(btnDownloadRelease, btnDownloadStorage);
     show(btnDownloadReleases);
     disable(btnCsvDataTab);
+
+    const releasesList = tabReleases.querySelector('releases-list');
+    releasesList.refreshStatus();
   });
   btnStorageTab.addEventListener('click', () => {
     hide(btnDownloadRelease, btnDownloadReleases);
@@ -121,8 +126,8 @@ function setupNavigation() {
 
 function main() {
   setupNavigation();
-  loadRelease();
   replaceVersion();
+  loadRelease();
 }
 
 document.addEventListener('DOMContentLoaded', main);

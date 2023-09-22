@@ -60,7 +60,7 @@ export function isValidBandcampURL(url) {
 /**
  * @param {Element} element
  */
-export function triggerClick(element) {
+export function click(element) {
   var event = new MouseEvent("click", {
       bubbles: true,
       cancelable: true,

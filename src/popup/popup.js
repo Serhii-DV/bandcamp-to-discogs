@@ -4,11 +4,12 @@ import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
 import { setupStorageTab } from "./tabs/storage_tab.js";
-import { disable, enable, hide, show, triggerClick } from "./helpers.js";
+import { disable, enable, hide, show, click } from "./helpers.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 
+const btnWarningMessageTab = document.getElementById("warningMessage-tab");
 const btnReleaseTab = document.getElementById("release-tab");
 const btnReleasesTab = document.getElementById("releases-tab");
 const btnCsvDataTab = document.getElementById('csvData-tab');
@@ -17,22 +18,25 @@ const btnDownloadRelease = document.getElementById('downloadRelease');
 const btnDownloadReleases = document.getElementById('downloadReleases');
 const btnDownloadStorage = document.getElementById('downloadStorage');
 const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
-const elMainNav = document.getElementById('mainNav');
-const elMainContainer = document.getElementById('mainContainer');
-const elWarningMessage = document.getElementById('warningMessage');
 
 async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
-        hide([elMainNav]);
-        show(elWarningMessage);
+        showWarningMessage();
         return;
       }
 
       processBandcampResponse(response);
     });
   });
+}
+
+function showWarningMessage() {
+  disable(btnReleaseTab, btnCsvDataTab);
+  hide(btnReleasesTab);
+  show(btnWarningMessageTab, btnDownloadReleases);
+  click(btnWarningMessageTab);
 }
 
 function processBandcampResponse(response) {
@@ -44,7 +48,7 @@ function processBandcampResponse(response) {
     return;
   }
 
-  hide(elWarningMessage);
+  hide(btnWarningMessageTab);
 
   if (isRelease) {
     processBandcampReleaseData(response.data);
@@ -56,7 +60,7 @@ function processBandcampResponse(response) {
 function processBandcampReleaseData(data) {
   hide(btnReleasesTab);
   show(btnReleaseTab);
-  triggerClick(btnReleaseTab);
+  click(btnReleaseTab);
 
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
@@ -69,9 +73,6 @@ function processBandcampReleaseData(data) {
         btnDiscogsSearchArtist
       );
       setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
-
-      show(elMainNav);
-      hide(elWarningMessage);
     });
   });
 }
@@ -79,7 +80,7 @@ function processBandcampReleaseData(data) {
 function processBandcampReleasesData(response) {
   hide(btnReleaseTab);
   show(btnReleasesTab);
-  triggerClick(btnReleasesTab);
+  click(btnReleasesTab);
 
   setupReleasesTab(
     response.data,

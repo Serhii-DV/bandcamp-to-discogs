@@ -7,6 +7,9 @@
 <body>
   <header>
     <nav id="mainNav" class="btn-group d-flex" role="tablist">
+      <button class="btn btn-dark rounded-0" id="warningMessage-tab" data-bs-toggle="tab" data-bs-target="#warningMessage" role="tab" aria-controls="warningMessage" aria-selected="true" type="button" title="Warning message">
+        <b2d-icon name="exclamation-triangle"></b2d-icon>
+      </button>
       <button class="btn btn-dark rounded-0" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
         <b2d-icon name="card-text"></b2d-icon>
       </button>
@@ -42,6 +45,10 @@
   <div id="mainContainer" class="container-fluid p-0 overflow-auto bg-image">
 
     <div class="tab-content">
+      <!-- Warning Message -->
+      <div class="tab-pane fade content-text" id="warningMessage" role="tabpanel" aria-labelledby="warningMessage-tab" tabindex="0">
+        <external-content href="content/warning_message.html"></external-content>
+      </div>
       <!-- Release -->
       <div class="tab-pane fade" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">
         <external-content href="content/release_tab.html" id="releaseTabContent"></external-content>
@@ -59,12 +66,6 @@
       <!-- About -->
       <div class="tab-pane fade content-text" id="about" role="tabpanel" aria-labelledby="about-tab" tabindex="0">
         <external-content href="content/about.html"></external-content>
-      </div>
-    </div>
-
-    <div id="warningMessage" class="card rounded-0 visually-hidden">
-      <div class="card-body">
-        <external-content href="content/warning_message.html"></external-content>
       </div>
     </div>
   </div>

@@ -1,5 +1,11 @@
 # Change log
 
+## 0.4.x (2023-XX-YY)
+
+### Fixed
+
+- Bancamp keywords convertion to Discogs genres/styles when creating draft CSV file for multiple releases
+
 ## 0.4.0 (2023-09-22)
 
 ### Features

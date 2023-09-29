@@ -129,7 +129,7 @@
 
     setTimeout(function () {
       notificationStack.removeChild(notification);
-    }, 5000); // Remove notification after 5 seconds
+    }, 20000); // Remove notification after 20 seconds
   }
 
   function showNotificationDebug(message) { showNotification(message, 'debug'); }

@@ -51,31 +51,30 @@ function processBandcampResponse(response) {
 
   hide(btnWarningMessageTab);
 
-  if (isRelease) {
-    processBandcampReleaseData(response.data);
-  } else {
-    processBandcampReleasesData(response);
-  }
+  loadDiscogsGenres(config.genres_url).then(genres => {
+    loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
+      if (isRelease) {
+        processBandcampReleaseData(response.data, keywordsMapping);
+      } else {
+        processBandcampReleasesData(response);
+      }
+    })
+  });
 }
 
-function processBandcampReleaseData(data) {
+function processBandcampReleaseData(data, keywordsMapping) {
   hide(btnReleasesTab);
   show(btnReleaseTab);
   click(btnReleaseTab);
 
-  loadDiscogsGenres(config.genres_url).then(genres => {
-    loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
-      const release = Release.fromJSON(data);
-
-      setupReleaseTab(
-        document.getElementById('release'),
-        release,
-        btnDownloadRelease,
-        btnDiscogsSearchArtist
-      );
-      setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
-    });
-  });
+  const release = Release.fromJSON(data);
+  setupReleaseTab(
+    document.getElementById('release'),
+    release,
+    btnDownloadRelease,
+    btnDiscogsSearchArtist
+  );
+  setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
 }
 
 function processBandcampReleasesData(response) {

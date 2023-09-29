@@ -5,6 +5,7 @@
 ### Fixed
 
 - Bancamp keywords convertion to Discogs genres/styles when creating draft CSV file for multiple releases
+- Show notifications on the Discgos page longer. Now it's 20 seconds
 
 ## 0.4.0 (2023-09-22)
 

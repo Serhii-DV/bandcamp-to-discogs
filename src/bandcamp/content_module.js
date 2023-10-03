@@ -45,4 +45,16 @@ export function main () {
   });
 
   injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'), () => { console.log('B2D: Bandcamp script was injected'); });
+  setupIsotope();
+}
+
+function setupIsotope() {
+  let elem = document.querySelector('#music-grid');
+  let iso = new Isotope(elem, {
+    // options
+    itemSelector: '.music-grid-item',
+    layoutMode: 'fitRows'
+  });
+
+  console.log('B2D: Isotope setuped correctly');
 }

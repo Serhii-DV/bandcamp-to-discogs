@@ -63,6 +63,10 @@ export function isArray(value) {
   return Array.isArray(value);
 }
 
+export function isFunction(value) {
+  return typeof value === 'function';
+}
+
 /**
  * @param {Array} value
  * @returns {Boolean}
@@ -138,8 +142,8 @@ export function injectCSSFile(cssUrl) {
 }
 
 export function injectJSFile(url, callback) {
-  const s = document.createElement('script');
+  const s = window.document.createElement('script');
   s.src = url;
-  s.onload = callback;
+  s.onload = callback();
   (document.head||document.documentElement).appendChild(s);
 }

@@ -16,7 +16,10 @@
   },
   "content_scripts": [
     {
-      "js": ["src/bandcamp/content.js"],
+      "js": [
+        "assets/isotope/isotope.pkgd.min.js",
+        "src/bandcamp/content.js"
+      ],
       "matches": ["https://*.bandcamp.com/*"],
       "run_at": "document_end"
     },

@@ -147,3 +147,15 @@ export function injectJSFile(url, callback) {
   s.onload = isFunction(callback) ? callback() : () => { console.log(`B2D: Script ${url} was injected!`); };
   (document.head||document.documentElement).appendChild(s);
 }
+
+/**
+ * @param {String} inputString
+ * @returns {Array}
+ */
+export function explodeString(inputString) {
+  const delimiters = /[,/&]+/;
+  const resultArray = inputString.split(delimiters);
+  return resultArray
+    .map(item => item.trim())
+    .filter(item => item !== '');
+}

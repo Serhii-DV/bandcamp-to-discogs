@@ -1,6 +1,6 @@
 import { Release } from "../app/release.js";
 import { createDatalistFromArray, createElementFromHTML, setDataAttribute } from "../modules/html.js";
-import { injectJSFile } from "../modules/utils.js";
+import { explodeString, injectJSFile } from "../modules/utils.js";
 import { extractDataFromMusicGridElement } from "./html.js";
 
 export function main () {
@@ -62,33 +62,30 @@ function setupIsotope() {
 
   let gridItems = document.querySelectorAll('.music-grid-item');
   let releases = [];
-  let artistsArr = [];
+  let filterData = [];
 
   gridItems.forEach((el) => {
     const releaseData = extractDataFromMusicGridElement(el);
-    setDataAttribute(el, 'filter-artist', releaseData.artist);
+    setDataAttribute(el, 'filter-artist', releaseData.artist + ' - ' + releaseData.title);
     releases.push(releaseData);
   });
 
-  releases.forEach((releaseData) => {
-    artistsArr.push(releaseData.artist);
+  // add artists
+  releases.forEach((release) => {
+    const artists = explodeString(release.artist);
+    filterData.push(...artists);
   });
-
-  const artists = [...new Set(artistsArr)];
-  let selectElements = [];
-
-  artists.forEach((artist) => {
-    selectElements.push({
-      value: artist,
-      text: artist,
-    });
-  });
+  // add artists with release titles
+  releases.forEach((release) => filterData.push(release.artist + ' - ' + release.title));
 
   const filterBlock = createElementFromHTML(`<div style="margin: 10px 0;">
   <label for="artist-filter">Artists:</label>
   </div>`);
   const artistFilter = createElementFromHTML('<input list="artist-filter-data" id="artist-filter" name="artist-filter" />');
-  const filterSelector = createDatalistFromArray(artists, 'artist-filter-data');
+  const filterSelectorData = [...new Set(filterData)];
+  // const filterSelectorData = filterData;
+  console.log(filterSelectorData);
+  const filterSelector = createDatalistFromArray(filterSelectorData, 'artist-filter-data');
 
   filterBlock.append(artistFilter);
   filterBlock.append(filterSelector);

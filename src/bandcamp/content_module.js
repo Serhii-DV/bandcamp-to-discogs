@@ -93,6 +93,10 @@ function setupIsotope() {
     const selectedValue = artistFilter.value;
     const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
     iso.arrange({ filter: filter });
+
+    // try to updata images
+    window.scrollBy(0, 1);
+    window.scrollBy(0, -1);
   });
 
   console.log('B2D: Isotope setuped correctly');

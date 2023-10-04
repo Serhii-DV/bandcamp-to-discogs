@@ -99,5 +99,12 @@ function setupIsotope() {
     window.scrollBy(0, -1);
   });
 
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'releases-list-search') {
+      artistFilter.value = message.search;
+      artistFilter.dispatchEvent(new Event('input'));
+    }
+  });
+
   console.log('B2D: Isotope setuped correctly');
 }

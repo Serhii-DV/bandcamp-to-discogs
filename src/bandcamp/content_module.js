@@ -44,8 +44,11 @@ export function main () {
     // });
   });
 
-  injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'), () => { console.log('B2D: Bandcamp script was injected'); });
-  setupIsotope();
+  injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
+
+  if (isOnReleasesListPage()) {
+    setupIsotope();
+  }
 }
 
 function setupIsotope() {

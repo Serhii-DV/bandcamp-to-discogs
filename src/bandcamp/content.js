@@ -80,8 +80,12 @@ function isOnReleasesListPage() {
   return location.pathname === '/' || location.pathname === '/music';
 }
 
-(async () => {
-  const src = chrome.runtime.getURL("src/bandcamp/content_module.js");
-  const contentMain = await import(src);
-  contentMain.main();
-})();
+importModule("src/bandcamp/content_module.js");
+
+function importModule(url) {
+  (async () => {
+    const src = chrome.runtime.getURL(url);
+    const contentMain = await import(src);
+    contentMain.main();
+  })()
+}

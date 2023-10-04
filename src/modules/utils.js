@@ -144,6 +144,6 @@ export function injectCSSFile(cssUrl) {
 export function injectJSFile(url, callback) {
   const s = window.document.createElement('script');
   s.src = url;
-  s.onload = callback();
+  s.onload = isFunction(callback) ? callback() : () => { console.log(`B2D: Script ${url} was injected!`); };
   (document.head||document.documentElement).appendChild(s);
 }

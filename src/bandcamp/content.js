@@ -48,6 +48,7 @@ function generateListResponse() {
   const releases = [];
   const releaseElements = document.querySelectorAll('#music-grid .music-grid-item');
   const imgBandPhoto = document.querySelector('.band-photo');
+  const artistFilter = document.querySelector('#b2dArtistFilter');
 
   releaseElements.forEach(element => {
     let artist = element.querySelector('.artist-override')?.innerText;
@@ -71,6 +72,7 @@ function generateListResponse() {
     data: releases,
     popup: {
       imageSrc: imgBandPhoto.src,
+      search: artistFilter.value,
     }
   };
 }

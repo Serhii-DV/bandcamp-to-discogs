@@ -1,5 +1,5 @@
 import { Release } from "../app/release.js";
-import { createDatalistFromArray, createElementFromHTML, setDataAttribute } from "../modules/html.js";
+import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
 import { explodeString, injectJSFile } from "../modules/utils.js";
 import { extractDataFromMusicGridElement } from "./html.js";
 
@@ -79,9 +79,9 @@ function setupIsotope() {
   releases.forEach((release) => filterData.push(release.artist + ' - ' + release.title));
 
   const filterBlock = createElementFromHTML(`<div style="margin: 10px 0;">
-  <label for="artist-filter">Artists:</label>
+  <label for="b2dArtistFilter">Artists:</label>
   </div>`);
-  const artistFilter = createElementFromHTML('<input list="artist-filter-data" id="artist-filter" name="artist-filter" />');
+  const artistFilter = createElementFromHTML('<input list="artist-filter-data" id="b2dArtistFilter" name="artist-filter" />');
   const filterSelectorData = [...new Set(filterData)];
   const filterSelector = createDatalistFromArray(filterSelectorData, 'artist-filter-data');
 
@@ -101,8 +101,7 @@ function setupIsotope() {
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'releases-list-search') {
-      artistFilter.value = message.search;
-      artistFilter.dispatchEvent(new Event('input'));
+      input(artistFilter, message.search);
     }
   });
 

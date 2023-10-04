@@ -86,6 +86,7 @@ function processBandcampReleasesData(response) {
     tabReleases,
     response.data,
     response.popup.imageSrc,
+    response.popup.search,
     btnDownloadReleases
   );
 }

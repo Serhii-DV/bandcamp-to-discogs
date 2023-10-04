@@ -1,9 +1,10 @@
 import { getCurrentTab, openTabs } from "../../modules/chrome.js";
+import { input } from "../../modules/html.js";
 import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/storage.js";
 import { removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState, transformReleasesToReleasesListData } from "../helpers.js";
 import { downloadReleasesCsv } from "./download_tab.js";
 
-export function setupReleasesTab(tab, releaseList, bgImageSrc, btnNavDownload) {
+export function setupReleasesTab(tab, releaseList, bgImageSrc, searchValue, btnNavDownload) {
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
   const releasesList = tab.querySelector('#releasesTabLIst');
   const downloadCsvFile = async (event) => {
@@ -54,6 +55,8 @@ export function setupReleasesTab(tab, releaseList, bgImageSrc, btnNavDownload) {
       sendSearchMessageToTab(activeTab, selectedValue);
     }
   });
+
+  input(releasesList.searchInput, searchValue);
 
   function sendSearchMessageToTab(tab, search) {
     chrome.tabs.sendMessage(tab.id, {

@@ -29,6 +29,7 @@ export function enable(...element) {
 }
 
 /**
+ * Triggers click event on the element
  * @param {Element} element
  */
 export function click(element) {
@@ -38,6 +39,31 @@ export function click(element) {
       view: window
   });
   element.dispatchEvent(event);
+  return element;
+}
+
+/**
+ * Triggers input event on element
+ * @param {Element} element
+ */
+export function input(element, value) {
+  if (value) {
+    // Trigger input event only when the value has changed
+    if (element.value !== value) {
+      element.value = value;
+      triggerInputEvent(element);
+    }
+
+    return element;
+  }
+
+  element.dispatchEvent(new Event('input'));
+  return element;
+}
+
+function triggerInputEvent(element) {
+  element.dispatchEvent(new Event('input'));
+  return element;
 }
 
 /**

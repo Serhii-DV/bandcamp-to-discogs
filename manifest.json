@@ -49,9 +49,11 @@
       "resources": [
         "src/bandcamp/script.js",
         "src/bandcamp/content_module.js",
+        "src/bandcamp/html.js",
         "src/app/release.js",
         "src/discogs/discogs.js",
         "src/modules/chrome.js",
+        "src/modules/html.js",
         "src/modules/utils.js",
         "src/discogs/discogs-csv.js",
         "src/config.js",

@@ -1,5 +1,7 @@
 import { Release } from "../app/release.js";
+import { createDatalistFromArray, createElementFromHTML, setDataAttribute } from "../modules/html.js";
 import { injectJSFile } from "../modules/utils.js";
+import { extractDataFromMusicGridElement } from "./html.js";
 
 export function main () {
   console.log('B2D: CONTENT AS MODULE');
@@ -52,11 +54,52 @@ export function main () {
 }
 
 function setupIsotope() {
-  let elem = document.querySelector('#music-grid');
-  let iso = new Isotope(elem, {
-    // options
+  let grid = document.querySelector('#music-grid');
+  let iso = new Isotope(grid, {
     itemSelector: '.music-grid-item',
     layoutMode: 'fitRows'
+  });
+
+  let gridItems = document.querySelectorAll('.music-grid-item');
+  let releases = [];
+  let artistsArr = [];
+
+  gridItems.forEach((el) => {
+    const releaseData = extractDataFromMusicGridElement(el);
+    setDataAttribute(el, 'filter-artist', releaseData.artist);
+    releases.push(releaseData);
+  });
+
+  releases.forEach((releaseData) => {
+    artistsArr.push(releaseData.artist);
+  });
+
+  const artists = [...new Set(artistsArr)];
+  let selectElements = [];
+
+  artists.forEach((artist) => {
+    selectElements.push({
+      value: artist,
+      text: artist,
+    });
+  });
+
+  const filterBlock = createElementFromHTML(`<div style="margin: 10px 0;">
+  <label for="artist-filter">Artists:</label>
+  </div>`);
+  const artistFilter = createElementFromHTML('<input list="artist-filter-data" id="artist-filter" name="artist-filter" />');
+  const filterSelector = createDatalistFromArray(artists, 'artist-filter-data');
+
+  filterBlock.append(artistFilter);
+  filterBlock.append(filterSelector);
+  document.querySelector('.leftMiddleColumns').prepend(filterBlock);
+
+  artistFilter.addEventListener('input', () => {
+    const selectedValue = artistFilter.value;
+    const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
+    iso.arrange({ filter: filter });
+
+    console.log(`Selected value: ${selectedValue}`);
   });
 
   console.log('B2D: Isotope setuped correctly');

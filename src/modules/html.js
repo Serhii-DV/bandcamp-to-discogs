@@ -11,6 +11,34 @@ export function getDataAttribute(element, attributeName) {
   return element.getAttribute(`data-${attributeName}`);
 }
 
+export function show(...element) {
+  element.forEach(el => isArray(el) ? show(...el) : el.classList.remove('visually-hidden'));
+}
+
+export function hide(...element) {
+  element.forEach(el => isArray(el) ? hide(...el) : el.classList.add('visually-hidden'));
+}
+
+export function disable(...element) {
+  element.forEach(el => isArray(el) ? disable(...el) : (el.disabled = true));
+}
+
+export function enable(...element) {
+  element.forEach(el => isArray(el) ? enable(...el) : (el.disabled = false));
+}
+
+/**
+ * @param {Element} element
+ */
+export function click(element) {
+  var event = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      view: window
+  });
+  element.dispatchEvent(event);
+}
+
 /**
  * @param {String} htmlString
  * @returns {Element}

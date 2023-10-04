@@ -2,7 +2,7 @@ import { Release } from "../../app/release.js";
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { isEmptyArray } from "../../modules/utils.js";
-import { disable, enable } from "../helpers.js";
+import { disable, enable } from "../modules/html.js";
 
 /**
  * @param {Element} button

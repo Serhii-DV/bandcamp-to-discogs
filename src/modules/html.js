@@ -1,3 +1,4 @@
+import { isArray } from "./utils.js";
 
 export function hasDataAttribute(element, attributeName) {
   return element.hasAttribute(`data-${attributeName}`);

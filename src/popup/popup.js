@@ -4,7 +4,7 @@ import { loadDiscogsGenres } from "../discogs/genres.js";
 import { loadKeywordMapping } from "../bandcamp/mapping.js";
 import config from "../config.js";
 import { setupStorageTab } from "./tabs/storage_tab.js";
-import { disable, enable, hide, show, click } from "./helpers.js";
+import { disable, enable, hide, show, click } from "../modules/html.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
@@ -86,6 +86,7 @@ function processBandcampReleasesData(response) {
     tabReleases,
     response.data,
     response.popup.imageSrc,
+    response.popup.search,
     btnDownloadReleases
   );
 }

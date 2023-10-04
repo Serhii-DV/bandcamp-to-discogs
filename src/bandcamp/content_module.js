@@ -1,5 +1,7 @@
 import { Release } from "../app/release.js";
-import { injectJSFile } from "../modules/utils.js";
+import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
+import { explodeString, injectJSFile } from "../modules/utils.js";
+import { extractDataFromMusicGridElement } from "./html.js";
 
 export function main () {
   console.log('B2D: CONTENT AS MODULE');
@@ -44,5 +46,64 @@ export function main () {
     // });
   });
 
-  injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'), () => { console.log('B2D: Bandcamp script was injected'); });
+  injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
+
+  if (isOnReleasesListPage()) {
+    setupIsotope();
+  }
+}
+
+function setupIsotope() {
+  let grid = document.querySelector('#music-grid');
+  let iso = new Isotope(grid, {
+    itemSelector: '.music-grid-item',
+    layoutMode: 'fitRows'
+  });
+
+  let gridItems = document.querySelectorAll('.music-grid-item');
+  let releases = [];
+  let filterData = [];
+
+  gridItems.forEach((el) => {
+    const releaseData = extractDataFromMusicGridElement(el);
+    setDataAttribute(el, 'filter-artist', releaseData.artist + ' - ' + releaseData.title);
+    releases.push(releaseData);
+  });
+
+  // add artists
+  releases.forEach((release) => {
+    const artists = explodeString(release.artist);
+    filterData.push(...artists);
+  });
+  // add artists with release titles
+  releases.forEach((release) => filterData.push(release.artist + ' - ' + release.title));
+
+  const filterBlock = createElementFromHTML(`<div style="margin: 10px 0;">
+  <label for="b2dArtistFilter">Artists:</label>
+  </div>`);
+  const artistFilter = createElementFromHTML('<input list="artist-filter-data" id="b2dArtistFilter" name="artist-filter" />');
+  const filterSelectorData = [...new Set(filterData)];
+  const filterSelector = createDatalistFromArray(filterSelectorData, 'artist-filter-data');
+
+  filterBlock.append(artistFilter);
+  filterBlock.append(filterSelector);
+  document.querySelector('.leftMiddleColumns').prepend(filterBlock);
+
+  artistFilter.addEventListener('input', () => {
+    const selectedValue = artistFilter.value;
+    const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
+    iso.arrange({ filter: filter });
+
+    // try to updata images
+    window.scrollBy(0, 1);
+    window.scrollBy(0, -1);
+  });
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'releases-list-search') {
+      input(artistFilter, message.search);
+    }
+  });
+
+  console.log('B2D: Isotope setuped correctly');
 }

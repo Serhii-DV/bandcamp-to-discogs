@@ -1,5 +1,13 @@
-export async function getCurrentTab() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
+import { isFunction } from "./utils.js";
+
+export async function getCurrentTab(callback) {
+  let queryOptions = { active: true, currentWindow: true };
+
+  if (isFunction(callback)) {
+    chrome.tabs.query(queryOptions, callback);
+    return;
+  }
+
   let [tab] = await chrome.tabs.query(queryOptions);
   return tab;
 };

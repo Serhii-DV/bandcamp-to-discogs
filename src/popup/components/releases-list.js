@@ -58,11 +58,11 @@ class ReleasesList extends HTMLElement {
       }
     });
 
-    const searchInput = document.getElementById(searchInputId);
-    searchInput.addEventListener("input", filterTable);
+    self.searchInput = document.getElementById(searchInputId);
+    self.searchInput.addEventListener("input", filterTable);
 
     function filterTable() {
-      const input = searchInput.value.toLowerCase();
+      const input = self.searchInput.value.toLowerCase();
       const rows = table.querySelectorAll("tbody tr");
 
       rows.forEach((row) => {

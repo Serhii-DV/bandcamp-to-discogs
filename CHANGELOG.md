@@ -1,5 +1,11 @@
 # Change log
 
+## 0.5.x (2023-XX-YY)
+
+### Features
+
+- Added artists filter widget on the bandcamp label page
+
 ## 0.4.1 (2023-09-29)
 
 ### Fixed

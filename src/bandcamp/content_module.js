@@ -83,8 +83,6 @@ function setupIsotope() {
   </div>`);
   const artistFilter = createElementFromHTML('<input list="artist-filter-data" id="artist-filter" name="artist-filter" />');
   const filterSelectorData = [...new Set(filterData)];
-  // const filterSelectorData = filterData;
-  console.log(filterSelectorData);
   const filterSelector = createDatalistFromArray(filterSelectorData, 'artist-filter-data');
 
   filterBlock.append(artistFilter);
@@ -95,8 +93,6 @@ function setupIsotope() {
     const selectedValue = artistFilter.value;
     const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
     iso.arrange({ filter: filter });
-
-    console.log(`Selected value: ${selectedValue}`);
   });
 
   console.log('B2D: Isotope setuped correctly');

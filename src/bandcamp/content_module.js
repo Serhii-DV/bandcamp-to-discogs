@@ -1,6 +1,6 @@
 import { Release } from "../app/release.js";
 import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
-import { explodeString, injectJSFile, isEmptyArray } from "../modules/utils.js";
+import { containsOneOf, explodeString, injectJSFile, isEmptyArray } from "../modules/utils.js";
 import { isOnReleasesListPage } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
 
@@ -146,8 +146,12 @@ function getArtistListData(releases) {
 
   // add artists
   releases.forEach((release) => {
-    const artists = explodeString(release.artist);
-    artistsData.push(...artists);
+    if (containsOneOf(release.artist, ['V/A'])) {
+      artistsData.push(release.artist);
+    } else {
+      const artists = explodeString(release.artist);
+      artistsData.push(...artists);
+    }
   });
   artistsData.sort();
   filterData.push(...artistsData);

@@ -159,3 +159,21 @@ export function explodeString(inputString) {
     .map(item => item.trim())
     .filter(item => item !== '');
 }
+
+export function containsOneOf(string1, arrayOfStrings) {
+  // This function checks if a string contains one of the strings in an array of strings.
+
+  // Args:
+  //   string1: The string to check.
+  //   arrayOfStrings: The array of strings to look for.
+
+  // Returns:
+  //   True if string1 contains one of the strings in arrayOfStrings, False otherwise.
+
+  for (const string2 of arrayOfStrings) {
+    if (string1.includes(string2)) {
+      return true;
+    }
+  }
+  return false;
+}

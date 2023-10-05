@@ -1,10 +1,13 @@
 import { Release } from "../app/release.js";
 import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
 import { explodeString, injectJSFile } from "../modules/utils.js";
+import { isOnReleasesListPage } from "./bandcamp.js";
 import { extractDataFromMusicGridElement } from "./html.js";
 
 export function main () {
   console.log('B2D: CONTENT AS MODULE');
+
+  setupSendMessageToPopup();
 
   window.addEventListener('BC_Data', (e) => {
     if (isOnReleasesListPage()) {
@@ -22,6 +25,7 @@ export function main () {
     // storage.clear();
 
     storage.get([currentTabUrl], (result) => {
+      // Save release data to the storage if it doesn't exist
       if (!result[currentTabUrl] || !result[currentTabUrl]['release']) {
         const { tralbumData, bandData, schemaData, coverSrc } = extractReleaseData();
         const release = Release.fromBandcampData(
@@ -45,6 +49,65 @@ export function main () {
   if (isOnReleasesListPage()) {
     setupIsotope();
   }
+}
+
+function setupSendMessageToPopup() {
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    let response;
+
+    if (request.type === 'getBandcampData') {
+      if (isOnReleasesListPage()) {
+        sendResponse(generateListResponse());
+      } else {
+        const currentTabUrl = window.location.href;
+        chrome.storage.local.get([currentTabUrl], (result) => {
+          if (result[currentTabUrl] && result[currentTabUrl]['release']) {
+            response = {
+              type: 'release',
+              data: result[currentTabUrl]['release']
+            };
+          }
+
+          sendResponse(response);
+        });
+      }
+    }
+
+    return true;
+  });
+}
+
+function generateListResponse() {
+  const releases = [];
+  const releaseElements = document.querySelectorAll('#music-grid .music-grid-item');
+  const imgBandPhoto = document.querySelector('.band-photo');
+  const artistFilter = document.querySelector('#b2dArtistFilter');
+
+  releaseElements.forEach(element => {
+    let artist = element.querySelector('.artist-override')?.innerText;
+
+    if (!artist) {
+      artist = document.querySelector('#band-name-location .title').innerText;
+    }
+
+    const titleParts = element.querySelector('.title').innerText.split("\n");
+    const title = titleParts[0];
+    const url = element.querySelector('a').getAttribute('href');
+    releases.push({
+      url: (url[0] === '/' ? window.location.origin : '') + url,
+      artist: artist,
+      title: title
+    });
+  });
+
+  return {
+    type: 'list',
+    data: releases,
+    popup: {
+      imageSrc: imgBandPhoto.src,
+      search: artistFilter.value,
+    }
+  };
 }
 
 function setupIsotope() {

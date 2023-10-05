@@ -70,3 +70,8 @@ export function keywordsToDiscogsGenres(keywords) {
 export function keywordsToDiscogsStyles(keywords) {
   return arrayUnique(keywords.map(keywordToDiscogsStyles));
 }
+
+export function isOnReleasesListPage() {
+  const location = window.location;
+  return location.pathname === '/' || location.pathname === '/music';
+}

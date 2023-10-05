@@ -2,18 +2,18 @@ import { Release } from "../app/release.js";
 import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
 import { explodeString, injectJSFile } from "../modules/utils.js";
 import { isOnReleasesListPage } from "./bandcamp.js";
-import { extractDataFromMusicGridElement } from "./html.js";
+import { extractDataFromMusicGridElement, getBandPhotoSrc, getReleasesData } from "./html.js";
 
 export function main () {
   console.log('B2D: CONTENT AS MODULE');
 
-  setupSendMessageToPopup();
-  setupBCDataEventListener();
-  injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
-
   if (isOnReleasesListPage()) {
     setupIsotope();
   }
+
+  setupSendMessageToPopup();
+  setupBCDataEventListener();
+  injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
 }
 
 function setupBCDataEventListener() {
@@ -52,12 +52,26 @@ function setupBCDataEventListener() {
 }
 
 function setupSendMessageToPopup() {
+  // Cache main data
+  window.B2D = window.B2D || {};
+
+  if (isOnReleasesListPage()) {
+    window.B2D.page_releases = getReleasesData();
+  }
+
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     let response;
 
     if (request.type === 'getBandcampData') {
       if (isOnReleasesListPage()) {
-        sendResponse(generateListResponse());
+        sendResponse({
+          type: 'list',
+          data: window.B2D.page_releases,
+          popup: {
+            imageSrc: getBandPhotoSrc(),
+            search: getArtistFilterValue(),
+          }
+        });
       } else {
         const currentTabUrl = window.location.href;
         chrome.storage.local.get([currentTabUrl], (result) => {
@@ -77,37 +91,9 @@ function setupSendMessageToPopup() {
   });
 }
 
-function generateListResponse() {
-  const releases = [];
-  const releaseElements = document.querySelectorAll('#music-grid .music-grid-item');
-  const imgBandPhoto = document.querySelector('.band-photo');
+function getArtistFilterValue() {
   const artistFilter = document.querySelector('#b2dArtistFilter');
-
-  releaseElements.forEach(element => {
-    let artist = element.querySelector('.artist-override')?.innerText;
-
-    if (!artist) {
-      artist = document.querySelector('#band-name-location .title').innerText;
-    }
-
-    const titleParts = element.querySelector('.title').innerText.split("\n");
-    const title = titleParts[0];
-    const url = element.querySelector('a').getAttribute('href');
-    releases.push({
-      url: (url[0] === '/' ? window.location.origin : '') + url,
-      artist: artist,
-      title: title
-    });
-  });
-
-  return {
-    type: 'list',
-    data: releases,
-    popup: {
-      imageSrc: imgBandPhoto.src,
-      search: artistFilter.value,
-    }
-  };
+  return artistFilter.value;
 }
 
 function setupIsotope() {

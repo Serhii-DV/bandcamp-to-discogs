@@ -16,9 +16,7 @@ export function main () {
     }
 
     // Getting data from script.js
-    TralbumData = e.detail.TralbumData;
-    BandData = e.detail.BandData;
-
+    const {TralbumData, BandData} = e.detail;
     const currentTabUrl = window.location.href;
     const storage = chrome.storage.local;
 
@@ -27,10 +25,10 @@ export function main () {
     storage.get([currentTabUrl], (result) => {
       // Save release data to the storage if it doesn't exist
       if (!result[currentTabUrl] || !result[currentTabUrl]['release']) {
-        const { tralbumData, bandData, schemaData, coverSrc } = extractReleaseData();
+        const { schemaData, coverSrc } = extractReleaseData();
         const release = Release.fromBandcampData(
-          tralbumData,
-          bandData,
+          TralbumData,
+          BandData,
           schemaData,
           coverSrc
         );
@@ -190,4 +188,20 @@ function setupArtistFilterElement(artistFilterElement, iso) {
     }
   });
 
+}
+
+function extractReleaseData() {
+  return {
+    schemaData: getSchemaData(),
+    coverSrc: {
+      small: document.querySelector('link[rel~="shortcut"]').href,
+      big: document.querySelector('link[rel="image_src"]').href,
+    },
+  };
+}
+
+function getSchemaData() {
+  const scriptElement = document.querySelector('script[type="application/ld+json"]');
+  const scriptContent = scriptElement.textContent;
+  return JSON.parse(scriptContent);
 }

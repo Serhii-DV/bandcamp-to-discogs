@@ -1,8 +1,8 @@
 import { Release } from "../app/release.js";
 import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
-import { explodeString, injectJSFile } from "../modules/utils.js";
+import { explodeString, injectJSFile, isEmptyArray } from "../modules/utils.js";
 import { isOnReleasesListPage } from "./bandcamp.js";
-import { extractDataFromMusicGridElement, getBandPhotoSrc, getReleasesData } from "./html.js";
+import { getBandPhotoSrc, getReleasesData } from "./html.js";
 
 export function main () {
   console.log('B2D: CONTENT AS MODULE');
@@ -104,6 +104,12 @@ function setupIsotope() {
   });
 
   const releases = getReleases();
+
+  releases.forEach(release => {
+    const gridElement = grid.querySelector('[data-item-id="' + release.item_id + '"]');
+    setDataAttribute(gridElement, 'filter-artist', release.artist + ' - ' + release.title);
+  });
+
   const artistFilterElement = createArtistFilterElement(releases);
   const filterBlock = createElementFromHTML(`<div style="margin: 10px 0;"></div>`);
   filterBlock.append(artistFilterElement);
@@ -117,16 +123,20 @@ function setupIsotope() {
 }
 
 function getReleases() {
-  let gridItems = document.querySelectorAll('.music-grid-item');
-  let releases = [];
+  if (!isOnReleasesListPage()) {
+    return [];
+  }
 
-  gridItems.forEach((el) => {
-    const releaseData = extractDataFromMusicGridElement(el);
-    setDataAttribute(el, 'filter-artist', releaseData.artist + ' - ' + releaseData.title);
-    releases.push(releaseData);
-  });
+  // Cache main data
+  const B2D = window.B2D || {};
 
-  return releases;
+  if (!isEmptyArray(B2D.page_releases)) {
+    return B2D.page_releases;
+  }
+
+  B2D.page_releases = getReleasesData();
+
+  return B2D.page_releases;
 }
 
 function getArtistListData(releases) {

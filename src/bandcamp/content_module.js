@@ -38,12 +38,6 @@ export function main () {
         console.log("B2D: Release data already exists");
       }
     });
-
-    // storage.get(null, (data) => {
-    //   // Display the data in the console
-    //   console.log("B2D: Local storage data");
-    //   console.log(data);
-    // });
   });
 
   injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
@@ -60,9 +54,22 @@ function setupIsotope() {
     layoutMode: 'fitRows'
   });
 
+  const releases = getReleases();
+  const artistFilterElement = createArtistFilterElement(releases);
+  const filterBlock = createElementFromHTML(`<div style="margin: 10px 0;"></div>`);
+  filterBlock.append(artistFilterElement);
+
+  // Prepend to the releases bandcamp page
+  document.querySelector('.leftMiddleColumns').prepend(filterBlock);
+
+  setupArtistFilterElement(artistFilterElement, iso);
+
+  console.log('B2D: Isotope setuped correctly');
+}
+
+function getReleases() {
   let gridItems = document.querySelectorAll('.music-grid-item');
   let releases = [];
-  let filterData = [];
 
   gridItems.forEach((el) => {
     const releaseData = extractDataFromMusicGridElement(el);
@@ -70,25 +77,40 @@ function setupIsotope() {
     releases.push(releaseData);
   });
 
+  return releases;
+}
+
+function getArtistListData(releases) {
+  let filterData = [];
+
   // add artists
   releases.forEach((release) => {
     const artists = explodeString(release.artist);
     filterData.push(...artists);
   });
+  filterData.sort();
   // add artists with release titles
   releases.forEach((release) => filterData.push(release.artist + ' - ' + release.title));
 
-  const filterBlock = createElementFromHTML(`<div style="margin: 10px 0;">
+  return [...new Set(filterData)];
+}
+
+function createArtistFilterElement(releases) {
+  let artistFilterElement = createElementFromHTML(
+`<div class="b2d-artist-filter-widget">
   <label for="b2dArtistFilter">Artists:</label>
-  </div>`);
-  const artistFilter = createElementFromHTML('<input list="artist-filter-data" id="b2dArtistFilter" name="artist-filter" />');
-  const filterSelectorData = [...new Set(filterData)];
-  const filterSelector = createDatalistFromArray(filterSelectorData, 'artist-filter-data');
+  <input list="artist-filter-data" id="b2dArtistFilter" name="artist-filter" />
+</div>`);
+  const artistFilterData = getArtistListData(releases);
+  const artistFilterDatalist = createDatalistFromArray(artistFilterData, 'artist-filter-data');
 
-  filterBlock.append(artistFilter);
-  filterBlock.append(filterSelector);
-  document.querySelector('.leftMiddleColumns').prepend(filterBlock);
+  artistFilterElement.append(artistFilterDatalist);
 
+  return artistFilterElement;
+}
+
+function setupArtistFilterElement(artistFilterElement, iso) {
+  const artistFilter = artistFilterElement.querySelector('#b2dArtistFilter');
   artistFilter.addEventListener('input', () => {
     const selectedValue = artistFilter.value;
     const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
@@ -105,5 +127,4 @@ function setupIsotope() {
     }
   });
 
-  console.log('B2D: Isotope setuped correctly');
 }

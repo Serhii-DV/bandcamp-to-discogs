@@ -8,7 +8,15 @@ export function main () {
   console.log('B2D: CONTENT AS MODULE');
 
   setupSendMessageToPopup();
+  setupBCDataEventListener();
+  injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
 
+  if (isOnReleasesListPage()) {
+    setupIsotope();
+  }
+}
+
+function setupBCDataEventListener() {
   window.addEventListener('BC_Data', (e) => {
     if (isOnReleasesListPage()) {
       // Do nothing
@@ -41,12 +49,6 @@ export function main () {
       }
     });
   });
-
-  injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
-
-  if (isOnReleasesListPage()) {
-    setupIsotope();
-  }
 }
 
 function setupSendMessageToPopup() {

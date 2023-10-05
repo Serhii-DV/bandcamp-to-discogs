@@ -141,15 +141,21 @@ function getReleases() {
 
 function getArtistListData(releases) {
   let filterData = [];
+  let artistsData = [];
+  let releasesData = [];
 
   // add artists
   releases.forEach((release) => {
     const artists = explodeString(release.artist);
-    filterData.push(...artists);
+    artistsData.push(...artists);
   });
-  filterData.sort();
+  artistsData.sort();
+  filterData.push(...artistsData);
+
   // add artists with release titles
-  releases.forEach((release) => filterData.push(release.artist + ' - ' + release.title));
+  releases.forEach((release) => releasesData.push(release.artist + ' - ' + release.title));
+  releasesData.sort();
+  filterData.push(...releasesData);
 
   return [...new Set(filterData)];
 }

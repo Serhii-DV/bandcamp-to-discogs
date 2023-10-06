@@ -71,7 +71,7 @@ export function keywordsToDiscogsStyles(keywords) {
   return arrayUnique(keywords.map(keywordToDiscogsStyles));
 }
 
-export function isOnReleasesListPage() {
-  const location = window.location;
-  return location.pathname === '/' || location.pathname === '/music';
+export function isReleasesListPage() {
+  const musicGridElement = document.querySelector('#music-grid');
+  return !!musicGridElement;
 }

@@ -1,13 +1,13 @@
 import { Release } from "../app/release.js";
 import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
 import { containsOneOf, explodeString, injectCSSFile, injectJSFile, isEmptyArray } from "../modules/utils.js";
-import { isOnReleasesListPage } from "./bandcamp.js";
+import { isReleasesListPage } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
 
 export function main () {
   console.log('B2D: CONTENT AS MODULE');
 
-  if (isOnReleasesListPage()) {
+  if (isReleasesListPage()) {
     setupIsotope();
   }
 
@@ -19,7 +19,7 @@ export function main () {
 
 function setupBCDataEventListener() {
   window.addEventListener('BC_Data', (e) => {
-    if (isOnReleasesListPage()) {
+    if (isReleasesListPage()) {
       // Do nothing
       return;
     }
@@ -56,7 +56,7 @@ function setupSendMessageToPopup() {
   // Cache main data
   window.B2D = window.B2D || {};
 
-  if (isOnReleasesListPage()) {
+  if (isReleasesListPage()) {
     window.B2D.page_releases = getReleasesData();
   }
 
@@ -64,7 +64,7 @@ function setupSendMessageToPopup() {
     let response;
 
     if (request.type === 'getBandcampData') {
-      if (isOnReleasesListPage()) {
+      if (isReleasesListPage()) {
         sendResponse({
           type: 'list',
           data: window.B2D.page_releases,
@@ -124,7 +124,7 @@ function setupIsotope() {
 }
 
 function getReleases() {
-  if (!isOnReleasesListPage()) {
+  if (!isReleasesListPage()) {
     return [];
   }
 

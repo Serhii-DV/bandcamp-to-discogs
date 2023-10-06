@@ -1,29 +1,30 @@
 import { Release } from "../app/release.js";
 import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
 import { containsOneOf, explodeString, injectCSSFile, injectJSFile, isEmptyArray } from "../modules/utils.js";
-import { isReleasesListPage } from "./bandcamp.js";
+import { PageType, PageTypeDetector } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
 
 export function main () {
   console.log('B2D: CONTENT AS MODULE');
+  const pageType = (new PageTypeDetector()).detect();
 
-  if (isReleasesListPage()) {
-    setupIsotope();
-  }
-
-  setupSendMessageToPopup();
-  setupBCDataEventListener();
+  setupIsotope(pageType);
+  setupSendMessageToPopup(pageType);
+  setupBCDataEventListener(pageType);
   injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
   injectCSSFile(chrome.runtime.getURL('src/bandcamp/styles.css'));
 }
 
-function setupBCDataEventListener() {
-  window.addEventListener('BC_Data', (e) => {
-    if (isReleasesListPage()) {
-      // Do nothing
-      return;
-    }
+/**
+ * @param {PageType} pageType
+ * @returns
+ */
+function setupBCDataEventListener(pageType) {
+  if (!pageType.isAlbum()) {
+    return;
+  }
 
+  window.addEventListener('BC_Data', (e) => {
     // Getting data from script.js
     const {TralbumData, BandData} = e.detail;
     const currentTabUrl = window.location.href;
@@ -52,11 +53,19 @@ function setupBCDataEventListener() {
   });
 }
 
-function setupSendMessageToPopup() {
+/**
+ * @param {PageType} pageType
+ * @returns
+ */
+function setupSendMessageToPopup(pageType) {
+  if (!pageType.isMusic() && !pageType.isAlbum()) {
+    return;
+  }
+
   // Cache main data
   window.B2D = window.B2D || {};
 
-  if (isReleasesListPage()) {
+  if (pageType.isMusic()) {
     window.B2D.page_releases = getReleasesData();
   }
 
@@ -64,7 +73,7 @@ function setupSendMessageToPopup() {
     let response;
 
     if (request.type === 'getBandcampData') {
-      if (isReleasesListPage()) {
+      if (pageType.isMusic()) {
         sendResponse({
           type: 'list',
           data: window.B2D.page_releases,
@@ -97,7 +106,15 @@ function getArtistFilterValue() {
   return artistFilter.value;
 }
 
-function setupIsotope() {
+/**
+ * @param {PageType} pageType
+ * @returns
+ */
+function setupIsotope(pageType) {
+  if (!pageType.isMusic()) {
+    return;
+  }
+
   let grid = document.querySelector('#music-grid');
   let iso = new Isotope(grid, {
     itemSelector: '.music-grid-item',
@@ -124,10 +141,6 @@ function setupIsotope() {
 }
 
 function getReleases() {
-  if (!isReleasesListPage()) {
-    return [];
-  }
-
   // Cache main data
   const B2D = window.B2D || {};
 

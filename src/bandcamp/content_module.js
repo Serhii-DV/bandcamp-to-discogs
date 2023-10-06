@@ -1,5 +1,5 @@
 import { Release } from "../app/release.js";
-import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
+import { contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, selectElementWithContent, setDataAttribute } from "../modules/html.js";
 import { containsOneOf, explodeString, injectCSSFile, injectJSFile, isEmptyArray } from "../modules/utils.js";
 import { PageType, PageTypeDetector } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
@@ -194,6 +194,7 @@ function createArtistFilterElement(releases) {
 
 function setupArtistFilterElement(artistFilterElement, iso) {
   const artistFilter = artistFilterElement.querySelector('#b2dArtistFilter');
+
   artistFilter.addEventListener('input', () => {
     const selectedValue = artistFilter.value;
     const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
@@ -209,6 +210,27 @@ function setupArtistFilterElement(artistFilterElement, iso) {
       input(artistFilter, message.search);
     }
   });
+
+  // Check if Bandcamp filter exists
+  const bandSelectorContainer = document.querySelector('.leftMiddleColumns .label-band-selector-container');
+
+  if (bandSelectorContainer) {
+    let bandMenuTitle = selectElementWithContent(bandSelectorContainer, '.bands-menu-title span', 'artists');
+
+    if (!bandMenuTitle) {
+      bandMenuTitle = bandSelectorContainer.querySelector('.bands-menu-title span.name');
+    }
+
+    if (bandMenuTitle) {
+      contentChangeWithPolling(bandMenuTitle, (newContent) => {
+        if (newContent === 'artists') {
+          newContent = '';
+        }
+
+        input(artistFilter, newContent);
+      }, 500);
+    }
+  }
 
 }
 

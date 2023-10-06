@@ -116,3 +116,32 @@ export function createDatalistFromArray(dataArray, datalistId) {
 
   return datalist;
 }
+
+export function contentChangeWithPolling(element, callback, interval = 1000) {
+  let previousContent = element.textContent;
+
+  const poller = setInterval(() => {
+    const currentContent = element.textContent;
+    if (currentContent !== previousContent) {
+      callback(currentContent);
+      previousContent = currentContent;
+    }
+  }, interval);
+
+  // Optionally, you can return a function to stop the polling when needed
+  return function stopPolling() {
+    clearInterval(poller);
+  };
+}
+
+export function selectElementWithContent(rootElement, querySelector, content) {
+  const elements = rootElement.querySelectorAll(querySelector);
+
+  for (const element of elements) {
+    if (element.textContent.includes(content)) {
+      return element;
+    }
+  }
+
+  return null;
+}

@@ -1,6 +1,6 @@
 import { Release } from "../app/release.js";
 import { createDatalistFromArray, createElementFromHTML, input, setDataAttribute } from "../modules/html.js";
-import { containsOneOf, explodeString, injectJSFile, isEmptyArray } from "../modules/utils.js";
+import { containsOneOf, explodeString, injectCSSFile, injectJSFile, isEmptyArray } from "../modules/utils.js";
 import { isOnReleasesListPage } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
 
@@ -14,6 +14,7 @@ export function main () {
   setupSendMessageToPopup();
   setupBCDataEventListener();
   injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
+  injectCSSFile(chrome.runtime.getURL('src/bandcamp/styles.css'));
 }
 
 function setupBCDataEventListener() {
@@ -111,7 +112,7 @@ function setupIsotope() {
   });
 
   const artistFilterElement = createArtistFilterElement(releases);
-  const filterBlock = createElementFromHTML(`<div style="margin: 10px 0;"></div>`);
+  const filterBlock = createElementFromHTML(`<div class="b2d-widget-container"></div>`);
   filterBlock.append(artistFilterElement);
 
   // Prepend to the releases bandcamp page

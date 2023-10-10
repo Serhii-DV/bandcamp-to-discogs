@@ -1,6 +1,6 @@
 import { Release } from "../app/release.js";
 import { contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, selectElementWithContent, setDataAttribute } from "../modules/html.js";
-import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray } from "../modules/utils.js";
+import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray, countOccurrences, removeBrackets } from "../modules/utils.js";
 import { PageType, PageTypeDetector } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
 
@@ -168,7 +168,7 @@ function getArtistListData(releases) {
     }
   });
   artistsData.sort();
-  filterData.push(...artistsData);
+  filterData.push(...countOccurrences(artistsData));
 
   // add artists with release titles
   releases.forEach((release) => releasesData.push(release.artist + ' - ' + release.title));
@@ -196,7 +196,10 @@ function setupArtistFilterElement(artistFilterElement, iso) {
   const artistFilter = artistFilterElement.querySelector('#b2dArtistFilter');
 
   artistFilter.addEventListener('input', () => {
-    const selectedValue = (artistFilter.value).toLowerCase();
+    let selectedValue = removeBrackets(artistFilter.value);
+    artistFilter.value = selectedValue;
+
+    selectedValue = selectedValue.toLowerCase();
     const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
     iso.arrange({ filter: filter });
 

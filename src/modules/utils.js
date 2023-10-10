@@ -177,3 +177,29 @@ export function containsOneOf(string1, arrayOfStrings) {
   }
   return false;
 }
+
+export function countOccurrences(arr) {
+  const count = new Map(); // Use a Map to store the counts
+  const result = [];
+
+  // Count occurrences of each element in the array
+  for (const item of arr) {
+      count.set(item, (count.get(item) || 0) + 1);
+  }
+
+  // Create the result array with the desired format
+  for (const [key, value] of count) {
+      if (value > 1) {
+          result.push(`${key} (${value})`);
+      } else {
+          result.push(key);
+      }
+  }
+
+  return result;
+}
+
+export function removeBrackets(inputString) {
+  // Use a regular expression to remove the brackets and their contents
+  return inputString.replace(/\s*\([^)]*\)\s*/g, '').trim();
+}

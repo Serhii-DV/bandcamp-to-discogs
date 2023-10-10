@@ -63,6 +63,10 @@ export function isArray(value) {
   return Array.isArray(value);
 }
 
+export function isFunction(value) {
+  return typeof value === 'function';
+}
+
 /**
  * @param {Array} value
  * @returns {Boolean}
@@ -138,8 +142,89 @@ export function injectCSSFile(cssUrl) {
 }
 
 export function injectJSFile(url, callback) {
-  const s = document.createElement('script');
+  const s = window.document.createElement('script');
   s.src = url;
-  s.onload = callback;
+  s.onload = isFunction(callback) ? callback() : () => { console.log(`B2D: Script ${url} was injected!`); };
   (document.head||document.documentElement).appendChild(s);
+}
+
+/**
+ * @param {String} inputString
+ * @param {RegExp|String} delimiters
+ * @returns {Array}
+ */
+export function splitString(inputString, delimiters) {
+  const resultArray = inputString.split(delimiters);
+  return resultArray
+    .map(item => item.trim())
+    .filter(item => item !== '');
+}
+
+export function containsOneOf(string1, arrayOfStrings) {
+  // This function checks if a string contains one of the strings in an array of strings.
+
+  // Args:
+  //   string1: The string to check.
+  //   arrayOfStrings: The array of strings to look for.
+
+  // Returns:
+  //   True if string1 contains one of the strings in arrayOfStrings, False otherwise.
+
+  for (const string2 of arrayOfStrings) {
+    if (string1.includes(string2)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export function countOccurrences(arr) {
+  const count = new Map();
+  const items = new Map();
+  const result = [];
+
+  // Count occurrences of each element in the array
+  for (const item of arr) {
+      const key = item.toLowerCase();
+
+      if (!items.has(key)) {
+        items.set(key, item);
+      }
+
+      count.set(key, (count.get(key) || 0) + 1);
+  }
+
+  for (const [key, item] of items) {
+    const value = count.get(key);
+    if (value > 1) {
+      result.push(`${item} (${value})`);
+    } else {
+      result.push(item);
+    }
+  }
+
+  return result;
+}
+
+export function removeBrackets(inputString) {
+  // Use a regular expression to remove the brackets and their contents
+  return inputString.replace(/\s*\([^)]*\)\s*/g, '').trim();
+}
+
+export function trimCharactersFromString(inputString, charactersToTrim) {
+  // Escape special characters within the provided string and construct the regex pattern
+  const escapedCharacters = charactersToTrim.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const regexPattern = new RegExp(`^[${escapedCharacters}]+|[${escapedCharacters}]+$`, 'g');
+  const trimmedString = inputString.replace(regexPattern, '');
+
+  return trimmedString;
+}
+
+export function removeInvisibleChars(inputString) {
+  // Define the invisible character(s) you want to remove (for example, non-breaking space)
+  const invisibleCharsRegex = /[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]|&lrm;/g;
+  // Use the regular expression to remove invisible characters
+  const cleanedString = inputString.replace(invisibleCharsRegex, '');
+
+  return cleanedString;
 }

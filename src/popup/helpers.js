@@ -1,4 +1,5 @@
 import { getSearchDiscogsReleaseUrl } from "../discogs/discogs.js";
+import { disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
 
 /**
@@ -55,34 +56,6 @@ export function createBootstrapCheckbox(id, value, labelText, checked) {
 export function isValidBandcampURL(url) {
   const pattern = /^(https?:\/\/)?([a-z0-9-]+\.)*bandcamp\.com(\/[a-z0-9-]+)*(\/[a-z0-9-]+\/[a-z0-9-]+)?$/;
   return pattern.test(url);
-}
-
-/**
- * @param {Element} element
- */
-export function click(element) {
-  var event = new MouseEvent("click", {
-      bubbles: true,
-      cancelable: true,
-      view: window
-  });
-  element.dispatchEvent(event);
-}
-
-export function show(...element) {
-  element.forEach(el => isArray(el) ? show(...el) : el.classList.remove('visually-hidden'));
-}
-
-export function hide(...element) {
-  element.forEach(el => isArray(el) ? hide(...el) : el.classList.add('visually-hidden'));
-}
-
-export function disable(...element) {
-  element.forEach(el => isArray(el) ? disable(...el) : (el.disabled = true));
-}
-
-export function enable(...element) {
-  element.forEach(el => isArray(el) ? enable(...el) : (el.disabled = false));
 }
 
 /**
@@ -181,16 +154,6 @@ export function createKeyValueDetails(key, value) {
 }
 
 /**
- * @param {String} htmlString
- * @returns {Element}
- */
-export function createElementFromHTML(htmlString) {
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = htmlString.trim();
-  return tempDiv.firstChild;
-}
-
-/**
  * @param {Element} button
  * @param {Array<Element>} checkboxes
  */
@@ -230,18 +193,6 @@ export function getIconLinkHtml(url, icon) {
 export function setBackgroundImage(element, imageUrl) {
   if (!element instanceof HTMLElement) return;
   element.style.backgroundImage = `url(${imageUrl})`;
-}
-
-export function hasDataAttribute(element, attributeName) {
-  return element.hasAttribute(`data-${attributeName}`);
-}
-
-export function setDataAttribute(element, attributeName, attributeValue = '') {
-  element.setAttribute(`data-${attributeName}`, attributeValue);
-}
-
-export function getDataAttribute(element, attributeName) {
-  return element.getAttribute(`data-${attributeName}`);
 }
 
 export function setButtonInLoadingState(button) {

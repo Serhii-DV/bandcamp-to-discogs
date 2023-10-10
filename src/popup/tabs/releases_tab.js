@@ -1,9 +1,10 @@
-import { openTabs } from "../../modules/chrome.js";
+import { getCurrentTab, openTabs } from "../../modules/chrome.js";
+import { input } from "../../modules/html.js";
 import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/storage.js";
 import { removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState, transformReleasesToReleasesListData } from "../helpers.js";
 import { downloadReleasesCsv } from "./download_tab.js";
 
-export function setupReleasesTab(tab, releaseList, bgImageSrc, btnNavDownload) {
+export function setupReleasesTab(tab, releaseList, bgImageSrc, searchValue, btnNavDownload) {
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
   const releasesList = tab.querySelector('#releasesTabLIst');
   const downloadCsvFile = async (event) => {
@@ -40,6 +41,29 @@ export function setupReleasesTab(tab, releaseList, bgImageSrc, btnNavDownload) {
   releasesList.populateData(
     transformReleasesToReleasesListData(releaseList)
   );
+
+  let activeTab;
+  releasesList.searchInput.addEventListener('input', () => {
+    const selectedValue = releasesList.searchInput.value;
+
+    if (!activeTab) {
+      getCurrentTab().then((tab) => {
+        activeTab = tab;
+        sendSearchMessageToTab(activeTab, selectedValue);
+      });
+    } else {
+      sendSearchMessageToTab(activeTab, selectedValue);
+    }
+  });
+
+  input(releasesList.searchInput, searchValue);
+
+  function sendSearchMessageToTab(tab, search) {
+    chrome.tabs.sendMessage(tab.id, {
+      type: 'releases-list-search',
+      search: search
+    });
+  }
 }
 
 function waitForBandcampData() {

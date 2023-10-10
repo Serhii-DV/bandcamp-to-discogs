@@ -125,7 +125,7 @@ function setupIsotope(pageType) {
 
   releases.forEach(release => {
     const gridElement = grid.querySelector('[data-item-id="' + release.item_id + '"]');
-    setDataAttribute(gridElement, 'filter-artist', release.artist + ' - ' + release.title);
+    setDataAttribute(gridElement, 'filter-artist', (release.artist + ' - ' + release.title).toLowerCase());
   });
 
   const artistFilterElement = createArtistFilterElement(releases);
@@ -196,7 +196,7 @@ function setupArtistFilterElement(artistFilterElement, iso) {
   const artistFilter = artistFilterElement.querySelector('#b2dArtistFilter');
 
   artistFilter.addEventListener('input', () => {
-    const selectedValue = artistFilter.value;
+    const selectedValue = (artistFilter.value).toLowerCase();
     const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
     iso.arrange({ filter: filter });
 

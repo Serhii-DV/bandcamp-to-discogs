@@ -163,7 +163,7 @@ function getArtistListData(releases) {
     if (containsOneOf(release.artist, ['V/A'])) {
       artistsData.push(release.artist);
     } else {
-      const artists = splitString(release.artist, /[,/&]+/);
+      const artists = splitString(release.artist, /[,/+•|]| Vs | & +/);
       artistsData.push(...artists);
     }
   });

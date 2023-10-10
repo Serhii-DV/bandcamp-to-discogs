@@ -1,5 +1,5 @@
 import { getDataAttribute } from "../modules/html.js";
-import { trimCharactersFromString } from "../modules/utils.js";
+import { removeInvisibleChars, trimCharactersFromString } from "../modules/utils.js";
 
 function extractDataFromMusicGridElement(element) {
   let artist = element.querySelector('.artist-override')?.innerText;
@@ -8,12 +8,15 @@ function extractDataFromMusicGridElement(element) {
     artist = document.querySelector('#band-name-location .title').innerText;
   }
 
+  artist = trimCharactersFromString(artist, " \-\n");
+  artist = removeInvisibleChars(artist);
+
   const titleParts = element.querySelector('.title').innerText.split("\n");
-  const title = titleParts[0];
+  const title = removeInvisibleChars(titleParts[0]);
   const url = element.querySelector('a').getAttribute('href');
 
   return {
-    artist: trimCharactersFromString(artist, " \-\n"),
+    artist: artist,
     title: title,
     url: (url[0] === '/' ? window.location.origin : '') + url,
     item_id: getDataAttribute(element, 'item-id'),

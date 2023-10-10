@@ -1,4 +1,4 @@
-import { isArray } from "./utils.js";
+import { isArray, isString } from "./utils.js";
 
 export function hasDataAttribute(element, attributeName) {
   return element.hasAttribute(`data-${attributeName}`);
@@ -47,7 +47,7 @@ export function click(element) {
  * @param {Element} element
  */
 export function input(element, value) {
-  if (value) {
+  if (isString(value)) {
     // Trigger input event only when the value has changed
     if (element.value !== value) {
       element.value = value;
@@ -57,7 +57,7 @@ export function input(element, value) {
     return element;
   }
 
-  element.dispatchEvent(new Event('input'));
+  triggerInputEvent(element);
   return element;
 }
 
@@ -115,4 +115,33 @@ export function createDatalistFromArray(dataArray, datalistId) {
   });
 
   return datalist;
+}
+
+export function contentChangeWithPolling(element, callback, interval = 1000) {
+  let previousContent = element.textContent;
+
+  const poller = setInterval(() => {
+    const currentContent = element.textContent;
+    if (currentContent !== previousContent) {
+      callback(currentContent);
+      previousContent = currentContent;
+    }
+  }, interval);
+
+  // Optionally, you can return a function to stop the polling when needed
+  return function stopPolling() {
+    clearInterval(poller);
+  };
+}
+
+export function selectElementWithContent(rootElement, querySelector, content) {
+  const elements = rootElement.querySelectorAll(querySelector);
+
+  for (const element of elements) {
+    if (element.textContent.includes(content)) {
+      return element;
+    }
+  }
+
+  return null;
 }

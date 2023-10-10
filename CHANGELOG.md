@@ -4,7 +4,8 @@
 
 ### Features
 
-- Added artists filter widget on the bandcamp label page
+- Introduced artists filter widget on the bandcamp label page
+- Artists filter widget is synchronized with the popup releases data widget
 
 ## 0.4.1 (2023-09-29)
 

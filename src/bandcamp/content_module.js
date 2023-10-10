@@ -181,7 +181,7 @@ function getArtistListData(releases) {
 function createArtistFilterElement(releases) {
   let artistFilterElement = createElementFromHTML(
 `<div class="b2d-artist-filter-widget">
-  <label for="b2dArtistFilter">Artists:</label>
+  <label for="b2dArtistFilter">Artist / Album:</label>
   <input list="artist-filter-data" id="b2dArtistFilter" name="artist-filter" />
 </div>`);
   const artistFilterData = getArtistListData(releases);

@@ -60,7 +60,8 @@
         "src/config.js",
         "src/bandcamp/bandcamp.js",
         "src/bandcamp/mapping.js",
-        "src/discogs/genres.js"
+        "src/discogs/genres.js",
+        "images/b2d_logo_16.png"
       ],
       "matches": ["https://*.bandcamp.com/*"]
     },

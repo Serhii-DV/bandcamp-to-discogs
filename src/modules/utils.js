@@ -150,10 +150,10 @@ export function injectJSFile(url, callback) {
 
 /**
  * @param {String} inputString
+ * @param {RegExp|String} delimiters
  * @returns {Array}
  */
-export function explodeString(inputString) {
-  const delimiters = /[,/&]+/;
+export function splitString(inputString, delimiters) {
   const resultArray = inputString.split(delimiters);
   return resultArray
     .map(item => item.trim())

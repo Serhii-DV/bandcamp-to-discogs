@@ -1,6 +1,6 @@
 import { Release } from "../app/release.js";
 import { contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, selectElementWithContent, setDataAttribute } from "../modules/html.js";
-import { containsOneOf, explodeString, injectCSSFile, injectJSFile, isEmptyArray } from "../modules/utils.js";
+import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray } from "../modules/utils.js";
 import { PageType, PageTypeDetector } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
 
@@ -163,7 +163,7 @@ function getArtistListData(releases) {
     if (containsOneOf(release.artist, ['V/A'])) {
       artistsData.push(release.artist);
     } else {
-      const artists = explodeString(release.artist);
+      const artists = splitString(release.artist, /[,/&]+/);
       artistsData.push(...artists);
     }
   });

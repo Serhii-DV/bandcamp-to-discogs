@@ -179,21 +179,28 @@ export function containsOneOf(string1, arrayOfStrings) {
 }
 
 export function countOccurrences(arr) {
-  const count = new Map(); // Use a Map to store the counts
+  const count = new Map();
+  const items = new Map();
   const result = [];
 
   // Count occurrences of each element in the array
   for (const item of arr) {
-      count.set(item, (count.get(item) || 0) + 1);
+      const key = item.toLowerCase();
+
+      if (!items.has(key)) {
+        items.set(key, item);
+      }
+
+      count.set(key, (count.get(key) || 0) + 1);
   }
 
-  // Create the result array with the desired format
-  for (const [key, value] of count) {
-      if (value > 1) {
-          result.push(`${key} (${value})`);
-      } else {
-          result.push(key);
-      }
+  for (const [key, item] of items) {
+    const value = count.get(key);
+    if (value > 1) {
+      result.push(`${item} (${value})`);
+    } else {
+      result.push(item);
+    }
   }
 
   return result;

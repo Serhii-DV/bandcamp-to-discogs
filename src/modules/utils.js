@@ -203,3 +203,12 @@ export function removeBrackets(inputString) {
   // Use a regular expression to remove the brackets and their contents
   return inputString.replace(/\s*\([^)]*\)\s*/g, '').trim();
 }
+
+export function trimCharactersFromString(inputString, charactersToTrim) {
+  // Escape special characters within the provided string and construct the regex pattern
+  const escapedCharacters = charactersToTrim.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const regexPattern = new RegExp(`^[${escapedCharacters}]+|[${escapedCharacters}]+$`, 'g');
+  const trimmedString = inputString.replace(regexPattern, '');
+
+  return trimmedString;
+}

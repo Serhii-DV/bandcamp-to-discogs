@@ -1,4 +1,5 @@
 import { getDataAttribute } from "../modules/html.js";
+import { trimCharactersFromString } from "../modules/utils.js";
 
 function extractDataFromMusicGridElement(element) {
   let artist = element.querySelector('.artist-override')?.innerText;
@@ -12,7 +13,7 @@ function extractDataFromMusicGridElement(element) {
   const url = element.querySelector('a').getAttribute('href');
 
   return {
-    artist: artist,
+    artist: trimCharactersFromString(artist, " \-\n"),
     title: title,
     url: (url[0] === '/' ? window.location.origin : '') + url,
     item_id: getDataAttribute(element, 'item-id'),

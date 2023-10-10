@@ -208,6 +208,7 @@ function setupArtistFilterElement(artistFilterElement, iso) {
     window.scrollBy(0, -1);
   });
 
+
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'releases-list-search') {
       input(artistFilter, message.search);

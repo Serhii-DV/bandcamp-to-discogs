@@ -128,14 +128,14 @@ function setupIsotope(pageType) {
     setDataAttribute(gridElement, 'filter-artist', (release.artist + ' - ' + release.title).toLowerCase());
   });
 
-  const artistFilterElement = createArtistFilterElement(releases);
+  const artistFilterWidget = createArtistFilterWidget(releases);
   const filterBlock = createElementFromHTML(`<div class="b2d-widget-container"></div>`);
-  filterBlock.append(artistFilterElement);
+  filterBlock.append(artistFilterWidget);
 
   // Prepend to the releases bandcamp page
   document.querySelector('.leftMiddleColumns').prepend(filterBlock);
 
-  setupArtistFilterElement(artistFilterElement, iso);
+  setupArtistFilterElement(artistFilterWidget, iso);
 
   console.log('B2D: Isotope setuped correctly');
 }
@@ -178,7 +178,7 @@ function getArtistListData(releases) {
   return [...new Set(filterData)];
 }
 
-function createArtistFilterElement(releases) {
+function createArtistFilterWidget(releases) {
   let artistFilterElement = createElementFromHTML(
 `<div class="b2d-artist-filter-widget">
   <label for="b2dArtistFilter">Artist / Album:</label>

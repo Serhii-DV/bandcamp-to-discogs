@@ -131,6 +131,7 @@ function setupIsotope(pageType) {
   const artistFilterWidget = createArtistFilterWidget(releases);
   const filterBlock = createElementFromHTML(`<div class="b2d-widget-container"></div>`);
   filterBlock.append(artistFilterWidget);
+  filterBlock.append(createAlbumAmountWidget(releases));
 
   // Prepend to the releases bandcamp page
   document.querySelector('.leftMiddleColumns').prepend(filterBlock);
@@ -180,7 +181,7 @@ function getArtistListData(releases) {
 
 function createArtistFilterWidget(releases) {
   let artistFilterElement = createElementFromHTML(
-`<div class="b2d-artist-filter-widget">
+`<div class="b2d-widget">
   <label for="b2dArtistFilter">Artist / Album:</label>
   <input list="artist-filter-data" id="b2dArtistFilter" name="artist-filter" />
 </div>`);
@@ -190,6 +191,11 @@ function createArtistFilterWidget(releases) {
   artistFilterElement.append(artistFilterDatalist);
 
   return artistFilterElement;
+}
+
+function createAlbumAmountWidget(releases) {
+  return createElementFromHTML(
+`<div class="b2d-widget" title="The amount of releases on the page">Releases: <strong>${releases.length}</strong></div>`);
 }
 
 function setupArtistFilterElement(artistFilterElement, iso) {

@@ -8,11 +8,7 @@ import { getBandPhotoSrc, getReleasesData } from "./html.js";
 export function main () {
   console.log('B2D: CONTENT AS MODULE');
   const pageType = (new PageTypeDetector()).detect();
-
-  const musicAlbumData = getMusicAlbumSchemaData();
-  console.log(musicAlbumData);
-
-  setupReleaseCollectedByWidget(pageType, musicAlbumData);
+  setupReleaseCollectedByWidget(pageType);
   setupIsotope(pageType);
   setupSendMessageToPopup(pageType);
   setupBCDataEventListener(pageType);
@@ -22,7 +18,7 @@ export function main () {
 
 function getMusicAlbumSchemaData() {
   const jsonLdScript = document.querySelector('script[type="application/ld+json"]');
-  return JSON.parse(jsonLdScript.textContent);
+  return jsonLdScript ? JSON.parse(jsonLdScript.textContent) : null;
 }
 
 /**
@@ -118,13 +114,11 @@ function getArtistFilterValue() {
 
 /**
  * @param {PageType} pageType
- * @param {Object} musicAlbumData
  */
-function setupReleaseCollectedByWidget(pageType, musicAlbumData) {
+function setupReleaseCollectedByWidget(pageType) {
   if (!pageType.isAlbum()) return;
 
-  const bcCollectedByContainer = document.querySelector('.collected-by');
-  const collectedByMessage = bcCollectedByContainer.querySelector('.message');
+  const musicAlbumData = getMusicAlbumSchemaData();
   const fanAmount = musicAlbumData.sponsor.length;
   let paidStr = '';
   const digitalAlbumRelease = getAlbumRelease(musicAlbumData, 'DigitalFormat');
@@ -134,8 +128,9 @@ function setupReleaseCollectedByWidget(pageType, musicAlbumData) {
     paidStr = `Minimun revenue is ${revenue} ${digitalAlbumRelease.offers.priceCurrency}.`;
   }
 
+  const bcCollectedByContainer = document.querySelector('.collected-by');
+  const collectedByMessage = bcCollectedByContainer.querySelector('.message');
   collectedByMessage.innerHTML = `supported by <strong>${fanAmount}</strong> people. ${paidStr}`;
-  console.log(collectedByMessage.innerHTML);
 }
 
 /**

@@ -55,6 +55,7 @@
         "src/discogs/discogs.js",
         "src/modules/chrome.js",
         "src/modules/html.js",
+        "src/modules/schema.js",
         "src/modules/utils.js",
         "src/discogs/discogs-csv.js",
         "src/config.js",

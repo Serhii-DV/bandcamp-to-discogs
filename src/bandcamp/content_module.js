@@ -1,6 +1,7 @@
 import { Release } from "../app/release.js";
-import { contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, selectElementWithContent, setDataAttribute } from "../modules/html.js";
-import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray, countOccurrences, removeBrackets } from "../modules/utils.js";
+import { click, contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, selectElementWithContent, setDataAttribute } from "../modules/html.js";
+import { getAlbumRelease } from "../modules/schema.js";
+import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray, countOccurrences, removeBrackets, isObject } from "../modules/utils.js";
 import { PageType, PageTypeDetector } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
 
@@ -8,11 +9,20 @@ export function main () {
   console.log('B2D: CONTENT AS MODULE');
   const pageType = (new PageTypeDetector()).detect();
 
+  const musicAlbumData = getMusicAlbumSchemaData();
+  console.log(musicAlbumData);
+
+  setupReleaseCollectedByWidget(pageType, musicAlbumData);
   setupIsotope(pageType);
   setupSendMessageToPopup(pageType);
   setupBCDataEventListener(pageType);
   injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
   injectCSSFile(chrome.runtime.getURL('src/bandcamp/styles.css'));
+}
+
+function getMusicAlbumSchemaData() {
+  const jsonLdScript = document.querySelector('script[type="application/ld+json"]');
+  return JSON.parse(jsonLdScript.textContent);
 }
 
 /**
@@ -104,6 +114,28 @@ function setupSendMessageToPopup(pageType) {
 function getArtistFilterValue() {
   const artistFilter = document.querySelector('#b2dArtistFilter');
   return artistFilter.value;
+}
+
+/**
+ * @param {PageType} pageType
+ * @param {Object} musicAlbumData
+ */
+function setupReleaseCollectedByWidget(pageType, musicAlbumData) {
+  if (!pageType.isAlbum()) return;
+
+  const bcCollectedByContainer = document.querySelector('.collected-by');
+  const collectedByMessage = bcCollectedByContainer.querySelector('.message');
+  const fanAmount = musicAlbumData.sponsor.length;
+  let paidStr = '';
+  const digitalAlbumRelease = getAlbumRelease(musicAlbumData, 'DigitalFormat');
+
+  if (isObject(digitalAlbumRelease)) {
+    const revenue = fanAmount * digitalAlbumRelease.offers.price;
+    paidStr = `Minimun revenue is ${revenue} ${digitalAlbumRelease.offers.priceCurrency}.`;
+  }
+
+  collectedByMessage.innerHTML = `supported by <strong>${fanAmount}</strong> people. ${paidStr}`;
+  console.log(collectedByMessage.innerHTML);
 }
 
 /**

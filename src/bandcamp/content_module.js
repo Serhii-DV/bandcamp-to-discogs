@@ -1,5 +1,5 @@
 import { Release } from "../app/release.js";
-import { click, contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, selectElementWithContent, setDataAttribute } from "../modules/html.js";
+import { click, contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, isElementDisplayNone, isHtmlElement, selectElementWithContent, setDataAttribute } from "../modules/html.js";
 import { getAlbumRelease } from "../modules/schema.js";
 import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray, countOccurrences, removeBrackets, isObject } from "../modules/utils.js";
 import { PageType, PageTypeDetector } from "./bandcamp.js";
@@ -119,25 +119,57 @@ function setupReleaseCollectedByWidget(pageType) {
   if (!pageType.isAlbum()) return;
 
   const musicAlbumData = getMusicAlbumSchemaData();
-  const fanAmount = musicAlbumData.sponsor.length;
-  let sponsoredText = `supported by <strong>${fanAmount}</strong> people.`;
-
-  const digitalAlbumRelease = getAlbumRelease(musicAlbumData, 'DigitalFormat');
-  const cdAlbumRelease = getAlbumRelease(musicAlbumData, 'CDFormat');
-
-  if (isObject(digitalAlbumRelease)) {
-    const revenue = fanAmount * digitalAlbumRelease.offers.price;
-    sponsoredText += `<br>Digital format minimum revenue is ${revenue} ${digitalAlbumRelease.offers.priceCurrency}.`;
-  }
-
-  if (isObject(cdAlbumRelease)) {
-    const revenue = fanAmount * cdAlbumRelease.offers.price;
-    sponsoredText += `<br>CD format minimum revenue is ${revenue} ${cdAlbumRelease.offers.priceCurrency}.`;
-  }
-
   const bcCollectedByContainer = document.querySelector('.collected-by');
   const collectedByMessage = bcCollectedByContainer.querySelector('.message');
-  collectedByMessage.innerHTML = sponsoredText;
+
+  const moreWritingElement = bcCollectedByContainer.querySelector('.more-writing');
+  const loadingWritingElement = bcCollectedByContainer.querySelector('.loading-writing');
+  const moreThumbsElement = bcCollectedByContainer.querySelector('.more-thumbs');
+  const loadingThumbsElement = bcCollectedByContainer.querySelector('.loading-thumbs');
+
+  function outputInformation() {
+    const fanElements = bcCollectedByContainer.querySelectorAll('.pic');
+    const fanAmount = fanElements.length;
+    let sponsoredText = `supported by <strong>${fanAmount}</strong> people.`;
+
+    const digitalAlbumRelease = getAlbumRelease(musicAlbumData, 'DigitalFormat');
+    const cdAlbumRelease = getAlbumRelease(musicAlbumData, 'CDFormat');
+
+    if (isObject(digitalAlbumRelease)) {
+      const revenue = fanAmount * digitalAlbumRelease.offers.price;
+      sponsoredText += `<br>Digital format potential revenue is ${revenue} ${digitalAlbumRelease.offers.priceCurrency}.`;
+    }
+
+    if (isObject(cdAlbumRelease)) {
+      const revenue = fanAmount * cdAlbumRelease.offers.price;
+      sponsoredText += `<br>CD format potential revenue is ${revenue} ${cdAlbumRelease.offers.priceCurrency}.`;
+    }
+
+    collectedByMessage.innerHTML = sponsoredText;
+  }
+
+  function clickMoreLinks() {
+    const isLoadingThumbs = isHtmlElement(loadingThumbsElement) && !isElementDisplayNone(loadingThumbsElement);
+    const isLoadingWritings = isHtmlElement(loadingWritingElement) && !isElementDisplayNone(loadingWritingElement);
+    const hasMoreWritings = isHtmlElement(moreWritingElement) && !isElementDisplayNone(moreWritingElement);
+    const hasMoreThumbs = isHtmlElement(moreThumbsElement) && !isElementDisplayNone(moreThumbsElement);
+
+    if (!isLoadingWritings && !isLoadingThumbs && !hasMoreWritings && !hasMoreThumbs) {
+      clearInterval(intervalId);
+      outputInformation();
+      return;
+    }
+
+    if (!isLoadingWritings && hasMoreWritings) {
+      click(moreWritingElement);
+    }
+
+    if (!isLoadingThumbs && hasMoreThumbs) {
+      click(moreThumbsElement);
+    }
+  }
+
+  const intervalId = setInterval(clickMoreLinks, 500);
 }
 
 /**

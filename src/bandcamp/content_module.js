@@ -120,17 +120,24 @@ function setupReleaseCollectedByWidget(pageType) {
 
   const musicAlbumData = getMusicAlbumSchemaData();
   const fanAmount = musicAlbumData.sponsor.length;
-  let paidStr = '';
+  let sponsoredText = `supported by <strong>${fanAmount}</strong> people.`;
+
   const digitalAlbumRelease = getAlbumRelease(musicAlbumData, 'DigitalFormat');
+  const cdAlbumRelease = getAlbumRelease(musicAlbumData, 'CDFormat');
 
   if (isObject(digitalAlbumRelease)) {
     const revenue = fanAmount * digitalAlbumRelease.offers.price;
-    paidStr = `Minimun revenue is ${revenue} ${digitalAlbumRelease.offers.priceCurrency}.`;
+    sponsoredText += `<br>Digital format minimum revenue is ${revenue} ${digitalAlbumRelease.offers.priceCurrency}.`;
+  }
+
+  if (isObject(cdAlbumRelease)) {
+    const revenue = fanAmount * cdAlbumRelease.offers.price;
+    sponsoredText += `<br>CD format minimum revenue is ${revenue} ${cdAlbumRelease.offers.priceCurrency}.`;
   }
 
   const bcCollectedByContainer = document.querySelector('.collected-by');
   const collectedByMessage = bcCollectedByContainer.querySelector('.message');
-  collectedByMessage.innerHTML = `supported by <strong>${fanAmount}</strong> people. ${paidStr}`;
+  collectedByMessage.innerHTML = sponsoredText;
 }
 
 /**

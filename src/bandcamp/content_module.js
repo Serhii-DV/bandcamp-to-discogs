@@ -122,6 +122,7 @@ function setupReleaseCollectedByWidget(pageType) {
   const bcCollectedByContainer = document.querySelector('.collected-by');
   const collectedByMessage = bcCollectedByContainer.querySelector('.message');
 
+  const loadingElement = createElementFromHTML('<span class="loading">Bandcamp To Discogs:<br>Calculating revenue information</span>');
   const moreWritingElement = bcCollectedByContainer.querySelector('.more-writing');
   const loadingWritingElement = bcCollectedByContainer.querySelector('.loading-writing');
   const moreThumbsElement = bcCollectedByContainer.querySelector('.more-thumbs');
@@ -169,6 +170,9 @@ function setupReleaseCollectedByWidget(pageType) {
     }
   }
 
+  // Show loading indicator
+  collectedByMessage.innerHTML = '';
+  collectedByMessage.append(loadingElement);
   const intervalId = setInterval(clickMoreLinks, 500);
 }
 

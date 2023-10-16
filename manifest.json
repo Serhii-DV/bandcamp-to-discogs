@@ -47,22 +47,23 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "src/bandcamp/script.js",
-        "src/bandcamp/styles.css",
+        "images/b2d_logo_16.png",
+        "src/app/release.js",
+        "src/bandcamp/bandcamp.js",
         "src/bandcamp/content_module.js",
         "src/bandcamp/html.js",
-        "src/app/release.js",
+        "src/bandcamp/mapping.js",
+        "src/bandcamp/script.js",
+        "src/bandcamp/styles.css",
+        "src/config.js",
+        "src/discogs/discogs-csv.js",
         "src/discogs/discogs.js",
+        "src/discogs/genres.js",
         "src/modules/chrome.js",
         "src/modules/html.js",
         "src/modules/schema.js",
-        "src/modules/utils.js",
-        "src/discogs/discogs-csv.js",
-        "src/config.js",
-        "src/bandcamp/bandcamp.js",
-        "src/bandcamp/mapping.js",
-        "src/discogs/genres.js",
-        "images/b2d_logo_16.png"
+        "src/modules/storage.js",
+        "src/modules/utils.js"
       ],
       "matches": ["https://*.bandcamp.com/*"]
     },

@@ -53,11 +53,6 @@ export function createBootstrapCheckbox(id, value, labelText, checked) {
   return container;
 }
 
-export function isValidBandcampURL(url) {
-  const pattern = /^(https?:\/\/)?([a-z0-9-]+\.)*bandcamp\.com(\/[a-z0-9-]+)*(\/[a-z0-9-]+\/[a-z0-9-]+)?$/;
-  return pattern.test(url);
-}
-
 /**
  * Converts a JavaScript object to an HTML element representing a table.
  * @param {Object} data - The JavaScript object to convert.

@@ -1,6 +1,7 @@
 import { Release } from "../app/release.js";
 import { click, contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, isElementDisplayNone, isHtmlElement, selectElementWithContent, setDataAttribute } from "../modules/html.js";
 import { getAlbumRelease } from "../modules/schema.js";
+import { findReleaseInStorage, saveRelease } from "../modules/storage.js";
 import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray, countOccurrences, removeBrackets, isObject } from "../modules/utils.js";
 import { PageType, PageTypeDetector } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
@@ -38,23 +39,17 @@ function setupBCDataEventListener(pageType) {
 
     // storage.clear();
 
-    storage.get([currentTabUrl], (result) => {
+    findReleaseInStorage(currentTabUrl, null, (url) => {
       // Save release data to the storage if it doesn't exist
-      if (!result[currentTabUrl] || !result[currentTabUrl]['release']) {
-        const { schemaData, coverSrc } = extractReleaseData();
-        const release = Release.fromBandcampData(
-          TralbumData,
-          BandData,
-          schemaData,
-          coverSrc
-        );
+      const { schemaData, coverSrc } = extractReleaseData();
+      const release = Release.fromBandcampData(
+        TralbumData,
+        BandData,
+        schemaData,
+        coverSrc
+      );
 
-        storage.set({ [currentTabUrl]: { release: release.toJSON() } }, () => {
-          console.log("B2D: Release data was saved in local storage");
-        });
-      } else {
-        console.log("B2D: Release data already exists");
-      }
+      saveRelease(url, release);
     });
   });
 }

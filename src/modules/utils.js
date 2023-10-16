@@ -208,7 +208,7 @@ export function countOccurrences(arr) {
 
 export function removeBrackets(inputString) {
   // Use a regular expression to remove the brackets and their contents
-  return inputString.replace(/\s*\([^)]*\)\s*/g, '').trim();
+  return inputString.replace(/\s*\([^)]*\)/, '');
 }
 
 export function trimCharactersFromString(inputString, charactersToTrim) {

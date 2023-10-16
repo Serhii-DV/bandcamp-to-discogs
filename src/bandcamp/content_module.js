@@ -130,13 +130,15 @@ function setupIsotope(pageType) {
 
   const artistFilterWidget = createArtistFilterWidget(releases);
   const filterBlock = createElementFromHTML(`<div class="b2d-widget-container"></div>`);
+  const albumAmountWidget = createAlbumAmountWidget(releases);
+
   filterBlock.append(artistFilterWidget);
-  filterBlock.append(createAlbumAmountWidget(releases));
+  filterBlock.append(albumAmountWidget);
 
   // Prepend to the releases bandcamp page
   document.querySelector('.leftMiddleColumns').prepend(filterBlock);
 
-  setupArtistFilterElement(artistFilterWidget, iso);
+  setupArtistFilterElement(artistFilterWidget, iso, albumAmountWidget);
 
   console.log('B2D: Isotope setuped correctly');
 }
@@ -195,10 +197,10 @@ function createArtistFilterWidget(releases) {
 
 function createAlbumAmountWidget(releases) {
   return createElementFromHTML(
-`<div class="b2d-widget" title="The amount of releases on the page">Releases: <strong>${releases.length}</strong></div>`);
+`<div class="b2d-widget" id="b2d-albumAmount" title="The amount of releases on the page">Releases: <span class="b2d-viewed">${releases.length}</span> / <strong>${releases.length}</strong></div>`);
 }
 
-function setupArtistFilterElement(artistFilterElement, iso) {
+function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
   const artistFilter = artistFilterElement.querySelector('#b2dArtistFilter');
 
   artistFilter.addEventListener('input', () => {
@@ -208,6 +210,8 @@ function setupArtistFilterElement(artistFilterElement, iso) {
     selectedValue = selectedValue.toLowerCase();
     const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
     iso.arrange({ filter: filter });
+
+    albumAmountWidget.querySelector('.b2d-viewed').innerHTML = iso.getFilteredItemElements().length;
 
     // try to updata images
     window.scrollBy(0, 1);

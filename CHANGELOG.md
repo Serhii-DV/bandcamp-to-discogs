@@ -1,5 +1,15 @@
 # Change log
 
+## 0.6.0 (2023-10-XX)
+
+### Features
+
+- BC music page: Introduced the widget that shows the amount of releases on the page
+
+### Fixed
+
+- BC music page: Artists filter trimmed spaces in wrong way
+
 ## 0.5.0 (2023-10-10)
 
 ### Features

@@ -267,7 +267,9 @@ function createArtistFilterWidget(releases) {
 
 function createAlbumAmountWidget(releases) {
   return createElementFromHTML(
-`<div class="b2d-widget" id="b2d-albumAmount" title="The amount of releases on the page">Releases: <span class="b2d-viewed">${releases.length}</span> / <strong>${releases.length}</strong></div>`);
+`<div class="b2d-albumAmount b2d-widget" title="The amount of releases on the page">
+Releases: <span class="b2d-visible">${releases.length}</span> / <span class="b2d-total">${releases.length}</span>
+</div>`);
 }
 
 function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
@@ -281,7 +283,7 @@ function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
     const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
     iso.arrange({ filter: filter });
 
-    albumAmountWidget.querySelector('.b2d-viewed').innerHTML = iso.getFilteredItemElements().length;
+    albumAmountWidget.querySelector('.b2d-visible').innerHTML = iso.getFilteredItemElements().length;
 
     // try to updata images
     window.scrollBy(0, 1);

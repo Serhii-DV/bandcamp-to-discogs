@@ -1,7 +1,7 @@
 import { Release } from "../app/release.js";
 import { click, contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, isElementDisplayNone, isHtmlElement, selectElementWithContent, setDataAttribute } from "../modules/html.js";
 import { getAlbumRelease } from "../modules/schema.js";
-import { findReleaseInStorage, saveRelease } from "../modules/storage.js";
+import { addReleaseHistory, findReleaseInStorage, saveRelease } from "../modules/storage.js";
 import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray, countOccurrences, removeBrackets, isObject } from "../modules/utils.js";
 import { PageType, PageTypeDetector } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
@@ -22,6 +22,10 @@ function getMusicAlbumSchemaData() {
   return jsonLdScript ? JSON.parse(jsonLdScript.textContent) : null;
 }
 
+function getCurrentUrl() {
+  return window.location.href;
+}
+
 /**
  * @param {PageType} pageType
  * @returns
@@ -34,12 +38,8 @@ function setupBCDataEventListener(pageType) {
   window.addEventListener('BC_Data', (e) => {
     // Getting data from script.js
     const {TralbumData, BandData} = e.detail;
-    const currentTabUrl = window.location.href;
-    const storage = chrome.storage.local;
 
-    // storage.clear();
-
-    findReleaseInStorage(currentTabUrl, null, (url) => {
+    findReleaseInStorage(getCurrentUrl(), null, (url) => {
       // Save release data to the storage if it doesn't exist
       const { schemaData, coverSrc } = extractReleaseData();
       const release = Release.fromBandcampData(
@@ -128,20 +128,26 @@ function setupReleaseCollectedByWidget(pageType) {
     const fanAmount = fanElements.length;
     let sponsoredText = `supported by <strong>${fanAmount}</strong> people.`;
 
+    let categoryValues = {};
+    categoryValues.fans = fanAmount;
+
     const digitalAlbumRelease = getAlbumRelease(musicAlbumData, 'DigitalFormat');
     const cdAlbumRelease = getAlbumRelease(musicAlbumData, 'CDFormat');
 
     if (isObject(digitalAlbumRelease)) {
       const revenue = fanAmount * digitalAlbumRelease.offers.price;
       sponsoredText += `<br>Digital format potential revenue is ${revenue} ${digitalAlbumRelease.offers.priceCurrency}.`;
+      categoryValues.digitalRevenue = revenue;
     }
 
     if (isObject(cdAlbumRelease)) {
       const revenue = fanAmount * cdAlbumRelease.offers.price;
       sponsoredText += `<br>CD format potential revenue is ${revenue} ${cdAlbumRelease.offers.priceCurrency}.`;
+      categoryValues.cdRevenue = revenue;
     }
 
     collectedByMessage.innerHTML = sponsoredText;
+    addReleaseHistory(getCurrentUrl(), categoryValues);
   }
 
   function clickMoreLinks() {

@@ -1,6 +1,6 @@
 import { Release } from "../app/release.js";
 import { isValidBandcampURL } from "../bandcamp/html.js";
-import { isArray, isFunction } from "./utils.js";
+import { isArray, isFunction, isObject } from "./utils.js";
 
 const storage = chrome.storage.local;
 
@@ -55,13 +55,62 @@ export function findMissingKeysInStorage(keys, onFind) {
 }
 
 /**
- * @param {String} url
+ * @param {String} key
  * @param {Release} release
  */
-export function saveRelease(url, release) {
-  storage.set({ [url]: { release: release.toJSON() } }, () => {
+export function saveRelease(key, release) {
+  storage.set({ [key]: { release: release.toJSON() } }, () => {
     console.log("B2D: Release data was saved in the local storage");
   });
+}
+
+/**
+ * @param {String} key
+ * @param {Array} categoryValues
+ */
+export function addReleaseHistory(key, categoryValues) {
+  storage.get([key], (data) => {
+    let releaseData = data[key] || null;
+    if (releaseData === null) return;
+    let history = releaseData.history || {};
+
+    const date = new Date();
+    const dateStr = date.toISOString();
+
+    for (let category in categoryValues) {
+      if (!categoryValues.hasOwnProperty(category)) continue;
+
+      let historyCategory = history[category] || [];
+      if (!isArray(historyCategory)) continue;
+
+      const historyValue = {
+        date: dateStr,
+        value: categoryValues[category]
+      };
+
+      addUniqueValueObjectToArray(historyCategory, historyValue);
+      history[category] = historyCategory;
+    }
+
+    releaseData.history = history;
+
+    storage.set({ [key]: releaseData }, () => {
+      console.log("B2D: Release history for categories was saved successfully", categoryValues);
+    });
+  });
+}
+
+function addUniqueValueObjectToArray(arr, obj) {
+  if (arr.length === 0 || arr[arr.length - 1].value !== obj.value) {
+      arr.push(obj);
+  }
+}
+
+function formatDateYMD(date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 function createReleaseFromStorageItem(storageItem) {

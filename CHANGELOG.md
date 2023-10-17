@@ -5,6 +5,7 @@
 ### Features
 
 - BC music page: Introduced the widget that shows the amount of releases on the page
+- BC music page: Now it saves the history data for revenues and amount of supporters
 
 ### Fixed
 

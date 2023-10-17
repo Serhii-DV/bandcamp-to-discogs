@@ -145,3 +145,11 @@ export function selectElementWithContent(rootElement, querySelector, content) {
 
   return null;
 }
+
+export function isElementDisplayNone(element) {
+  return window.getComputedStyle(element).display === 'none';
+}
+
+export function isHtmlElement(element) {
+  return element instanceof HTMLElement;
+}

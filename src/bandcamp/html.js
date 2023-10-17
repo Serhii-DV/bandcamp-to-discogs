@@ -39,3 +39,8 @@ export function getBandPhotoSrc() {
   const imgBandPhoto = document.querySelector('.band-photo');
   return imgBandPhoto.src;
 }
+
+export function isValidBandcampURL(url) {
+  const pattern = /^(https?:\/\/)?([a-z0-9-]+\.)*bandcamp\.com(\/[a-z0-9-]+)*(\/[a-z0-9-]+\/[a-z0-9-]+)?$/;
+  return pattern.test(url);
+}

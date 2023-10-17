@@ -10,6 +10,7 @@
   background-image: url("../../images/b2d_logo_16.png");
 }
 
-.b2d-widget-container .b2d-widget strong {
-  font-size: 150%;
+.b2d-albumAmount .b2d-visible,
+.b2d-albumAmount .b2d-total {
+  font-size: 130%;
 }

@@ -16,7 +16,7 @@ export function generateKeyForUrl(url) {
  * @return {String}
  */
 export function generateKeyForRelease(release) {
-  return generateKeyForUrl(release.url);
+  return generateKeyForUrl(release.releaseItem.url);
 }
 
 export function generateKeysFromUrls(urls) {

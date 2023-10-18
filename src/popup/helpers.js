@@ -3,33 +3,6 @@ import { getSearchDiscogsReleaseUrl } from "../discogs/discogs.js";
 import { disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
 
-/**
- *
- * @param {Array} releases
- * @param {HTMLElement} form
- * @param {Boolean} checked
- */
-export function fillReleasesForm(releases, form, checked) {
-  const checkboxes = form.querySelector('.checkboxes');
-  checkboxes.innerHTML = '';
-
-  for (const release of releases) {
-    const releaseLink = document.createElement("a");
-    releaseLink.href = release.url;
-    releaseLink.target = '_blank';
-    releaseLink.innerHTML = `<b2d-icon name="box-arrow-up-right"></b2d-icon>`;
-
-    const checkbox = createBootstrapCheckbox(
-      form.id + ':' + convertToAlias(release.title),
-      release.url,
-      release.artist + " - " + release.title + ' ' + releaseLink.outerHTML,
-      checked
-    );
-
-    checkboxes.appendChild(checkbox);
-  }
-}
-
 export function createBootstrapCheckbox(id, value, labelText, checked) {
   // Create the checkbox input element
   const checkboxInput = document.createElement("input");

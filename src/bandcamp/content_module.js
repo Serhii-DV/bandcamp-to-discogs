@@ -66,8 +66,6 @@ function setupSendMessageToPopup(pageType) {
   }
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    let response;
-
     if (request.type === 'getBandcampData') {
       if (pageType.isMusic()) {
         sendResponse({
@@ -86,6 +84,8 @@ function setupSendMessageToPopup(pageType) {
             type: 'release',
             data: release.toObject()
           });
+        }, key => {
+
         });
       }
     }

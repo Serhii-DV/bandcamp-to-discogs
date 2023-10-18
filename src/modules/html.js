@@ -153,3 +153,7 @@ export function isElementDisplayNone(element) {
 export function isHtmlElement(element) {
   return element instanceof HTMLElement;
 }
+
+export function getCurrentUrl() {
+  return window.location.href;
+}

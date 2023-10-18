@@ -1,24 +1,28 @@
 import { Release } from "../app/release.js";
 import { isValidBandcampURL } from "../bandcamp/html.js";
+import { generateKeyForRelease, generateKeyForUrl, generateKeyUrlMapFromUrls, generateKeysFromUrls } from "./key-generator.js";
 import { isArray, isFunction, isObject } from "./utils.js";
 
 const storage = chrome.storage.local;
 
-export function findAllReleasesInStorage(onFind) {
-  storage.get(null, (data) => {
-    console.log('storage.get', data);
+export function logStorage() {
+  console.log('B2D: Storage data');
+  storage.get(null, (data) => console.log(data));
+}
 
+export function findAllReleases(onFind) {
+  storage.get(null, (data) => {
     const releases = [];
 
     for (const key in data) {
-      if (!isValidBandcampURL(key) || !data.hasOwnProperty(key)) {
+      if (!data.hasOwnProperty(key) && !isObject(data[key])) {
         continue;
       }
 
-      const releaseObject = data[key];
-
-      if (releaseObject.release) {
-        releases.push(releaseObject.release);
+      try {
+        releases.push(Release.fromObject(data[key]));
+      } catch (error) {
+        continue;
       }
     }
 
@@ -26,40 +30,45 @@ export function findAllReleasesInStorage(onFind) {
   });
 }
 
-export function findReleaseInStorage(url, onFind, onMissing) {
-  storage.get([url], (result) => {
-    if (result[url] && result[url]['release']) {
-      const release = createReleaseFromStorageItem(result[url]);
+export function findReleaseByUrl(url, onFind, onMissing) {
+  const key = generateKeyForUrl(url);
+  storage.get([key], (result) => {
+    if (isObject(result[key])) {
+      const release = Release.fromObject(result[key]);
       if (isFunction(onFind)) onFind(release);
     } else {
-      console.log("B2D: Release data doesn't exists", url);
-      if (isFunction(onMissing)) onMissing(url);
+      console.log("B2D: Release data doesn't exists", key);
+      if (isFunction(onMissing)) onMissing(key);
     }
   });
 
 }
 
-export function findReleasesInStorage(urls, onFind) {
-  storage.get(urls, result => {
-    let releases = Object.values(result).map(item => createReleaseFromStorageItem(item));
+export function findReleasesByUrls(urls, onFind) {
+  const keys = generateKeysFromUrls(urls);
+  storage.get(keys, result => {
+    let releases = Object.values(result).map(obj => Release.fromObject(obj));
     if (isFunction(onFind)) onFind(releases);
   });
 }
 
-export function findMissingKeysInStorage(keys, onFind) {
+export function findMissingUrls(urls, onFind) {
+  const keyUrlMap = generateKeyUrlMapFromUrls(urls);
+  const keys = Object.keys(keyUrlMap);
   storage.get(keys, result => {
-    let foundKeys = Object.keys(result);
-    let missingKeys = keys.filter(key => !foundKeys.includes(key));
-    if (isFunction(onFind)) onFind(missingKeys);
+    const foundKeys = Object.keys(result);
+    const missingKeys = keys.filter(key => !foundKeys.includes(key));
+    const missingUrls = missingKeys.map(key => keyUrlMap[key]);
+    if (isFunction(onFind)) onFind(missingUrls);
   });
 }
 
 /**
- * @param {String} key
  * @param {Release} release
  */
-export function saveRelease(key, release) {
-  storage.set({ [key]: { release: release.toJSON() } }, () => {
+export function saveRelease(release) {
+  const key = generateKeyForRelease(release);
+  storage.set({ [key]: release.toObject() }, () => {
     console.log("B2D: Release data was saved in the local storage");
   });
 }
@@ -104,20 +113,6 @@ function addUniqueValueObjectToArray(arr, obj) {
   if (arr.length === 0 || arr[arr.length - 1].value !== obj.value) {
       arr.push(obj);
   }
-}
-
-function formatDateYMD(date) {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function createReleaseFromStorageItem(storageItem) {
-  if (!storageItem.release) {
-    throw new Error('Storage items is not Release object');
-  }
-  return Release.fromJSON(storageItem.release);
 }
 
 export function clearStorage() {

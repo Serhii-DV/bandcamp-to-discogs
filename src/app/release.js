@@ -1,34 +1,39 @@
 import { generateSubmissionNotes } from '../discogs/discogs.js';
 import { getExtensionManifest } from '../modules/chrome.js';
+import { generateKeyForUrl } from '../modules/key-generator.js';
 import { padStringLeft } from '../modules/utils.js';
+
+export class ReleaseItem {
+  constructor(url, artist, title) {
+    this.url = url;
+    this.artist = artist;
+    this.title = title;
+    this.uuid = generateKeyForUrl(url);
+  }
+
+  static fromObject(obj) {
+    return new ReleaseItem(obj.url, obj.artist, obj.title);
+  }
+}
 
 export class Release {
   /**
-   *
    * @param {String} artist
    * @param {String} title
    * @param {String} label
    * @param {Date} date
    * @param {Array} tracks
    * @param {String} url
-   * @param {String} about
-   * @param {String} credits
-   * @param {String} type
-   * @param {Object} coverSrc
+   * @param {String} image
    * @param {Array} keywords
    */
-  constructor(artist, title, label, date, tracks, url, about, credits, type, coverSrc, keywords) {
-    this.artist = artist;
-    this.title = title;
+  constructor(artist, title, label, date, tracks, url, image, keywords) {
+    this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
     this.date = date;
     this.tracks = tracks;
     this.tracksQty = tracks.length;
-    this.url = url;
-    this.about = about;
-    this.credits = credits;
-    this.type = type;
-    this.coverSrc = coverSrc;
+    this.image = image;
     this.keywords = keywords;
   }
 
@@ -41,12 +46,12 @@ export class Release {
    */
   static fromBandcampData(TralbumData, BandData, SchemaData, coverSrc) {
     const { artist, current, url } = TralbumData;
-    const { title, about, credits, publish_date, type } = current;
+    const { title, publish_date } = current;
     const { keywords } = SchemaData;
     const tracks = TralbumData.trackinfo.map(track => new Track(
       track.track_num,
       track.title,
-      track.duration
+      durationFromSeconds(Math.trunc(track.duration))
     ));
     const labelName = BandData.name;
     const label = artist === labelName ? `Not On Label (${labelName} Self-released)` : labelName;
@@ -58,55 +63,81 @@ export class Release {
       new Date(publish_date),
       tracks,
       url,
-      about,
-      credits,
-      type,
-      coverSrc,
+      coverSrc.big,
       keywords
     );
   }
 
-  toJSON() {
+  /**
+   * @param {Object} schema
+   * @returns {Release}
+   */
+  static fromBandcampSchema(schema) {
+    const artist = schema.byArtist.name;
+    const title = schema.name;
+    const label = schema.publisher.name;
+    const date = new Date(schema.datePublished);
+    const tracks = schema.track.itemListElement.map(track => new Track(
+      track.position,
+      track.item.name,
+      parseDuration(track.item.duration)
+    ));
+    const url = schema.mainEntityOfPage;
+    const image = schema.image;
+    const keywords = schema.keywords;
+
+    return new Release(
+      artist,
+      title,
+      label,
+      date,
+      tracks,
+      url,
+      image,
+      keywords
+    );
+  }
+
+  toObject() {
     return {
-      artist: this.artist,
-      title: this.title,
+      uuid: this.releaseItem.uuid,
+      artist: this.releaseItem.artist,
+      title: this.releaseItem.title,
+      url: this.releaseItem.url,
       label: this.label,
       date: this.date.toISOString(),
       tracks: this.tracks,
-      url: this.url,
-      about: this.about,
-      credits: this.credits,
-      type: this.type,
-      coverSrc: this.coverSrc,
+      image: this.image,
       keywords: this.keywords
     };
   }
 
   /**
-   * Create an instance of the Release class from a parsed JSON object.
-   * @param {Object} jsonParsedObject - The parsed JSON object.
+   * Create an instance of the Release class from the object.
+   * @param {Object} obj - A simple object.
    * @returns {Release} An instance of the Release class.
    */
-  static fromJSON(jsonParsedObject) {
-    const tracks = jsonParsedObject.tracks.map(trackData => Track.fromJSON(trackData));
+  static fromObject(obj) {
+    if (!obj.url || !obj.tracks) {
+      throw new Error('Cannot create Release object from object', obj);
+    }
+
+    const tracks = obj.tracks.map(trackData => Track.fromObject(trackData));
 
     return new Release(
-      jsonParsedObject.artist,
-      jsonParsedObject.title,
-      jsonParsedObject.label,
-      new Date(jsonParsedObject.date),
+      obj.artist,
+      obj.title,
+      obj.label,
+      new Date(obj.date),
       tracks,
-      jsonParsedObject.url,
-      jsonParsedObject.about,
-      jsonParsedObject.credits,
-      jsonParsedObject.type,
-      jsonParsedObject.coverSrc,
-      jsonParsedObject.keywords
+      obj.url,
+      obj.image,
+      obj.keywords
     );
   }
 
   /**
-   * Returns release json metadata
+   * Returns release metadata
    * @param {Release} release
    * @returns Object
    */
@@ -134,30 +165,37 @@ export class Track {
     this.num = num;
     this.title = title;
     this.duration = duration;
-    this.durationText = Track.durationToSeconds(Math.trunc(this.duration));
   }
 
   /**
-   * @param {Number} duration
-   * @returns {String}
-   */
-  static durationToSeconds(duration) {
-    let minutes = Math.floor(duration / 60);
-    let seconds = duration % 60;
-
-    return minutes.toString() + ':' + padStringLeft(seconds.toString(), '0', 2);
-  }
-
-  /**
-   * Create an instance of the Track class from a parsed JSON object.
-   * @param {Object} jsonParsedObject - The parsed JSON object.
+   * Create an instance of the Track class from the object.
+   * @param {Object} obj - A simple object.
    * @returns {Track} An instance of the Track class.
    */
-  static fromJSON(jsonParsedObject) {
+  static fromObject(obj) {
     return new Track(
-      jsonParsedObject.num,
-      jsonParsedObject.title,
-      jsonParsedObject.duration
+      obj.num,
+      obj.title,
+      obj.duration
     );
   }
+}
+
+function durationFromSeconds(duration) {
+  let minutes = Math.floor(duration / 60);
+  let seconds = duration % 60;
+
+  return minutes.toString() + ':' + padStringLeft(seconds.toString(), '0', 2);
+}
+
+function parseDuration(duration) {
+  const regexHours = /(\d+)H/;
+  const regexMinutes = /(\d+)M/;
+  const regexSeconds = /(\d+)S/;
+  const hours = (regexHours.exec(duration) || [])[1] || 0;
+  const minutes = (regexMinutes.exec(duration) || [])[1] || 0;
+  const seconds = (regexSeconds.exec(duration) || [])[1] || 0;
+  const formatted = `${hours}:${minutes}:${seconds}`;
+
+  return formatted;
 }

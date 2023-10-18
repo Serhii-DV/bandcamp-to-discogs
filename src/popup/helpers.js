@@ -1,33 +1,7 @@
+import { Release, ReleaseItem } from "../app/release.js";
 import { getSearchDiscogsReleaseUrl } from "../discogs/discogs.js";
 import { disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
-
-/**
- *
- * @param {Array} releases
- * @param {HTMLElement} form
- * @param {Boolean} checked
- */
-export function fillReleasesForm(releases, form, checked) {
-  const checkboxes = form.querySelector('.checkboxes');
-  checkboxes.innerHTML = '';
-
-  for (const release of releases) {
-    const releaseLink = document.createElement("a");
-    releaseLink.href = release.url;
-    releaseLink.target = '_blank';
-    releaseLink.innerHTML = `<b2d-icon name="box-arrow-up-right"></b2d-icon>`;
-
-    const checkbox = createBootstrapCheckbox(
-      form.id + ':' + convertToAlias(release.title),
-      release.url,
-      release.artist + " - " + release.title + ' ' + releaseLink.outerHTML,
-      checked
-    );
-
-    checkboxes.appendChild(checkbox);
-  }
-}
 
 export function createBootstrapCheckbox(id, value, labelText, checked) {
   // Create the checkbox input element
@@ -158,23 +132,34 @@ export function updateButtonState(button, checkboxes) {
 }
 
 /**
- * @param {Array} releases
+ * @param {Array<ReleaseItem>|Array<Release>} releases
  * @return {Array}
  */
-export function transformReleasesToReleasesListData(releases) {
+function transformReleaseItemsToReleaseListData(releases) {
   const data = [];
 
-  releases.forEach(release => {
+  releases.forEach(item => {
+    const release = item instanceof Release ? item.releaseItem : item;
     const viewLink = getIconLinkHtml(release.url, 'box-arrow-up-right');
     const searchLink = getIconLinkHtml(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search');
     data.push({
       title: `${release.artist} - ${release.title} ${viewLink} ${searchLink}`,
-      value: release.url,
+      value: release.uuid,
       id: convertToAlias(release.title)
     });
   });
 
   return data;
+}
+
+/**
+ * @param {ReleasesList} releasesList
+ * @param {Array<ReleaseItem>|Array<Release>} releases
+ */
+export function populateReleasesList(releasesList, releases) {
+  releasesList.populateData(
+    transformReleaseItemsToReleaseListData(releases)
+  );
 }
 
 export function getIconLinkHtml(url, icon) {

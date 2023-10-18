@@ -1,8 +1,8 @@
 import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { createElementFromHTML, hasDataAttribute, setDataAttribute } from "../../modules/html.js";
-import { clearStorage, clearStorageByKey, findAllReleasesInStorage, findReleasesInStorage } from "../../modules/storage.js";
-import { removeButtonLoadingState, setButtonInLoadingState, transformReleasesToReleasesListData } from "../helpers.js";
+import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls } from "../../modules/storage.js";
+import { populateReleasesList, removeButtonLoadingState, setButtonInLoadingState } from "../helpers.js";
 
 /**
  * @param {Element} btnDownloadCsv
@@ -19,10 +19,8 @@ export function setupStorageTab(tab, btnDownloadCsv) {
 }
 
 function updateReleasesListData(releasesList) {
-  findAllReleasesInStorage((releases) => {
-    releasesList.populateData(
-      transformReleasesToReleasesListData(releases)
-    );
+  findAllReleases((releases) => {
+    populateReleasesList(releasesList, releases);
   });
 }
 
@@ -46,7 +44,7 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
     setButtonInLoadingState(button);
     const selectedValues = releasesList.getSelectedValues();
 
-    findReleasesInStorage(selectedValues, releases => {
+    findReleasesByUrls(selectedValues, releases => {
       const firstRelease = releases[0];
       const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
       const csv = objectsToCsv(csvObjects);

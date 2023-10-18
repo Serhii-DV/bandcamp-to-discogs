@@ -67,7 +67,7 @@ function processBandcampReleaseData(data, keywordsMapping) {
   show(btnReleaseTab);
   click(btnReleaseTab);
 
-  const release = Release.fromJSON(data);
+  const release = Release.fromObject(data);
   setupReleaseTab(
     document.getElementById('release'),
     release,

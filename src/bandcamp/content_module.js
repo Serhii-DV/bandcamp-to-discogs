@@ -84,16 +84,13 @@ function setupSendMessageToPopup(pageType) {
           }
         });
       } else {
-        const currentTabUrl = window.location.href;
-        chrome.storage.local.get([currentTabUrl], (result) => {
-          if (result[currentTabUrl] && result[currentTabUrl]['release']) {
-            response = {
-              type: 'release',
-              data: result[currentTabUrl]['release']
-            };
-          }
+        const url = window.location.href;
 
-          sendResponse(response);
+        findReleaseByUrl(url, release => {
+          sendResponse({
+            type: 'release',
+            data: release.toObject()
+          });
         });
       }
     }

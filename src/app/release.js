@@ -1,5 +1,6 @@
 import { generateSubmissionNotes } from '../discogs/discogs.js';
 import { getExtensionManifest } from '../modules/chrome.js';
+import { generateKeyForUrl } from '../modules/key-generator.js';
 import { padStringLeft } from '../modules/utils.js';
 
 export class Release {
@@ -26,6 +27,7 @@ export class Release {
     this.type = type;
     this.coverSrc = coverSrc;
     this.keywords = keywords;
+    this.id = generateKeyForUrl(url);
   }
 
   /**
@@ -62,6 +64,7 @@ export class Release {
 
   toObject() {
     return {
+      id: this.id,
       artist: this.artist,
       title: this.title,
       label: this.label,

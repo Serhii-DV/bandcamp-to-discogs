@@ -169,7 +169,7 @@ export function transformReleasesToReleasesListData(releases) {
     const searchLink = getIconLinkHtml(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search');
     data.push({
       title: `${release.artist} - ${release.title} ${viewLink} ${searchLink}`,
-      value: release.url,
+      value: release.id,
       id: convertToAlias(release.title)
     });
   });

@@ -19,10 +19,10 @@ export function findAllReleases(onFind) {
         continue;
       }
 
-      const release = data[key];
-
-      if (isValidBandcampURL(release.url)) {
-        releases.push(release);
+      try {
+        releases.push(Release.fromObject(data[key]));
+      } catch (error) {
+        continue;
       }
     }
 

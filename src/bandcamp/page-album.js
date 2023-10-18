@@ -1,6 +1,7 @@
+import { Release } from "../app/release.js";
 import { click, createElementFromHTML, getCurrentUrl, isElementDisplayNone, isHtmlElement } from "../modules/html.js";
 import { getAlbumRelease } from "../modules/schema.js";
-import { addReleaseHistory, findReleaseByUrl } from "../modules/storage.js";
+import { addReleaseHistory, findReleaseByUrl, saveRelease } from "../modules/storage.js";
 import { isObject } from "../modules/utils.js";
 import { getMusicAlbumSchemaData } from "./html.js";
 
@@ -18,7 +19,11 @@ function setupBCDataEventListener() {
 
     findReleaseByUrl(getCurrentUrl(), null, (url) => {
       // Save release data to the storage if it doesn't exist
-      const { schemaData, coverSrc } = extractReleaseData();
+      const schemaData = getMusicAlbumSchemaData();
+      const coverSrc = {
+        small: document.querySelector('link[rel~="shortcut"]').href,
+        big: document.querySelector('link[rel="image_src"]').href,
+      };
       const release = Release.fromBandcampData(
         TralbumData,
         BandData,
@@ -29,22 +34,6 @@ function setupBCDataEventListener() {
       saveRelease(release);
     });
   });
-}
-
-function extractReleaseData() {
-  return {
-    schemaData: getSchemaData(),
-    coverSrc: {
-      small: document.querySelector('link[rel~="shortcut"]').href,
-      big: document.querySelector('link[rel="image_src"]').href,
-    },
-  };
-}
-
-function getSchemaData() {
-  const scriptElement = document.querySelector('script[type="application/ld+json"]');
-  const scriptContent = scriptElement.textContent;
-  return JSON.parse(scriptContent);
 }
 
 function setupSendMessageToPopup() {

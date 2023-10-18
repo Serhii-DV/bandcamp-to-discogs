@@ -1,28 +1,23 @@
 import { Release } from "../app/release.js";
 import { click, createElementFromHTML, getCurrentUrl, isElementDisplayNone, isHtmlElement } from "../modules/html.js";
 import { getAlbumRelease } from "../modules/schema.js";
-import { addReleaseHistory, findReleaseByUrl, logStorage, saveRelease } from "../modules/storage.js";
+import { addReleaseHistory, findReleaseByUrl, saveRelease } from "../modules/storage.js";
 import { isObject } from "../modules/utils.js";
 import { getMusicAlbumSchemaData } from "./html.js";
 
 // Setup logic for BC albums page
 export function setupPageAlbum() {
-  setupBCDataEventListener();
+  setupRelease();
   setupSendMessageToPopup();
   setupReleaseCollectedByWidget();
 }
 
-function setupBCDataEventListener() {
-  window.addEventListener('BC_Data', (e) => {
-    // Getting data from script.js
-    const {TralbumData, BandData} = e.detail;
-
-    findReleaseByUrl(getCurrentUrl(), null, (key) => {
-      // Save release data to the storage if it doesn't exist
-      const schemaData = getMusicAlbumSchemaData();
-      const release = Release.fromBandcampSchema(schemaData);
-      saveRelease(release);
-    });
+function setupRelease() {
+  // Save release data to the storage if it doesn't exist
+  findReleaseByUrl(getCurrentUrl(), null, (key) => {
+    const schemaData = getMusicAlbumSchemaData();
+    const release = Release.fromBandcampSchema(schemaData);
+    saveRelease(release);
   });
 }
 

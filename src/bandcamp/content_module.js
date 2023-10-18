@@ -14,6 +14,5 @@ export function main () {
     setupPageAlbum();
   }
 
-  injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
   injectCSSFile(chrome.runtime.getURL('src/bandcamp/styles.css'));
 }

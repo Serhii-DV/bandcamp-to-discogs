@@ -62,7 +62,6 @@
         "src/bandcamp/mapping.js",
         "src/bandcamp/page-album.js",
         "src/bandcamp/page-music.js",
-        "src/bandcamp/script.js",
         "src/bandcamp/styles.css",
         "src/config.js",
         "src/discogs/discogs-csv.js",

@@ -67,7 +67,7 @@ function setupSendMessageToPopup(pageType) {
   window.B2D = window.B2D || {};
 
   if (pageType.isMusic()) {
-    window.B2D.page_releases = getReleasesData();
+    window.B2D.pageReleases = getReleasesData();
   }
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -77,7 +77,7 @@ function setupSendMessageToPopup(pageType) {
       if (pageType.isMusic()) {
         sendResponse({
           type: 'list',
-          data: window.B2D.page_releases,
+          data: window.B2D.pageReleases,
           popup: {
             imageSrc: getBandPhotoSrc(),
             search: getArtistFilterValue(),
@@ -215,13 +215,13 @@ function getReleases() {
   // Cache main data
   const B2D = window.B2D || {};
 
-  if (!isEmptyArray(B2D.page_releases)) {
-    return B2D.page_releases;
+  if (!isEmptyArray(B2D.pageReleases)) {
+    return B2D.pageReleases;
   }
 
-  B2D.page_releases = getReleasesData();
+  B2D.pageReleases = getReleasesData();
 
-  return B2D.page_releases;
+  return B2D.pageReleases;
 }
 
 function getArtistListData(releases) {

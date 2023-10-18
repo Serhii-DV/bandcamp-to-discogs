@@ -1,9 +1,37 @@
 import { contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, selectElementWithContent, setDataAttribute } from "../modules/html.js";
 import { containsOneOf, splitString, isEmptyArray, countOccurrences, removeBrackets } from "../modules/utils.js";
+import { getBandPhotoSrc, getReleasesData } from "./html.js";
 
 // Setup logic for BC music page
 export function setupPageMusic() {
+  setupSendMessageToPopup();
   setupIsotope();
+}
+
+function setupSendMessageToPopup() {
+  // Cache main data
+  window.B2D = window.B2D || {};
+  window.B2D.pageReleases = getReleasesData();
+
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === 'getBandcampData') {
+      sendResponse({
+        type: 'list',
+        data: window.B2D.pageReleases,
+        popup: {
+          imageSrc: getBandPhotoSrc(),
+          search: getArtistFilterValue(),
+        }
+      });
+    }
+
+    return true;
+  });
+}
+
+function getArtistFilterValue() {
+  const artistFilter = document.querySelector('#b2dArtistFilter');
+  return artistFilter.value;
 }
 
 function setupIsotope() {

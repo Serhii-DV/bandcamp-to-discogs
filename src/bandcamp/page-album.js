@@ -1,12 +1,28 @@
 import { click, createElementFromHTML, getCurrentUrl, isElementDisplayNone, isHtmlElement } from "../modules/html.js";
 import { getAlbumRelease } from "../modules/schema.js";
-import { addReleaseHistory } from "../modules/storage.js";
+import { addReleaseHistory, findReleaseByUrl } from "../modules/storage.js";
 import { isObject } from "../modules/utils.js";
 import { getMusicAlbumSchemaData } from "./html.js";
 
 // Setup logic for BC albums page
 export function setupPageAlbum() {
+  setupSendMessageToPopup();
   setupReleaseCollectedByWidget();
+}
+
+function setupSendMessageToPopup() {
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === 'getBandcampData') {
+      findReleaseByUrl(getCurrentUrl(), release => {
+        sendResponse({
+          type: 'release',
+          data: release.toObject()
+        });
+      });
+    }
+
+    return true;
+  });
 }
 
 function setupReleaseCollectedByWidget() {

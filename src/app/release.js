@@ -11,13 +11,11 @@ export class Release {
    * @param {Date} date
    * @param {Array} tracks
    * @param {String} url
-   * @param {String} about
-   * @param {String} credits
    * @param {String} type
    * @param {Object} coverSrc
    * @param {Array} keywords
    */
-  constructor(artist, title, label, date, tracks, url, about, credits, type, coverSrc, keywords) {
+  constructor(artist, title, label, date, tracks, url, type, coverSrc, keywords) {
     this.artist = artist;
     this.title = title;
     this.label = label;
@@ -25,8 +23,6 @@ export class Release {
     this.tracks = tracks;
     this.tracksQty = tracks.length;
     this.url = url;
-    this.about = about;
-    this.credits = credits;
     this.type = type;
     this.coverSrc = coverSrc;
     this.keywords = keywords;
@@ -41,7 +37,7 @@ export class Release {
    */
   static fromBandcampData(TralbumData, BandData, SchemaData, coverSrc) {
     const { artist, current, url } = TralbumData;
-    const { title, about, credits, publish_date, type } = current;
+    const { title, publish_date, type } = current;
     const { keywords } = SchemaData;
     const tracks = TralbumData.trackinfo.map(track => new Track(
       track.track_num,
@@ -58,8 +54,6 @@ export class Release {
       new Date(publish_date),
       tracks,
       url,
-      about,
-      credits,
       type,
       coverSrc,
       keywords
@@ -74,8 +68,6 @@ export class Release {
       date: this.date.toISOString(),
       tracks: this.tracks,
       url: this.url,
-      about: this.about,
-      credits: this.credits,
       type: this.type,
       coverSrc: this.coverSrc,
       keywords: this.keywords
@@ -101,8 +93,6 @@ export class Release {
       new Date(obj.date),
       tracks,
       obj.url,
-      obj.about,
-      obj.credits,
       obj.type,
       obj.coverSrc,
       obj.keywords

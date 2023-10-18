@@ -66,7 +66,7 @@ export class Release {
     );
   }
 
-  toJSON() {
+  toObject() {
     return {
       artist: this.artist,
       title: this.title,
@@ -83,30 +83,34 @@ export class Release {
   }
 
   /**
-   * Create an instance of the Release class from a parsed JSON object.
-   * @param {Object} jsonParsedObject - The parsed JSON object.
+   * Create an instance of the Release class from the object.
+   * @param {Object} obj - A simple object.
    * @returns {Release} An instance of the Release class.
    */
-  static fromJSON(jsonParsedObject) {
-    const tracks = jsonParsedObject.tracks.map(trackData => Track.fromJSON(trackData));
+  static fromObject(obj) {
+    if (!obj.url || !obj.tracks) {
+      throw new Error('Cannot create Release object from object', obj);
+    }
+
+    const tracks = obj.tracks.map(trackData => Track.fromObject(trackData));
 
     return new Release(
-      jsonParsedObject.artist,
-      jsonParsedObject.title,
-      jsonParsedObject.label,
-      new Date(jsonParsedObject.date),
+      obj.artist,
+      obj.title,
+      obj.label,
+      new Date(obj.date),
       tracks,
-      jsonParsedObject.url,
-      jsonParsedObject.about,
-      jsonParsedObject.credits,
-      jsonParsedObject.type,
-      jsonParsedObject.coverSrc,
-      jsonParsedObject.keywords
+      obj.url,
+      obj.about,
+      obj.credits,
+      obj.type,
+      obj.coverSrc,
+      obj.keywords
     );
   }
 
   /**
-   * Returns release json metadata
+   * Returns release metadata
    * @param {Release} release
    * @returns Object
    */
@@ -149,15 +153,15 @@ export class Track {
   }
 
   /**
-   * Create an instance of the Track class from a parsed JSON object.
-   * @param {Object} jsonParsedObject - The parsed JSON object.
+   * Create an instance of the Track class from the object.
+   * @param {Object} obj - A simple object.
    * @returns {Track} An instance of the Track class.
    */
-  static fromJSON(jsonParsedObject) {
+  static fromObject(obj) {
     return new Track(
-      jsonParsedObject.num,
-      jsonParsedObject.title,
-      jsonParsedObject.duration
+      obj.num,
+      obj.title,
+      obj.duration
     );
   }
 }

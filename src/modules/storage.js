@@ -5,10 +5,13 @@ import { isArray, isFunction, isObject } from "./utils.js";
 
 const storage = chrome.storage.local;
 
+export function logStorage() {
+  console.log('B2D: Storage data');
+  storage.get(null, (data) => console.log(data));
+}
+
 export function findAllReleases(onFind) {
   storage.get(null, (data) => {
-    console.log('storage.get', data);
-
     const releases = [];
 
     for (const key in data) {
@@ -31,7 +34,7 @@ export function findReleaseByUrl(url, onFind, onMissing) {
   const key = generateKeyForUrl(url);
   storage.get([key], (result) => {
     if (isObject(result[key])) {
-      const release = createReleaseFromObject(result[key]);
+      const release = Release.fromObject(result[key]);
       if (isFunction(onFind)) onFind(release);
     } else {
       console.log("B2D: Release data doesn't exists", key);
@@ -44,7 +47,7 @@ export function findReleaseByUrl(url, onFind, onMissing) {
 export function findReleasesByUrls(urls, onFind) {
   const keys = generateKeysFromUrls(urls);
   storage.get(keys, result => {
-    let releases = Object.values(result).map(obj => createReleaseFromObject(obj));
+    let releases = Object.values(result).map(obj => Release.fromObject(obj));
     if (isFunction(onFind)) onFind(releases);
   });
 }
@@ -65,7 +68,7 @@ export function findMissingUrls(urls, onFind) {
  */
 export function saveRelease(release) {
   const key = generateKeyForRelease(release);
-  storage.set({ [key]: release.toJSON() }, () => {
+  storage.set({ [key]: release.toObject() }, () => {
     console.log("B2D: Release data was saved in the local storage");
   });
 }
@@ -110,20 +113,6 @@ function addUniqueValueObjectToArray(arr, obj) {
   if (arr.length === 0 || arr[arr.length - 1].value !== obj.value) {
       arr.push(obj);
   }
-}
-
-function formatDateYMD(date) {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function createReleaseFromObject(storageItem) {
-  if (!storageItem.release) {
-    throw new Error('Storage items is not Release object');
-  }
-  return Release.fromJSON(storageItem.release);
 }
 
 export function clearStorage() {

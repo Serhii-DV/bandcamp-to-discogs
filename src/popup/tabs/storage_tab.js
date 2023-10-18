@@ -2,7 +2,7 @@ import { DiscogsCsv } from "../../discogs/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { createElementFromHTML, hasDataAttribute, setDataAttribute } from "../../modules/html.js";
 import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls } from "../../modules/storage.js";
-import { removeButtonLoadingState, setButtonInLoadingState, transformReleasesToReleasesListData } from "../helpers.js";
+import { populateReleasesList, removeButtonLoadingState, setButtonInLoadingState } from "../helpers.js";
 
 /**
  * @param {Element} btnDownloadCsv
@@ -20,9 +20,7 @@ export function setupStorageTab(tab, btnDownloadCsv) {
 
 function updateReleasesListData(releasesList) {
   findAllReleases((releases) => {
-    releasesList.populateData(
-      transformReleasesToReleasesListData(releases)
-    );
+    populateReleasesList(releasesList, releases);
   });
 }
 

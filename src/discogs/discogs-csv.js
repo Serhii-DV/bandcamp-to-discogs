@@ -54,8 +54,8 @@ export class DiscogsCsv {
    */
   static fromRelease(release) {
     return new DiscogsCsv({
-      artist: release.artist,
-      title: release.title,
+      artist: release.releaseItem.artist,
+      title: release.releaseItem.title,
       label: release.label,
       catno: 'none',
       format: 'File',

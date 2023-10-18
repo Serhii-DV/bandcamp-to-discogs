@@ -1,10 +1,11 @@
+import { ReleaseItem } from "../../app/release.js";
 import { getCurrentTab, openTabs } from "../../modules/chrome.js";
 import { input } from "../../modules/html.js";
 import { findMissingUrls, findReleasesByUrls } from "../../modules/storage.js";
-import { removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState, transformReleasesToReleasesListData } from "../helpers.js";
+import { populateReleasesList, removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState } from "../helpers.js";
 import { downloadReleasesCsv } from "./download_tab.js";
 
-export function setupReleasesTab(tab, releaseList, bgImageSrc, searchValue, btnNavDownload) {
+export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue, btnNavDownload) {
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
   const releasesList = tab.querySelector('#releasesTabLIst');
   const downloadCsvFile = async (event) => {
@@ -38,9 +39,9 @@ export function setupReleasesTab(tab, releaseList, bgImageSrc, searchValue, btnN
       document.getElementById('viewedStatusInfo')
     );
 
-  releasesList.populateData(
-    transformReleasesToReleasesListData(releaseList)
-  );
+  const releaseItems = [];
+  releasesData.forEach(obj => releaseItems.push(ReleaseItem.fromObject(obj)));
+  populateReleasesList(releasesList, releaseItems);
 
   let activeTab;
   releasesList.searchInput.addEventListener('input', () => {

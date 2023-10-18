@@ -7,7 +7,7 @@ import { Release } from '../app/release.js';
  */
 export function generateKeyForUrl(url) {
   const uuid = v5(url, v5.URL);
-  console.log(`B2D: v5(${url}): `, uuid);
+  // console.log(`B2D: v5(${url}): `, uuid);
   return uuid;
 }
 

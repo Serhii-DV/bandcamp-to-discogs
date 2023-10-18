@@ -3,9 +3,21 @@ import { getExtensionManifest } from '../modules/chrome.js';
 import { generateKeyForUrl } from '../modules/key-generator.js';
 import { padStringLeft } from '../modules/utils.js';
 
+export class ReleaseItem {
+  constructor(url, artist, title) {
+    this.url = url;
+    this.artist = artist;
+    this.title = title;
+    this.uuid = generateKeyForUrl(url);
+  }
+
+  static fromObject(obj) {
+    return new ReleaseItem(obj.url, obj.artist, obj.title);
+  }
+}
+
 export class Release {
   /**
-   *
    * @param {String} artist
    * @param {String} title
    * @param {String} label
@@ -17,17 +29,14 @@ export class Release {
    * @param {Array} keywords
    */
   constructor(artist, title, label, date, tracks, url, type, coverSrc, keywords) {
-    this.artist = artist;
-    this.title = title;
+    this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
     this.date = date;
     this.tracks = tracks;
     this.tracksQty = tracks.length;
-    this.url = url;
     this.type = type;
     this.coverSrc = coverSrc;
     this.keywords = keywords;
-    this.id = generateKeyForUrl(url);
   }
 
   /**
@@ -64,13 +73,13 @@ export class Release {
 
   toObject() {
     return {
-      id: this.id,
-      artist: this.artist,
-      title: this.title,
+      uuid: this.releaseItem.uuid,
+      artist: this.releaseItem.artist,
+      title: this.releaseItem.title,
+      url: this.releaseItem.url,
       label: this.label,
       date: this.date.toISOString(),
       tracks: this.tracks,
-      url: this.url,
       type: this.type,
       coverSrc: this.coverSrc,
       keywords: this.keywords

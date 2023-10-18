@@ -11,7 +11,7 @@ import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
  */
 export function setupReleaseTab(tab, release, btnDownloadRelease, btnDiscogsSearch) {
   outputRelease(tab, release);
-  btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
+  btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.releaseItem.artist, release.releaseItem.title);
   setupBtnToDownloadReleasesAsCsv(btnDownloadRelease, [release]);
 }
 
@@ -26,8 +26,8 @@ function outputRelease(tab, release) {
   const releaseContent = tab.querySelector('.release-content');
 
   setBackgroundImage(document.querySelector('.bg-image'), release.coverSrc.big);
-  releaseArtist.innerHTML = release.artist;
-  releaseTitle.innerHTML = release.title;
+  releaseArtist.innerHTML = release.releaseItem.artist;
+  releaseTitle.innerHTML = release.releaseItem.title;
   releaseDate.innerHTML = release.date.getFullYear();
 
   let countArtistLines = countLinesInHtmlElement(releaseArtist);

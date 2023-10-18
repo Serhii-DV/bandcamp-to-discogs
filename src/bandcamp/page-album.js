@@ -6,8 +6,45 @@ import { getMusicAlbumSchemaData } from "./html.js";
 
 // Setup logic for BC albums page
 export function setupPageAlbum() {
+  setupBCDataEventListener();
   setupSendMessageToPopup();
   setupReleaseCollectedByWidget();
+}
+
+function setupBCDataEventListener() {
+  window.addEventListener('BC_Data', (e) => {
+    // Getting data from script.js
+    const {TralbumData, BandData} = e.detail;
+
+    findReleaseByUrl(getCurrentUrl(), null, (url) => {
+      // Save release data to the storage if it doesn't exist
+      const { schemaData, coverSrc } = extractReleaseData();
+      const release = Release.fromBandcampData(
+        TralbumData,
+        BandData,
+        schemaData,
+        coverSrc
+      );
+
+      saveRelease(release);
+    });
+  });
+}
+
+function extractReleaseData() {
+  return {
+    schemaData: getSchemaData(),
+    coverSrc: {
+      small: document.querySelector('link[rel~="shortcut"]').href,
+      big: document.querySelector('link[rel="image_src"]').href,
+    },
+  };
+}
+
+function getSchemaData() {
+  const scriptElement = document.querySelector('script[type="application/ld+json"]');
+  const scriptContent = scriptElement.textContent;
+  return JSON.parse(scriptContent);
 }
 
 function setupSendMessageToPopup() {

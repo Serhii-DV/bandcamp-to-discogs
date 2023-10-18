@@ -1,7 +1,7 @@
 import { Release } from "../app/release.js";
 import { click, contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, isElementDisplayNone, isHtmlElement, selectElementWithContent, setDataAttribute } from "../modules/html.js";
 import { getAlbumRelease } from "../modules/schema.js";
-import { addReleaseHistory, findReleaseInStorage, saveRelease } from "../modules/storage.js";
+import { addReleaseHistory, findReleaseByUrl, saveRelease } from "../modules/storage.js";
 import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray, countOccurrences, removeBrackets, isObject } from "../modules/utils.js";
 import { PageType, PageTypeDetector } from "./bandcamp.js";
 import { getBandPhotoSrc, getReleasesData } from "./html.js";
@@ -39,7 +39,7 @@ function setupBCDataEventListener(pageType) {
     // Getting data from script.js
     const {TralbumData, BandData} = e.detail;
 
-    findReleaseInStorage(getCurrentUrl(), null, (url) => {
+    findReleaseByUrl(getCurrentUrl(), null, (url) => {
       // Save release data to the storage if it doesn't exist
       const { schemaData, coverSrc } = extractReleaseData();
       const release = Release.fromBandcampData(
@@ -49,7 +49,7 @@ function setupBCDataEventListener(pageType) {
         coverSrc
       );
 
-      saveRelease(url, release);
+      saveRelease(release);
     });
   });
 }

@@ -48,6 +48,13 @@
     {
       "resources": [
         "images/b2d_logo_16.png",
+        "assets/uuid/v5.js",
+        "assets/uuid/v35.js",
+        "assets/uuid/sha1-browser.js",
+        "assets/uuid/parse.js",
+        "assets/uuid/regex.js",
+        "assets/uuid/stringify.js",
+        "assets/uuid/validate.js",
         "src/app/release.js",
         "src/bandcamp/bandcamp.js",
         "src/bandcamp/content_module.js",
@@ -61,6 +68,7 @@
         "src/discogs/genres.js",
         "src/modules/chrome.js",
         "src/modules/html.js",
+        "src/modules/key-generator.js",
         "src/modules/schema.js",
         "src/modules/storage.js",
         "src/modules/utils.js"

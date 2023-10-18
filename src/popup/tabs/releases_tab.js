@@ -1,6 +1,6 @@
 import { getCurrentTab, openTabs } from "../../modules/chrome.js";
 import { input } from "../../modules/html.js";
-import { findMissingKeysInStorage, findReleasesInStorage } from "../../modules/storage.js";
+import { findMissingUrls, findReleasesByUrls } from "../../modules/storage.js";
 import { removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState, transformReleasesToReleasesListData } from "../helpers.js";
 import { downloadReleasesCsv } from "./download_tab.js";
 
@@ -12,7 +12,7 @@ export function setupReleasesTab(tab, releaseList, bgImageSrc, searchValue, btnN
     setButtonInLoadingState(button);
 
     const checkedUrls = releasesList.getSelectedValues();
-    findMissingKeysInStorage(checkedUrls, missingKeys => {
+    findMissingUrls(checkedUrls, missingKeys => {
       openTabs(missingKeys, (tab) => {
         chrome.scripting.executeScript({
           target: { tabId: tab.id },
@@ -21,7 +21,7 @@ export function setupReleasesTab(tab, releaseList, bgImageSrc, searchValue, btnN
       }).then(() => {
         setTimeout(() => {
           // Read data from the storage
-          findReleasesInStorage(checkedUrls, releases => {
+          findReleasesByUrls(checkedUrls, releases => {
             downloadReleasesCsv(releases);
             removeButtonLoadingState(button);
           });

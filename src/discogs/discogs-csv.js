@@ -53,10 +53,12 @@ export class DiscogsCsv {
    * @return {DiscogsCsv} - The converted DiscogsCsv instance.
    */
   static fromRelease(release) {
+    const label = release.artist === release.label ? `Not On Label (${release.artist} Self-released)` : release.label;
+
     return new DiscogsCsv({
       artist: release.releaseItem.artist,
       title: release.releaseItem.title,
-      label: release.label,
+      label: label,
       catno: 'none',
       format: 'File',
       genres: keywordsToDiscogsGenres(release.keywords),
@@ -64,7 +66,7 @@ export class DiscogsCsv {
       tracks: release.tracks,
       notes: JSON.stringify(release.toMetadata()),
       date: release.date.toISOString().split('T')[0],
-      images: release.coverSrc.big
+      images: release.image
     });
   }
 
@@ -120,7 +122,7 @@ export class DiscogsCsv {
    */
   toCsvObject() {
     const tracks = this.tracks
-      .map(track => `${capitalizeEachWord(track.title)} ${track.durationText}`)
+      .map(track => `${capitalizeEachWord(track.title)} ${track.duration}`)
       .join("\r");
     const notes = this.notes ? this.notes.replace(/"/g, '""') : '';
 

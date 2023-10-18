@@ -1,7 +1,7 @@
 import { Release } from "../app/release.js";
 import { click, createElementFromHTML, getCurrentUrl, isElementDisplayNone, isHtmlElement } from "../modules/html.js";
 import { getAlbumRelease } from "../modules/schema.js";
-import { addReleaseHistory, findReleaseByUrl, saveRelease } from "../modules/storage.js";
+import { addReleaseHistory, findReleaseByUrl, logStorage, saveRelease } from "../modules/storage.js";
 import { isObject } from "../modules/utils.js";
 import { getMusicAlbumSchemaData } from "./html.js";
 
@@ -17,20 +17,10 @@ function setupBCDataEventListener() {
     // Getting data from script.js
     const {TralbumData, BandData} = e.detail;
 
-    findReleaseByUrl(getCurrentUrl(), null, (url) => {
+    findReleaseByUrl(getCurrentUrl(), null, (key) => {
       // Save release data to the storage if it doesn't exist
       const schemaData = getMusicAlbumSchemaData();
-      const coverSrc = {
-        small: document.querySelector('link[rel~="shortcut"]').href,
-        big: document.querySelector('link[rel="image_src"]').href,
-      };
-      const release = Release.fromBandcampData(
-        TralbumData,
-        BandData,
-        schemaData,
-        coverSrc
-      );
-
+      const release = Release.fromBandcampSchema(schemaData);
       saveRelease(release);
     });
   });

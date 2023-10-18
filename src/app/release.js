@@ -24,18 +24,16 @@ export class Release {
    * @param {Date} date
    * @param {Array} tracks
    * @param {String} url
-   * @param {String} type
-   * @param {Object} coverSrc
+   * @param {String} image
    * @param {Array} keywords
    */
-  constructor(artist, title, label, date, tracks, url, type, coverSrc, keywords) {
+  constructor(artist, title, label, date, tracks, url, image, keywords) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
     this.date = date;
     this.tracks = tracks;
     this.tracksQty = tracks.length;
-    this.type = type;
-    this.coverSrc = coverSrc;
+    this.image = image;
     this.keywords = keywords;
   }
 
@@ -48,12 +46,12 @@ export class Release {
    */
   static fromBandcampData(TralbumData, BandData, SchemaData, coverSrc) {
     const { artist, current, url } = TralbumData;
-    const { title, publish_date, type } = current;
+    const { title, publish_date } = current;
     const { keywords } = SchemaData;
     const tracks = TralbumData.trackinfo.map(track => new Track(
       track.track_num,
       track.title,
-      track.duration
+      durationFromSeconds(Math.trunc(track.duration))
     ));
     const labelName = BandData.name;
     const label = artist === labelName ? `Not On Label (${labelName} Self-released)` : labelName;
@@ -65,8 +63,37 @@ export class Release {
       new Date(publish_date),
       tracks,
       url,
-      type,
-      coverSrc,
+      coverSrc.big,
+      keywords
+    );
+  }
+
+  /**
+   * @param {Object} schema
+   * @returns {Release}
+   */
+  static fromBandcampSchema(schema) {
+    const artist = schema.byArtist.name;
+    const title = schema.name;
+    const label = schema.publisher.name;
+    const date = new Date(schema.datePublished);
+    const tracks = schema.track.itemListElement.map(track => new Track(
+      track.position,
+      track.item.name,
+      parseDuration(track.item.duration)
+    ));
+    const url = schema.mainEntityOfPage;
+    const image = schema.image;
+    const keywords = schema.keywords;
+
+    return new Release(
+      artist,
+      title,
+      label,
+      date,
+      tracks,
+      url,
+      image,
       keywords
     );
   }
@@ -80,8 +107,7 @@ export class Release {
       label: this.label,
       date: this.date.toISOString(),
       tracks: this.tracks,
-      type: this.type,
-      coverSrc: this.coverSrc,
+      image: this.image,
       keywords: this.keywords
     };
   }
@@ -105,8 +131,7 @@ export class Release {
       new Date(obj.date),
       tracks,
       obj.url,
-      obj.type,
-      obj.coverSrc,
+      obj.image,
       obj.keywords
     );
   }
@@ -140,18 +165,6 @@ export class Track {
     this.num = num;
     this.title = title;
     this.duration = duration;
-    this.durationText = Track.durationToSeconds(Math.trunc(this.duration));
-  }
-
-  /**
-   * @param {Number} duration
-   * @returns {String}
-   */
-  static durationToSeconds(duration) {
-    let minutes = Math.floor(duration / 60);
-    let seconds = duration % 60;
-
-    return minutes.toString() + ':' + padStringLeft(seconds.toString(), '0', 2);
   }
 
   /**
@@ -166,4 +179,23 @@ export class Track {
       obj.duration
     );
   }
+}
+
+function durationFromSeconds(duration) {
+  let minutes = Math.floor(duration / 60);
+  let seconds = duration % 60;
+
+  return minutes.toString() + ':' + padStringLeft(seconds.toString(), '0', 2);
+}
+
+function parseDuration(duration) {
+  const regexHours = /(\d+)H/;
+  const regexMinutes = /(\d+)M/;
+  const regexSeconds = /(\d+)S/;
+  const hours = (regexHours.exec(duration) || [])[1] || 0;
+  const minutes = (regexMinutes.exec(duration) || [])[1] || 0;
+  const seconds = (regexSeconds.exec(duration) || [])[1] || 0;
+  const formatted = `${hours}:${minutes}:${seconds}`;
+
+  return formatted;
 }

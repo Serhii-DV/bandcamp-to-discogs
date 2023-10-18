@@ -25,7 +25,7 @@ function outputRelease(tab, release) {
   const releaseDate = tab.querySelector('#release-year');
   const releaseContent = tab.querySelector('.release-content');
 
-  setBackgroundImage(document.querySelector('.bg-image'), release.coverSrc.big);
+  setBackgroundImage(document.querySelector('.bg-image'), release.image);
   releaseArtist.innerHTML = release.releaseItem.artist;
   releaseTitle.innerHTML = release.releaseItem.title;
   releaseDate.innerHTML = release.date.getFullYear();
@@ -39,7 +39,7 @@ function outputRelease(tab, release) {
   let trackinfo = '';
 
   release.tracks.forEach(track => {
-    trackinfo += `${track.num}. ${track.title} (${track.durationText})<br>`;
+    trackinfo += `${track.num}. ${track.title} (${track.duration})<br>`;
   });
 
   releaseContent.innerHTML = trackinfo;

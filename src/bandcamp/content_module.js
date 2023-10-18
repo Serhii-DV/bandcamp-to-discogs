@@ -4,7 +4,7 @@ import { getAlbumRelease } from "../modules/schema.js";
 import { addReleaseHistory, findReleaseByUrl, saveRelease } from "../modules/storage.js";
 import { containsOneOf, splitString, injectCSSFile, injectJSFile, isEmptyArray, countOccurrences, removeBrackets, isObject } from "../modules/utils.js";
 import { PageType, PageTypeDetector } from "./bandcamp.js";
-import { getBandPhotoSrc, getReleasesData } from "./html.js";
+import { getBandPhotoSrc, getMusicAlbumSchemaData, getReleasesData } from "./html.js";
 
 export function main () {
   console.log('B2D: CONTENT AS MODULE');
@@ -15,11 +15,6 @@ export function main () {
   setupBCDataEventListener(pageType);
   injectJSFile(chrome.runtime.getURL('src/bandcamp/script.js'));
   injectCSSFile(chrome.runtime.getURL('src/bandcamp/styles.css'));
-}
-
-function getMusicAlbumSchemaData() {
-  const jsonLdScript = document.querySelector('script[type="application/ld+json"]');
-  return jsonLdScript ? JSON.parse(jsonLdScript.textContent) : null;
 }
 
 function getCurrentUrl() {

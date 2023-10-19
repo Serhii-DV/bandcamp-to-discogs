@@ -1,6 +1,6 @@
 'use strict';
 
-importModule("src/bandcamp/content_module.js");
+importModule("src/bandcamp/modules/main.js");
 
 function importModule(url) {
   (async () => {

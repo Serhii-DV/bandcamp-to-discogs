@@ -1,7 +1,7 @@
-import { DiscogsCsv } from "../../discogs/discogs-csv.js";
+import { DiscogsCsv } from "../../discogs/app/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { createElementFromHTML, hasDataAttribute, setDataAttribute } from "../../modules/html.js";
-import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls } from "../../modules/storage.js";
+import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls, logStorage } from "../../modules/storage.js";
 import { populateReleasesList, removeButtonLoadingState, setButtonInLoadingState } from "../helpers.js";
 
 /**

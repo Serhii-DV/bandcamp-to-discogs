@@ -1,5 +1,5 @@
 import { Release } from "../app/release.js";
-import { isValidBandcampURL } from "../bandcamp/html.js";
+import { isValidBandcampURL } from "../bandcamp/modules/html.js";
 import { generateKeyForRelease, generateKeyForUrl, generateKeyUrlMapFromUrls, generateKeysFromUrls } from "./key-generator.js";
 import { isArray, isFunction, isObject } from "./utils.js";
 
@@ -129,4 +129,8 @@ export function clearStorageByKey(key, onDone) {
 
       if (isFunction(onDone)) onDone();
     });
+}
+
+export function getStorageSize(callable) {
+  storage.getBytesInUse(null, callable);
 }

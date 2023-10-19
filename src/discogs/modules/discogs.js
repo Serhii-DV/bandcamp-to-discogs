@@ -1,7 +1,7 @@
-import { DiscogsCsv } from "./discogs-csv.js";
-import { Release } from "../app/release.js";
-import config from "../config.js";
-import { replaceTokens } from "../modules/utils.js";
+import { DiscogsCsv } from "../app/discogs-csv.js";
+import { Release } from "../../app/release.js";
+import config from "../../config.js";
+import { replaceTokens } from "../../modules/utils.js";
 
 /**
  * @param {Release} release

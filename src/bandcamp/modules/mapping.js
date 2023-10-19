@@ -1,5 +1,5 @@
-import { getGenreByStyle } from "../discogs/genres.js";
-import { isEmptyObject, isObject, isString } from "../modules/utils.js";
+import { getGenreByStyle } from "../../discogs/modules/genres.js";
+import { isEmptyObject, isObject, isString } from "../../modules/utils.js";
 
 let mapping = {};
 

@@ -11,9 +11,6 @@
   "host_permissions": [
     "https://*.bandcamp.com/*"
   ],
-  "background": {
-    "service_worker": "src/background.js"
-  },
   "content_scripts": [
     {
       "js": [
@@ -47,26 +44,27 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "images/b2d_logo_16.png",
-        "assets/uuid/v5.js",
-        "assets/uuid/v35.js",
-        "assets/uuid/sha1-browser.js",
         "assets/uuid/parse.js",
         "assets/uuid/regex.js",
+        "assets/uuid/sha1-browser.js",
         "assets/uuid/stringify.js",
+        "assets/uuid/v5.js",
+        "assets/uuid/v35.js",
         "assets/uuid/validate.js",
+        "images/b2d_logo_16.png",
         "src/app/release.js",
-        "src/bandcamp/bandcamp.js",
-        "src/bandcamp/content_module.js",
-        "src/bandcamp/html.js",
-        "src/bandcamp/mapping.js",
-        "src/bandcamp/page-album.js",
-        "src/bandcamp/page-music.js",
+        "src/bandcamp/app/page-type.js",
+        "src/bandcamp/modules/bandcamp.js",
+        "src/bandcamp/modules/html.js",
+        "src/bandcamp/modules/main.js",
+        "src/bandcamp/modules/mapping.js",
+        "src/bandcamp/pages/page-album.js",
+        "src/bandcamp/pages/page-music.js",
         "src/bandcamp/styles.css",
         "src/config.js",
-        "src/discogs/discogs-csv.js",
-        "src/discogs/discogs.js",
-        "src/discogs/genres.js",
+        "src/discogs/app/discogs-csv.js",
+        "src/discogs/modules/discogs.js",
+        "src/discogs/modules/genres.js",
         "src/modules/chrome.js",
         "src/modules/html.js",
         "src/modules/key-generator.js",

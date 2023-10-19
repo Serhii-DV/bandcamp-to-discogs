@@ -4,8 +4,9 @@
 
 ### Features
 
-- BC music page: Introduced the widget that shows the amount of releases on the page
-- BC music page: Now it saves the history data for revenues and amount of supporters
+- extension: Re-organize file structure
+- popup: Introduced console command feature with one command "log.storage"
+- popup: Add a badge that displays the storage size
 
 ### Fixed
 

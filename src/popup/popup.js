@@ -1,13 +1,16 @@
 import { Release } from "../app/release.js";
 import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
-import { loadDiscogsGenres } from "../discogs/genres.js";
-import { loadKeywordMapping } from "../bandcamp/mapping.js";
+import { loadDiscogsGenres } from "../discogs/modules/genres.js";
+import { loadKeywordMapping } from "../bandcamp/modules/mapping.js";
 import config from "../config.js";
 import { setupStorageTab } from "./tabs/storage_tab.js";
 import { disable, enable, hide, show, click } from "../modules/html.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
+import { getStorageSize } from "../modules/storage.js";
+import { bytesToSize } from "../modules/utils.js";
+import { setupConsole, setupConsoleRelease } from "./console.js";
 
 const btnWarningMessageTab = document.getElementById("warningMessage-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -68,13 +71,14 @@ function processBandcampReleaseData(data, keywordsMapping) {
   click(btnReleaseTab);
 
   const release = Release.fromObject(data);
+  setupConsoleRelease(release, keywordsMapping);
   setupReleaseTab(
     document.getElementById('release'),
     release,
     btnDownloadRelease,
     btnDiscogsSearchArtist
   );
-  setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
+  setupCsvDataTab(release, btnCsvDataTab);
 }
 
 function processBandcampReleasesData(response) {
@@ -125,9 +129,20 @@ function setupNavigation() {
 }
 
 function main() {
+  setupConsole();
   setupNavigation();
   replaceVersion();
   loadRelease();
+  checkStorageSize();
 }
 
 document.addEventListener('DOMContentLoaded', main);
+
+function checkStorageSize() {
+  getStorageSize(size => {
+    document.querySelectorAll('.storage-size').forEach(el => {
+      el.textContent = bytesToSize(size);
+      el.setAttribute('title', `Storage size (${size} bytes)`)
+    });
+  });
+}

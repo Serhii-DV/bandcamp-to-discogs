@@ -1,7 +1,7 @@
 import { Release } from "../app/release.js";
 import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/genres.js";
-import { loadKeywordMapping } from "../bandcamp/mapping.js";
+import { loadKeywordMapping } from "../bandcamp/modules/mapping.js";
 import config from "../config.js";
 import { setupStorageTab } from "./tabs/storage_tab.js";
 import { disable, enable, hide, show, click } from "../modules/html.js";

@@ -1,4 +1,4 @@
-import { arrayUnique, isArray, isString } from "../modules/utils.js";
+import { arrayUnique, isArray, isString } from "../../modules/utils.js";
 import { Style, getMapping } from "./mapping.js";
 
 const PageTypeEnum = {

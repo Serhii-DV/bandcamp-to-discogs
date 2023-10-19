@@ -1,7 +1,7 @@
-import { Release } from "../app/release.js";
-import { getCurrentUrl } from "../modules/html.js";
-import { findReleaseByUrl, saveRelease } from "../modules/storage.js";
-import { getMusicAlbumSchemaData } from "./html.js";
+import { Release } from "../../app/release.js";
+import { getCurrentUrl } from "../../modules/html.js";
+import { findReleaseByUrl, saveRelease } from "../../modules/storage.js";
+import { getMusicAlbumSchemaData } from "../modules/html.js";
 
 // Setup logic for BC albums page
 export function setupPageAlbum() {

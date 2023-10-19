@@ -144,7 +144,7 @@ function transformReleaseItemsToReleaseListData(releases) {
     const searchLink = getIconLinkHtml(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search');
     data.push({
       title: `${release.artist} - ${release.title} ${viewLink} ${searchLink}`,
-      value: release.uuid,
+      value: release.url,
       id: convertToAlias(release.title)
     });
   });

@@ -20,7 +20,9 @@ export function generateKeyForRelease(release) {
 }
 
 export function generateKeysFromUrls(urls) {
-  return urls.forEach(url => generateKeyForUrl(url));
+  const keys = [];
+  urls.forEach(url => keys.push(generateKeyForUrl(url)));
+  return keys;
 }
 
 export function generateKeyUrlMapFromUrls(urls) {

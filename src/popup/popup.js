@@ -8,9 +8,9 @@ import { disable, enable, hide, show, click } from "../modules/html.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
-import { getStorageSize, logStorage } from "../modules/storage.js";
+import { getStorageSize } from "../modules/storage.js";
 import { bytesToSize } from "../modules/utils.js";
-import { setupConsole } from "./console.js";
+import { setupConsole, setupConsoleRelease } from "./console.js";
 
 const btnWarningMessageTab = document.getElementById("warningMessage-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -71,13 +71,14 @@ function processBandcampReleaseData(data, keywordsMapping) {
   click(btnReleaseTab);
 
   const release = Release.fromObject(data);
+  setupConsoleRelease(release, keywordsMapping);
   setupReleaseTab(
     document.getElementById('release'),
     release,
     btnDownloadRelease,
     btnDiscogsSearchArtist
   );
-  setupCsvDataTab(release, keywordsMapping, btnCsvDataTab);
+  setupCsvDataTab(release, btnCsvDataTab);
 }
 
 function processBandcampReleasesData(response) {

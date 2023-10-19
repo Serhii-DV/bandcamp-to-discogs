@@ -1,7 +1,7 @@
 import { DiscogsCsv } from "../../discogs/app/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { createElementFromHTML, hasDataAttribute, setDataAttribute } from "../../modules/html.js";
-import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls } from "../../modules/storage.js";
+import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls, logStorage } from "../../modules/storage.js";
 import { populateReleasesList, removeButtonLoadingState, setButtonInLoadingState } from "../helpers.js";
 
 /**
@@ -73,4 +73,14 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
     document.getElementById('selectedStatusInfo'),
     document.getElementById('viewedStatusInfo')
   );
+
+  // Setup custom debug commands
+  releasesList.searchInput.addEventListener('keypress', (e) => {
+    if (e.key !== "Enter") return;
+    const inputValue = e.target.value;
+
+    if (inputValue === 'log.storage') {
+      logStorage();
+    }
+  });
 }

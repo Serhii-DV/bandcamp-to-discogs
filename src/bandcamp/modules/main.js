@@ -1,11 +1,9 @@
-import { logStorage } from "../../modules/storage.js";
-import { injectCSSFile, injectJSFile } from "../../modules/utils.js";
+import { injectCSSFile } from "../../modules/utils.js";
 import { PageTypeDetector } from "../app/page-type.js";
 import { setupPageAlbum } from "../pages/page-album.js";
 import { setupPageMusic } from "../pages/page-music.js";
 
 export function main () {
-  logStorage();
   const pageType = (new PageTypeDetector()).detect();
 
   if (pageType.isMusic()) {

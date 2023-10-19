@@ -5,27 +5,31 @@ import { getMusicAlbumSchemaData } from "./html.js";
 
 // Setup logic for BC albums page
 export function setupPageAlbum() {
-  setupRelease();
-  setupSendMessageToPopup();
+  const schema = getMusicAlbumSchemaData();
+  const release = Release.fromBandcampSchema(schema);
+  setupRelease(release);
+  setupSendMessageToPopup(release);
 }
 
-function setupRelease() {
+/**
+ * @param {Release} release
+ */
+function setupRelease(release) {
   // Save release data to the storage if it doesn't exist
   findReleaseByUrl(getCurrentUrl(), null, (key) => {
-    const schemaData = getMusicAlbumSchemaData();
-    const release = Release.fromBandcampSchema(schemaData);
     saveRelease(release);
   });
 }
 
-function setupSendMessageToPopup() {
+/**
+ * @param {Release} release
+ */
+function setupSendMessageToPopup(release) {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'getBandcampData') {
-      findReleaseByUrl(getCurrentUrl(), release => {
-        sendResponse({
-          type: 'release',
-          data: release.toObject()
-        });
+      sendResponse({
+        type: 'release',
+        data: release.toObject()
       });
     }
 

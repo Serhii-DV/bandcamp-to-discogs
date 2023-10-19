@@ -13,8 +13,8 @@ export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue, btn
     setButtonInLoadingState(button);
 
     const checkedUrls = releasesList.getSelectedValues();
-    findMissingUrls(checkedUrls, missingKeys => {
-      openTabs(missingKeys, (tab) => {
+    findMissingUrls(checkedUrls, missingUrls => {
+      openTabs(missingUrls, (tab) => {
         chrome.scripting.executeScript({
           target: { tabId: tab.id },
           func: waitForBandcampData

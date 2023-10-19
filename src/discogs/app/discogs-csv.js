@@ -1,5 +1,5 @@
 import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../../bandcamp/modules/bandcamp.js";
-import { capitalizeEachWord } from "../../modules/utils.js";
+import { capitalizeEachWord, removeZeroHours } from "../../modules/utils.js";
 import { Release, Track } from "../../app/release.js";
 
 /**
@@ -122,7 +122,7 @@ export class DiscogsCsv {
    */
   toCsvObject() {
     const tracks = this.tracks
-      .map(track => `${capitalizeEachWord(track.title)} ${track.duration}`)
+      .map(track => `${capitalizeEachWord(track.title)} ${removeZeroHours(track.duration)}`)
       .join("\r");
     const notes = this.notes ? this.notes.replace(/"/g, '""') : '';
 

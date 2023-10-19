@@ -8,6 +8,7 @@ import { disable, enable, hide, show, click } from "../modules/html.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
+import { logStorage } from "../modules/storage.js";
 
 const btnWarningMessageTab = document.getElementById("warningMessage-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -125,9 +126,16 @@ function setupNavigation() {
 }
 
 function main() {
+  setupConsole();
   setupNavigation();
   replaceVersion();
   loadRelease();
 }
 
 document.addEventListener('DOMContentLoaded', main);
+
+// Setup console
+function setupConsole() {
+  const consoleCommand = document.querySelector('console-command');
+  consoleCommand.addCommand('log.storage', () => { logStorage();});
+}

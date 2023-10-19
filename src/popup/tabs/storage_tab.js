@@ -73,14 +73,4 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
     document.getElementById('selectedStatusInfo'),
     document.getElementById('viewedStatusInfo')
   );
-
-  // Setup custom debug commands
-  releasesList.searchInput.addEventListener('keypress', (e) => {
-    if (e.key !== "Enter") return;
-    const inputValue = e.target.value;
-
-    if (inputValue === 'log.storage') {
-      logStorage();
-    }
-  });
 }

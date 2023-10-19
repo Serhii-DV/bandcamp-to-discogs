@@ -8,7 +8,8 @@ import { disable, enable, hide, show, click } from "../modules/html.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
-import { logStorage } from "../modules/storage.js";
+import { getStorageSize, logStorage } from "../modules/storage.js";
+import { bytesToSize } from "../modules/utils.js";
 
 const btnWarningMessageTab = document.getElementById("warningMessage-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -130,6 +131,7 @@ function main() {
   setupNavigation();
   replaceVersion();
   loadRelease();
+  checkStorageSize();
 }
 
 document.addEventListener('DOMContentLoaded', main);
@@ -138,4 +140,13 @@ document.addEventListener('DOMContentLoaded', main);
 function setupConsole() {
   const consoleCommand = document.querySelector('console-command');
   consoleCommand.addCommand('log.storage', () => { logStorage();});
+}
+
+function checkStorageSize() {
+  getStorageSize(size => {
+    document.querySelectorAll('.storage-size').forEach(el => {
+      el.textContent = bytesToSize(size);
+      el.setAttribute('title', `Storage size (${size} bytes)`)
+    });
+  });
 }

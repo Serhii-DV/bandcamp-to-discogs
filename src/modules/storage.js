@@ -130,3 +130,7 @@ export function clearStorageByKey(key, onDone) {
       if (isFunction(onDone)) onDone();
     });
 }
+
+export function getStorageSize(callable) {
+  storage.getBytesInUse(null, callable);
+}

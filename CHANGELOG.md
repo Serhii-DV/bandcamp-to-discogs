@@ -6,6 +6,7 @@
 
 - extension: Re-organize file structure
 - popup: Introduced console command feature with one command "log.storage"
+- popup: Add a badge that displays the storage size
 
 ### Fixed
 

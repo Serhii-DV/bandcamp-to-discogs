@@ -11,9 +11,6 @@
   "host_permissions": [
     "https://*.bandcamp.com/*"
   ],
-  "background": {
-    "service_worker": "src/background.js"
-  },
   "content_scripts": [
     {
       "js": [

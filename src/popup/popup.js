@@ -10,6 +10,7 @@ import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 import { getStorageSize, logStorage } from "../modules/storage.js";
 import { bytesToSize } from "../modules/utils.js";
+import { setupConsole } from "./console.js";
 
 const btnWarningMessageTab = document.getElementById("warningMessage-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -135,12 +136,6 @@ function main() {
 }
 
 document.addEventListener('DOMContentLoaded', main);
-
-// Setup console
-function setupConsole() {
-  const consoleCommand = document.querySelector('console-command');
-  consoleCommand.addCommand('log.storage', () => { logStorage();});
-}
 
 function checkStorageSize() {
   getStorageSize(size => {

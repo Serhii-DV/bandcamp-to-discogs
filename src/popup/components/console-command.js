@@ -56,11 +56,26 @@ class ConsoleCommand extends HTMLElement {
       self.commands[commandName]();
       self.inputElement.value = '';
     }
+    self.hide();
     return self;
   }
 
-  focusInput() {
-    this.inputElement.focus();
+  show() {
+    const self = this;
+    self.style.display = "block";
+    self.inputElement.focus();
+    return self;
+  }
+
+  hide() {
+    const self = this;
+    self.style.display = "none";
+    return self;
+  }
+
+  toggle() {
+    const self = this;
+    return self.style.display === "none" ? self.show() : self.hide();
   }
 }
 
@@ -73,8 +88,7 @@ customElements.define('console-command', ConsoleCommand);
 
   document.addEventListener("keydown", event => {
     if ((event.ctrlKey || event.metaKey) && event.key === "`") {
-      consoleCommand.style.display = consoleCommand.style.display === "none" ? "block" : "none";
-      consoleCommand.focusInput();
+      consoleCommand.toggle();
     }
   });
 })();

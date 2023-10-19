@@ -1,5 +1,6 @@
 import { Release } from "../app/release.js";
 import { releaseToDiscogsCsv } from "../discogs/modules/discogs.js";
+import { logStorage } from "../modules/storage.js";
 
 const consoleCommand = document.querySelector('console-command');
 

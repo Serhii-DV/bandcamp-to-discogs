@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Bandcamp To Discogs",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Generates a CSV file for the Bandcamp artist release. The CSV file can be imported into Discogs as a draft.",
   "permissions": [
     "activeTab",
@@ -11,9 +11,6 @@
   "host_permissions": [
     "https://*.bandcamp.com/*"
   ],
-  "background": {
-    "service_worker": "src/background.js"
-  },
   "content_scripts": [
     {
       "js": [
@@ -47,21 +44,33 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "src/bandcamp/script.js",
-        "src/bandcamp/styles.css",
-        "src/bandcamp/content_module.js",
-        "src/bandcamp/html.js",
+        "assets/uuid/parse.js",
+        "assets/uuid/regex.js",
+        "assets/uuid/sha1-browser.js",
+        "assets/uuid/stringify.js",
+        "assets/uuid/v5.js",
+        "assets/uuid/v35.js",
+        "assets/uuid/validate.js",
+        "images/b2d_logo_16.png",
         "src/app/release.js",
-        "src/discogs/discogs.js",
+        "src/bandcamp/app/page-type.js",
+        "src/bandcamp/modules/bandcamp.js",
+        "src/bandcamp/modules/html.js",
+        "src/bandcamp/modules/main.js",
+        "src/bandcamp/modules/mapping.js",
+        "src/bandcamp/pages/page-album.js",
+        "src/bandcamp/pages/page-music.js",
+        "src/bandcamp/styles.css",
+        "src/config.js",
+        "src/discogs/app/discogs-csv.js",
+        "src/discogs/modules/discogs.js",
+        "src/discogs/modules/genres.js",
         "src/modules/chrome.js",
         "src/modules/html.js",
-        "src/modules/utils.js",
-        "src/discogs/discogs-csv.js",
-        "src/config.js",
-        "src/bandcamp/bandcamp.js",
-        "src/bandcamp/mapping.js",
-        "src/discogs/genres.js",
-        "images/b2d_logo_16.png"
+        "src/modules/key-generator.js",
+        "src/modules/schema.js",
+        "src/modules/storage.js",
+        "src/modules/utils.js"
       ],
       "matches": ["https://*.bandcamp.com/*"]
     },

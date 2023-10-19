@@ -1,7 +1,16 @@
 .b2d-widget-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   margin: 0 0 2em 0;
-  padding-left: 20px;
+  padding: 0 10px 0 20px;
   background-position: 0 50%;
   background-repeat: no-repeat;
   background-image: url("../../images/b2d_logo_16.png");
+}
+
+.b2d-albumAmount .b2d-visible,
+.b2d-albumAmount .b2d-total {
+  font-size: 130%;
 }

@@ -32,7 +32,8 @@
         <b2d-icon name="download"></b2d-icon>
       </button>
       <a id="discogsCsvToDraft" class="btn btn-dark rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
-        <b2d-icon name="box-arrow-up-right"></b2d-icon>
+        <!-- <b2d-icon name="box-arrow-up-right"></b2d-icon> -->
+        <b2d-icon name="discogs"></b2d-icon>
       </a>
       <a id="discogsSearchArtist" class="btn btn-dark rounded-0" href="https://www.discogs.com/search" target="_blank" role="button" title="Search for Discogs artist release" disabled>
         <b2d-icon name="search"></b2d-icon>
@@ -71,7 +72,8 @@
   </div>
   <footer id="mainFooter" class="small">
     <div class="badges-status">
-      <span class="badge bg-dark">Version: <span class="version"></span></span>
+      <span class="badge bg-dark version" title="Current version"></span>
+      <span class="badge bg-dark storage-size" title="Storage size"></span>
       <span class="badge bg-dark" id="selectedStatusInfo" data-format="Selected: {selected}/{filtered}"></span>
       <span class="badge bg-dark" id="viewedStatusInfo" data-format="Viewed: {filtered}/{total}"></span>
     </div>
@@ -81,6 +83,7 @@
   <script src="components/icon.js"></script>
   <script src="components/external-content.js"></script>
   <script src="components/releases-list.js"></script>
+  <script src="components/console-command.js"></script>
   <script type="module" src="popup.js"></script>
 </body>
 </html>

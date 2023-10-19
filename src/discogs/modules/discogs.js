@@ -1,7 +1,7 @@
-import { DiscogsCsv } from "./discogs-csv.js";
-import { Release } from "../app/release.js";
-import config from "../config.js";
-import { replaceTokens } from "../modules/utils.js";
+import { DiscogsCsv } from "../app/discogs-csv.js";
+import { Release } from "../../app/release.js";
+import config from "../../config.js";
+import { replaceTokens } from "../../modules/utils.js";
 
 /**
  * @param {Release} release
@@ -26,6 +26,6 @@ export function getSearchDiscogsReleaseUrl(artist, release) {
 export function generateSubmissionNotes(release) {
   return replaceTokens(config.text.notes, {
     extension_url: config.extension_url,
-    release_url: release.url
+    release_url: release.releaseItem.url
   });
 }

@@ -1,5 +1,5 @@
 import { Release } from "../../app/release.js";
-import { getSearchDiscogsReleaseUrl } from "../../discogs/discogs.js";
+import { getSearchDiscogsReleaseUrl } from "../../discogs/modules/discogs.js";
 import { setBackgroundImage } from "../helpers.js";
 import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 
@@ -11,7 +11,7 @@ import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
  */
 export function setupReleaseTab(tab, release, btnDownloadRelease, btnDiscogsSearch) {
   outputRelease(tab, release);
-  btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.artist, release.title);
+  btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(release.releaseItem.artist, release.releaseItem.title);
   setupBtnToDownloadReleasesAsCsv(btnDownloadRelease, [release]);
 }
 
@@ -25,9 +25,9 @@ function outputRelease(tab, release) {
   const releaseDate = tab.querySelector('#release-year');
   const releaseContent = tab.querySelector('.release-content');
 
-  setBackgroundImage(document.querySelector('.bg-image'), release.coverSrc.big);
-  releaseArtist.innerHTML = release.artist;
-  releaseTitle.innerHTML = release.title;
+  setBackgroundImage(document.querySelector('.bg-image'), release.image);
+  releaseArtist.innerHTML = release.releaseItem.artist;
+  releaseTitle.innerHTML = release.releaseItem.title;
   releaseDate.innerHTML = release.date.getFullYear();
 
   let countArtistLines = countLinesInHtmlElement(releaseArtist);
@@ -39,7 +39,7 @@ function outputRelease(tab, release) {
   let trackinfo = '';
 
   release.tracks.forEach(track => {
-    trackinfo += `${track.num}. ${track.title} (${track.durationText})<br>`;
+    trackinfo += `${track.num}. ${track.title} (${track.duration})<br>`;
   });
 
   releaseContent.innerHTML = trackinfo;

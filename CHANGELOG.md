@@ -1,5 +1,17 @@
 # Change log
 
+## 0.6.0 (2023-10-XX)
+
+### Features
+
+- extension: Re-organize file structure
+- popup: Introduced console command feature with one command "log.storage"
+- popup: Add a badge that displays the storage size
+
+### Fixed
+
+- BC music page: Artists filter trimmed spaces in wrong way
+
 ## 0.5.0 (2023-10-10)
 
 ### Features

@@ -1,5 +1,10 @@
-import { getDataAttribute } from "../modules/html.js";
-import { removeInvisibleChars, trimCharactersFromString } from "../modules/utils.js";
+import { getDataAttribute } from "../../modules/html.js";
+import { removeInvisibleChars, trimCharactersFromString } from "../../modules/utils.js";
+
+export function getMusicAlbumSchemaData() {
+  const jsonLdScript = document.querySelector('script[type="application/ld+json"]');
+  return jsonLdScript ? JSON.parse(jsonLdScript.textContent) : null;
+}
 
 function extractDataFromMusicGridElement(element) {
   let artist = element.querySelector('.artist-override')?.innerText;
@@ -38,4 +43,9 @@ export function getReleasesData() {
 export function getBandPhotoSrc() {
   const imgBandPhoto = document.querySelector('.band-photo');
   return imgBandPhoto.src;
+}
+
+export function isValidBandcampURL(url) {
+  const pattern = /^(https?:\/\/)?([a-z0-9-]+\.)*bandcamp\.com(\/[a-z0-9-]+)*(\/[a-z0-9-]+\/[a-z0-9-]+)?$/;
+  return pattern.test(url);
 }

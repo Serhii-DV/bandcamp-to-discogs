@@ -208,7 +208,7 @@ export function countOccurrences(arr) {
 
 export function removeBrackets(inputString) {
   // Use a regular expression to remove the brackets and their contents
-  return inputString.replace(/\s*\([^)]*\)\s*/g, '').trim();
+  return inputString.replace(/\s*\([^)]*\)/, '');
 }
 
 export function trimCharactersFromString(inputString, charactersToTrim) {
@@ -227,4 +227,23 @@ export function removeInvisibleChars(inputString) {
   const cleanedString = inputString.replace(invisibleCharsRegex, '');
 
   return cleanedString;
+}
+
+export function bytesToSize(bytes) {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+
+  if (bytes === 0) return '0 Byte';
+
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+  return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+}
+
+export function removeZeroHours(duration) {
+  const parts = duration.split(':');
+  if (parts[0] === '00') {
+    // If hours are "00", remove the first element
+    parts.shift();
+  }
+  // Join the remaining parts with ':' to reconstruct the duration
+  return parts.join(':');
 }

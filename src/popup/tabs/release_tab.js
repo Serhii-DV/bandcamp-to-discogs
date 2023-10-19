@@ -1,5 +1,5 @@
 import { Release } from "../../app/release.js";
-import { getSearchDiscogsReleaseUrl } from "../../discogs/discogs.js";
+import { getSearchDiscogsReleaseUrl } from "../../discogs/modules/discogs.js";
 import { setBackgroundImage } from "../helpers.js";
 import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 

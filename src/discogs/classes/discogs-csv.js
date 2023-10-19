@@ -1,6 +1,6 @@
-import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../bandcamp/modules/bandcamp.js";
-import { capitalizeEachWord } from "../modules/utils.js";
-import { Release, Track } from "../app/release.js";
+import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../../bandcamp/modules/bandcamp.js";
+import { capitalizeEachWord } from "../../modules/utils.js";
+import { Release, Track } from "../../app/release.js";
 
 /**
  * Represents a Discogs CSV entry.

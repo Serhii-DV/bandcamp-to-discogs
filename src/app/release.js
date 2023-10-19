@@ -1,4 +1,4 @@
-import { generateSubmissionNotes } from '../discogs/discogs.js';
+import { generateSubmissionNotes } from '../discogs/modules/discogs.js';
 import { getExtensionManifest } from '../modules/chrome.js';
 import { generateKeyForUrl } from '../modules/key-generator.js';
 import { padStringLeft } from '../modules/utils.js';

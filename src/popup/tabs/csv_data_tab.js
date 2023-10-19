@@ -1,5 +1,5 @@
 import { Release } from "../../app/release.js";
-import { releaseToDiscogsCsv } from "../../discogs/discogs.js";
+import { releaseToDiscogsCsv } from "../../discogs/modules/discogs.js";
 import { createKeyValueDetails, objectToDetailsElement, objectToHtmlElement } from "../helpers.js";
 
 export function setupCsvDataTab(release, keywordsMapping, btnCsvData) {

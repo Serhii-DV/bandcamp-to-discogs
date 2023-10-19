@@ -1,5 +1,5 @@
 import { Release, ReleaseItem } from "../app/release.js";
-import { getSearchDiscogsReleaseUrl } from "../discogs/discogs.js";
+import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
 import { disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
 

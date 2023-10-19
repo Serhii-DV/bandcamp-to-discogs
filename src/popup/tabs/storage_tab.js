@@ -1,4 +1,4 @@
-import { DiscogsCsv } from "../../discogs/discogs-csv.js";
+import { DiscogsCsv } from "../../discogs/classes/discogs-csv.js";
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { createElementFromHTML, hasDataAttribute, setDataAttribute } from "../../modules/html.js";
 import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls } from "../../modules/storage.js";

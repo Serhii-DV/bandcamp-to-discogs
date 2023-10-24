@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "disconnect": "^1.2.2"
+  }
+}

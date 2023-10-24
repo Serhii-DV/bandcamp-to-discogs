@@ -38,6 +38,9 @@
       <a id="discogsSearchArtist" class="btn btn-dark rounded-0" href="https://www.discogs.com/search" target="_blank" role="button" title="Search for Discogs artist release" disabled>
         <b2d-icon name="search"></b2d-icon>
       </a>
+      <button class="btn btn-dark rounded-0" id="discogsTab-tab" data-bs-toggle="tab" data-bs-target="#discogsTab" role="tab" aria-controls="discogsTab" aria-selected="true" type="button" title="Dicogs tab">
+        <b2d-icon name="discogs"></b2d-icon>
+      </button>
       <button class="btn btn-dark rounded-0" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" role="tab" aria-controls="about" aria-selected="true" type="button" title="About the extension">
         <b2d-icon name="question-square"></b2d-icon>
       </button>
@@ -63,6 +66,10 @@
       <!-- Storage data -->
       <div class="tab-pane fade small" id="storageData" role="tabpanel" aria-labelledby="storageData-tab" tabindex="0">
         <external-content href="content/storage_tab.html"></external-content>
+      </div>
+      <!-- Discogs tab -->
+      <div class="tab-pane fade small" id="discogsTab" role="tabpanel" aria-labelledby="discogsTab-tab" tabindex="6">
+        <external-content href="content/discogs_tab.html"></external-content>
       </div>
       <!-- About -->
       <div class="tab-pane fade content-text" id="about" role="tabpanel" aria-labelledby="about-tab" tabindex="0">

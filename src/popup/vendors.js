@@ -1,3 +1,5 @@
+import bootstrap from 'bootstrap';
+
 // Custom components
 import { B2DIconComponent } from './components/icon.js';
 import { ConsoleCommand } from './components/console-command.js';

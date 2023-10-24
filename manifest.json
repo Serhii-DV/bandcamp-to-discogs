@@ -15,7 +15,7 @@
     {
       "js": [
         "assets/isotope/isotope.pkgd.min.js",
-        "src/bandcamp/content.js"
+        "dist/bandcamp-content.js"
       ],
       "matches": ["https://*.bandcamp.com/*"],
       "run_at": "document_end"
@@ -44,13 +44,6 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "assets/uuid/parse.js",
-        "assets/uuid/regex.js",
-        "assets/uuid/sha1-browser.js",
-        "assets/uuid/stringify.js",
-        "assets/uuid/v5.js",
-        "assets/uuid/v35.js",
-        "assets/uuid/validate.js",
         "images/b2d_logo_16.png",
         "src/app/release.js",
         "src/bandcamp/app/page-type.js",

@@ -4,6 +4,7 @@ module.exports = {
   entry: {
     vendors: './src/popup/vendors.js',
     popup: './src/popup/popup.js',
+    "bandcamp-content": './src/bandcamp/modules/main.js'
   },
   output: {
     filename: '[name].js',

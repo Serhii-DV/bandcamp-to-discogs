@@ -14,3 +14,5 @@ export function main () {
 
   injectCSSFile(chrome.runtime.getURL('src/bandcamp/styles.css'));
 }
+
+main();

@@ -37,6 +37,18 @@ export class Release {
     this.keywords = keywords;
   }
 
+  get artist() {
+    return this.releaseItem.artist;
+  }
+
+  get url() {
+    return this.releaseItem.url;
+  }
+
+  get title() {
+    return this.releaseItem.title;
+  }
+
   /**
    * @param {Object} TralbumData
    * @param {Object} BandData

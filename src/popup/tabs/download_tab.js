@@ -30,5 +30,7 @@ export function downloadReleasesCsv(releases) {
   const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
   const csv = objectsToCsv(csvObjects);
 
-  downloadCsv(csv, `discogs-selected-releases-${firstRelease.artist}`);
+  const filename = releases.length > 1 ? `discogs-selected-releases-${firstRelease.artist}` : `discogs-releases-${firstRelease.artist}-${firstRelease.title}`;
+
+  downloadCsv(csv, filename);
 }

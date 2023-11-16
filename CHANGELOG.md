@@ -1,5 +1,12 @@
 # Change log
 
+## 0.7.0 (2023-11-XX)
+
+### Features
+
+- core: use webpack to compile assets
+- core: use nmp modules: twitter bootstrap, uuidjs, etc.
+
 ## 0.6.1 (2023-10-19)
 
 ### Fixed

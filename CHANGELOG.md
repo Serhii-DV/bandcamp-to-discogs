@@ -1,12 +1,13 @@
 # Change log
 
-## 0.7.0 (2023-11-XX)
+## 0.7.0 (2023-11-16)
 
 ### Features
 
-- core: use webpack to compile assets
-- core: use nmp modules: twitter bootstrap, uuidjs, etc.
-- popup: now it's possible to sort data in the releases table
+- core: Use webpack to compile assets
+- core: Use nmp modules: twitter bootstrap, uuidjs, etc.
+- core: Re-organize folder structure
+- popup: Introduced sorting data feature in the releases table
 
 ### Fixed
 

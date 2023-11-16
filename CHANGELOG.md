@@ -6,6 +6,11 @@
 
 - core: use webpack to compile assets
 - core: use nmp modules: twitter bootstrap, uuidjs, etc.
+- popup: now it's possible to sort data in the releases table
+
+### Fixed
+
+- popup: fixed saved CSV file name
 
 ## 0.6.1 (2023-10-19)
 

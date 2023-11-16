@@ -1,4 +1,4 @@
-import v5 from '../../assets/uuid/v5.js';
+import { v5 as uuid5} from 'uuid';
 import { Release } from '../app/release.js';
 
 /**
@@ -6,8 +6,8 @@ import { Release } from '../app/release.js';
  * @returns {String}
  */
 export function generateKeyForUrl(url) {
-  const uuid = v5(url, v5.URL);
-  // console.log(`B2D: v5(${url}): `, uuid);
+  const uuid = uuid5(url, uuid5.URL);
+  // console.log(`B2D: uuid5(${url}): `, uuid);
   return uuid;
 }
 

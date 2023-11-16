@@ -35,3 +35,7 @@ export async function openTabs(urls, callback) {
 
   return Promise.all(tabPromises);
 }
+
+export function getExtensionUrl(path) {
+  return chrome.runtime.getURL(path);
+}

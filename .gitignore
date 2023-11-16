@@ -1,0 +1,37 @@
+# Node.js
+node_modules/
+
+# npm
+npm-debug.log
+
+# Log files
+*.log
+logs/
+log/
+
+# Dependency directories
+jspm_packages/
+bower_components/
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn
+yarn-error.log
+.pnp.*
+.pnp.local.*
+
+# dotenv environment variables file
+.env
+
+# Visual Studio Code project folder
+.vscode/
+
+# User-specific files
+npm-debug.log.*
+pids
+logs
+yarn-error.log.*
+
+# Editor directories and files
+.vscode/

@@ -8,8 +8,8 @@ export function setDataAttribute(element, attributeName, attributeValue = '') {
   element.setAttribute(`data-${attributeName}`, attributeValue);
 }
 
-export function getDataAttribute(element, attributeName) {
-  return element.getAttribute(`data-${attributeName}`);
+export function getDataAttribute(element, attributeName, defaultValue = undefined) {
+  return hasDataAttribute(element, attributeName) ? element.getAttribute(`data-${attributeName}`) : defaultValue;
 }
 
 export function show(...element) {

@@ -1,4 +1,4 @@
-import { getDataAttribute } from "../../modules/html";
+import { createElementFromHTML, getDataAttribute, hasDataAttribute, setDataAttribute } from "../../modules/html";
 
 class ReleasesList extends HTMLElement {
   constructor() {
@@ -17,10 +17,14 @@ class ReleasesList extends HTMLElement {
           <input type="text" id="${searchInputId}" class="form-control form-control-sm" placeholder="Search...">
           <div class="control-buttons btn-group btn-group-sm" role="group" aria-label="Control buttons">
           </div>
-          <button id="${sortingId}-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Sorting">Sorting</button>
+          <button id="${sortingId}-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Sorted by default">
+            <b2d-icon name="sort-down"></b2d-icon>
+          </button>
           <ul id="${sortingId}" class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#" data-dir="asc" data-sorting-title="A..z">By name A..z</a></li>
-            <li><a class="dropdown-item" href="#" data-dir="desc" data-sorting-title="z..A">By name z..A</a></li>
+            <li><a class="dropdown-item" href="#" data-dir="asc" data-sorting-icon="sort-down" data-sorting-title="Sorted by default"><b2d-icon name="sort-down"></b2d-icon> reset sorting</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" data-col-index="1" data-dir="asc" data-sorting-icon="sort-alpha-down" data-sorting-title="Sorted by name A..z"><b2d-icon name="sort-alpha-down"></b2d-icon> by name A..z</a></li>
+            <li><a class="dropdown-item" href="#" data-col-index="1" data-dir="desc" data-sorting-icon="sort-alpha-down-alt" data-sorting-title="Sorted by name z..A"><b2d-icon name="sort-alpha-down-alt"></b2d-icon> by name z..A</a></li>
           </ul>
         </div>
         <table class="table table-hover table-sm table-transparent table-borderless">
@@ -84,26 +88,45 @@ class ReleasesList extends HTMLElement {
     function setupSorting() {
       const sortingUl = self.querySelector('#' + sortingId);
       const sortingBtn = self.querySelector('#' + sortingId + '-button');
-      const sortingOptions = sortingUl.querySelectorAll('.dropdown-item');
+      const sortingItems = sortingUl.querySelectorAll('.dropdown-item');
 
-      sortingOptions.forEach((option) => {
+      function setupSortingButton(sortingItem) {
+        const colIndex = parseInt(getDataAttribute(sortingItem, 'col-index', -1));
+        const dir = getDataAttribute(sortingItem, 'dir', 'asc');
+        const icon = getDataAttribute(sortingItem, 'sorting-icon');
+        const title = getDataAttribute(sortingItem, 'sorting-title');
+
+        sortingBtn.innerHTML = `<b2d-icon name="${icon}"></b2d-icon>`;
+        sortingBtn.setAttribute('title', title);
+        sortTable(colIndex > -1 ? colIndex : undefined, dir);
+      }
+
+      sortingItems.forEach((option) => {
         option.addEventListener('click', (e) => {
-          const el = e.target;
-          sortingBtn.innerText = getDataAttribute(el, 'sorting-title');
-          sortTable(1, getDataAttribute(el, 'dir'));
+          setupSortingButton(e.target);
         });
       });
     }
 
-    const sortTable = (columnIndex, dir) => {
+    const sortTable = (columnIndex, dir = 'asc') => {
       const rows = Array.from(table.rows).slice(1); // Exclude the header row
+      const hasColumnIndex = columnIndex !== undefined;
 
-      rows.sort((a, b) => {
-          const x = a.cells[columnIndex].textContent.toLowerCase();
-          const y = b.cells[columnIndex].textContent.toLowerCase();
+      if (hasColumnIndex) {
+        rows.sort((a, b) => {
+            const x = a.cells[columnIndex].textContent;
+            const y = b.cells[columnIndex].textContent;
 
-          return dir === "asc" ? x.localeCompare(y) : y.localeCompare(x);
-      });
+            return dir === "asc" ? x.localeCompare(y) : y.localeCompare(x);
+        });
+      } else {
+        rows.sort((a, b) => {
+            const x = parseInt(a.getAttribute('data-sort'));
+            const y = parseInt(b.getAttribute('data-sort'));
+
+            return dir === "asc" ? x - y : y - x;
+        });
+      }
 
       // Reorder the rows in the table
       rows.forEach((row) => table.tBodies[0].appendChild(row));
@@ -126,7 +149,6 @@ class ReleasesList extends HTMLElement {
       const total = self.querySelectorAll('tr.release-item').length;
       const selected = self.getSelectedValues().length;
       const filtered = self.querySelectorAll('tr.release-item:not(.visually-hidden)').length;
-      const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
       const statusText = element.getAttribute("data-format")
         .replace(new RegExp("{total}", "g"), total)
         .replace(new RegExp("{selected}", "g"), selected)
@@ -211,6 +233,7 @@ class ReleasesList extends HTMLElement {
       const row = document.createElement("tr");
       const checkboxId = self.getPrefixed('checkbox_'+index);
       row.classList.add('release-item');
+      setDataAttribute(row, 'sort', index);
       row.innerHTML = `
         <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
         <td><label for="${checkboxId}">${item.title}</label></td>

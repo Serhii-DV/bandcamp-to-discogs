@@ -1,3 +1,5 @@
+import { getDataAttribute } from "../../modules/html";
+
 class ReleasesList extends HTMLElement {
   constructor() {
     super();
@@ -8,12 +10,18 @@ class ReleasesList extends HTMLElement {
 
     const selectAllCheckboxId = self.getPrefixed('selectAllCheckbox');
     const searchInputId = self.getPrefixed('searchInput');
+    const sortingId = self.getPrefixed('sorting');
     const template = document.createElement('template');
     template.innerHTML = `
         <div class="content-header input-group input-group-sm sticky-top">
           <input type="text" id="${searchInputId}" class="form-control form-control-sm" placeholder="Search...">
           <div class="control-buttons btn-group btn-group-sm" role="group" aria-label="Control buttons">
           </div>
+          <button id="${sortingId}-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Sorting">Sorting</button>
+          <ul id="${sortingId}" class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#" data-dir="asc" data-sorting-title="A..z">By name A..z</a></li>
+            <li><a class="dropdown-item" href="#" data-dir="desc" data-sorting-title="z..A">By name z..A</a></li>
+          </ul>
         </div>
         <table class="table table-hover table-sm table-transparent table-borderless">
           <thead>
@@ -72,6 +80,36 @@ class ReleasesList extends HTMLElement {
 
       self.refreshStatus();
     }
+
+    function setupSorting() {
+      const sortingUl = self.querySelector('#' + sortingId);
+      const sortingBtn = self.querySelector('#' + sortingId + '-button');
+      const sortingOptions = sortingUl.querySelectorAll('.dropdown-item');
+
+      sortingOptions.forEach((option) => {
+        option.addEventListener('click', (e) => {
+          const el = e.target;
+          sortingBtn.innerText = getDataAttribute(el, 'sorting-title');
+          sortTable(1, getDataAttribute(el, 'dir'));
+        });
+      });
+    }
+
+    const sortTable = (columnIndex, dir) => {
+      const rows = Array.from(table.rows).slice(1); // Exclude the header row
+
+      rows.sort((a, b) => {
+          const x = a.cells[columnIndex].textContent.toLowerCase();
+          const y = b.cells[columnIndex].textContent.toLowerCase();
+
+          return dir === "asc" ? x.localeCompare(y) : y.localeCompare(x);
+      });
+
+      // Reorder the rows in the table
+      rows.forEach((row) => table.tBodies[0].appendChild(row));
+    };
+
+    setupSorting();
   }
 
   refreshStatus() {

@@ -1,6 +1,12 @@
 # Change log
 
-## 0.6.0 (2023-10-XX)
+## 0.6.1 (2023-10-19)
+
+### Fixed
+
+- Multiple releases download feature is broken
+
+## 0.6.0 (2023-10-19)
 
 ### Features
 

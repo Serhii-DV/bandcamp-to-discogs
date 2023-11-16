@@ -1,5 +1,6 @@
 import { Release } from "../../app/release.js";
 import { getSearchDiscogsReleaseUrl } from "../../discogs/modules/discogs.js";
+import { capitalizeEachWord, removeZeroHours } from "../../modules/utils.js";
 import { setBackgroundImage } from "../helpers.js";
 import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 
@@ -38,11 +39,11 @@ function outputRelease(tab, release) {
 
   let trackinfo = '';
 
-  release.tracks.forEach(track => {
-    trackinfo += `${track.num}. ${track.title} (${track.duration})<br>`;
-  });
+  const tracks = release.tracks
+    .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeZeroHours(track.duration)})`)
+    .join("<br>");
 
-  releaseContent.innerHTML = trackinfo;
+  releaseContent.innerHTML = tracks;
 }
 
 function countLinesInHtmlElement(el) {

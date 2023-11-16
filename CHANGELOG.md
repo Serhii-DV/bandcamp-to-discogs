@@ -1,6 +1,25 @@
 # Change log
 
-## 0.6.0 (2023-10-XX)
+## 0.7.0 (2023-11-16)
+
+### Features
+
+- core: Use webpack to compile assets
+- core: Use nmp modules: twitter bootstrap, uuidjs, etc.
+- core: Re-organize folder structure
+- popup: Introduced sorting data feature in the releases table
+
+### Fixed
+
+- popup: fixed saved CSV file name
+
+## 0.6.1 (2023-10-19)
+
+### Fixed
+
+- Multiple releases download feature is broken
+
+## 0.6.0 (2023-10-19)
 
 ### Features
 

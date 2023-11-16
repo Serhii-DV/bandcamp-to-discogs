@@ -7,5 +7,5 @@ function importModule(url) {
     const src = chrome.runtime.getURL(url);
     const contentMain = await import(src);
     contentMain.main();
-  })()
+  })();
 }

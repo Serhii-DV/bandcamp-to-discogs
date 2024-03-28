@@ -49,7 +49,7 @@ export class Release {
     return this.releaseItem.title;
   }
 
-  toObject() {
+  toStorageObject() {
     return {
       uuid: this.releaseItem.uuid,
       artist: this.releaseItem.artist,
@@ -68,7 +68,7 @@ export class Release {
    * @param {Object} obj - A simple object.
    * @returns {Release} An instance of the Release class.
    */
-  static fromObject(obj) {
+  static fromStorageObject(obj) {
     if (!obj.url || !obj.tracks) {
       throw new Error('Cannot create Release object from object', obj);
     }

@@ -30,7 +30,12 @@ export class Release {
   /**
    * @type {Date}
    */
-  date;
+  datePublished;
+
+  /**
+   * @type {Date}
+   */
+  dateModified;
 
   /**
    * @type {Array.<Track>}
@@ -56,16 +61,16 @@ export class Release {
    * @param {string} artist
    * @param {string} title
    * @param {string} label
-   * @param {Date} date
+   * @param {Date} datePublished
    * @param {Array.<Track>} tracks
    * @param {string} url
    * @param {string} image
    * @param {Array.<string>} keywords
    */
-  constructor(artist, title, label, date, tracks, url, image, keywords) {
+  constructor(artist, title, label, datePublished, tracks, url, image, keywords) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
-    this.date = date;
+    this.datePublished = datePublished;
     this.tracks = tracks;
     this.tracksQty = tracks.length;
     this.image = image;
@@ -123,7 +128,7 @@ export class Release {
     const artist = schema.byArtist.name;
     const title = schema.name;
     const label = schema.publisher.name;
-    const date = new Date(schema.datePublished);
+    const datePublished = new Date(schema.datePublished);
     const tracks = schema.track.itemListElement.map(track => new Track(
       track.position,
       track.item.name,
@@ -137,7 +142,7 @@ export class Release {
       artist,
       title,
       label,
-      date,
+      datePublished,
       tracks,
       url,
       image,
@@ -152,7 +157,7 @@ export class Release {
       title: this.releaseItem.title,
       url: this.releaseItem.url,
       label: this.label,
-      date: this.date.toISOString(),
+      date: this.datePublished.toISOString(),
       tracks: this.tracks,
       image: this.image,
       keywords: this.keywords

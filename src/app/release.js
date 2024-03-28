@@ -92,7 +92,7 @@ export class Release {
     const tracks = schema.track.itemListElement.map(track => new Track(
       track.position,
       track.item.name,
-      parseDuration(track.item.duration)
+      TrackDuration.fromDuration(track.item.duration)
     ));
     const url = schema.mainEntityOfPage;
     const image = schema.image;
@@ -169,9 +169,24 @@ export class Release {
 
 export class Track {
   /**
+   * @type {String}
+   */
+  num;
+
+  /**
+   * @type {String}
+   */
+  title;
+
+  /**
+   * @type {TrackDuration}
+   */
+  duration;
+
+  /**
    * @param {String} num
    * @param {String} title
-   * @param {String} duration
+   * @param {TrackDuration} duration
    */
   constructor(num, title, duration) {
     this.num = num;
@@ -193,21 +208,72 @@ export class Track {
   }
 }
 
+export class TrackDuration {
+  /**
+   * @type {Date}
+   */
+  date;
+
+  /**
+   * @type {string}
+   */
+  value;
+
+  /**
+   * @param {Number} hours
+   * @param {Number} minutes
+   * @param {Number} seconds
+   */
+  constructor(hours, minutes, seconds) {
+    this.date = new Date(0);
+    this.date.setHours(hours);
+    this.date.setMinutes(minutes);
+    this.date.setSeconds(seconds);
+    this.value = this.toString();
+  }
+
+  /**
+   * Returns a string representation of the duration in the format "HH:MM:SS".
+   * @returns {string} String representation of the duration.
+   */
+  toString() {
+    const formatter = new Intl.DateTimeFormat('en', {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+
+    return formatter.format(this.date);
+  }
+
+  /**
+   * Creates a Duration instance from a duration string.
+   * The duration string should be in the format "XHYMZS",
+   * where X is hours, Y is minutes, and Z is seconds.
+   * See: https://en.wikipedia.org/wiki/ISO_8601
+   * @param {string} duration
+   * @returns {TrackDuration}
+   */
+  static fromDuration(duration) {
+    const regexHours = /(\d+)H/;
+    const regexMinutes = /(\d+)M/;
+    const regexSeconds = /(\d+)S/;
+    const hours = (regexHours.exec(duration) || [])[1] || 0;
+    const minutes = (regexMinutes.exec(duration) || [])[1] || 0;
+    const seconds = (regexSeconds.exec(duration) || [])[1] || 0;
+
+    return new TrackDuration(
+      parseInt(hours, 10),
+      parseInt(minutes, 10),
+      parseInt(seconds, 10)
+    );
+  }
+}
+
 function durationFromSeconds(duration) {
   let minutes = Math.floor(duration / 60);
   let seconds = duration % 60;
 
   return minutes.toString() + ':' + padStringLeft(seconds.toString(), '0', 2);
-}
-
-function parseDuration(duration) {
-  const regexHours = /(\d+)H/;
-  const regexMinutes = /(\d+)M/;
-  const regexSeconds = /(\d+)S/;
-  const hours = (regexHours.exec(duration) || [])[1] || 0;
-  const minutes = (regexMinutes.exec(duration) || [])[1] || 0;
-  const seconds = (regexSeconds.exec(duration) || [])[1] || 0;
-  const formatted = `${hours}:${minutes}:${seconds}`;
-
-  return formatted;
 }

@@ -1,6 +1,6 @@
 import { Release } from "../../app/release.js";
 import { getSearchDiscogsReleaseUrl } from "../../discogs/modules/discogs.js";
-import { capitalizeEachWord, removeZeroHours } from "../../modules/utils.js";
+import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../modules/utils.js";
 import { setBackgroundImage } from "../helpers.js";
 import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 
@@ -38,7 +38,7 @@ function outputRelease(tab, release) {
   tab.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
 
   const tracks = release.tracks
-    .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeZeroHours(track.duration)})`)
+    .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.duration.value)})`)
     .join("<br>");
 
   releaseContent.innerHTML = tracks;

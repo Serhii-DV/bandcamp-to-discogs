@@ -29,7 +29,7 @@ function outputRelease(tab, release) {
   setBackgroundImage(document.querySelector('.bg-image'), release.image);
   releaseArtist.innerHTML = release.releaseItem.artist;
   releaseTitle.innerHTML = release.releaseItem.title;
-  releaseDate.innerHTML = release.date.getFullYear();
+  releaseDate.innerHTML = release.datePublished.getFullYear();
 
   let countArtistLines = countLinesInHtmlElement(releaseArtist);
   let countTitleLines = countLinesInHtmlElement(releaseTitle);

@@ -65,7 +65,7 @@ export class DiscogsCsv {
       styles: keywordsToDiscogsStyles(release.keywords),
       tracks: release.tracks,
       notes: JSON.stringify(release.toMetadata()),
-      date: release.date.toISOString().split('T')[0],
+      date: release.datePublished.toISOString().split('T')[0],
       images: release.image
     });
   }

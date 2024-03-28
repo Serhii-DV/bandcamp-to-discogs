@@ -18,19 +18,61 @@ export class ReleaseItem {
 
 export class Release {
   /**
-   * @param {String} artist
-   * @param {String} title
-   * @param {String} label
-   * @param {Date} date
-   * @param {Array} tracks
-   * @param {String} url
-   * @param {String} image
-   * @param {Array} keywords
+   * @type {ReleaseItem}
    */
-  constructor(artist, title, label, date, tracks, url, image, keywords) {
+  releaseItem;
+
+  /**
+   * @type {string}
+   */
+  label;
+
+  /**
+   * @type {Date}
+   */
+  datePublished;
+
+  /**
+   * @type {Date}
+   */
+  dateModified;
+
+  /**
+   * @type {Array.<Track>}
+   */
+  tracks;
+
+  /**
+   * @type {Number}
+   */
+  tracksQty;
+
+  /**
+   * @type {string}
+   */
+  image;
+
+  /**
+   * @type {Array.<string>}
+   */
+  keywords;
+
+  /**
+   * @param {string} artist
+   * @param {string} title
+   * @param {string} label
+   * @param {Date} datePublished
+   * @param {Date} dateModified
+   * @param {Array.<Track>} tracks
+   * @param {string} url
+   * @param {string} image
+   * @param {Array.<string>} keywords
+   */
+  constructor(artist, title, label, datePublished, dateModified, tracks, url, image, keywords) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
-    this.date = date;
+    this.datePublished = datePublished;
+    this.dateModified = dateModified;
     this.tracks = tracks;
     this.tracksQty = tracks.length;
     this.image = image;
@@ -57,6 +99,7 @@ export class Release {
       url: this.releaseItem.url,
       label: this.label,
       datePublished: this.datePublished.toISOString(),
+      dateModified: this.dateModified.toISOString(),
       tracks: this.tracks,
       image: this.image,
       keywords: this.keywords
@@ -79,7 +122,8 @@ export class Release {
       obj.artist,
       obj.title,
       obj.label,
-      new Date(obj.date ?? obj.datePublished),
+      new Date(obj.datePublished ?? obj.date),
+      new Date(obj.dateModified ?? obj.date),
       tracks,
       obj.url,
       obj.image,

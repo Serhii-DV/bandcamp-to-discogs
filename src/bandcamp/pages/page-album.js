@@ -21,6 +21,7 @@ function createReleaseFromSchema(schema) {
   const title = schema.name;
   const label = schema.publisher.name;
   const datePublished = new Date(schema.datePublished);
+  const dateModified = new Date(schema.dateModified);
   const tracks = schema.track.itemListElement.map(track => new Track(
     track.position,
     track.item.name,
@@ -35,6 +36,7 @@ function createReleaseFromSchema(schema) {
     title,
     label,
     datePublished,
+    dateModified,
     tracks,
     url,
     image,

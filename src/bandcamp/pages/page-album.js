@@ -1,4 +1,5 @@
-import { Release } from "../../app/release.js";
+import { Release, Track, TrackDuration } from "../../app/release.js";
+import TrackTime from "../../app/trackTime.js";
 import { getCurrentUrl } from "../../modules/html.js";
 import { findReleaseByUrl, saveRelease } from "../../modules/storage.js";
 import { getMusicAlbumSchemaData } from "../modules/html.js";
@@ -6,9 +7,39 @@ import { getMusicAlbumSchemaData } from "../modules/html.js";
 // Setup logic for BC albums page
 export function setupPageAlbum() {
   const schema = getMusicAlbumSchemaData();
-  const release = Release.fromBandcampSchema(schema);
+  const release = createReleaseFromSchema(schema);
   setupRelease(release);
   setupSendMessageToPopup(release);
+}
+
+/**
+ * @param {Object} schema
+ * @returns {Release}
+ */
+function createReleaseFromSchema(schema) {
+  const artist = schema.byArtist.name;
+  const title = schema.name;
+  const label = schema.publisher.name;
+  const datePublished = new Date(schema.datePublished);
+  const tracks = schema.track.itemListElement.map(track => new Track(
+    track.position,
+    track.item.name,
+    TrackTime.fromDuration(track.item.duration)
+  ));
+  const url = schema.mainEntityOfPage;
+  const image = schema.image;
+  const keywords = schema.keywords;
+
+  return new Release(
+    artist,
+    title,
+    label,
+    datePublished,
+    tracks,
+    url,
+    image,
+    keywords
+  );
 }
 
 /**

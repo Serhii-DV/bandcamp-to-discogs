@@ -49,36 +49,6 @@ export class Release {
     return this.releaseItem.title;
   }
 
-  /**
-   * @param {Object} schema
-   * @returns {Release}
-   */
-  static fromBandcampSchema(schema) {
-    const artist = schema.byArtist.name;
-    const title = schema.name;
-    const label = schema.publisher.name;
-    const date = new Date(schema.datePublished);
-    const tracks = schema.track.itemListElement.map(track => new Track(
-      track.position,
-      track.item.name,
-      TrackTime.fromDuration(track.item.duration)
-    ));
-    const url = schema.mainEntityOfPage;
-    const image = schema.image;
-    const keywords = schema.keywords;
-
-    return new Release(
-      artist,
-      title,
-      label,
-      date,
-      tracks,
-      url,
-      image,
-      keywords
-    );
-  }
-
   toObject() {
     return {
       uuid: this.releaseItem.uuid,

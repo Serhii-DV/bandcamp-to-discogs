@@ -96,7 +96,7 @@ export class Release {
       title: this.releaseItem.title,
       url: this.releaseItem.url,
       label: this.label,
-      date: this.datePublished.toISOString(),
+      datePublished: this.datePublished.toISOString(),
       tracks: this.tracks,
       image: this.image,
       keywords: this.keywords
@@ -113,13 +113,17 @@ export class Release {
       throw new Error('Cannot create Release object from object', obj);
     }
 
-    const tracks = obj.tracks.map(trackData => Track.fromObject(trackData));
+    const tracks = obj.tracks.map(trackData => new Track(
+      trackData.num,
+      trackData.title,
+      trackData.duration
+    ));
 
     return new Release(
       obj.artist,
       obj.title,
       obj.label,
-      new Date(obj.date),
+      new Date(obj.date ?? obj.datePublished),
       tracks,
       obj.url,
       obj.image,
@@ -171,19 +175,6 @@ export class Track {
     this.num = num;
     this.title = title;
     this.duration = duration;
-  }
-
-  /**
-   * Create an instance of the Track class from the object.
-   * @param {Object} obj - A simple object.
-   * @returns {Track} An instance of the Track class.
-   */
-  static fromObject(obj) {
-    return new Track(
-      obj.num,
-      obj.title,
-      obj.duration
-    );
   }
 }
 

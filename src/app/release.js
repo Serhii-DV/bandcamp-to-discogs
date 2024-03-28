@@ -62,15 +62,17 @@ export class Release {
    * @param {string} title
    * @param {string} label
    * @param {Date} datePublished
+   * @param {Date} dateModified
    * @param {Array.<Track>} tracks
    * @param {string} url
    * @param {string} image
    * @param {Array.<string>} keywords
    */
-  constructor(artist, title, label, datePublished, tracks, url, image, keywords) {
+  constructor(artist, title, label, datePublished, dateModified, tracks, url, image, keywords) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
     this.datePublished = datePublished;
+    this.dateModified = dateModified;
     this.tracks = tracks;
     this.tracksQty = tracks.length;
     this.image = image;
@@ -97,6 +99,7 @@ export class Release {
       url: this.releaseItem.url,
       label: this.label,
       datePublished: this.datePublished.toISOString(),
+      dateModified: this.dateModified.toISOString(),
       tracks: this.tracks,
       image: this.image,
       keywords: this.keywords
@@ -123,7 +126,8 @@ export class Release {
       obj.artist,
       obj.title,
       obj.label,
-      new Date(obj.date ?? obj.datePublished),
+      new Date(obj.datePublished ?? obj.date),
+      new Date(obj.dateModified ?? obj.date),
       tracks,
       obj.url,
       obj.image,

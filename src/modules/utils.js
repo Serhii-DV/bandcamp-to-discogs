@@ -238,12 +238,8 @@ export function bytesToSize(bytes) {
   return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
 
-export function removeZeroHours(duration) {
-  const parts = duration.split(':');
-  if (parts[0] === '00') {
-    // If hours are "00", remove the first element
-    parts.shift();
-  }
-  // Join the remaining parts with ':' to reconstruct the duration
-  return parts.join(':');
+export function removeLeadingZeroOrColon(str) {
+  // Use a regular expression to match leading zeros or colons
+  // and replace them with an empty string
+  return str.replace(/^(:|0)*/, '');
 }

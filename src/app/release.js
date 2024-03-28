@@ -18,14 +18,49 @@ export class ReleaseItem {
 
 export class Release {
   /**
-   * @param {String} artist
-   * @param {String} title
-   * @param {String} label
+   * @type {ReleaseItem}
+   */
+  releaseItem;
+
+  /**
+   * @type {string}
+   */
+  label;
+
+  /**
+   * @type {Date}
+   */
+  date;
+
+  /**
+   * @type {Array.<Track>}
+   */
+  tracks;
+
+  /**
+   * @type {Number}
+   */
+  tracksQty;
+
+  /**
+   * @type {string}
+   */
+  image;
+
+  /**
+   * @type {Array.<string>}
+   */
+  keywords;
+
+  /**
+   * @param {string} artist
+   * @param {string} title
+   * @param {string} label
    * @param {Date} date
-   * @param {Array} tracks
-   * @param {String} url
-   * @param {String} image
-   * @param {Array} keywords
+   * @param {Array.<Track>} tracks
+   * @param {string} url
+   * @param {string} image
+   * @param {Array.<string>} keywords
    */
   constructor(artist, title, label, date, tracks, url, image, keywords) {
     this.releaseItem = new ReleaseItem(url, artist, title);

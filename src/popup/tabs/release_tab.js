@@ -37,8 +37,6 @@ function outputRelease(tab, release) {
   releaseArtist.classList.toggle('display-6', countArtistLines >= 3 && countArtistLines <= 5);
   tab.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
 
-  let trackinfo = '';
-
   const tracks = release.tracks
     .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeZeroHours(track.duration)})`)
     .join("<br>");

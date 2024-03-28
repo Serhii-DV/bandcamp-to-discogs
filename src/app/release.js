@@ -56,7 +56,7 @@ export class Release {
       title: this.releaseItem.title,
       url: this.releaseItem.url,
       label: this.label,
-      date: this.date.toISOString(),
+      datePublished: this.datePublished.toISOString(),
       tracks: this.tracks,
       image: this.image,
       keywords: this.keywords
@@ -79,7 +79,7 @@ export class Release {
       obj.artist,
       obj.title,
       obj.label,
-      new Date(obj.date),
+      new Date(obj.date ?? obj.datePublished),
       tracks,
       obj.url,
       obj.image,
@@ -142,7 +142,7 @@ export class Track {
     return new Track(
       obj.num,
       obj.title,
-      TrackTime.fromString(obj.duration.value)
+      obj.duration
     );
   }
 }

@@ -90,37 +90,6 @@ export class Release {
   }
 
   /**
-   * @param {Object} TralbumData
-   * @param {Object} BandData
-   * @param {Object} SchemaData
-   * @param {Object} coverSrc
-   * @returns {Release}
-   */
-  static fromBandcampData(TralbumData, BandData, SchemaData, coverSrc) {
-    const { artist, current, url } = TralbumData;
-    const { title, publish_date } = current;
-    const { keywords } = SchemaData;
-    const tracks = TralbumData.trackinfo.map(track => new Track(
-      track.track_num,
-      track.title,
-      durationFromSeconds(Math.trunc(track.duration))
-    ));
-    const labelName = BandData.name;
-    const label = artist === labelName ? `Not On Label (${labelName} Self-released)` : labelName;
-
-    return new Release(
-      artist,
-      title,
-      label,
-      new Date(publish_date),
-      tracks,
-      url,
-      coverSrc.big,
-      keywords
-    );
-  }
-
-  /**
    * @param {Object} schema
    * @returns {Release}
    */

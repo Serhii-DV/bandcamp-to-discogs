@@ -25,6 +25,7 @@ function outputRelease(tab, release) {
   const releaseTitle = tab.querySelector('#release-title');
   const releaseDate = tab.querySelector('#release-year');
   const releaseContent = tab.querySelector('.release-content');
+  const releaseTracks = tab.querySelector('#release-tracks');
 
   setBackgroundImage(document.querySelector('.bg-image'), release.image);
   releaseArtist.innerHTML = release.releaseItem.artist;
@@ -41,7 +42,9 @@ function outputRelease(tab, release) {
     .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.time.value)})`)
     .join("<br>");
 
-  releaseContent.innerHTML = tracks;
+  releaseTracks.innerHTML = tracks;
+  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(el => el.innerHTML = release.datePublished.toLocaleString());
+  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(el => el.innerHTML = release.dateModified.toLocaleString());
 }
 
 function countLinesInHtmlElement(el) {

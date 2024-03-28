@@ -59,7 +59,7 @@ function setupSendMessageToPopup(release) {
     if (request.type === 'getBandcampData') {
       sendResponse({
         type: 'release',
-        data: release.toObject()
+        data: release.toStorageObject()
       });
     }
 

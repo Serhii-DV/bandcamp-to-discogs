@@ -20,7 +20,7 @@ export function findAllReleases(onFind) {
       }
 
       try {
-        releases.push(Release.fromObject(data[key]));
+        releases.push(Release.fromStorageObject(data[key]));
       } catch (error) {
         continue;
       }
@@ -34,7 +34,7 @@ export function findReleaseByUrl(url, onFind, onMissing) {
   const key = generateKeyForUrl(url);
   storage.get([key], (result) => {
     if (isObject(result[key])) {
-      const release = Release.fromObject(result[key]);
+      const release = Release.fromStorageObject(result[key]);
       if (isFunction(onFind)) onFind(release);
     } else {
       console.log("B2D: Release data doesn't exists", key);
@@ -47,7 +47,7 @@ export function findReleaseByUrl(url, onFind, onMissing) {
 export function findReleasesByUrls(urls, onFind) {
   const keys = generateKeysFromUrls(urls);
   storage.get(keys, result => {
-    let releases = Object.values(result).map(obj => Release.fromObject(obj));
+    let releases = Object.values(result).map(obj => Release.fromStorageObject(obj));
     if (isFunction(onFind)) onFind(releases);
   });
 }
@@ -68,7 +68,7 @@ export function findMissingUrls(urls, onFind) {
  */
 export function saveRelease(release) {
   const key = generateKeyForRelease(release);
-  storage.set({ [key]: release.toObject() }, () => {
+  storage.set({ [key]: release.toStorageObject() }, () => {
     console.log("B2D: Release data was saved in the local storage");
   });
 }

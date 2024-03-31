@@ -34,8 +34,12 @@ export function findReleaseByUrl(url, onFind, onMissing) {
   const key = generateKeyForUrl(url);
   storage.get([key], (result) => {
     if (isObject(result[key])) {
-      const release = Release.fromStorageObject(result[key]);
-      if (isFunction(onFind)) onFind(release);
+      try {
+        const release = Release.fromStorageObject(result[key]);
+        if (isFunction(onFind)) onFind(release);
+      } catch (error) {
+        console.log("B2D: Broken storage data for release", result[key]);
+      }
     } else {
       console.log("B2D: Release data doesn't exists", key);
       if (isFunction(onMissing)) onMissing(key);
@@ -47,7 +51,17 @@ export function findReleaseByUrl(url, onFind, onMissing) {
 export function findReleasesByUrls(urls, onFind) {
   const keys = generateKeysFromUrls(urls);
   storage.get(keys, result => {
-    let releases = Object.values(result).map(obj => Release.fromStorageObject(obj));
+    let releases = Object
+      .values(result)
+      .map(function(obj) {
+        try {
+          return Release.fromStorageObject(obj);
+        } catch (error) {
+          console.log("B2D: Broken storage object. " + JSON.stringify(error), obj);
+          return null;
+        }
+      })
+      .filter(obj => obj instanceof Release);
     if (isFunction(onFind)) onFind(releases);
   });
 }

@@ -1,5 +1,16 @@
 # Change log
 
+## 0.8.0 (2024-04-XX)
+
+### Features
+
+- core: Better webpack development setup
+- popup: Output release published and modified dates
+
+### Fixed
+
+- popup: Output release track time without leading zeroes
+
 ## 0.7.0 (2023-11-16)
 
 ### Features

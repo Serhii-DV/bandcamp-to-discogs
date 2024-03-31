@@ -25,11 +25,12 @@ function outputRelease(tab, release) {
   const releaseTitle = tab.querySelector('#release-title');
   const releaseDate = tab.querySelector('#release-year');
   const releaseContent = tab.querySelector('.release-content');
+  const releaseTracks = tab.querySelector('#release-tracks');
 
   setBackgroundImage(document.querySelector('.bg-image'), release.image);
   releaseArtist.innerHTML = release.releaseItem.artist;
   releaseTitle.innerHTML = release.releaseItem.title;
-  releaseDate.innerHTML = release.date.getFullYear();
+  releaseDate.innerHTML = release.published.getFullYear();
 
   let countArtistLines = countLinesInHtmlElement(releaseArtist);
   let countTitleLines = countLinesInHtmlElement(releaseTitle);
@@ -41,7 +42,21 @@ function outputRelease(tab, release) {
     .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.duration.value)})`)
     .join("<br>");
 
-  releaseContent.innerHTML = tracks;
+  releaseTracks.innerHTML = tracks;
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(function(el) {
+    el.innerHTML = formatter.format(release.published);
+    el.title = release.published.toLocaleString();
+  });
+  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(function(el) {
+    el.innerHTML = formatter.format(release.modified);
+    el.title = release.modified.toLocaleString();
+  });
 }
 
 function countLinesInHtmlElement(el) {

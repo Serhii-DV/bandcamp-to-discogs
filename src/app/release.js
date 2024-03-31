@@ -58,11 +58,6 @@ export class Release {
   keywords;
 
   /**
-   * @type {Intl.DateTimeFormat}
-   */
-  dateFormatter;
-
-  /**
    * @param {string} artist
    * @param {string} title
    * @param {string} label
@@ -82,12 +77,6 @@ export class Release {
     this.tracksQty = tracks.length;
     this.image = image;
     this.keywords = keywords;
-
-    this.dateFormatter = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-    });
   }
 
   get artist() {
@@ -102,14 +91,6 @@ export class Release {
     return this.releaseItem.title;
   }
 
-  get publishedDate() {
-    return this.dateFormatter.format(this.published);
-  }
-
-  get modifiedDate() {
-    return this.dateFormatter.format(this.modified);
-  }
-
   toStorageObject() {
     return {
       uuid: this.releaseItem.uuid,
@@ -117,8 +98,8 @@ export class Release {
       title: this.releaseItem.title,
       url: this.releaseItem.url,
       label: this.label,
-      datePublished: this.published.toISOString(),
-      dateModified: this.modified.toISOString(),
+      published: this.published.toISOString(),
+      modified: this.modified.toISOString(),
       tracks: this.tracks,
       image: this.image,
       keywords: this.keywords
@@ -136,6 +117,14 @@ export class Release {
     }
 
     const tracks = obj.tracks.map(trackData => Track.fromObject(trackData));
+
+    if (!obj.published && !obj.date) {
+      throw new Error("Missing published or date property");
+    }
+
+    if (!obj.modified && !obj.date) {
+      throw new Error("Missing published or date property");
+    }
 
     return new Release(
       obj.artist,

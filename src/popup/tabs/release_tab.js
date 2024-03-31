@@ -30,7 +30,7 @@ function outputRelease(tab, release) {
   setBackgroundImage(document.querySelector('.bg-image'), release.image);
   releaseArtist.innerHTML = release.releaseItem.artist;
   releaseTitle.innerHTML = release.releaseItem.title;
-  releaseDate.innerHTML = release.datePublished.getFullYear();
+  releaseDate.innerHTML = release.published.getFullYear();
 
   let countArtistLines = countLinesInHtmlElement(releaseArtist);
   let countTitleLines = countLinesInHtmlElement(releaseTitle);
@@ -43,8 +43,8 @@ function outputRelease(tab, release) {
     .join("<br>");
 
   releaseTracks.innerHTML = tracks;
-  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(el => el.innerHTML = release.datePublished.toLocaleString());
-  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(el => el.innerHTML = release.dateModified.toLocaleString());
+  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(el => el.innerHTML = release.publishedDate());
+  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(el => el.innerHTML = release.modifiedDate());
 }
 
 function countLinesInHtmlElement(el) {

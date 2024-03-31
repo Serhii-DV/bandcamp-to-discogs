@@ -30,12 +30,12 @@ export class Release {
   /**
    * @type {Date}
    */
-  datePublished;
+  published;
 
   /**
    * @type {Date}
    */
-  dateModified;
+  modified;
 
   /**
    * @type {Array.<Track>}
@@ -58,6 +58,11 @@ export class Release {
   keywords;
 
   /**
+   * @type {Intl.DateTimeFormat}
+   */
+  dateFormatter;
+
+  /**
    * @param {string} artist
    * @param {string} title
    * @param {string} label
@@ -71,12 +76,18 @@ export class Release {
   constructor(artist, title, label, datePublished, dateModified, tracks, url, image, keywords) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
-    this.datePublished = datePublished;
-    this.dateModified = dateModified;
+    this.published = datePublished;
+    this.modified = dateModified;
     this.tracks = tracks;
     this.tracksQty = tracks.length;
     this.image = image;
     this.keywords = keywords;
+
+    this.dateFormatter = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    });
   }
 
   get artist() {
@@ -91,6 +102,14 @@ export class Release {
     return this.releaseItem.title;
   }
 
+  get publishedDate() {
+    return this.dateFormatter.format(this.published);
+  }
+
+  get modifiedDate() {
+    return this.dateFormatter.format(this.modified);
+  }
+
   toStorageObject() {
     return {
       uuid: this.releaseItem.uuid,
@@ -98,8 +117,8 @@ export class Release {
       title: this.releaseItem.title,
       url: this.releaseItem.url,
       label: this.label,
-      datePublished: this.datePublished.toISOString(),
-      dateModified: this.dateModified.toISOString(),
+      datePublished: this.published.toISOString(),
+      dateModified: this.modified.toISOString(),
       tracks: this.tracks,
       image: this.image,
       keywords: this.keywords
@@ -126,8 +145,8 @@ export class Release {
       obj.artist,
       obj.title,
       obj.label,
-      new Date(obj.datePublished ?? obj.date),
-      new Date(obj.dateModified ?? obj.date),
+      new Date(obj.published ?? obj.date),
+      new Date(obj.modified ?? obj.date),
       tracks,
       obj.url,
       obj.image,

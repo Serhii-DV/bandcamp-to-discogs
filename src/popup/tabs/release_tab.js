@@ -43,8 +43,20 @@ function outputRelease(tab, release) {
     .join("<br>");
 
   releaseTracks.innerHTML = tracks;
-  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(el => el.innerHTML = release.publishedDate());
-  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(el => el.innerHTML = release.modifiedDate());
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(function(el) {
+    el.innerHTML = formatter.format(release.published);
+    el.title = release.published.toLocaleString();
+  });
+  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(function(el) {
+    el.innerHTML = formatter.format(release.modified);
+    el.title = release.modified.toLocaleString();
+  });
 }
 
 function countLinesInHtmlElement(el) {

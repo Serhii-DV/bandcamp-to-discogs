@@ -19,8 +19,8 @@
       <button class="btn btn-dark rounded-0" id="csvData-tab" data-bs-toggle="tab" data-bs-target="#csvData" role="tab" aria-controls="csvData" aria-selected="true" type="button" title="Preview Discogs CSV data">
         <b2d-icon name="table"></b2d-icon>
       </button>
-      <button class="btn btn-dark rounded-0" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="tab" aria-controls="history" aria-selected="true" type="button" title="History">
-        <b2d-icon name="clock-history"></b2d-icon>
+      <button class="btn btn-dark rounded-0" id="storageData-tab" data-bs-toggle="tab" data-bs-target="#storageData" role="tab" aria-controls="storageData" aria-selected="true" type="button" title="Releases in the storage">
+        <b2d-icon name="database"></b2d-icon>
       </button>
       <button id="downloadRelease" class="btn btn-primary rounded-0 visually-hidden" type="button" title="Download Discogs CSV file" disabled>
         <b2d-icon name="download"></b2d-icon>
@@ -28,7 +28,7 @@
       <button id="downloadReleases" class="btn btn-primary rounded-0 visually-hidden" type="button" title="Download selected releases as Discogs CSV file" disabled>
         <b2d-icon name="download"></b2d-icon>
       </button>
-      <button id="downloadHistory" class="btn btn-primary rounded-0 visually-hidden" type="button" title="Download selected releases from the history as Discogs CSV file" disabled>
+      <button id="downloadStorage" class="btn btn-primary rounded-0 visually-hidden" type="button" title="Download selected releases from the storage as Discogs CSV file" disabled>
         <b2d-icon name="download"></b2d-icon>
       </button>
       <a id="discogsCsvToDraft" class="btn btn-dark rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
@@ -60,9 +60,9 @@
       </div>
       <!-- CSV data -->
       <div class="tab-pane fade small content-text" id="csvData" role="tabpanel" aria-labelledby="csvData-tab" tabindex="0"></div>
-      <!-- History data -->
-      <div class="tab-pane fade small" id="history" role="tabpanel" aria-labelledby="history-tab" tabindex="0">
-        <external-content href="content/history_tab.html"></external-content>
+      <!-- Storage data -->
+      <div class="tab-pane fade small" id="storageData" role="tabpanel" aria-labelledby="storageData-tab" tabindex="0">
+        <external-content href="content/storage_tab.html"></external-content>
       </div>
       <!-- About -->
       <div class="tab-pane fade content-text" id="about" role="tabpanel" aria-labelledby="about-tab" tabindex="0">

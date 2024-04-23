@@ -18,61 +18,19 @@ export class ReleaseItem {
 
 export class Release {
   /**
-   * @type {ReleaseItem}
+   * @param {String} artist
+   * @param {String} title
+   * @param {String} label
+   * @param {Date} date
+   * @param {Array} tracks
+   * @param {String} url
+   * @param {String} image
+   * @param {Array} keywords
    */
-  releaseItem;
-
-  /**
-   * @type {string}
-   */
-  label;
-
-  /**
-   * @type {Date}
-   */
-  published;
-
-  /**
-   * @type {Date}
-   */
-  modified;
-
-  /**
-   * @type {Array.<Track>}
-   */
-  tracks;
-
-  /**
-   * @type {Number}
-   */
-  tracksQty;
-
-  /**
-   * @type {string}
-   */
-  image;
-
-  /**
-   * @type {Array.<string>}
-   */
-  keywords;
-
-  /**
-   * @param {string} artist
-   * @param {string} title
-   * @param {string} label
-   * @param {Date} datePublished
-   * @param {Date} dateModified
-   * @param {Array.<Track>} tracks
-   * @param {string} url
-   * @param {string} image
-   * @param {Array.<string>} keywords
-   */
-  constructor(artist, title, label, datePublished, dateModified, tracks, url, image, keywords) {
+  constructor(artist, title, label, date, tracks, url, image, keywords) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
-    this.published = datePublished;
-    this.modified = dateModified;
+    this.date = date;
     this.tracks = tracks;
     this.tracksQty = tracks.length;
     this.image = image;
@@ -91,15 +49,75 @@ export class Release {
     return this.releaseItem.title;
   }
 
-  toStorageObject() {
+  /**
+   * @param {Object} TralbumData
+   * @param {Object} BandData
+   * @param {Object} SchemaData
+   * @param {Object} coverSrc
+   * @returns {Release}
+   */
+  static fromBandcampData(TralbumData, BandData, SchemaData, coverSrc) {
+    const { artist, current, url } = TralbumData;
+    const { title, publish_date } = current;
+    const { keywords } = SchemaData;
+    const tracks = TralbumData.trackinfo.map(track => new Track(
+      track.track_num,
+      track.title,
+      durationFromSeconds(Math.trunc(track.duration))
+    ));
+    const labelName = BandData.name;
+    const label = artist === labelName ? `Not On Label (${labelName} Self-released)` : labelName;
+
+    return new Release(
+      artist,
+      title,
+      label,
+      new Date(publish_date),
+      tracks,
+      url,
+      coverSrc.big,
+      keywords
+    );
+  }
+
+  /**
+   * @param {Object} schema
+   * @returns {Release}
+   */
+  static fromBandcampSchema(schema) {
+    const artist = schema.byArtist.name;
+    const title = schema.name;
+    const label = schema.publisher.name;
+    const date = new Date(schema.datePublished);
+    const tracks = schema.track.itemListElement.map(track => new Track(
+      track.position,
+      track.item.name,
+      parseDuration(track.item.duration)
+    ));
+    const url = schema.mainEntityOfPage;
+    const image = schema.image;
+    const keywords = schema.keywords;
+
+    return new Release(
+      artist,
+      title,
+      label,
+      date,
+      tracks,
+      url,
+      image,
+      keywords
+    );
+  }
+
+  toObject() {
     return {
       uuid: this.releaseItem.uuid,
       artist: this.releaseItem.artist,
       title: this.releaseItem.title,
       url: this.releaseItem.url,
       label: this.label,
-      published: this.published.toISOString(),
-      modified: this.modified.toISOString(),
+      date: this.date.toISOString(),
       tracks: this.tracks,
       image: this.image,
       keywords: this.keywords
@@ -111,31 +129,18 @@ export class Release {
    * @param {Object} obj - A simple object.
    * @returns {Release} An instance of the Release class.
    */
-  static fromStorageObject(obj) {
+  static fromObject(obj) {
     if (!obj.url || !obj.tracks) {
       throw new Error('Cannot create Release object from object', obj);
     }
 
-    const tracks = obj.tracks.map(trackData => new Track(
-      trackData.num,
-      trackData.title,
-      trackData.duration
-    ));
-
-    if (!obj.published && !obj.date) {
-      throw new Error("Missing published or date property");
-    }
-
-    if (!obj.modified && !obj.date) {
-      throw new Error("Missing published or date property");
-    }
+    const tracks = obj.tracks.map(trackData => Track.fromObject(trackData));
 
     return new Release(
       obj.artist,
       obj.title,
       obj.label,
-      new Date(obj.published ?? obj.date),
-      new Date(obj.modified ?? obj.date),
+      new Date(obj.date),
       tracks,
       obj.url,
       obj.image,
@@ -164,91 +169,26 @@ export class Release {
 
 export class Track {
   /**
-   * @type {String}
-   */
-  num;
-
-  /**
-   * @type {String}
-   */
-  title;
-
-  /**
-   * @type {TrackDuration}
-   */
-  duration;
-
-  /**
    * @param {String} num
    * @param {String} title
-   * @param {TrackDuration} duration
+   * @param {String} duration
    */
   constructor(num, title, duration) {
     this.num = num;
     this.title = title;
     this.duration = duration;
   }
-}
-
-export class TrackDuration {
-  /**
-   * @type {Date}
-   */
-  date;
 
   /**
-   * @type {string}
+   * Create an instance of the Track class from the object.
+   * @param {Object} obj - A simple object.
+   * @returns {Track} An instance of the Track class.
    */
-  value;
-
-  /**
-   * @param {Number} hours
-   * @param {Number} minutes
-   * @param {Number} seconds
-   */
-  constructor(hours, minutes, seconds) {
-    this.date = new Date(0);
-    this.date.setHours(hours);
-    this.date.setMinutes(minutes);
-    this.date.setSeconds(seconds);
-    this.value = this.toString();
-  }
-
-  /**
-   * Returns a string representation of the duration in the format "HH:MM:SS".
-   * @returns {string} String representation of the duration.
-   */
-  toString() {
-    const formatter = new Intl.DateTimeFormat('en', {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
-
-    return formatter.format(this.date);
-  }
-
-  /**
-   * Creates a Duration instance from a duration string.
-   * The duration string should be in the format "XHYMZS",
-   * where X is hours, Y is minutes, and Z is seconds.
-   * See: https://en.wikipedia.org/wiki/ISO_8601
-   * @param {string} duration
-   * @returns {TrackDuration}
-   */
-  static fromDuration(duration) {
-    const regexHours = /(\d+)H/;
-    const regexMinutes = /(\d+)M/;
-    const regexSeconds = /(\d+)S/;
-    const hours = (regexHours.exec(duration) || [])[1] || 0;
-    const minutes = (regexMinutes.exec(duration) || [])[1] || 0;
-    const seconds = (regexSeconds.exec(duration) || [])[1] || 0;
-
-    return new TrackDuration(
-      parseInt(hours, 10),
-      parseInt(minutes, 10),
-      parseInt(seconds, 10)
+  static fromObject(obj) {
+    return new Track(
+      obj.num,
+      obj.title,
+      obj.duration
     );
   }
 }
@@ -258,4 +198,16 @@ function durationFromSeconds(duration) {
   let seconds = duration % 60;
 
   return minutes.toString() + ':' + padStringLeft(seconds.toString(), '0', 2);
+}
+
+function parseDuration(duration) {
+  const regexHours = /(\d+)H/;
+  const regexMinutes = /(\d+)M/;
+  const regexSeconds = /(\d+)S/;
+  const hours = (regexHours.exec(duration) || [])[1] || 0;
+  const minutes = (regexMinutes.exec(duration) || [])[1] || 0;
+  const seconds = (regexSeconds.exec(duration) || [])[1] || 0;
+  const formatted = `${hours}:${minutes}:${seconds}`;
+
+  return formatted;
 }

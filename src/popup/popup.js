@@ -20,7 +20,7 @@ const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
 const btnDownloadRelease = document.getElementById('downloadRelease');
 const btnDownloadReleases = document.getElementById('downloadReleases');
-const btnDownloadStorage = document.getElementById('downloadStorage');
+const btnDownloadStorage = document.getElementById('downloadHistory');
 const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
 const tabReleases = document.getElementById('releases');
 

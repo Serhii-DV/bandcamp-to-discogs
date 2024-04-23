@@ -1,6 +1,6 @@
 import { Release } from "../../app/release.js";
 import { getSearchDiscogsReleaseUrl } from "../../discogs/modules/discogs.js";
-import { capitalizeEachWord, removeZeroHours } from "../../modules/utils.js";
+import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../modules/utils.js";
 import { setBackgroundImage } from "../helpers.js";
 import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 
@@ -25,11 +25,12 @@ function outputRelease(tab, release) {
   const releaseTitle = tab.querySelector('#release-title');
   const releaseDate = tab.querySelector('#release-year');
   const releaseContent = tab.querySelector('.release-content');
+  const releaseTracks = tab.querySelector('#release-tracks');
 
   setBackgroundImage(document.querySelector('.bg-image'), release.image);
   releaseArtist.innerHTML = release.releaseItem.artist;
   releaseTitle.innerHTML = release.releaseItem.title;
-  releaseDate.innerHTML = release.date.getFullYear();
+  releaseDate.innerHTML = release.published.getFullYear();
 
   let countArtistLines = countLinesInHtmlElement(releaseArtist);
   let countTitleLines = countLinesInHtmlElement(releaseTitle);
@@ -37,13 +38,25 @@ function outputRelease(tab, release) {
   releaseArtist.classList.toggle('display-6', countArtistLines >= 3 && countArtistLines <= 5);
   tab.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
 
-  let trackinfo = '';
-
   const tracks = release.tracks
-    .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeZeroHours(track.duration)})`)
+    .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.duration.value)})`)
     .join("<br>");
 
-  releaseContent.innerHTML = tracks;
+  releaseTracks.innerHTML = tracks;
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(function(el) {
+    el.innerHTML = formatter.format(release.published);
+    el.title = release.published.toLocaleString();
+  });
+  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(function(el) {
+    el.innerHTML = formatter.format(release.modified);
+    el.title = release.modified.toLocaleString();
+  });
 }
 
 function countLinesInHtmlElement(el) {

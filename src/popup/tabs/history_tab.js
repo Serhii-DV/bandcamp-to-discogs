@@ -7,8 +7,8 @@ import { populateReleasesList, removeButtonLoadingState, setButtonInLoadingState
 /**
  * @param {Element} btnDownloadCsv
  */
-export function setupStorageTab(tab, btnDownloadCsv) {
-  const releasesList = document.querySelector('#storageReleasesLIst');
+export function setupHistoryTab(tab, btnDownloadCsv) {
+  const releasesList = document.querySelector('#historyReleasesList');
 
   if (!hasDataAttribute(tab, 'buttons-initialized')) {
     setupReleasesList(tab, releasesList, btnDownloadCsv);
@@ -31,11 +31,11 @@ function updateReleasesListData(releasesList) {
  */
 function setupReleasesList(tab, releasesList, btnDownloadCsv) {
   const btnClearSelected = createElementFromHTML(`
-<button id="storageDataClearSelected" type="button" class="btn btn-danger" data-status-update title="Clear selected storage data">
+<button id="historyDataClearSelected" type="button" class="btn btn-danger" data-status-update title="Clear selected history">
   <b2d-icon name="database-dash"></b2d-icon>
 </button>`);
   const btnClearAll = createElementFromHTML(`
-<button id="storageDataClear" type="button" class="btn btn-dark" title="Remove all items from the storage" data-bs-toggle="modal" data-bs-target="#storageTabDeleteAllModal">
+<button id="historyDataClear" type="button" class="btn btn-dark" title="Remove all items from the history" data-bs-toggle="modal" data-bs-target="#historyTabDeleteAllModal">
   <b2d-icon name="database-x"></b2d-icon>
 </button>`);
 
@@ -63,7 +63,7 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
     });
   });
 
-  tab.querySelector('#storageTabDeleteAllModal_btnYes').addEventListener('click', () => {
+  tab.querySelector('#historyTabDeleteAllModal_btnYes').addEventListener('click', () => {
     clearStorage();
     updateReleasesListData(releasesList);
   });

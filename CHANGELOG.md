@@ -6,6 +6,7 @@
 
 - core: Better webpack development setup
 - popup: Output release published and modified dates
+- popup: Renamed "Storage" tab to "History" tab
 
 ### Fixed
 

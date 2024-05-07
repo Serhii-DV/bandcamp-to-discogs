@@ -11,7 +11,6 @@ import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 import { getStorageSize } from "../modules/storage.js";
 import { bytesToSize } from "../modules/utils.js";
 import { setupConsole, setupConsoleRelease } from "./console.js";
-import { setupDiscogsTab } from "./tabs/discogs_tab.js";
 
 const btnWarningMessageTab = document.getElementById("warningMessage-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -135,7 +134,6 @@ function main() {
   replaceVersion();
   loadRelease();
   checkStorageSize();
-  setupDiscogsTab(document.querySelector('#discogsTab'));
 }
 
 document.addEventListener('DOMContentLoaded', main);

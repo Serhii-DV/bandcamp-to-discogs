@@ -10,5 +10,14 @@ module.exports = {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
+  devServer: {
+    static: {
+      directory: path.resolve(__dirname, 'dist'),
+    },
+    devMiddleware: {
+      writeToDisk: true,
+    },
+    hot: false,
+  },
   devtool: 'source-map',
 };

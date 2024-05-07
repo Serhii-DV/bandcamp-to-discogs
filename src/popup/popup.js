@@ -3,7 +3,7 @@ import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/modules/genres.js";
 import { loadKeywordMapping } from "../bandcamp/modules/mapping.js";
 import config from "../config.js";
-import { setupStorageTab } from "./tabs/storage_tab.js";
+import { setupHistoryTab } from "./tabs/history_tab.js";
 import { disable, enable, hide, show, click } from "../modules/html.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
@@ -11,16 +11,15 @@ import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 import { getStorageSize } from "../modules/storage.js";
 import { bytesToSize } from "../modules/utils.js";
 import { setupConsole, setupConsoleRelease } from "./console.js";
-import { setupDiscogsTab } from "./tabs/discogs_tab.js";
 
 const btnWarningMessageTab = document.getElementById("warningMessage-tab");
 const btnReleaseTab = document.getElementById("release-tab");
 const btnReleasesTab = document.getElementById("releases-tab");
 const btnCsvDataTab = document.getElementById('csvData-tab');
-const btnStorageTab = document.getElementById('storageData-tab');
+const btnHistoryTab = document.getElementById('history-tab');
 const btnDownloadRelease = document.getElementById('downloadRelease');
 const btnDownloadReleases = document.getElementById('downloadReleases');
-const btnDownloadStorage = document.getElementById('downloadStorage');
+const btnDownloadStorage = document.getElementById('downloadHistory');
 const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
 const tabReleases = document.getElementById('releases');
 
@@ -96,7 +95,7 @@ function processBandcampReleasesData(response) {
   );
 }
 
-function replaceVersion() {
+function replaceVersion(document) {
   const manifest = getExtensionManifest();
 
   // Set extension version
@@ -119,11 +118,11 @@ function setupNavigation() {
     const releasesList = tabReleases.querySelector('releases-list');
     releasesList.refreshStatus();
   });
-  btnStorageTab.addEventListener('click', () => {
+  btnHistoryTab.addEventListener('click', () => {
     hide(btnDownloadRelease, btnDownloadReleases);
     show(btnDownloadStorage);
-    setupStorageTab(
-      document.getElementById('storageData'),
+    setupHistoryTab(
+      document.getElementById('history'),
       btnDownloadStorage
     );
   });
@@ -132,10 +131,12 @@ function setupNavigation() {
 function main() {
   setupConsole();
   setupNavigation();
-  replaceVersion();
+  replaceVersion(document);
   loadRelease();
   checkStorageSize();
-  setupDiscogsTab(document.querySelector('#discogsTab'));
+  onExternalContentLoaded((e) => {
+    replaceVersion(e.target);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', main);
@@ -146,5 +147,15 @@ function checkStorageSize() {
       el.textContent = bytesToSize(size);
       el.setAttribute('title', `Storage size (${size} bytes)`)
     });
+  });
+}
+
+/**
+ * Run some specific logic for external content
+ */
+function onExternalContentLoaded(fn) {
+  const externalContentElements = document.querySelectorAll('external-content');
+  externalContentElements.forEach(el => {
+    el.addEventListener('externalContentLoaded', fn);
   });
 }

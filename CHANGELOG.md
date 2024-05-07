@@ -4,6 +4,8 @@
 
 ### Fixed
 
+- core: Added `externalContentLoaded` event to `external-content` custom HTML tag element
+- popup: Added link to the changelog file on "About" tab
 - popup: Fixed renaming "Storage" tab to "History" tab
 
 ## 0.8.0 (2024-04-23)

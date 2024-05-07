@@ -1,5 +1,11 @@
 # Change log
 
+## 0.8.1 (2024-05-XX)
+
+### Fixed
+
+- popup: Fixed renaming "Storage" tab to "History" tab
+
 ## 0.8.0 (2024-04-23)
 
 ### Features

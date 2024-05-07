@@ -10,6 +10,7 @@ class ExternalContent extends HTMLElement {
       const response = await fetch(href);
       const content = await response.text();
       this.innerHTML = content;
+      this.dispatchEvent(new CustomEvent('externalContentLoaded'));
     } catch (error) {
       console.error('Error loading external content:', error);
     }

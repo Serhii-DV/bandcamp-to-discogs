@@ -11,7 +11,6 @@ import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 import { getStorageSize } from "../modules/storage.js";
 import { bytesToSize } from "../modules/utils.js";
 import { setupConsole, setupConsoleRelease } from "./console.js";
-import { setupDiscogsTab } from "./tabs/discogs_tab.js";
 
 const btnWarningMessageTab = document.getElementById("warningMessage-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -96,7 +95,7 @@ function processBandcampReleasesData(response) {
   );
 }
 
-function replaceVersion() {
+function replaceVersion(document) {
   const manifest = getExtensionManifest();
 
   // Set extension version
@@ -132,10 +131,12 @@ function setupNavigation() {
 function main() {
   setupConsole();
   setupNavigation();
-  replaceVersion();
+  replaceVersion(document);
   loadRelease();
   checkStorageSize();
-  setupDiscogsTab(document.querySelector('#discogsTab'));
+  onExternalContentLoaded((e) => {
+    replaceVersion(e.target);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', main);
@@ -146,5 +147,15 @@ function checkStorageSize() {
       el.textContent = bytesToSize(size);
       el.setAttribute('title', `Storage size (${size} bytes)`)
     });
+  });
+}
+
+/**
+ * Run some specific logic for external content
+ */
+function onExternalContentLoaded(fn) {
+  const externalContentElements = document.querySelectorAll('external-content');
+  externalContentElements.forEach(el => {
+    el.addEventListener('externalContentLoaded', fn);
   });
 }

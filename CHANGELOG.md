@@ -6,7 +6,7 @@
 
 - popup: Fixed renaming "Storage" tab to "History" tab
 
-## 0.8.0 (2024-04-XX)
+## 0.8.0 (2024-04-23)
 
 ### Features
 

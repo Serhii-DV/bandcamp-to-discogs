@@ -71,19 +71,15 @@ function processBandcampReleaseData(data, keywordsMapping) {
   show(btnReleaseTab);
   click(btnReleaseTab);
 
-  try {
-    const release = Release.fromStorageObject(data);
-    setupConsoleRelease(release, keywordsMapping);
-    setupReleaseTab(
-      document.getElementById('release'),
-      release,
-      btnDownloadRelease,
-      btnDiscogsSearchArtist
-    );
-    setupCsvDataTab(release, btnCsvDataTab);
-  } catch (error) {
-    console.error(error);
-  }
+  const release = Release.fromObject(data);
+  setupConsoleRelease(release, keywordsMapping);
+  setupReleaseTab(
+    document.getElementById('release'),
+    release,
+    btnDownloadRelease,
+    btnDiscogsSearchArtist
+  );
+  setupCsvDataTab(release, btnCsvDataTab);
 }
 
 function processBandcampReleasesData(response) {

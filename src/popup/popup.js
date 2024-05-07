@@ -95,7 +95,7 @@ function processBandcampReleasesData(response) {
   );
 }
 
-function replaceVersion() {
+function replaceVersion(document) {
   const manifest = getExtensionManifest();
 
   // Set extension version
@@ -131,9 +131,12 @@ function setupNavigation() {
 function main() {
   setupConsole();
   setupNavigation();
-  replaceVersion();
+  replaceVersion(document);
   loadRelease();
   checkStorageSize();
+  onExternalContentLoaded((e) => {
+    replaceVersion(e.target);
+  });
 }
 
 document.addEventListener('DOMContentLoaded', main);
@@ -144,5 +147,15 @@ function checkStorageSize() {
       el.textContent = bytesToSize(size);
       el.setAttribute('title', `Storage size (${size} bytes)`)
     });
+  });
+}
+
+/**
+ * Run some specific logic for external content
+ */
+function onExternalContentLoaded(fn) {
+  const externalContentElements = document.querySelectorAll('external-content');
+  externalContentElements.forEach(el => {
+    el.addEventListener('externalContentLoaded', fn);
   });
 }

@@ -203,7 +203,7 @@ export class Track {
     return new Track(
       obj.num,
       obj.title,
-      obj.duration
+      TrackDuration.fromDuration(obj.duration)
     );
   }
 }

@@ -38,7 +38,7 @@ function outputRelease(tab, release) {
   tab.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
 
   const tracks = release.tracks
-    .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.duration.value)})`)
+    .map(track => `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.time.value)})`)
     .join("<br>");
 
   releaseContent.innerHTML = tracks;

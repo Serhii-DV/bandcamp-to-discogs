@@ -122,7 +122,7 @@ export class DiscogsCsv {
    */
   toCsvObject() {
     const tracks = this.tracks
-      .map(track => `${capitalizeEachWord(track.title)} ${removeLeadingZeroOrColon(track.duration.value)}`)
+      .map(track => `${capitalizeEachWord(track.title)} ${removeLeadingZeroOrColon(track.time.value)}`)
       .join("\r");
     const notes = this.notes ? this.notes.replace(/"/g, '""') : '';
 

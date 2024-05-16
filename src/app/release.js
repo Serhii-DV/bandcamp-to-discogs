@@ -100,7 +100,7 @@ export class Release {
       label: this.label,
       published: this.published.toISOString(),
       modified: this.modified.toISOString(),
-      tracks: this.tracks,
+      tracks: this.tracks.map(track => track.toStorageObject()),
       image: this.image,
       keywords: this.keywords
     };
@@ -116,7 +116,7 @@ export class Release {
       throw new Error('Cannot create Release object from object', obj);
     }
 
-    const tracks = obj.tracks.map(trackData => Track.fromObject(trackData));
+    const tracks = obj.tracks.map(trackData => Track.fromStorageObject(trackData));
 
     if (!obj.published && !obj.date) {
       throw new Error("Missing published or date property");
@@ -185,16 +185,24 @@ export class Track {
     this.time = time;
   }
 
+  toStorageObject() {
+    return {
+      num: this.num,
+      title: this.title,
+      time: this.time.value
+    };
+  }
+
   /**
    * Create an instance of the Track class from the object.
    * @param {Object} obj - A simple object.
    * @returns {Track} An instance of the Track class.
    */
-  static fromObject(obj) {
+  static fromStorageObject(obj) {
     return new Track(
       obj.num,
       obj.title,
-      obj.duration
+      obj.time || obj.duration
     );
   }
 }

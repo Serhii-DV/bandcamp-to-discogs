@@ -1,6 +1,12 @@
 # Change log
 
-## 0.9.0 (2024-05-XX)
+## 0.9.1 (2024-05-16)
+
+### Fixed
+
+- core: release time detection was broken
+
+## 0.9.0 (2024-05-07)
 
 ### Features
 

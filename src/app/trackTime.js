@@ -30,6 +30,10 @@ class TrackTime {
     return this.toString();
   }
 
+  get date() {
+    return this.toDate();
+  }
+
   /**
    * Returns a string representation of the duration in the format "HH:MM:SS".
    * @returns {string} String representation of the duration.

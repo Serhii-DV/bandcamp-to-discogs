@@ -12,11 +12,19 @@ export function generateKeyForUrl(url) {
 }
 
 /**
+ * @param {ReleaseItem} releaseItem
+ * @return {String}
+ */
+export function generateKeyForReleaseItem(releaseItem) {
+  return generateKeyForUrl(releaseItem.url);
+}
+
+/**
  * @param {Release} release
  * @return {String}
  */
 export function generateKeyForRelease(release) {
-  return generateKeyForUrl(release.releaseItem.url);
+  return generateKeyForReleaseItem(release.releaseItem);
 }
 
 export function generateKeysFromUrls(urls) {

@@ -39,6 +39,7 @@ export function findReleaseByUrl(url, onFind, onMissing) {
         if (isFunction(onFind)) onFind(release);
       } catch (error) {
         console.log("B2D: Broken storage data for release", result[key]);
+        clearStorageByKey(key);
       }
     } else {
       console.log("B2D: Release data doesn't exists", key);

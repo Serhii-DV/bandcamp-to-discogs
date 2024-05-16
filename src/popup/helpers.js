@@ -1,6 +1,7 @@
 import { Release, ReleaseItem } from "../app/release.js";
 import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
 import { disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
+import { generateKeyForReleaseItem } from "../modules/key-generator.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
 
 export function createBootstrapCheckbox(id, value, labelText, checked) {
@@ -144,7 +145,7 @@ function transformReleaseItemsToReleaseListData(releases) {
     const searchLink = getIconLinkHtml(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search');
     data.push({
       title: `${release.artist} - ${release.title} ${viewLink} ${searchLink}`,
-      value: release.url,
+      value: generateKeyForReleaseItem(release),
       id: convertToAlias(release.title)
     });
   });

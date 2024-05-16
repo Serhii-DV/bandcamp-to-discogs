@@ -1,6 +1,14 @@
 # Change log
 
-## 0.9.0 (2024-05-XX)
+## 0.9.1 (2024-05-16)
+
+### Fixed
+
+- core: release time detection was broken introduced in 0.8.0 version
+- core: restore Output release published and modified dates feature introduced in 0.8.0 version
+- core: deleting history item works again
+
+## 0.9.0 (2024-05-07)
 
 ### Features
 

@@ -1,5 +1,5 @@
 import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../../bandcamp/modules/bandcamp.js";
-import { capitalizeEachWord, removeZeroHours } from "../../modules/utils.js";
+import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../modules/utils.js";
 import { Release, Track } from "../../app/release.js";
 
 /**
@@ -65,7 +65,7 @@ export class DiscogsCsv {
       styles: keywordsToDiscogsStyles(release.keywords),
       tracks: release.tracks,
       notes: JSON.stringify(release.toMetadata()),
-      date: release.date.toISOString().split('T')[0],
+      date: release.published.toISOString().split('T')[0],
       images: release.image
     });
   }
@@ -122,7 +122,7 @@ export class DiscogsCsv {
    */
   toCsvObject() {
     const tracks = this.tracks
-      .map(track => `${capitalizeEachWord(track.title)} ${removeZeroHours(track.duration)}`)
+      .map(track => `${capitalizeEachWord(track.title)} ${removeLeadingZeroOrColon(track.time.value)}`)
       .join("\r");
     const notes = this.notes ? this.notes.replace(/"/g, '""') : '';
 

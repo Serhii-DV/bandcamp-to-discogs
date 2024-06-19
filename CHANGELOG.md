@@ -2,6 +2,10 @@
 
 ## 0.10 (2024-06-XX)
 
+### Features
+
+- popup: Added a Discogs search form on the main dashboard tab
+
 ## 0.9.1 (2024-05-16)
 
 ### Fixed

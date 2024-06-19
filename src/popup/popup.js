@@ -27,7 +27,7 @@ async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
-        showDashboard();
+        showBandcampDataNotFoundWarning();
         return;
       }
 
@@ -36,11 +36,14 @@ async function loadRelease() {
   });
 }
 
-function showDashboard() {
+function showBandcampDataNotFoundWarning() {
   disable(btnReleaseTab, btnCsvDataTab);
   hide(btnReleasesTab);
   show(btnDashboardTab, btnDownloadReleases);
   click(btnDashboardTab);
+
+  const warningBandcampDataNotFound = document.getElementById('b2d-warning-bandcamp-data-not-found');
+  show(warningBandcampDataNotFound);
 }
 
 function processBandcampResponse(response) {

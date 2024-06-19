@@ -5,6 +5,7 @@
 ### Features
 
 - popup: Added a Discogs search form on the main dashboard tab
+- popup: Introduced a Dashboard tab
 
 ### Fixed
 

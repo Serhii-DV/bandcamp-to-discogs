@@ -6,6 +6,10 @@
 
 - popup: Added a Discogs search form on the main dashboard tab
 
+### Fixed
+
+- bandcamp page: Fixed an error when tracklist is empty
+
 ## 0.9.1 (2024-05-16)
 
 ### Fixed

@@ -22,11 +22,13 @@ function createReleaseFromSchema(schema) {
   const label = schema.publisher.name;
   const datePublished = new Date(schema.datePublished);
   const dateModified = new Date(schema.dateModified);
-  const tracks = schema.track.itemListElement.map(track => new Track(
-    track.position,
-    track.item.name,
-    TrackTime.fromDuration(track.item.duration)
-  ));
+  const tracks = schema.track.numberOfItems
+    ? schema.track.itemListElement.map(track => new Track(
+      track.position,
+      track.item.name,
+      TrackTime.fromDuration(track.item.duration)
+    ))
+    : [];
   const url = schema.mainEntityOfPage;
   const image = schema.image;
   const keywords = schema.keywords;

@@ -39,7 +39,7 @@ async function loadRelease() {
 function showBandcampDataNotFoundWarning() {
   disable(btnReleaseTab, btnCsvDataTab);
   hide(btnReleasesTab);
-  show(btnDashboardTab, btnDownloadReleases);
+  show(btnDownloadReleases);
   click(btnDashboardTab);
 
   const warningBandcampDataNotFound = document.getElementById('b2d-warning-bandcamp-data-not-found');
@@ -54,8 +54,6 @@ function processBandcampResponse(response) {
     // todo: Show error?
     return;
   }
-
-  hide(btnDashboardTab);
 
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {

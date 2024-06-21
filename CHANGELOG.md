@@ -9,7 +9,7 @@
 
 ### Fixed
 
-- bandcamp page: Fixed an error when tracklist is empty
+- bandcamp page: Fixed an error when track list is empty
 
 ## 0.9.1 (2024-05-16)
 
@@ -85,8 +85,8 @@
 
 ### Fixed
 
-- Bancamp keywords convertion to Discogs genres/styles when creating draft CSV file for multiple releases
-- Show notifications on the Discgos page longer. Now it's 20 seconds
+- Bandcamp keywords conversion to Discogs genres/styles when creating draft CSV file for multiple releases
+- Show notifications on the Discogs page longer. Now it's 20 seconds
 
 ## 0.4.0 (2023-09-22)
 
@@ -109,7 +109,7 @@
 ### Features
 
 - Save release metadata as JSON value in notes field
-- Outofill release fields from metadata on Discogs draft page
+- Autofill release fields from metadata on Discogs draft page
 - Updated "About extension" information
 
 ## 0.1.3

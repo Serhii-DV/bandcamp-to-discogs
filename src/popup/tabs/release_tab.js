@@ -1,6 +1,8 @@
 import { Release } from "../../app/release.js";
+import { getDiscogsDateValue } from "../../discogs/app/utils.js";
 import { getSearchDiscogsReleaseUrl } from "../../discogs/modules/discogs.js";
 import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../modules/utils.js";
+import { initClipboard } from "../../utils/clipboard.js";
 import { setBackgroundImage } from "../helpers.js";
 import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 
@@ -49,13 +51,19 @@ function outputRelease(tab, release) {
     month: 'long',
     day: 'numeric',
   });
-  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(function(el) {
-    el.innerHTML = formatter.format(release.published);
+  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(el => {
+    el.innerHTML = formatter.format(release.published) + el.innerHTML;
     el.title = release.published.toLocaleString();
+    const copyEl = el.querySelector('.action-copy');
+    copyEl.setAttribute('data-content', getDiscogsDateValue(release.published));
+    initClipboard(copyEl);
   });
-  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(function(el) {
-    el.innerHTML = formatter.format(release.modified);
+  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(el => {
+    el.innerHTML = formatter.format(release.modified) + el.innerHTML;
     el.title = release.modified.toLocaleString();
+    const copyEl = el.querySelector('.action-copy');
+    copyEl.setAttribute('data-content', getDiscogsDateValue(release.modified));
+    initClipboard(copyEl);
   });
 }
 

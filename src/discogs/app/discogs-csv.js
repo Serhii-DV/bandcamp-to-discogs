@@ -1,6 +1,7 @@
 import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../../bandcamp/modules/bandcamp.js";
 import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../modules/utils.js";
 import { Release, Track } from "../../app/release.js";
+import { getDiscogsDateValue } from "./utils.js";
 
 /**
  * Represents a Discogs CSV entry.
@@ -18,7 +19,7 @@ export class DiscogsCsv {
    * @param {Array<String>} params.styles - The styles associated with the release.
    * @param {Array<Track>} params.tracks - The tracks included in the release.
    * @param {String} params.notes - Additional notes.
-   * @param {String} params.date - The release date.
+   * @param {Date} params.date - The release date.
    * @param {String} params.images - The image URLs associated with the release.
    */
   constructor({
@@ -65,7 +66,7 @@ export class DiscogsCsv {
       styles: keywordsToDiscogsStyles(release.keywords),
       tracks: release.tracks,
       notes: JSON.stringify(release.toMetadata()),
-      date: release.published.toISOString().split('T')[0],
+      date: release.published,
       images: release.image
     });
   }
@@ -117,6 +118,14 @@ export class DiscogsCsv {
   }
 
   /**
+   * Retrieves the formatted date value
+   * @returns {String} - The discogs date value
+   */
+  getDate() {
+    return getDiscogsDateValue(this.date);
+  }
+
+  /**
    * Converts the DiscogsCsv instance to a CSV object.
    * @returns {Object} - The CSV object representing the csv row object.
    */
@@ -136,7 +145,7 @@ export class DiscogsCsv {
       style: `"${this.getStyle()}"`,
       tracks: `"${tracks}"`,
       notes: `"${notes}"`,
-      date: this.date,
+      date: this.getDate(),
       images: this.images
     };
   }

@@ -1,6 +1,12 @@
 # Change log
 
-## 0.10 (2024-06-23)
+## 0.10.1 (2024-06-23)
+
+### Fixed
+
+- popup: Fixed broken releases tab
+
+## 0.10.0 (2024-06-23)
 
 ### Features
 

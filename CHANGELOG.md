@@ -6,6 +6,7 @@
 
 - popup: Added a Discogs search form on the main dashboard tab
 - popup: Introduced a Dashboard tab
+- popup: Added Discogs copy date buttons for the published and modified release dates
 
 ### Fixed
 

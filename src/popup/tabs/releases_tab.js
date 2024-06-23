@@ -40,7 +40,7 @@ export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue, btn
     );
 
   const releaseItems = [];
-  releasesData.forEach(obj => releaseItems.push(ReleaseItem.fromStorageObject(obj)));
+  releasesData.forEach(obj => releaseItems.push(ReleaseItem.fromObject(obj)));
   populateReleasesList(releasesList, releaseItems);
 
   let activeTab;

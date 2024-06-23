@@ -1,24 +1,10 @@
 /**
- * @param {HTMLElement[]} elements
+ * @param {HTMLElement} element
+ * @param {string} content
  */
-export const initClipboard = elements => {
-  if (Array.isArray(elements)) {
-    elements.forEach(el => {
-      initClipboardElement(el);
-    });
-    return;
-  }
-
-  initClipboardElement(elements);
-};
-
-const initClipboardElement = el => {
-  el.addEventListener('click', () => {
-    const text = el.getAttribute('data-content');
-
-    copyToClipboard(text).then(() => {
-      alert(text);
-    });
+export const initClipboard = (element, content) => {
+  element.addEventListener('click', () => {
+    copyToClipboard(content ?? element.getAttribute('data-content'));
   });
 };
 

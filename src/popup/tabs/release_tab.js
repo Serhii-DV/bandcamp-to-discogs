@@ -54,16 +54,12 @@ function outputRelease(tab, release) {
   releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(el => {
     el.innerHTML = formatter.format(release.published) + el.innerHTML;
     el.title = release.published.toLocaleString();
-    const copyEl = el.querySelector('.action-copy');
-    copyEl.setAttribute('data-content', getDiscogsDateValue(release.published));
-    initClipboard(copyEl);
+    initClipboard(el.querySelector('.action-copy'), getDiscogsDateValue(release.published));
   });
   releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(el => {
     el.innerHTML = formatter.format(release.modified) + el.innerHTML;
     el.title = release.modified.toLocaleString();
-    const copyEl = el.querySelector('.action-copy');
-    copyEl.setAttribute('data-content', getDiscogsDateValue(release.modified));
-    initClipboard(copyEl);
+    initClipboard(el.querySelector('.action-copy'), getDiscogsDateValue(release.modified));
   });
 }
 

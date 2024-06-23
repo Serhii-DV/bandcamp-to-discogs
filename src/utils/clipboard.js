@@ -4,7 +4,14 @@
  */
 export const initClipboard = (element, content) => {
   element.addEventListener('click', () => {
-    copyToClipboard(content ?? element.getAttribute('data-content'));
+    const icon = element.querySelector('b2d-icon');
+    copyToClipboard(content ?? element.getAttribute('data-content')).then(() => {
+      const initIconName = icon.getAttribute('name');
+      icon.setIcon('clipboard2-check-fill');
+      setTimeout(() => {
+        icon.setIcon(initIconName);
+      }, 3000)
+    });
   });
 };
 

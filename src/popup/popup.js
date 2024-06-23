@@ -12,7 +12,7 @@ import { getStorageSize } from "../modules/storage.js";
 import { bytesToSize } from "../modules/utils.js";
 import { setupConsole, setupConsoleRelease } from "./console.js";
 
-const btnWarningMessageTab = document.getElementById("warningMessage-tab");
+const btnDashboardTab = document.getElementById("dashboard-tab");
 const btnReleaseTab = document.getElementById("release-tab");
 const btnReleasesTab = document.getElementById("releases-tab");
 const btnCsvDataTab = document.getElementById('csvData-tab');
@@ -27,7 +27,7 @@ async function loadRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
-        showWarningMessage();
+        showBandcampDataNotFoundWarning();
         return;
       }
 
@@ -36,11 +36,14 @@ async function loadRelease() {
   });
 }
 
-function showWarningMessage() {
+function showBandcampDataNotFoundWarning() {
   disable(btnReleaseTab, btnCsvDataTab);
   hide(btnReleasesTab);
-  show(btnWarningMessageTab, btnDownloadReleases);
-  click(btnWarningMessageTab);
+  show(btnDownloadReleases);
+  click(btnDashboardTab);
+
+  const warningBandcampDataNotFound = document.getElementById('b2d-warning-bandcamp-data-not-found');
+  show(warningBandcampDataNotFound);
 }
 
 function processBandcampResponse(response) {
@@ -51,8 +54,6 @@ function processBandcampResponse(response) {
     // todo: Show error?
     return;
   }
-
-  hide(btnWarningMessageTab);
 
   loadDiscogsGenres(config.genres_url).then(genres => {
     loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {

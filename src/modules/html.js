@@ -1,10 +1,20 @@
-import { isArray, isString } from "./utils.js";
+import { isArray, isObject, isString } from "./utils.js";
 
 export function hasDataAttribute(element, attributeName) {
   return element.hasAttribute(`data-${attributeName}`);
 }
 
 export function setDataAttribute(element, attributeName, attributeValue = '') {
+  if (isObject(attributeName)) {
+    const obj = attributeName;
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        console.log(key, obj[key]);
+        setDataAttribute(element, key, obj[key]);
+      }
+    }
+    return;
+  }
   element.setAttribute(`data-${attributeName}`, attributeValue);
 }
 

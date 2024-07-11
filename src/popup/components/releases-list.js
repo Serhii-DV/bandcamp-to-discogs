@@ -233,7 +233,7 @@ class ReleasesList extends HTMLElement {
       const checkboxId = self.getPrefixed('checkbox_'+index);
       row.classList.add('release-item');
       setDataAttribute(row, 'sort', index);
-      setDataAttribute(row, 'title', item.title);
+      setDataAttribute(row, item.dataAtts);
       row.innerHTML = `
         <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
         <td><label for="${checkboxId}">${item.title}</label></td>

@@ -1,4 +1,4 @@
-import { createElementFromHTML, getDataAttribute, hasDataAttribute, setDataAttribute } from "../../modules/html";
+import { getDataAttribute, setDataAttribute } from "../../modules/html";
 
 class ReleasesList extends HTMLElement {
   constructor() {

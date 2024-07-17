@@ -42,9 +42,11 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
   const downloadCsvFile = (event) => {
     const button = event.target;
     setButtonInLoadingState(button);
-    const selectedValues = releasesList.getSelectedValues();
 
-    findReleasesByUrls(selectedValues, releases => {
+    const bcLinks = releasesList.querySelectorAll('.release-item.table-active .link-bandcamp-url');
+    const checkedUrls = Array.from(bcLinks).map(link => link.getAttribute('href'));
+
+    findReleasesByUrls(checkedUrls, releases => {
       const firstRelease = releases[0];
       const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
       const csv = objectsToCsv(csvObjects);

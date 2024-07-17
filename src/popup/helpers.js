@@ -141,12 +141,15 @@ function transformReleaseItemsToReleaseListData(releases) {
 
   releases.forEach(item => {
     const release = item instanceof Release ? item.releaseItem : item;
-    const viewLink = getIconLinkHtml(release.url, 'box-arrow-up-right');
-    const searchLink = getIconLinkHtml(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search');
+    const viewLink = getIconLinkHtml(release.url, 'box-arrow-up-right', 'link-bandcamp-url');
+    const searchLink = getIconLinkHtml(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search', 'link-discogs-search');
     data.push({
       title: `${release.artist} - ${release.title} ${viewLink} ${searchLink}`,
       value: generateKeyForReleaseItem(release),
-      id: convertToAlias(release.title)
+      id: convertToAlias(release.title),
+      dataAtts: {
+        title: `${release.artist} - ${release.title}`
+      }
     });
   });
 
@@ -163,8 +166,9 @@ export function populateReleasesList(releasesList, releases) {
   );
 }
 
-export function getIconLinkHtml(url, icon) {
+export function getIconLinkHtml(url, icon, className) {
   const releaseLink = document.createElement("a");
+  releaseLink.classList.add(className);
   releaseLink.href = url;
   releaseLink.target = '_blank';
   releaseLink.innerHTML = `<b2d-icon name="${icon}"></b2d-icon>`;

@@ -9,7 +9,6 @@ export function setDataAttribute(element, attributeName, attributeValue = '') {
     const obj = attributeName;
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
-        console.log(key, obj[key]);
         setDataAttribute(element, key, obj[key]);
       }
     }

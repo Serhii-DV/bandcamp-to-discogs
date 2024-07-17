@@ -1,7 +1,7 @@
 import { ReleaseItem } from "../../app/release.js";
 import { getCurrentTab, openTabs } from "../../modules/chrome.js";
 import { input } from "../../modules/html.js";
-import { findMissingUrls, findReleasesByUrls } from "../../modules/storage.js";
+import { findReleasesByUrls } from "../../modules/storage.js";
 import { populateReleasesList, removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState } from "../helpers.js";
 import { downloadReleasesCsv } from "./download_tab.js";
 
@@ -12,22 +12,22 @@ export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue, btn
     const button = event.target;
     setButtonInLoadingState(button);
 
-    const checkedUrls = releasesList.getSelectedValues();
-    findMissingUrls(checkedUrls, missingUrls => {
-      openTabs(missingUrls, (tab) => {
-        chrome.scripting.executeScript({
-          target: { tabId: tab.id },
-          func: waitForBandcampData
-        }).then(() => {});
-      }).then(() => {
-        setTimeout(() => {
-          // Read data from the storage
-          findReleasesByUrls(checkedUrls, releases => {
-            downloadReleasesCsv(releases);
-            removeButtonLoadingState(button);
-          });
-        }, 3000);
-      });
+    const bcLinks = releasesList.querySelectorAll('.release-item.table-active .link-bandcamp-url');
+    const checkedUrls = Array.from(bcLinks).map(link => link.getAttribute('href'));
+
+    openTabs(checkedUrls, (tab) => {
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: waitForBandcampData
+      }).then(() => {});
+    }).then(() => {
+      setTimeout(() => {
+        // Read data from the storage
+        findReleasesByUrls(checkedUrls, releases => {
+          downloadReleasesCsv(releases);
+          removeButtonLoadingState(button);
+        });
+      }, 3000);
     });
   };
 

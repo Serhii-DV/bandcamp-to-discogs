@@ -70,7 +70,8 @@
     {
       "resources": [
         "src/discogs/script.js",
-        "src/discogs/notification.css"
+        "src/discogs/notification.css",
+        "src/discogs/modules/content-main.js"
       ],
       "matches": ["https://www.discogs.com/*"]
     }

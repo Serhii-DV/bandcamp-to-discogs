@@ -14,7 +14,7 @@
   function initialize() {
     detectElements();
     // @see DiscogsCsv::fromRelease
-    const releaseData = unserializeReleaseData();
+    const releaseData = deserializeReleaseData();
 
     if (!isObject(releaseData)) {
       showNotificationWarning('Release metadata was not found');
@@ -45,7 +45,7 @@
     submissionNotesTextarea = document.querySelector('textarea#release-submission-notes-textarea');
   }
 
-  function unserializeReleaseData() {
+  function deserializeReleaseData() {
     const jsonString = notesTextarea.value;
     try {
       return JSON.parse(jsonString);

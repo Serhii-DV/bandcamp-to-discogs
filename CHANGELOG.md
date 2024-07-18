@@ -1,5 +1,13 @@
 # Change log
 
+## 0.11.0 (2024-XX-YY)
+
+## 0.10.2 (2024-07-17)
+
+### Fixed
+
+- popup: Fixed broken multi download feature
+
 ## 0.10.1 (2024-06-23)
 
 ### Fixed

@@ -52,16 +52,6 @@ class ReleasesList extends HTMLElement {
     });
 
     const table = self.querySelector(".table");
-    table.addEventListener("click", event => {
-      const target = event.target;
-      if (target.nodeName === 'TD') {
-        const parentTr = target.parentElement;
-        const checkbox = parentTr.querySelector("input[type='checkbox']");
-        if (checkbox && !target.matches("label")) {
-          checkbox.click();
-        }
-      }
-    });
     table.addEventListener('change', event => {
       const target = event.target;
       if (target.type === 'checkbox') {
@@ -246,7 +236,7 @@ class ReleasesList extends HTMLElement {
       setDataAttribute(row, item.dataAtts);
       row.innerHTML = `
         <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
-        <td><label for="${checkboxId}">${item.title}</label></td>
+        <td><label for="${checkboxId}">${item.title}</label>${item.controls}</td>
       `;
       tableBody.appendChild(row);
     });

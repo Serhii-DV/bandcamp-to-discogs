@@ -3,7 +3,7 @@ import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
 import { loadDiscogsGenres } from "../discogs/modules/genres.js";
 import { loadKeywordMapping } from "../bandcamp/modules/mapping.js";
 import config from "../config.js";
-import { setupHistoryTab } from "./tabs/history_tab.js";
+import { setHistoryTabSearchValue, setupHistoryTab } from "./tabs/history_tab.js";
 import { disable, enable, hide, show, click } from "../modules/html.js";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
@@ -32,6 +32,18 @@ async function loadRelease() {
       }
 
       processBandcampResponse(response);
+    });
+  });
+}
+
+async function getDiscogsEditPageData() {
+  getCurrentTab().then((tab) => {
+    chrome.tabs.sendMessage(tab.id, { type: 'getDiscogsEditPageData' }, (response) => {
+      if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
+        return;
+      }
+
+      processDiscogsDraftPageResponse(response);
     });
   });
 }
@@ -100,6 +112,11 @@ function processBandcampReleasesData(response) {
   );
 }
 
+function processDiscogsDraftPageResponse(response) {
+  click(btnHistoryTab);
+  setHistoryTabSearchValue(response.data.artistName);
+}
+
 function replaceVersion(document) {
   const manifest = getExtensionManifest();
 
@@ -142,6 +159,8 @@ function main() {
   onExternalContentLoaded((e) => {
     replaceVersion(e.target);
   });
+
+  getDiscogsEditPageData();
 }
 
 document.addEventListener('DOMContentLoaded', main);

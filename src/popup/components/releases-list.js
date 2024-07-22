@@ -1,4 +1,5 @@
-import { getDataAttribute, setDataAttribute } from "../../modules/html";
+import { getDataAttribute, input, setDataAttribute } from "../../modules/html";
+import { isEmptyArray } from "../../modules/utils";
 
 class ReleasesList extends HTMLElement {
   constructor() {
@@ -158,6 +159,12 @@ class ReleasesList extends HTMLElement {
     return self;
   }
 
+  refreshSearchStatus() {
+    const self = this;
+    input(self.searchInput);
+    return self;
+  }
+
   addStatusElement(...element) {
     const self = this;
     element.forEach(el => self.statusElements.push(el));
@@ -216,7 +223,10 @@ class ReleasesList extends HTMLElement {
   connectedCallback() {
     const dataAttr = this.getAttribute("data");
     const data = dataAttr ? JSON.parse(dataAttr) : [];
-    this.populateData(data);
+
+    if (!isEmptyArray(data)) {
+      this.populateData(data);
+    }
   }
 
   /**
@@ -241,7 +251,9 @@ class ReleasesList extends HTMLElement {
       tableBody.appendChild(row);
     });
 
-    self.refreshStatus();
+    self
+      .refreshStatus()
+      .refreshSearchStatus();
 
     return self;
   }
@@ -287,6 +299,14 @@ class ReleasesList extends HTMLElement {
     self.stateButtons.forEach(button => self.updateButtonState(button));
     return self;
   }
+
+  setSearchValue(value) {
+    const self = this;
+    self.searchInput.value = value;
+    return self;
+  }
 }
 
-customElements.define('releases-list', ReleasesList);
+if (!customElements.get('releases-list')) {
+  customElements.define('releases-list', ReleasesList);
+}

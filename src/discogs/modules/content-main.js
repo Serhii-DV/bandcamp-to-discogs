@@ -25,14 +25,21 @@ function injectJSFile(url, callback) {
 }
 
 function setupSendMessageToPopup() {
-  console.log('setupSendMessageToPopup', chrome);
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'getDiscogsEditPageData') {
-      sendResponse({
-        data: 'DISCOGS',
-      });
+      sendResponse(prepareSendMessageData());
     }
 
     return true;
   });
+}
+
+function prepareSendMessageData() {
+  const artistNameInput = document.getElementById('artist-name-input');
+
+  return {
+    data: {
+      artistName: artistNameInput.getAttribute('value'),
+    }
+  };
 }

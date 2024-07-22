@@ -1,14 +1,15 @@
 import { DiscogsCsv } from "../../discogs/app/discogs-csv.js";
+import { ReleasesList } from '../components/releases-list.js';
 import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { createElementFromHTML, hasDataAttribute, setDataAttribute } from "../../modules/html.js";
-import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls, logStorage } from "../../modules/storage.js";
+import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls } from "../../modules/storage.js";
 import { populateReleasesList, removeButtonLoadingState, setButtonInLoadingState } from "../helpers.js";
 
 /**
  * @param {Element} btnDownloadCsv
  */
 export function setupHistoryTab(tab, btnDownloadCsv) {
-  const releasesList = document.querySelector('#historyReleasesList');
+  const releasesList = getReleasesList();
 
   if (!hasDataAttribute(tab, 'buttons-initialized')) {
     setupReleasesList(tab, releasesList, btnDownloadCsv);
@@ -16,6 +17,18 @@ export function setupHistoryTab(tab, btnDownloadCsv) {
   }
 
   updateReleasesListData(releasesList);
+}
+
+export function setHistoryTabSearchValue(searchValue) {
+  const releasesList = getReleasesList();
+  releasesList.setSearchValue(searchValue);
+}
+
+/**
+ * @returns {ReleasesList}
+ */
+function getReleasesList() {
+  return document.getElementById('historyReleasesList');
 }
 
 function updateReleasesListData(releasesList) {

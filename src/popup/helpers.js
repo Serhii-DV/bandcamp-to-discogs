@@ -3,7 +3,7 @@ import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
 import { disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
 import { generateKeyForReleaseItem } from "../modules/key-generator.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
-import { createClipboardLink, initClipboard } from "../utils/clipboard.js";
+import { createClipboardLink } from "../utils/clipboard.js";
 
 export function createBootstrapCheckbox(id, value, labelText, checked) {
   // Create the checkbox input element
@@ -142,23 +142,26 @@ function transformReleaseItemsToReleaseListData(releases) {
 
   releases.forEach(item => {
     const release = item instanceof Release ? item.releaseItem : item;
-    const viewLink = getIconLinkHtml(release.url, 'box-arrow-up-right', 'link-bandcamp-url');
-    const searchLink = getIconLinkHtml(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search', 'link-discogs-search');
-    let metadataLinkHtml = '';
+    const viewLink = createIconLink(release.url, 'box-arrow-up-right', 'link-bandcamp-url');
+    const searchLink = createIconLink(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search', 'link-discogs-search');
+    const controls = [
+      viewLink,
+      searchLink,
+    ];
 
     if (item instanceof Release) {
-      const metadataLink = createClipboardLink();
-      initClipboard(metadataLink, item.toMetadata());
-      metadataLinkHtml = metadataLink.outerHTML;
+      const copyMetadataLink = createClipboardLink(JSON.stringify(item.toMetadata()));
+      controls.push(copyMetadataLink);
     }
 
     data.push({
-      title: `${release.artist} - ${release.title} ${viewLink} ${searchLink} ${metadataLinkHtml}`,
+      title: `${release.artist} - ${release.title}`,
       value: generateKeyForReleaseItem(release),
       id: convertToAlias(release.title),
       dataAtts: {
         title: `${release.artist} - ${release.title}`
-      }
+      },
+      controls,
     });
   });
 
@@ -175,13 +178,13 @@ export function populateReleasesList(releasesList, releases) {
   );
 }
 
-function getIconLinkHtml(url, icon, className) {
-  const releaseLink = document.createElement("a");
-  releaseLink.classList.add(className);
-  releaseLink.href = url;
-  releaseLink.target = '_blank';
-  releaseLink.innerHTML = `<b2d-icon name="${icon}"></b2d-icon>`;
-  return releaseLink.outerHTML;
+function createIconLink(url, icon, className) {
+  const link = document.createElement("a");
+  link.classList.add(className);
+  link.href = url;
+  link.target = '_blank';
+  link.innerHTML = `<b2d-icon name="${icon}"></b2d-icon>`;
+  return link;
 }
 
 export function setBackgroundImage(element, imageUrl) {

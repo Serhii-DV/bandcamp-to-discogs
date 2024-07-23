@@ -27,12 +27,18 @@ export const copyToClipboard = str => {
 
 /**
  * Creates a new Clipboard link element
+ * @param {string} content
  * @returns {HTMLElement}
  */
-export const createClipboardLink = () => {
-  const clipboardLink = document.createElement("a");
-  clipboardLink.classList.add('clipboard-link');
-  clipboardLink.href = '#';
-  clipboardLink.innerHTML = `<b2d-icon name="clipboard"></b2d-icon>`;
-  return clipboardLink;
+export const createClipboardLink = (content) => {
+  const link = document.createElement("a");
+  link.classList.add('clipboard-link');
+  link.href = '#';
+  link.innerHTML = `<b2d-icon name="clipboard"></b2d-icon>`;
+
+  if (content) {
+    initClipboard(link, content);
+  }
+
+  return link;
 };

@@ -236,8 +236,16 @@ class ReleasesList extends HTMLElement {
       setDataAttribute(row, item.dataAtts);
       row.innerHTML = `
         <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
-        <td><label for="${checkboxId}">${item.title}</label>${item.controls}</td>
+        <td><label for="${checkboxId}">${item.title}</label><span class="controls"></span></td>
       `;
+
+      const controlsEl = row.querySelector('span.controls');
+      item.controls.forEach((control) => {
+        if (control instanceof HTMLElement) {
+          controlsEl.appendChild(control);
+        }
+      });
+
       tableBody.appendChild(row);
     });
 

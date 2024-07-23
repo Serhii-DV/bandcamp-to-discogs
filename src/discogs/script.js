@@ -1,15 +1,18 @@
 'use strict';
 
-((document) => {
+import { getSubmissionFormSectionNotes } from "./modules/draft-page.js";
+
+export function runScript() {
   let artistNameInput;
   let qtyInput;
   let trackTitleInputs;
   let trackDurationInputs;
   let notesTextarea;
+  let submissionFormSectionNotes;
   let submissionNotesTextarea;
-
+console.log('B2D: Discogs runScript');
   // Initialize script after some period of time. We have to wait for elements initializing on the page.
-  setTimeout(initialize, 2000);
+  setTimeout(initialize, 5000);
 
   function initialize() {
     detectElements();
@@ -28,6 +31,11 @@
     setInputValue(submissionNotesTextarea, releaseData.submissionNotes);
     setInputValue(notesTextarea, '');
 
+    const btnElement = document.createElement('button');
+    btnElement.textContent = 'Refresh';
+
+    submissionFormSectionNotes.prepend(btnElement);
+
     showNotificationInfo('Release metadata was applied');
 
     if (artistNameInput) {
@@ -42,6 +50,7 @@
     trackTitleInputs = document.querySelectorAll('.track_input');
     trackDurationInputs = document.querySelectorAll('input[aria-label="Track duration"]');
     notesTextarea = document.querySelector('textarea#release-notes-textarea');
+    submissionFormSectionNotes = getSubmissionFormSectionNotes();
     submissionNotesTextarea = document.querySelector('textarea#release-submission-notes-textarea');
   }
 
@@ -137,8 +146,7 @@
   function showNotificationWarning(message) { showNotification(message, 'warning'); }
   function showNotificationError(message) { showNotification(message, 'error'); }
 
-})(document);
-
+}
 
 /**
  * @param {String} str

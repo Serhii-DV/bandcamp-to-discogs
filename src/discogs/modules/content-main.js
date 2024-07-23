@@ -1,9 +1,13 @@
+import { runScript } from "../script.js";
 import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
 
 export function main () {
-  console.log('B2D: content-main.js', chrome);
+  console.log('B2D: content-main.js');
   injectCSSFile(chrome.runtime.getURL('src/discogs/notification.css'));
-  injectJSFile(chrome.runtime.getURL('src/discogs/script.js'), () => { console.log('B2D: Discogs script loaded', chrome); });
+
+  setTimeout(() => {
+    runScript();
+  }, 2000);
 
   setupSendMessageToPopup();
 }

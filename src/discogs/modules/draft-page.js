@@ -5,3 +5,7 @@ export function getArtistNameInput() {
 export function getReleaseTitleInput() {
   return document.getElementById('release-title-input');
 }
+
+export function getSubmissionFormSectionNotes() {
+  return document.querySelector('#subform .notes');
+}

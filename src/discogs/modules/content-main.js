@@ -1,3 +1,5 @@
+import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
+
 export function main () {
   console.log('B2D: content-main.js', chrome);
   injectCSSFile(chrome.runtime.getURL('src/discogs/notification.css'));
@@ -35,11 +37,12 @@ function setupSendMessageToPopup() {
 }
 
 function prepareSendMessageData() {
-  const artistNameInput = document.getElementById('artist-name-input');
+  const artistNameInput = getArtistNameInput();
+  const releaseTitleInput = getReleaseTitleInput();
 
   return {
     data: {
-      artistName: artistNameInput.getAttribute('value'),
+      artistName: artistNameInput.value + ' - ' + releaseTitleInput.value,
     }
   };
 }

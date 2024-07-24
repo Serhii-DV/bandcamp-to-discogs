@@ -6,6 +6,11 @@ export function getReleaseTitleInput() {
   return document.getElementById('release-title-input');
 }
 
+export function getSection(name) {
+  const artistBlock = document.querySelector(`[data-ref-overview="${name}"]`);
+  return artistBlock.parentElement;
+}
+
 export function getSubmissionFormSectionNotes() {
   return document.querySelector('#subform .notes');
 }
@@ -95,4 +100,15 @@ function checkInput(inputElement) {
 function triggerInputEvent(element) {
   const inputEvent = new Event("input", { bubbles: true, cancelable: true });
   element.dispatchEvent(inputEvent);
+}
+
+export function addTextToSection(sectionElement, text) {
+  if (!text) {
+    return;
+  }
+
+  const textEl = document.createElement("div");
+  textEl.innerHTML = 'B2D: ' + text;
+
+  sectionElement.prepend(textEl);
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 import { click } from "../modules/html.js";
-import { fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue } from "./modules/draft-page.js";
+import { addTextToSection, fillDurations, getSection, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue } from "./modules/draft-page.js";
 
 export function runScript() {
   let artistNameInput;
@@ -34,6 +34,12 @@ export function runScript() {
     applyBtn.textContent = 'Apply metadata';
     applyBtn.addEventListener('click', () => {
       const metadata = deserializeMetadata();
+
+      if (!isObject(metadata)) {
+        showNotificationWarning('Release metadata was not found');
+        return;
+      }
+
       applyMetadata(metadata);
     });
 
@@ -55,11 +61,7 @@ export function runScript() {
   }
 
   function applyMetadata(metadata) {
-    if (!isObject(metadata)) {
-      showNotificationWarning('Release metadata was not found');
-      return;
-    }
-
+    appendTextToSections(metadata);
     updateQuantity(metadata.format.qty);
     selectFormatFileType(metadata.format.fileType);
     selectFormatDescription(metadata.format.description);
@@ -79,6 +81,16 @@ export function runScript() {
    */
   function updateQuantity(qty) {
     setInputValue(qtyInput, qty);
+  }
+
+  function appendTextToSections(metadata) {
+    addTextToSection(getSection('artist'), metadata.artists);
+    addTextToSection(getSection('title'), metadata.title);
+    addTextToSection(getSection('label'), metadata.label);
+    addTextToSection(getSection('country'), metadata.country);
+    addTextToSection(getSection('released'), metadata.released);
+    addTextToSection(getSection('credits'), metadata.credits);
+    addTextToSection(getSection('genres'), metadata.genres);
   }
 
   // Notifications

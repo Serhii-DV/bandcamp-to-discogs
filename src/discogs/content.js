@@ -1,8 +1,6 @@
 'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
-  importModule('src/discogs/modules/content-main.js');
-});
+importModule('src/discogs/modules/content-main.js');
 
 function importModule(url) {
   (async () => {

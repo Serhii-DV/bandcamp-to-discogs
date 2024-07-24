@@ -1,3 +1,4 @@
+import { observeAttributeChange } from "../../modules/html.js";
 import { runScript } from "../script.js";
 import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
 
@@ -5,9 +6,12 @@ export function main () {
   console.log('B2D: content-main.js');
   injectCSSFile(chrome.runtime.getURL('src/discogs/notification.css'));
 
-  setTimeout(() => {
-    runScript();
-  }, 2000);
+  observeAttributeChange(document.querySelector('html'), 'class', (el) => {
+    if (el.classList.contains('de-enabled') && !el.classList.contains('b2d-script-injected')) {
+      runScript();
+      el.classList.add('b2d-script-injected');
+    }
+  });
 
   setupSendMessageToPopup();
 }

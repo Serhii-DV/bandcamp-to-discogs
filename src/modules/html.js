@@ -166,3 +166,24 @@ export function isHtmlElement(element) {
 export function getCurrentUrl() {
   return window.location.href;
 }
+
+/**
+ * Observes changes to a specified attribute on a given HTMLElement
+ * and runs a callback function when changes are detected.
+ *
+ * @param {HTMLElement} element - The element to observe.
+ * @param {string} attributeName - The name of the attribute to observe.
+ * @param {Function} callback - The function to call when the attribute changes.
+ */
+export function observeAttributeChange(element, attributeName, callback) {
+  const observer = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+          if (mutation.type === 'attributes' && mutation.attributeName === attributeName) {
+              callback(element);
+          }
+      }
+  });
+
+  const config = { attributes: true, attributeFilter: [attributeName] };
+  observer.observe(element, config);
+}

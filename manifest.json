@@ -72,7 +72,9 @@
         "src/discogs/script.js",
         "src/discogs/notification.css",
         "src/discogs/modules/content-main.js",
-        "src/discogs/modules/draft-page.js"
+        "src/discogs/modules/draft-page.js",
+        "src/modules/html.js",
+        "src/modules/utils.js"
       ],
       "matches": ["https://www.discogs.com/*"]
     }

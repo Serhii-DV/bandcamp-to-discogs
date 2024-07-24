@@ -187,3 +187,21 @@ export function observeAttributeChange(element, attributeName, callback) {
   const config = { attributes: true, attributeFilter: [attributeName] };
   observer.observe(element, config);
 }
+
+/**
+ * @param {String} cssUrl
+ */
+export function injectCSSFile(cssUrl) {
+  const linkElement = document.createElement('link');
+  linkElement.rel = 'stylesheet';
+  linkElement.href = cssUrl;
+
+  document.head.appendChild(linkElement);
+}
+
+export function injectJSFile(url, callback) {
+  const s = document.createElement('script');
+  s.src = url;
+  s.onload = callback;
+  (document.head||document.documentElement).appendChild(s);
+}

@@ -1,4 +1,4 @@
-import { observeAttributeChange } from "../../modules/html.js";
+import { injectCSSFile, observeAttributeChange } from "../../modules/html.js";
 import { runScript } from "../script.js";
 import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
 
@@ -14,24 +14,6 @@ export function main () {
   });
 
   setupSendMessageToPopup();
-}
-
-/**
- * @param {String} cssUrl
- */
-function injectCSSFile(cssUrl) {
-  const linkElement = document.createElement('link');
-  linkElement.rel = 'stylesheet';
-  linkElement.href = cssUrl;
-
-  document.head.appendChild(linkElement);
-}
-
-function injectJSFile(url, callback) {
-  const s = document.createElement('script');
-  s.src = url;
-  s.onload = callback;
-  (document.head||document.documentElement).appendChild(s);
 }
 
 function setupSendMessageToPopup() {

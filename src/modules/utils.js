@@ -131,24 +131,6 @@ export function replaceTokens(template, replacements) {
 }
 
 /**
- * @param {String} cssUrl
- */
-export function injectCSSFile(cssUrl) {
-  const linkElement = document.createElement('link');
-  linkElement.rel = 'stylesheet';
-  linkElement.href = cssUrl;
-
-  document.head.appendChild(linkElement);
-}
-
-export function injectJSFile(url, callback) {
-  const s = window.document.createElement('script');
-  s.src = url;
-  s.onload = isFunction(callback) ? callback() : () => { console.log(`B2D: Script ${url} was injected!`); };
-  (document.head||document.documentElement).appendChild(s);
-}
-
-/**
  * @param {String} inputString
  * @param {RegExp|String} delimiters
  * @returns {Array}

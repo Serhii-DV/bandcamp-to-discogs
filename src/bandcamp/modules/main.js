@@ -1,4 +1,4 @@
-import { injectCSSFile } from "../../modules/utils.js";
+import { injectCSSFile } from "../../modules/html.js";
 import { PageTypeDetector } from "../app/page-type.js";
 import { setupPageAlbum } from "../pages/page-album.js";
 import { setupPageMusic } from "../pages/page-music.js";

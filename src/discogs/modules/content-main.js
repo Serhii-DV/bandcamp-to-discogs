@@ -4,6 +4,7 @@ import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
 
 export function main () {
   console.log('B2D: content-main.js');
+  injectCSSFile(chrome.runtime.getURL('src/discogs/css/b2d.css'));
   injectCSSFile(chrome.runtime.getURL('src/discogs/notification.css'));
 
   observeAttributeChange(document.querySelector('html'), 'class', (el) => {

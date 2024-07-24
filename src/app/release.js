@@ -153,7 +153,7 @@ export class Release {
         fileType: 'FLAC',
         description: 'Album'
       },
-      submissionNotes: generateSubmissionNotes(this)
+      submissionNotes: generateSubmissionNotes(this.releaseItem.url),
     };
   }
 }

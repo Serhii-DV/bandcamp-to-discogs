@@ -8,7 +8,6 @@ export function runScript() {
   let qtyInput;
   let trackTitleInputs;
   let notesTextarea;
-  let submissionFormSectionNotes;
   let submissionNotesTextarea;
 
   // Initialize script after some period of time. We have to wait for elements initializing on the page.
@@ -24,7 +23,6 @@ export function runScript() {
     qtyInput = document.querySelector('input[aria-label="Quantity of format"]');
     trackTitleInputs = document.querySelectorAll('.track_input');
     notesTextarea = document.querySelector('textarea#release-notes-textarea');
-    submissionFormSectionNotes = getSubmissionFormSectionNotes();
     submissionNotesTextarea = document.querySelector('textarea#release-submission-notes-textarea');
   }
 
@@ -43,6 +41,7 @@ export function runScript() {
       applyMetadata(metadata);
     });
 
+    const submissionFormSectionNotes = getSubmissionFormSectionNotes();
     submissionFormSectionNotes.append(applyBtn);
 
     if (submissionNotesTextarea.value) {

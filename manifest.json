@@ -73,6 +73,7 @@
         "src/discogs/notification.css",
         "src/discogs/modules/content-main.js",
         "src/discogs/modules/draft-page.js",
+        "src/discogs/modules/metadata.js",
         "src/modules/html.js",
         "src/modules/utils.js"
       ],

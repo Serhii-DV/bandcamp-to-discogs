@@ -1,4 +1,5 @@
 import { Release, ReleaseItem } from "../app/release.js";
+import { Metadata } from "../discogs/app/metadata.js";
 import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
 import { disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
 import { generateKeyForReleaseItem } from "../modules/key-generator.js";
@@ -150,7 +151,8 @@ function transformReleaseItemsToReleaseListData(releases) {
     ];
 
     if (item instanceof Release) {
-      const copyMetadataLink = createClipboardLink(JSON.stringify(item.toMetadata()));
+      const metadata = Metadata.fromRelease(item);
+      const copyMetadataLink = createClipboardLink(JSON.stringify(metadata));
       controls.push(copyMetadataLink);
     }
 

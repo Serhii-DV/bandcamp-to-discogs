@@ -1,5 +1,6 @@
 'use strict';
 
+import { click } from "../modules/html.js";
 import { getSubmissionFormSectionNotes } from "./modules/draft-page.js";
 
 export function runScript() {
@@ -10,38 +11,13 @@ export function runScript() {
   let notesTextarea;
   let submissionFormSectionNotes;
   let submissionNotesTextarea;
-console.log('B2D: Discogs runScript');
+
   // Initialize script after some period of time. We have to wait for elements initializing on the page.
   setTimeout(initialize, 5000);
 
   function initialize() {
     detectElements();
-    // @see DiscogsCsv::fromRelease
-    const releaseData = deserializeReleaseData();
-
-    if (!isObject(releaseData)) {
-      showNotificationWarning('Release metadata was not found');
-      return;
-    }
-
-    updateQuantity(releaseData.format.qty);
-    selectFormatFileType(releaseData.format.fileType);
-    selectFormatDescription(releaseData.format.description);
-    fillDurations();
-    setInputValue(submissionNotesTextarea, releaseData.submissionNotes);
-    setInputValue(notesTextarea, '');
-
-    const btnElement = document.createElement('button');
-    btnElement.textContent = 'Refresh';
-
-    submissionFormSectionNotes.prepend(btnElement);
-
-    showNotificationInfo('Release metadata was applied');
-
-    if (artistNameInput) {
-      // Focus on artist name input
-      artistNameInput.focus();
-    }
+    setupApplyMetadataButton();
   }
 
   function detectElements() {
@@ -54,7 +30,23 @@ console.log('B2D: Discogs runScript');
     submissionNotesTextarea = document.querySelector('textarea#release-submission-notes-textarea');
   }
 
-  function deserializeReleaseData() {
+  function setupApplyMetadataButton() {
+    const applyBtn = document.createElement('button');
+    applyBtn.classList.add('button', 'button-small', 'button-blue');
+    applyBtn.textContent = 'Apply metadata';
+    applyBtn.addEventListener('click', () => {
+      const metadata = deserializeMetadata();
+      applyMetadata(metadata);
+    });
+
+    submissionFormSectionNotes.append(applyBtn);
+
+    if (submissionNotesTextarea.value) {
+      click(applyBtn);
+    }
+  }
+
+  function deserializeMetadata() {
     const jsonString = notesTextarea.value;
     try {
       return JSON.parse(jsonString);
@@ -62,6 +54,26 @@ console.log('B2D: Discogs runScript');
       console.error('B2D: Invalid JSON in Notes');
     }
     return null;
+  }
+
+  function applyMetadata(metadata) {
+    if (!isObject(metadata)) {
+      showNotificationWarning('Release metadata was not found');
+      return;
+    }
+
+    updateQuantity(metadata.format.qty);
+    selectFormatFileType(metadata.format.fileType);
+    selectFormatDescription(metadata.format.description);
+    fillDurations();
+    setInputValue(submissionNotesTextarea, metadata.submissionNotes);
+    setInputValue(notesTextarea, '');
+    showNotificationInfo('Release metadata was applied');
+
+    if (artistNameInput) {
+      // Focus on artist name input
+      artistNameInput.focus();
+    }
   }
 
   /**

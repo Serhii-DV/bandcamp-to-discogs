@@ -3,3 +3,9 @@ div.b2d-section-text {
   padding: 5px 10px;
   margin: 0 0 20px 0;
 }
+
+div.b2d-section-text var {
+  padding: 0 2px;
+  font-style: normal;
+  background: #222 !important;
+}

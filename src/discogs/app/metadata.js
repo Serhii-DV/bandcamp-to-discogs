@@ -1,4 +1,5 @@
 import { Release } from "../../app/release.js";
+import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../../bandcamp/modules/bandcamp.js";
 import { getExtensionManifest } from "../../modules/chrome.js";
 import { generateSubmissionNotes } from "../modules/discogs.js";
 import { getDiscogsDateValue } from "./utils.js";
@@ -101,16 +102,22 @@ export class Metadata {
   static fromRelease(release) {
     const publishedDate = getDiscogsDateValue(release.published);
     const modifiedDate = getDiscogsDateValue(release.modified);
+    const discogsGenres = keywordsToDiscogsGenres(release.keywords);
+    const discogsStyles = keywordsToDiscogsStyles(release.keywords);
+    const genres = `Bandcamp keywords: <var>${release.keywords.join(', ')}</var><br>
+Discogs genres: <var>${discogsGenres.join(', ')}</var><br>
+Discogs styles: <var>${discogsStyles.join(', ')}</var><br>
+`;
 
     return new Metadata({
-      artists: release.releaseItem.artist,
-      title: release.releaseItem.title,
-      label: release.label,
-      released: `Published date: ${publishedDate}. Modified date: ${modifiedDate}`,
+      artists: `<var>${release.releaseItem.artist}</var>`,
+      title: `<var>${release.releaseItem.title}</var>`,
+      label: `<var>${release.label}</var>`,
+      released: `Published date: <var>${publishedDate}</var>.<br>Modified date: <var>${modifiedDate}</var>`,
       trackQty: release.tracksQty,
       formatFileType: 'FLAC',
       formatDescription: 'Album',
-      genres: release.keywords.join(', '),
+      genres,
       releaseUrl: release.url
     });
   }

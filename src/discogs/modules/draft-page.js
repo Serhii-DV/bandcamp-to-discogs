@@ -108,7 +108,9 @@ export function addTextToSection(sectionElement, text) {
   }
 
   const textEl = document.createElement("div");
-  textEl.innerHTML = 'B2D: ' + text;
+  textEl.classList.add("b2d-section-text");
+  textEl.innerHTML = '<b>Bandcamp To Discogs</b><br>' + text;
 
-  sectionElement.prepend(textEl);
+  const sectionLabel = sectionElement.querySelector("label");
+  sectionLabel.insertAdjacentElement('afterend', textEl);
 }

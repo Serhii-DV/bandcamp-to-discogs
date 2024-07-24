@@ -4,6 +4,9 @@ import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { createElementFromHTML, hasDataAttribute, setDataAttribute } from "../../modules/html.js";
 import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls } from "../../modules/storage.js";
 import { populateReleasesList, removeButtonLoadingState, setButtonInLoadingState } from "../helpers.js";
+import config from "../../config.js";
+import { loadDiscogsGenres } from "../../discogs/modules/genres.js";
+import { loadKeywordMapping } from "../../bandcamp/modules/mapping.js";
 
 /**
  * @param {Element} btnDownloadCsv
@@ -16,7 +19,11 @@ export function setupHistoryTab(tab, btnDownloadCsv) {
     setDataAttribute(tab, 'buttons-initialized');
   }
 
-  updateReleasesListData(releasesList);
+  loadDiscogsGenres(config.genres_url).then(genres => {
+    loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
+      updateReleasesListData(releasesList);
+    })
+  });
 }
 
 export function setHistoryTabSearchValue(searchValue) {

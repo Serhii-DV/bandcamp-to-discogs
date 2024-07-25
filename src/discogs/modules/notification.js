@@ -16,14 +16,14 @@ function createNotificationStack() {
   return stack;
 }
 
-function showNotification(type, message, onShow) {
+export const showNotification = (type, message, onShow) => {
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
   notification.innerHTML = `<div class="header">Bandcamp to Discogs</div>${message}<span class="notification-close">×</span>`;
 
   const closeButton = notification.querySelector('.notification-close');
   closeButton.addEventListener('click', function () {
-    notificationStack.removeChild(notification);
+    closeNotification(notification);
   });
 
   notificationStack.appendChild(notification);
@@ -33,6 +33,10 @@ function showNotification(type, message, onShow) {
   }
 
   setTimeout(function () {
-    notificationStack.removeChild(notification);
+    closeNotification(notification);
   }, 20000); // Remove notification after 20 seconds
+}
+
+export const closeNotification = (notification) => {
+  notificationStack.removeChild(notification);
 }

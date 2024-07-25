@@ -2,7 +2,7 @@
 
 import { chromeListenMessage } from "../modules/chrome.js";
 import { click } from "../modules/html.js";
-import { addTextToSection, fillDurations, getSection, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue } from "./modules/draft-page.js";
+import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue } from "./modules/draft-page.js";
 
 export function runScript() {
   let artistNameInput;
@@ -69,14 +69,14 @@ export function runScript() {
   }
 
   function applyMetadata(metadata) {
-    appendTextToSections(metadata);
+    setMetadataHints(metadata);
     updateQuantity(metadata.format.qty);
     selectFormatFileType(metadata.format.fileType);
     selectFormatDescription(metadata.format.description);
     fillDurations();
     setInputValue(submissionNotesTextarea, metadata.submissionNotes);
     setInputValue(notesTextarea, '');
-    showNotificationInfo('Release metadata was applied');
+    showNotificationInfo(`Release metadata was applied.<br>${metadata.artists} - ${metadata.title}`);
 
     if (artistNameInput) {
       // Focus on artist name input
@@ -91,14 +91,14 @@ export function runScript() {
     setInputValue(qtyInput, qty);
   }
 
-  function appendTextToSections(metadata) {
-    addTextToSection(getSection('artist'), metadata.artists);
-    addTextToSection(getSection('title'), metadata.title);
-    addTextToSection(getSection('label'), metadata.label);
-    addTextToSection(getSection('country'), metadata.country);
-    addTextToSection(getSection('released'), metadata.released);
-    addTextToSection(getSection('credits'), metadata.credits);
-    addTextToSection(getSection('genres'), metadata.genres);
+  function setMetadataHints(metadata) {
+    setSectionHint('artist', metadata.artists, 'Bandcamp artist name');
+    setSectionHint('title', metadata.title, 'Bandcamp release title');
+    setSectionHint('label', metadata.label, 'Bandcamp page label or artist name');
+    setSectionHint('country', metadata.country, 'Bandcamp country');
+    setSectionHint('released', metadata.released, 'Bandcamp release dates');
+    setSectionHint('credits', metadata.credits, 'Bandcamp credits');
+    setSectionHint('genres', metadata.genres, 'Bandcamp genres related data');
   }
 
   // Notifications

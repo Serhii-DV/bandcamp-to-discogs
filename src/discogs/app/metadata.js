@@ -105,8 +105,8 @@ export class Metadata {
     const discogsGenres = keywordsToDiscogsGenres(release.keywords);
     const discogsStyles = keywordsToDiscogsStyles(release.keywords);
     const genres = `Bandcamp keywords: <var>${release.keywords.join(', ')}</var><br>
-Discogs genres: <var>${discogsGenres.join(', ')}</var><br>
-Discogs styles: <var>${discogsStyles.join(', ')}</var><br>
+Auto-detected genres: <var>${discogsGenres.join(', ')}</var><br>
+Auto-detected styles: <var>${discogsStyles.join(', ')}</var><br>
 `;
 
     return new Metadata({

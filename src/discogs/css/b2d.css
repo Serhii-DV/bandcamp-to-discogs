@@ -8,14 +8,14 @@
   --txt-color: #fff;
 }
 
-div.b2d-section-text {
+div.b2d-section-hint {
   background-color: var(--bg-color) !important;
   color: var(--txt-color) !important;
   padding: 5px 10px;
   margin: 0 0 20px 0;
 }
 
-div.b2d-section-text var {
+div.b2d-section-hint var {
   padding: 0 2px;
   font-style: normal;
   background: #222 !important;

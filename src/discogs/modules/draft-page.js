@@ -102,15 +102,21 @@ function triggerInputEvent(element) {
   element.dispatchEvent(inputEvent);
 }
 
-export function addTextToSection(sectionElement, text) {
+export const setSectionHint = (section, text, title) => {
   if (!text) {
     return;
   }
 
-  const textEl = document.createElement("div");
-  textEl.classList.add("b2d-section-text");
-  textEl.innerHTML = '<b>Bandcamp To Discogs</b><br>' + text;
+  const sectionElement = getSection(section);
+  let sectionHint = sectionElement.querySelector('.b2d-section-hint');
 
-  const sectionLabel = sectionElement.querySelector("label");
-  sectionLabel.insertAdjacentElement('afterend', textEl);
+  if (!sectionHint) {
+    sectionHint = document.createElement("div");
+    sectionHint.classList.add("b2d-section-hint");
+
+    const sectionLabel = sectionElement.querySelector("label");
+    sectionLabel.insertAdjacentElement('afterend', sectionHint);
+  }
+
+  sectionHint.innerHTML = `<h4>${title}</h4><p>${text}</p>`;
 }

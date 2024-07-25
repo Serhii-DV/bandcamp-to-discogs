@@ -39,3 +39,13 @@ export async function openTabs(urls, callback) {
 export function getExtensionUrl(path) {
   return chrome.runtime.getURL(path);
 }
+
+export const chromeSendMessageToCurrentTab = (message, responseCallback) => {
+  getCurrentTab().then((tab) => {
+    chrome.tabs.sendMessage(tab.id, message, responseCallback);
+  });
+}
+
+export const chromeListenMessage = (listenCallback) => {
+  chrome.runtime.onMessage.addListener(listenCallback);
+}

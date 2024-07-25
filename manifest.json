@@ -69,12 +69,13 @@
     },
     {
       "resources": [
-        "src/discogs/script.js",
         "src/discogs/css/b2d.css",
-        "src/discogs/notification.css",
         "src/discogs/modules/content-main.js",
         "src/discogs/modules/draft-page.js",
         "src/discogs/modules/metadata.js",
+        "src/discogs/notification.css",
+        "src/discogs/script.js",
+        "src/modules/chrome.js",
         "src/modules/html.js",
         "src/modules/utils.js"
       ],

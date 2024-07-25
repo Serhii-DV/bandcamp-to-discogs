@@ -1,5 +1,6 @@
 'use strict';
 
+import { chromeListenMessage } from "../modules/chrome.js";
 import { click } from "../modules/html.js";
 import { addTextToSection, fillDurations, getSection, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue } from "./modules/draft-page.js";
 
@@ -16,6 +17,14 @@ export function runScript() {
   function initialize() {
     detectElements();
     setupApplyMetadataButton();
+
+    chromeListenMessage((request, sender, sendResponse) => {
+      if (request.type === 'metadata') {
+        applyMetadata(request.metadata);
+      }
+
+      return true;
+    });
   }
 
   function detectElements() {

@@ -19,7 +19,7 @@ export const initialize = () => {
   notesTextarea = getNotesTextarea();
   submissionNotesTextarea = getSubmissionNotesTextarea();
 
-  setupApplyMetadataButton();
+  setupReadMetadataButton();
 
   chromeListenMessage((request, sender, sendResponse) => {
     if (request.type === 'metadata') {
@@ -30,11 +30,11 @@ export const initialize = () => {
   });
 }
 
-function setupApplyMetadataButton() {
-  const applyBtn = document.createElement('button');
-  applyBtn.classList.add('button', 'button-small', 'button-blue');
-  applyBtn.textContent = 'Apply metadata';
-  applyBtn.addEventListener('click', () => {
+function setupReadMetadataButton() {
+  const readMetadataBtn = document.createElement('button');
+  readMetadataBtn.classList.add('button', 'button-small', 'button-blue');
+  readMetadataBtn.textContent = 'Read metadata';
+  readMetadataBtn.addEventListener('click', () => {
     try {
       const metadata = JSON.parse(notesTextarea.value);
       applyMetadata(metadata);
@@ -47,10 +47,10 @@ function setupApplyMetadataButton() {
   });
 
   const submissionFormSectionNotes = getSubmissionFormSectionNotes();
-  submissionFormSectionNotes.append(applyBtn);
+  submissionFormSectionNotes.append(readMetadataBtn);
 
   if (submissionNotesTextarea.value) {
-    click(applyBtn);
+    click(readMetadataBtn);
   }
 }
 

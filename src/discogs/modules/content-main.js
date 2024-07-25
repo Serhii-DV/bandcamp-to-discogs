@@ -16,29 +16,33 @@ export function main () {
   observeAttributeChange(html, 'class', (el) => {
     if (el.classList.contains('de-enabled') && !el.classList.contains('b2d-initialized')) {
       // Initialize the script after some period of time. We have to wait for elements initializing on the page.
-      setTimeout(initialize, 5000);
+      setTimeout(() => {
+        try {
+          initialize();
+        } catch (error) {
+          console.error(error);
+          showNotInitializedMessage();
+        }
+      }, 5000);
       el.classList.add('b2d-initialized');
     }
   });
 
-  // Check if the script is already injected
-  setTimeout(() => {
-    if (!html.classList.contains('b2d-initialized')) {
-      showNotificationError(
-        'Not initialized!<br><button class="button button-small button-blue action-restart">Restart initialization</button>',
-        (notification) => {
-          notification
-            .querySelector('.action-restart')
-            .addEventListener('click', () => {
-              initialize();
-              closeNotification(notification);
-            });
-        }
-      );
-    }
-  }, 5000);
-
   setupSendMessageToPopup();
+}
+
+const showNotInitializedMessage = () => {
+  showNotificationError(
+    'Not initialized!<br><button class="button button-small button-blue action-restart">Restart initialization</button>',
+    (notification) => {
+      notification
+        .querySelector('.action-restart')
+        .addEventListener('click', () => {
+          initialize();
+          closeNotification(notification);
+        });
+    }
+  );
 }
 
 function setupSendMessageToPopup() {

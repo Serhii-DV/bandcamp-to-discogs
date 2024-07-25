@@ -5,6 +5,8 @@ import { click } from "../modules/html.js";
 import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue } from "./modules/draft-page.js";
 
 export function runScript() {
+  console.log('[B2D] Running the main discogs draft page logic (script.js)');
+
   let artistNameInput;
   let qtyInput;
   let trackTitleInputs;
@@ -15,6 +17,7 @@ export function runScript() {
   setTimeout(initialize, 5000);
 
   function initialize() {
+    console.log('[B2D] Initialization...');
     detectElements();
     setupApplyMetadataButton();
 
@@ -134,7 +137,6 @@ export function runScript() {
   function showNotificationInfo(message) { showNotification(message, 'info'); }
   function showNotificationWarning(message) { showNotification(message, 'warning'); }
   function showNotificationError(message) { showNotification(message, 'error'); }
-
 }
 
 function isObject(value) {

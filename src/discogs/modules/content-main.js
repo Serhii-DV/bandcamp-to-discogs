@@ -3,7 +3,8 @@ import { runScript } from "../script.js";
 import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
 
 export function main () {
-  console.log('B2D: content-main.js');
+  console.log('[B2D] Running discogs content main logic (content-main.js)');
+
   injectCSSFile(chrome.runtime.getURL('src/discogs/css/b2d.css'));
   injectCSSFile(chrome.runtime.getURL('src/discogs/notification.css'));
 

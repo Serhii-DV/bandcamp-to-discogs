@@ -1,11 +1,27 @@
 import { camelCaseToReadable, isArray, isObject } from "../../modules/utils.js";
 
-export function getArtistNameInput() {
+export const getArtistNameInput = () => {
   return document.getElementById('artist-name-input');
 }
 
-export function getReleaseTitleInput() {
+export const getReleaseTitleInput = () => {
   return document.getElementById('release-title-input');
+}
+
+export const getQuantityInput = () => {
+  return document.querySelector('input[aria-label="Quantity of format"]');
+}
+
+export const getTrackTitleInputs = () => {
+  return document.querySelectorAll('.track_input');
+}
+
+export const getNotesTextarea = () => {
+  return document.querySelector('textarea#release-notes-textarea');
+}
+
+export const getSubmissionNotesTextarea = () => {
+  return document.querySelector('textarea#release-submission-notes-textarea');
 }
 
 export function getSection(name) {

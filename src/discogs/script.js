@@ -2,24 +2,31 @@
 
 import { chromeListenMessage } from "../modules/chrome.js";
 import { click } from "../modules/html.js";
-import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue } from "./modules/draft-page.js";
+import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue, getArtistNameInput, getQuantityInput, getTrackTitleInputs, getNotesTextarea, getSubmissionNotesTextarea } from "./modules/draft-page.js";
 import { showNotificationInfo, showNotificationWarning } from "./modules/notification.js";
+
+let artistNameInput;
+let qtyInput;
+let trackTitleInputs;
+let notesTextarea;
+let submissionNotesTextarea;
 
 export function runScript() {
   console.log('[B2D] Running the main discogs draft page logic (script.js)');
-
-  let artistNameInput;
-  let qtyInput;
-  let trackTitleInputs;
-  let notesTextarea;
-  let submissionNotesTextarea;
 
   // Initialize script after some period of time. We have to wait for elements initializing on the page.
   setTimeout(initialize, 5000);
 
   function initialize() {
     console.log('[B2D] Initialization...');
-    detectElements();
+
+    // Detect elements
+    artistNameInput = getArtistNameInput();
+    qtyInput = getQuantityInput();
+    trackTitleInputs = getTrackTitleInputs();
+    notesTextarea = getNotesTextarea();
+    submissionNotesTextarea = getSubmissionNotesTextarea();
+
     setupApplyMetadataButton();
 
     chromeListenMessage((request, sender, sendResponse) => {
@@ -30,81 +37,74 @@ export function runScript() {
       return true;
     });
   }
+}
 
-  function detectElements() {
-    artistNameInput = document.getElementById('artist-name-input');
-    qtyInput = document.querySelector('input[aria-label="Quantity of format"]');
-    trackTitleInputs = document.querySelectorAll('.track_input');
-    notesTextarea = document.querySelector('textarea#release-notes-textarea');
-    submissionNotesTextarea = document.querySelector('textarea#release-submission-notes-textarea');
-  }
 
-  function setupApplyMetadataButton() {
-    const applyBtn = document.createElement('button');
-    applyBtn.classList.add('button', 'button-small', 'button-blue');
-    applyBtn.textContent = 'Apply metadata';
-    applyBtn.addEventListener('click', () => {
-      const metadata = deserializeMetadata();
+function setupApplyMetadataButton() {
+  const applyBtn = document.createElement('button');
+  applyBtn.classList.add('button', 'button-small', 'button-blue');
+  applyBtn.textContent = 'Apply metadata';
+  applyBtn.addEventListener('click', () => {
+    const metadata = deserializeMetadata();
 
-      if (!isObject(metadata)) {
-        showNotificationWarning('Release metadata was not found');
-        return;
-      }
-
-      applyMetadata(metadata);
-    });
-
-    const submissionFormSectionNotes = getSubmissionFormSectionNotes();
-    submissionFormSectionNotes.append(applyBtn);
-
-    if (submissionNotesTextarea.value) {
-      click(applyBtn);
+    if (!isObject(metadata)) {
+      showNotificationWarning('Release metadata was not found');
+      return;
     }
-  }
 
-  function deserializeMetadata() {
-    const jsonString = notesTextarea.value;
-    try {
-      return JSON.parse(jsonString);
-    } catch (error) {
-      console.error('B2D: Invalid JSON in Notes');
-    }
-    return null;
-  }
+    applyMetadata(metadata);
+  });
 
-  function applyMetadata(metadata) {
-    setMetadataHints(metadata);
-    updateQuantity(metadata.format.qty);
-    selectFormatFileType(metadata.format.fileType);
-    selectFormatDescription(metadata.format.description);
-    fillDurations();
-    setInputValue(submissionNotesTextarea, metadata.submissionNotes);
-    setInputValue(notesTextarea, '');
-    showNotificationInfo(`Release metadata was applied.<br>${metadata.artist} - ${metadata.title}`);
+  const submissionFormSectionNotes = getSubmissionFormSectionNotes();
+  submissionFormSectionNotes.append(applyBtn);
 
-    if (artistNameInput) {
-      // Focus on artist name input
-      artistNameInput.focus();
-    }
+  if (submissionNotesTextarea.value) {
+    click(applyBtn);
   }
+}
 
-  /**
-   * @param {Number} qty
-   */
-  function updateQuantity(qty) {
-    setInputValue(qtyInput, qty);
+function deserializeMetadata() {
+  const jsonString = notesTextarea.value;
+  try {
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error('B2D: Invalid JSON in Notes');
   }
+  return null;
+}
 
-  function setMetadataHints(metadata) {
-    setSectionHint({section: 'artist', text: `<var>${metadata.artist}</var>`, title: 'Bandcamp artist name'});
-    setSectionHint({section: 'title', text: `<var>${metadata.title}</var>`, title: 'Bandcamp release title'});
-    setSectionHint({section: 'label', text: `<var>${metadata.label}</var>`, title: 'Bandcamp page label or artist name'});
-    setSectionHint({section: 'country', text: metadata.country, title: 'Bandcamp country'});
-    setSectionHint({section: 'format', text: metadata.format, title: 'Bandcamp auto-detected format'});
-    setSectionHint({section: 'released', text: metadata.released, title: 'Bandcamp release dates'});
-    setSectionHint({section: 'credits', text: metadata.credits, title: 'Bandcamp credits'});
-    setSectionHint({section: 'genres', text: metadata.genres, title: 'Bandcamp genres related data'});
+function applyMetadata(metadata) {
+  setMetadataHints(metadata);
+  updateQuantity(metadata.format.qty);
+  selectFormatFileType(metadata.format.fileType);
+  selectFormatDescription(metadata.format.description);
+  fillDurations();
+  setInputValue(submissionNotesTextarea, metadata.submissionNotes);
+  setInputValue(notesTextarea, '');
+  showNotificationInfo(`Release metadata was applied.<br>${metadata.artist} - ${metadata.title}`);
+
+  if (artistNameInput) {
+    // Focus on artist name input
+    artistNameInput.focus();
   }
+}
+
+/**
+ * @param {Number} qty
+ */
+function updateQuantity(qty) {
+  setInputValue(qtyInput, qty);
+}
+
+function setMetadataHints(metadata) {
+  setSectionHint({section: 'artist', text: `<var>${metadata.artist}</var>`, title: 'Bandcamp artist name'});
+  setSectionHint({section: 'title', text: `<var>${metadata.title}</var>`, title: 'Bandcamp release title'});
+  setSectionHint({section: 'label', text: `<var>${metadata.label}</var>`, title: 'Bandcamp page label or artist name'});
+  setSectionHint({section: 'country', text: metadata.country, title: 'Bandcamp country'});
+  setSectionHint({section: 'format', text: metadata.format, title: 'Bandcamp auto-detected format'});
+  setSectionHint({section: 'released', text: metadata.released, title: 'Bandcamp release dates'});
+  setSectionHint({section: 'credits', text: metadata.credits, title: 'Bandcamp credits'});
+  setSectionHint({section: 'genres', text: metadata.genres, title: 'Bandcamp genres related data'});
 }
 
 function isObject(value) {

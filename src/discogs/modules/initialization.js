@@ -1,10 +1,10 @@
 'use strict';
 
-import { chromeListenMessage } from "../modules/chrome.js";
-import { click } from "../modules/html.js";
-import { isObject } from "../modules/utils.js";
-import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue, getArtistNameInput, getQuantityInput, getNotesTextarea, getSubmissionNotesTextarea } from "./modules/draft-page.js";
-import { showNotificationInfo, showNotificationWarning } from "./modules/notification.js";
+import { chromeListenMessage } from "../../modules/chrome.js";
+import { click } from "../../modules/html.js";
+import { isObject } from "../../modules/utils.js";
+import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue, getArtistNameInput, getQuantityInput, getNotesTextarea, getSubmissionNotesTextarea } from "./draft-page.js";
+import { showNotificationInfo, showNotificationWarning } from "./notification.js";
 
 let artistNameInput;
 let qtyInput;

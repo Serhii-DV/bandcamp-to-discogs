@@ -1,5 +1,5 @@
 import { injectCSSFile, observeAttributeChange } from "../../modules/html.js";
-import { initialize } from "../script.js";
+import { initialize } from "./initialization.js";
 import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
 import { closeNotification, showNotificationError, showNotificationInfo } from "./notification.js";
 

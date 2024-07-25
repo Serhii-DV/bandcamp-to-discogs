@@ -2,7 +2,6 @@
 
 import { chromeListenMessage } from "../../modules/chrome.js";
 import { click } from "../../modules/html.js";
-import { isObject } from "../../modules/utils.js";
 import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue, getArtistNameInput, getQuantityInput, getNotesTextarea, getSubmissionNotesTextarea } from "./draft-page.js";
 import { showNotificationInfo, showNotificationWarning } from "./notification.js";
 
@@ -36,14 +35,15 @@ function setupApplyMetadataButton() {
   applyBtn.classList.add('button', 'button-small', 'button-blue');
   applyBtn.textContent = 'Apply metadata';
   applyBtn.addEventListener('click', () => {
-    const metadata = deserializeMetadata();
+    try {
+      const metadata = JSON.parse(notesTextarea.value);
+      applyMetadata(metadata);
+    } catch (error) {
+      console.error('[B2D] Invalid JSON metadata in Notes');
+      console.error(error);
 
-    if (!isObject(metadata)) {
-      showNotificationWarning('Release metadata was not found');
-      return;
+      showNotificationWarning('Release metadata was not found in Notes');
     }
-
-    applyMetadata(metadata);
   });
 
   const submissionFormSectionNotes = getSubmissionFormSectionNotes();
@@ -52,16 +52,6 @@ function setupApplyMetadataButton() {
   if (submissionNotesTextarea.value) {
     click(applyBtn);
   }
-}
-
-function deserializeMetadata() {
-  const jsonString = notesTextarea.value;
-  try {
-    return JSON.parse(jsonString);
-  } catch (error) {
-    console.error('B2D: Invalid JSON in Notes');
-  }
-  return null;
 }
 
 function applyMetadata(metadata) {

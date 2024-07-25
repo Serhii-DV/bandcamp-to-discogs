@@ -1,3 +1,5 @@
+import { camelCaseToReadable, isArray, isObject } from "../../modules/utils.js";
+
 export function getArtistNameInput() {
   return document.getElementById('artist-name-input');
 }
@@ -105,6 +107,26 @@ function triggerInputEvent(element) {
 export const setSectionHint = ({section, title, text}) => {
   if (!text) {
     return;
+  }
+
+  if (isObject(text)) {
+    let textArr = [];
+    for (const key in text) {
+      if (text.hasOwnProperty(key)) {
+        textArr.push({
+          title: camelCaseToReadable(key),
+          value: text[key]
+        });
+      }
+    }
+    text = textArr;
+  }
+
+  if (isArray(text)) {
+    text = text.map((textItem) => {
+      let value = isArray(textItem.value) ? textItem.value.join(', '): textItem.value;
+      return `${textItem.title}: <var>${value}</var>`;
+    }).join('<br />');
   }
 
   const sectionElement = getSection(section);

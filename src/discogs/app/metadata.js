@@ -36,7 +36,7 @@ export class Metadata {
   country;
 
   /**
-   * @param {String}
+   * @param {Array}
    */
   released;
 
@@ -82,8 +82,8 @@ export class Metadata {
     self.title = title;
     self.label = label;
     self.format = {
-      qty: trackQty,
       fileType: formatFileType,
+      qty: trackQty,
       description: formatDescription
     };
     self.country = country;
@@ -104,20 +104,23 @@ export class Metadata {
     const modifiedDate = getDiscogsDateValue(release.modified);
     const discogsGenres = keywordsToDiscogsGenres(release.keywords);
     const discogsStyles = keywordsToDiscogsStyles(release.keywords);
-    const genres = `Bandcamp keywords: <var>${release.keywords.join(', ')}</var><br>
-Auto-detected genres: <var>${discogsGenres.join(', ')}</var><br>
-Auto-detected styles: <var>${discogsStyles.join(', ')}</var><br>
-`;
 
     return new Metadata({
-      artist: `<var>${release.releaseItem.artist}</var>`,
-      title: `<var>${release.releaseItem.title}</var>`,
-      label: `<var>${release.label}</var>`,
-      released: `Published date: <var>${publishedDate}</var>.<br>Modified date: <var>${modifiedDate}</var>`,
+      artist: release.releaseItem.artist,
+      title: release.releaseItem.title,
+      label: release.label,
+      released: {
+        publishedDate,
+        modifiedDate
+      },
       trackQty: release.tracksQty,
       formatFileType: 'FLAC',
       formatDescription: 'Album',
-      genres,
+      genres: {
+        keywords: release.keywords,
+        autoDetectedGenres: discogsGenres,
+        autoDetectedStyles: discogsStyles,
+      },
       releaseUrl: release.url
     });
   }

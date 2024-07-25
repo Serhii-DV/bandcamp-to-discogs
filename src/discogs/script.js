@@ -92,15 +92,11 @@ export function runScript() {
   }
 
   function setMetadataHints(metadata) {
-    setSectionHint({section: 'artist', text: metadata.artist, title: 'Bandcamp artist name'});
-    setSectionHint({section: 'title', text: metadata.title, title: 'Bandcamp release title'});
-    setSectionHint({section: 'label', text: metadata.label, title: 'Bandcamp page label or artist name'});
+    setSectionHint({section: 'artist', text: `<var>${metadata.artist}</var>`, title: 'Bandcamp artist name'});
+    setSectionHint({section: 'title', text: `<var>${metadata.title}</var>`, title: 'Bandcamp release title'});
+    setSectionHint({section: 'label', text: `<var>${metadata.label}</var>`, title: 'Bandcamp page label or artist name'});
     setSectionHint({section: 'country', text: metadata.country, title: 'Bandcamp country'});
-    setSectionHint({
-      section: 'format',
-      text: `Type: <var>${metadata.format.fileType}</var>. Qty: <var>${metadata.format.qty}</var>. Description: <var>${metadata.format.description}</var>`,
-      title: 'Bandcamp auto-detected format'
-    });
+    setSectionHint({section: 'format', text: metadata.format, title: 'Bandcamp auto-detected format'});
     setSectionHint({section: 'released', text: metadata.released, title: 'Bandcamp release dates'});
     setSectionHint({section: 'credits', text: metadata.credits, title: 'Bandcamp credits'});
     setSectionHint({section: 'genres', text: metadata.genres, title: 'Bandcamp genres related data'});

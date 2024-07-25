@@ -225,3 +225,12 @@ export function removeLeadingZeroOrColon(str) {
   // and replace them with an empty string
   return str.replace(/^(:|0)*/, '');
 }
+
+
+export const camelCaseToReadable = (text) => {
+  // Replace each uppercase letter with a space and that letter in lowercase
+  let result = text.replace(/([a-z])([A-Z])/g, '$1 $2');
+  // Capitalize the first letter of the resulting string
+  result = result.charAt(0).toUpperCase() + result.slice(1);
+  return result;
+}

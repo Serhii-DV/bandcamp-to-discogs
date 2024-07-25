@@ -1,9 +1,11 @@
 // Notifications
 
-export const showNotificationDebug = (message) => { showNotification(message, 'debug'); }
-export const showNotificationInfo = (message) => { showNotification(message, 'info'); }
-export const showNotificationWarning = (message) => { showNotification(message, 'warning'); }
-export const showNotificationError = (message) => { showNotification(message, 'error'); }
+import { isFunction } from "../../modules/utils.js";
+
+export const showNotificationDebug = (message, onShow) => { showNotification('debug', message, onShow); }
+export const showNotificationInfo = (message, onShow) => { showNotification('info', message, onShow); }
+export const showNotificationWarning = (message, onShow) => { showNotification('warning', message, onShow); }
+export const showNotificationError = (message, onShow) => { showNotification('error', message, onShow); }
 
 const notificationStack = createNotificationStack();
 
@@ -14,7 +16,7 @@ function createNotificationStack() {
   return stack;
 }
 
-function showNotification(message, type) {
+function showNotification(type, message, onShow) {
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
   notification.innerHTML = `<div class="header">Bandcamp to Discogs</div>${message}<span class="notification-close">×</span>`;
@@ -25,6 +27,10 @@ function showNotification(message, type) {
   });
 
   notificationStack.appendChild(notification);
+
+  if (isFunction(onShow)) {
+    onShow(notification);
+  }
 
   setTimeout(function () {
     notificationStack.removeChild(notification);

@@ -11,31 +11,24 @@ let qtyInput;
 let notesTextarea;
 let submissionNotesTextarea;
 
-export function runScript() {
-  console.log('[B2D] Running the main discogs draft page logic (script.js)');
+export const initialize = () => {
+  console.log('[B2D] Initialization... (discogs/script.js)');
 
-  // Initialize script after some period of time. We have to wait for elements initializing on the page.
-  setTimeout(initialize, 5000);
+  // Detect elements
+  artistNameInput = getArtistNameInput();
+  qtyInput = getQuantityInput();
+  notesTextarea = getNotesTextarea();
+  submissionNotesTextarea = getSubmissionNotesTextarea();
 
-  function initialize() {
-    console.log('[B2D] Initialization...');
+  setupApplyMetadataButton();
 
-    // Detect elements
-    artistNameInput = getArtistNameInput();
-    qtyInput = getQuantityInput();
-    notesTextarea = getNotesTextarea();
-    submissionNotesTextarea = getSubmissionNotesTextarea();
+  chromeListenMessage((request, sender, sendResponse) => {
+    if (request.type === 'metadata') {
+      applyMetadata(request.metadata);
+    }
 
-    setupApplyMetadataButton();
-
-    chromeListenMessage((request, sender, sendResponse) => {
-      if (request.type === 'metadata') {
-        applyMetadata(request.metadata);
-      }
-
-      return true;
-    });
-  }
+    return true;
+  });
 }
 
 function setupApplyMetadataButton() {

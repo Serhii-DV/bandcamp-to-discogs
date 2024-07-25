@@ -1,5 +1,16 @@
+:root {
+  --bg-color: #333;
+  --txt-color: #fff;
+}
+
+.de-dark-theme {
+  --bg-color: #31154b;
+  --txt-color: #fff;
+}
+
 div.b2d-section-text {
-  background-color: #31154b !important;
+  background-color: var(--bg-color) !important;
+  color: var(--txt-color) !important;
   padding: 5px 10px;
   margin: 0 0 20px 0;
 }

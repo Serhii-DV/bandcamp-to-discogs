@@ -62,6 +62,7 @@ export function selectFormatDescription(formatDescription) {
 }
 
 export function fillDurations() {
+  const trackTitleInputs = getTrackTitleInputs();
   const trackDurationInputs = document.querySelectorAll('input[aria-label="Track duration"]');
 
   trackDurationInputs.forEach((durationInput, index) => {

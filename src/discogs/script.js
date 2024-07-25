@@ -2,12 +2,12 @@
 
 import { chromeListenMessage } from "../modules/chrome.js";
 import { click } from "../modules/html.js";
-import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue, getArtistNameInput, getQuantityInput, getTrackTitleInputs, getNotesTextarea, getSubmissionNotesTextarea } from "./modules/draft-page.js";
+import { isObject } from "../modules/utils.js";
+import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue, getArtistNameInput, getQuantityInput, getNotesTextarea, getSubmissionNotesTextarea } from "./modules/draft-page.js";
 import { showNotificationInfo, showNotificationWarning } from "./modules/notification.js";
 
 let artistNameInput;
 let qtyInput;
-let trackTitleInputs;
 let notesTextarea;
 let submissionNotesTextarea;
 
@@ -23,7 +23,6 @@ export function runScript() {
     // Detect elements
     artistNameInput = getArtistNameInput();
     qtyInput = getQuantityInput();
-    trackTitleInputs = getTrackTitleInputs();
     notesTextarea = getNotesTextarea();
     submissionNotesTextarea = getSubmissionNotesTextarea();
 
@@ -38,7 +37,6 @@ export function runScript() {
     });
   }
 }
-
 
 function setupApplyMetadataButton() {
   const applyBtn = document.createElement('button');
@@ -105,24 +103,4 @@ function setMetadataHints(metadata) {
   setSectionHint({section: 'released', text: metadata.released, title: 'Bandcamp release dates'});
   setSectionHint({section: 'credits', text: metadata.credits, title: 'Bandcamp credits'});
   setSectionHint({section: 'genres', text: metadata.genres, title: 'Bandcamp genres related data'});
-}
-
-function isObject(value) {
-  return Object.prototype.toString.call(value) === '[object Object]';
-}
-
-function addToast(parentElement) {
-  const toastBody =
-`<div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
-  <div class="d-flex">
-    <div class="toast-body">
-      Hello, world! This is a toast message.
-    </div>
-    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-  </div>
-</div>`;
-  const toastEl = document.createElement('div');
-  toastEl.innerHTML = toastBody;
-console.log(toastEl.firstChild);
-  parentElement.appendChild(toastEl.firstChild);
 }

@@ -13,7 +13,7 @@ export class Metadata {
   /**
    * @param {String}
    */
-  artists;
+  artist;
 
   /**
    * @param {String}
@@ -61,7 +61,7 @@ export class Metadata {
   submissionNotes;
 
   constructor({
-    artists,
+    artist,
     title,
     label,
     trackQty,
@@ -78,7 +78,7 @@ export class Metadata {
     const manifest = getExtensionManifest();
 
     self.version = manifest.version;
-    self.artists = artists;
+    self.artist = artist;
     self.title = title;
     self.label = label;
     self.format = {
@@ -110,7 +110,7 @@ Auto-detected styles: <var>${discogsStyles.join(', ')}</var><br>
 `;
 
     return new Metadata({
-      artists: `<var>${release.releaseItem.artist}</var>`,
+      artist: `<var>${release.releaseItem.artist}</var>`,
       title: `<var>${release.releaseItem.title}</var>`,
       label: `<var>${release.label}</var>`,
       released: `Published date: <var>${publishedDate}</var>.<br>Modified date: <var>${modifiedDate}</var>`,

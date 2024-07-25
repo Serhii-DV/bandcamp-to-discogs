@@ -76,7 +76,7 @@ export function runScript() {
     fillDurations();
     setInputValue(submissionNotesTextarea, metadata.submissionNotes);
     setInputValue(notesTextarea, '');
-    showNotificationInfo(`Release metadata was applied.<br>${metadata.artists} - ${metadata.title}`);
+    showNotificationInfo(`Release metadata was applied.<br>${metadata.artist} - ${metadata.title}`);
 
     if (artistNameInput) {
       // Focus on artist name input
@@ -92,7 +92,7 @@ export function runScript() {
   }
 
   function setMetadataHints(metadata) {
-    setSectionHint('artist', metadata.artists, 'Bandcamp artist name');
+    setSectionHint('artist', metadata.artist, 'Bandcamp artist name');
     setSectionHint('title', metadata.title, 'Bandcamp release title');
     setSectionHint('label', metadata.label, 'Bandcamp page label or artist name');
     setSectionHint('country', metadata.country, 'Bandcamp country');

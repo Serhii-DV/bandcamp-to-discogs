@@ -161,7 +161,7 @@ function transformReleaseItemsToReleaseListData(releases) {
         });
 
         return true;
-      });
+      }, 'file-arrow-down', 'file-arrow-down-fill');
       controls.push(copyMetadataLink);
     }
 

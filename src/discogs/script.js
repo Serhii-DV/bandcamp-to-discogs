@@ -3,6 +3,7 @@
 import { chromeListenMessage } from "../modules/chrome.js";
 import { click } from "../modules/html.js";
 import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue } from "./modules/draft-page.js";
+import { showNotificationInfo, showNotificationWarning } from "./modules/notification.js";
 
 export function runScript() {
   console.log('[B2D] Running the main discogs draft page logic (script.js)');
@@ -104,39 +105,6 @@ export function runScript() {
     setSectionHint({section: 'credits', text: metadata.credits, title: 'Bandcamp credits'});
     setSectionHint({section: 'genres', text: metadata.genres, title: 'Bandcamp genres related data'});
   }
-
-  // Notifications
-
-  const notificationStack = createNotificationStack();
-
-  function createNotificationStack() {
-    const stack = document.createElement('div');
-    stack.className = 'notification-stack';
-    document.body.appendChild(stack);
-    return stack;
-  }
-
-  function showNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `<div class="header">Bandcamp to Discogs</div>${message}<span class="notification-close">×</span>`;
-
-    const closeButton = notification.querySelector('.notification-close');
-    closeButton.addEventListener('click', function () {
-      notificationStack.removeChild(notification);
-    });
-
-    notificationStack.appendChild(notification);
-
-    setTimeout(function () {
-      notificationStack.removeChild(notification);
-    }, 20000); // Remove notification after 20 seconds
-  }
-
-  function showNotificationDebug(message) { showNotification(message, 'debug'); }
-  function showNotificationInfo(message) { showNotification(message, 'info'); }
-  function showNotificationWarning(message) { showNotification(message, 'warning'); }
-  function showNotificationError(message) { showNotification(message, 'error'); }
 }
 
 function isObject(value) {

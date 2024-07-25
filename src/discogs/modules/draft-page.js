@@ -102,7 +102,7 @@ function triggerInputEvent(element) {
   element.dispatchEvent(inputEvent);
 }
 
-export const setSectionHint = (section, text, title) => {
+export const setSectionHint = ({section, title, text}) => {
   if (!text) {
     return;
   }

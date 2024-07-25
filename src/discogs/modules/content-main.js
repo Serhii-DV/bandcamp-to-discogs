@@ -1,7 +1,7 @@
 import { injectCSSFile, observeAttributeChange } from "../../modules/html.js";
 import { initialize } from "../script.js";
 import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
-import { showNotificationInfo } from "./notification.js";
+import { closeNotification, showNotificationError, showNotificationInfo } from "./notification.js";
 
 export function main () {
   console.log('[B2D] Running discogs content main logic (content-main.js)');
@@ -9,22 +9,34 @@ export function main () {
   injectCSSFile(chrome.runtime.getURL('src/discogs/css/b2d.css'));
   injectCSSFile(chrome.runtime.getURL('src/discogs/notification.css'));
 
-  showNotificationInfo('Initialization...<br><button class="button button-small button-blue action-restart">Restart initialization</button>', (notification) => {
-    notification
-      .querySelector('.action-restart')
-      .addEventListener('click', () => {
-        initialize();
-      });
-  });
+  showNotificationInfo('Initialization...');
 
-  observeAttributeChange(document.querySelector('html'), 'class', (el) => {
-    if (el.classList.contains('de-enabled') && !el.classList.contains('b2d-script-injected')) {
+  const html = document.querySelector('html');
+
+  observeAttributeChange(html, 'class', (el) => {
+    if (el.classList.contains('de-enabled') && !el.classList.contains('b2d-initialized')) {
       // Initialize the script after some period of time. We have to wait for elements initializing on the page.
       setTimeout(initialize, 5000);
-
-      el.classList.add('b2d-script-injected');
+      el.classList.add('b2d-initialized');
     }
   });
+
+  // Check if the script is already injected
+  setTimeout(() => {
+    if (!html.classList.contains('b2d-initialized')) {
+      showNotificationError(
+        'Not initialized!<br><button class="button button-small button-blue action-restart">Restart initialization</button>',
+        (notification) => {
+          notification
+            .querySelector('.action-restart')
+            .addEventListener('click', () => {
+              initialize();
+              closeNotification(notification);
+            });
+        }
+      );
+    }
+  }, 5000);
 
   setupSendMessageToPopup();
 }

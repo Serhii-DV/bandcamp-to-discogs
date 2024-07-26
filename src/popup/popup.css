@@ -102,7 +102,15 @@ releases-list .content-header {
   background-color: var(--main-bg-color);
   padding: 5px 10px;
 }
+releases-list td .controls {
+  display: block;
+  float: right;
+}
 
+releases-list td .controls a {
+  display: inline-block;
+  margin: 0 2px;
+}
 
 console-command {
   position: absolute;

@@ -38,7 +38,7 @@ export const copyToClipboard = str => {
  * @param {Function} onDone
  * @returns {HTMLElement}
  */
-export const createClipboardLink = (content, onDone, iconName = 'clipboard', iconFillName = 'clipboard2-check-fill') => {
+export const createClipboardLink = ({content, onDone, iconName = 'clipboard', iconFillName = 'clipboard2-check-fill'}) => {
   const link = document.createElement("a");
   link.classList.add('clipboard-link');
   link.href = '#';

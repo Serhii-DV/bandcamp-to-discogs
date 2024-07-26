@@ -153,15 +153,19 @@ function transformReleaseItemsToReleaseListData(releases) {
 
     if (item instanceof Release) {
       const metadata = Metadata.fromRelease(item);
-      const metadataJson = JSON.stringify(metadata);
-      const copyMetadataLink = createClipboardLink(metadataJson, () => {
-        chromeSendMessageToCurrentTab({
-          type: 'metadata',
-          metadata
-        });
+      const copyMetadataLink = createClipboardLink({
+        content: JSON.stringify(metadata),
+        onDone: () => {
+          chromeSendMessageToCurrentTab({
+            type: 'metadata',
+            metadata
+          });
 
-        return true;
-      }, 'file-arrow-down', 'file-arrow-down-fill');
+          return true;
+        },
+        iconName: 'file-arrow-down',
+        iconFillName: 'file-arrow-down-fill',
+      });
       controls.push(copyMetadataLink);
     }
 

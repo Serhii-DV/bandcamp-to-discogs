@@ -1,6 +1,7 @@
 'use strict';
 
 import { click } from "../../modules/html.js";
+import { convertNewlinesToBreaks } from "../../modules/utils.js";
 import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue, getArtistNameInput, getQuantityInput, getNotesTextarea, getSubmissionNotesTextarea } from "./draft-page.js";
 import { showNotificationError, showNotificationInfo } from "./notification.js";
 
@@ -93,4 +94,5 @@ function setMetadataHints(metadata) {
   setSectionHint({section: 'released', text: metadata.released, title: 'Bandcamp release dates'});
   setSectionHint({section: 'credits', text: metadata.credits, title: 'Bandcamp credits'});
   setSectionHint({section: 'genres', text: metadata.genres, title: 'Bandcamp genres related data'});
+  setSectionHint({section: 'submission_notes', text: `<var>${convertNewlinesToBreaks(metadata.submissionNotes)}</var>`, title: 'Auto-generated submission notes'});
 }

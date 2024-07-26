@@ -2,13 +2,9 @@ import { isFunction } from "./utils.js";
 
 export async function getCurrentTab(callback) {
   let queryOptions = { active: true, currentWindow: true };
-
-  if (isFunction(callback)) {
-    chrome.tabs.query(queryOptions, callback);
-    return;
-  }
-
-  let [tab] = await chrome.tabs.query(queryOptions);
+  let [tab] = isFunction(callback)
+    ? await chrome.tabs.query(queryOptions, callback)
+    : await chrome.tabs.query(queryOptions);
   return tab;
 };
 
@@ -42,6 +38,8 @@ export function getExtensionUrl(path) {
 
 export const chromeSendMessageToCurrentTab = (message, responseCallback) => {
   getCurrentTab().then((tab) => {
-    chrome.tabs.sendMessage(tab.id, message, responseCallback);
+    if (tab) {
+      chrome.tabs.sendMessage(tab.id, message, responseCallback);
+    }
   });
 }

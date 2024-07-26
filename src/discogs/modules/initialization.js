@@ -1,6 +1,5 @@
 'use strict';
 
-import { chromeListenMessage } from "../../modules/chrome.js";
 import { click } from "../../modules/html.js";
 import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue, getArtistNameInput, getQuantityInput, getNotesTextarea, getSubmissionNotesTextarea } from "./draft-page.js";
 import { showNotificationError, showNotificationInfo } from "./notification.js";
@@ -21,7 +20,7 @@ export const initialize = () => {
 
   setupReadMetadataButton();
 
-  chromeListenMessage((request, sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'metadata') {
       applyMetadata(request.metadata);
     }

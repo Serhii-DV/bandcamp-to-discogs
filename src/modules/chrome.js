@@ -45,7 +45,3 @@ export const chromeSendMessageToCurrentTab = (message, responseCallback) => {
     chrome.tabs.sendMessage(tab.id, message, responseCallback);
   });
 }
-
-export const chromeListenMessage = (listenCallback) => {
-  chrome.runtime.onMessage.addListener(listenCallback);
-}

@@ -49,8 +49,6 @@ function setupSendMessageToPopup() {
     if (request.type === 'getDiscogsEditPageData') {
       sendResponse(prepareSendMessageData());
     }
-
-    return true;
   });
 }
 

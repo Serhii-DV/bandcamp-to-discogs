@@ -11,6 +11,8 @@ import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 import { getStorageSize } from "../modules/storage.js";
 import { bytesToSize } from "../modules/utils.js";
 import { setupConsole, setupConsoleRelease } from "./console.js";
+import { isValidBandcampURL } from "../bandcamp/modules/html.js";
+import { isValidDiscogsReleaseEditUrl } from "../discogs/app/utils.js";
 
 const btnDashboardTab = document.getElementById("dashboard-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -23,7 +25,7 @@ const btnDownloadStorage = document.getElementById('downloadHistory');
 const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
 const tabReleases = document.getElementById('releases');
 
-async function loadRelease() {
+async function loadBandcampRelease() {
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
@@ -150,20 +152,32 @@ function setupNavigation() {
   });
 }
 
-function main() {
+function initialize(tab) {
+  const currentTabUrl = tab.url;
+
   setupConsole();
   setupNavigation();
   replaceVersion(document);
-  loadRelease();
+
+  if (isValidBandcampURL(currentTabUrl)) {
+    loadBandcampRelease();
+  }
+
   checkStorageSize();
   onExternalContentLoaded((e) => {
     replaceVersion(e.target);
   });
 
-  getDiscogsEditPageData();
+  if (isValidDiscogsReleaseEditUrl(currentTabUrl)) {
+    getDiscogsEditPageData();
+  }
 }
 
-document.addEventListener('DOMContentLoaded', main);
+document.addEventListener('DOMContentLoaded', () => {
+  getCurrentTab().then((tab) => {
+    initialize(tab);
+  });
+});
 
 function checkStorageSize() {
   getStorageSize(size => {

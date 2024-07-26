@@ -10,7 +10,8 @@
 
 ### Fixed
 
-- discogs page: The artist input is selected by default after parsing metadata
+- discogs page: The artist input is selected by default after parsing metadata.
+- popup: Improved initialization logic. Fixed sending chrome messages.
 
 ## 0.10.2 (2024-07-17)
 

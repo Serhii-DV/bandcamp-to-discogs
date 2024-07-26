@@ -147,11 +147,13 @@ function transformReleaseItemsToReleaseListData(releases) {
       href: release.url,
       iconDefault: 'box-arrow-up-right',
       className: 'link-bandcamp-url',
+      title: 'View bandcamp release',
     });
     const searchLink = createIconLink({
       href: getSearchDiscogsReleaseUrl(release.artist, release.title),
       iconDefault: 'search',
       className: 'link-discogs-search',
+      title: 'Search release on Discogs',
     });
     const controls = [
       viewLink,

@@ -6,6 +6,7 @@
 
 - discogs page: Added release hints on the Discogs edit page
 - popup: Added load hints link to the release on History page
+- popup: Added clear search button to the releases and history table
 - core: Some code refactoring. Improved module loading
 
 ### Fixed

@@ -16,6 +16,9 @@ class ReleasesList extends HTMLElement {
     template.innerHTML = `
         <div class="content-header input-group input-group-sm sticky-top">
           <input type="text" id="${searchInputId}" class="form-control form-control-sm" placeholder="Search...">
+          <button id="clear-search-button" type="button" class="btn" title="Clear search">
+            <b2d-icon name="x-circle"></b2d-icon>
+          </button>
           <div class="control-buttons btn-group btn-group-sm" role="group" aria-label="Control buttons">
           </div>
           <button id="${sortingId}-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Sorted by default">
@@ -123,6 +126,15 @@ class ReleasesList extends HTMLElement {
     };
 
     setupSorting();
+
+    // Setup clear search button
+    const clearSearchBtn = self.querySelector('#clear-search-button');
+    clearSearchBtn.addEventListener('click', () => {
+      self
+        .setSearchValue('')
+        .refreshSearchStatus();
+      self.searchInput.focus();
+    });
   }
 
   refreshStatus() {

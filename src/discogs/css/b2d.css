@@ -1,11 +1,15 @@
 :root {
   --bg-color: #333;
   --txt-color: #fff;
+  --var-bg-color: #666;
+  --var-txt-color: #fff;
 }
 
 .de-dark-theme {
   --bg-color: #31154b;
   --txt-color: #fff;
+  --var-bg-color: #222;
+  --var-txt-color: #fff;
 }
 
 div.b2d-section-hint {
@@ -16,7 +20,9 @@ div.b2d-section-hint {
 }
 
 div.b2d-section-hint var {
-  padding: 0 2px;
+  display: inline-block;
+  padding: 0 5px;
   font-style: normal;
-  background: #222 !important;
+  background: var(--var-bg-color) !important;
+  color: var(--var-txt-color) !important;
 }

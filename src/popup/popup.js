@@ -115,6 +115,8 @@ function processBandcampReleasesData(response) {
 }
 
 function processDiscogsDraftPageResponse(response) {
+  disable(btnReleaseTab, btnCsvDataTab);
+  hide(btnReleasesTab);
   click(btnHistoryTab);
   setHistoryTabSearchValue(response.data.artistName);
 }

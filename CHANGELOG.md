@@ -2,6 +2,16 @@
 
 ## 0.11.0 (2024-XX-YY)
 
+### Features
+
+- discogs page: Added release hints on the Discogs edit page
+- popup: Added load hints link to the release on History page
+- core: Some code refactoring. Improved module loading
+
+### Fixed
+
+- discogs page: The artist input is selected by default after parsing metadata
+
 ## 0.10.2 (2024-07-17)
 
 ### Fixed

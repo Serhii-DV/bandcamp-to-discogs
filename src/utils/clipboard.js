@@ -38,9 +38,10 @@ export const copyToClipboard = str => {
  * @param {Function} onDone
  * @returns {HTMLElement}
  */
-export const createClipboardLink = ({content, onDone, iconName = 'clipboard', iconFillName = 'clipboard2-check-fill'}) => {
+export const createClipboardLink = ({content, onDone, iconName = 'clipboard', iconFillName = 'clipboard2-check-fill', title = ''}) => {
   const link = document.createElement("a");
   link.classList.add('clipboard-link');
+  link.title = title;
   link.href = '#';
   link.innerHTML = `<b2d-icon name="${iconName}"></b2d-icon>`;
 

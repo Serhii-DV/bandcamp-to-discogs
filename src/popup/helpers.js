@@ -165,6 +165,7 @@ function transformReleaseItemsToReleaseListData(releases) {
         },
         iconName: 'file-arrow-down',
         iconFillName: 'file-arrow-down-fill',
+        title: 'Load release hints into the current Discogs release draft',
       });
       controls.push(copyMetadataLink);
     }

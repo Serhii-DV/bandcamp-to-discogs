@@ -209,7 +209,7 @@ export function injectJSFile(url, callback) {
   (document.head||document.documentElement).appendChild(s);
 }
 
-export const createIconLinkExtended = ({
+export const createIconLink = ({
   className = 'icon-link',
   href = '#',
   onClick,
@@ -222,6 +222,7 @@ export const createIconLinkExtended = ({
   link.classList.add(className);
   link.title = title;
   link.href = href;
+  link.target = '_blank';
   link.innerHTML = `<b2d-icon name="${iconDefault}"></b2d-icon>`;
 
   if (onClick) {

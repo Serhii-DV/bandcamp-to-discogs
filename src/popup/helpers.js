@@ -2,7 +2,7 @@ import { Release, ReleaseItem } from "../app/release.js";
 import { Metadata } from "../discogs/app/metadata.js";
 import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
 import { chromeSendMessageToCurrentTab } from "../modules/chrome.js";
-import { createIconLinkExtended, disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
+import { createIconLink, disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
 import { generateKeyForReleaseItem } from "../modules/key-generator.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
 
@@ -143,8 +143,16 @@ function transformReleaseItemsToReleaseListData(releases) {
 
   releases.forEach(item => {
     const release = item instanceof Release ? item.releaseItem : item;
-    const viewLink = createIconLink(release.url, 'box-arrow-up-right', 'link-bandcamp-url');
-    const searchLink = createIconLink(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search', 'link-discogs-search');
+    const viewLink = createIconLink({
+      href: release.url,
+      iconDefault: 'box-arrow-up-right',
+      className: 'link-bandcamp-url',
+    });
+    const searchLink = createIconLink({
+      href: getSearchDiscogsReleaseUrl(release.artist, release.title),
+      iconDefault: 'search',
+      className: 'link-discogs-search',
+    });
     const controls = [
       viewLink,
       searchLink,
@@ -152,7 +160,7 @@ function transformReleaseItemsToReleaseListData(releases) {
 
     if (item instanceof Release) {
       const metadata = Metadata.fromRelease(item);
-      const applyMetadataLink = createIconLinkExtended({
+      const applyMetadataLink = createIconLink({
         title: 'Load release hints into the current Discogs release draft',
         iconDefault: 'file-arrow-down',
         iconOnClick: 'file-arrow-down-fill',
@@ -190,15 +198,6 @@ export function populateReleasesList(releasesList, releases) {
   releasesList.populateData(
     transformReleaseItemsToReleaseListData(releases)
   );
-}
-
-function createIconLink(url, icon, className) {
-  const link = document.createElement("a");
-  link.classList.add(className);
-  link.href = url;
-  link.target = '_blank';
-  link.innerHTML = `<b2d-icon name="${icon}"></b2d-icon>`;
-  return link;
 }
 
 export function setBackgroundImage(element, imageUrl) {

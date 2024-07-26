@@ -1,4 +1,4 @@
-import { isArray, isObject, isString } from "./utils.js";
+import { isArray, isFunction, isObject, isString } from "./utils.js";
 
 export function hasDataAttribute(element, attributeName) {
   return element.hasAttribute(`data-${attributeName}`);
@@ -225,8 +225,9 @@ export const createIconLink = ({
   link.target = '_blank';
   link.innerHTML = `<b2d-icon name="${iconDefault}"></b2d-icon>`;
 
-  if (onClick) {
+  if (isFunction(onClick)) {
     link.addEventListener('click', (e) => {
+      e.preventDefault();
       const eventReturn = onClick(e);
 
       if (iconOnClick) {

@@ -2,10 +2,9 @@ import { Release, ReleaseItem } from "../app/release.js";
 import { Metadata } from "../discogs/app/metadata.js";
 import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
 import { chromeSendMessageToCurrentTab } from "../modules/chrome.js";
-import { disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
+import { createIconLinkExtended, disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
 import { generateKeyForReleaseItem } from "../modules/key-generator.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
-import { createClipboardLink } from "../utils/clipboard.js";
 
 export function createBootstrapCheckbox(id, value, labelText, checked) {
   // Create the checkbox input element
@@ -153,21 +152,20 @@ function transformReleaseItemsToReleaseListData(releases) {
 
     if (item instanceof Release) {
       const metadata = Metadata.fromRelease(item);
-      const copyMetadataLink = createClipboardLink({
-        content: JSON.stringify(metadata),
-        onDone: () => {
+      const applyMetadataLink = createIconLinkExtended({
+        title: 'Load release hints into the current Discogs release draft',
+        iconDefault: 'file-arrow-down',
+        iconOnClick: 'file-arrow-down-fill',
+        onClick: () => {
           chromeSendMessageToCurrentTab({
             type: 'metadata',
             metadata
           });
 
           return true;
-        },
-        iconName: 'file-arrow-down',
-        iconFillName: 'file-arrow-down-fill',
-        title: 'Load release hints into the current Discogs release draft',
+        }
       });
-      controls.push(copyMetadataLink);
+      controls.push(applyMetadataLink);
     }
 
     data.push({

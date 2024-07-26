@@ -208,3 +208,37 @@ export function injectJSFile(url, callback) {
   s.onload = callback;
   (document.head||document.documentElement).appendChild(s);
 }
+
+export const createIconLinkExtended = ({
+  className = 'icon-link',
+  href = '#',
+  onClick,
+  title = '',
+  iconDefault,
+  iconOnClick,
+  iconOnClickTimeout = 3000,
+}) => {
+  const link = document.createElement("a");
+  link.classList.add(className);
+  link.title = title;
+  link.href = href;
+  link.innerHTML = `<b2d-icon name="${iconDefault}"></b2d-icon>`;
+
+  if (onClick) {
+    link.addEventListener('click', (e) => {
+      const eventReturn = onClick(e);
+
+      if (iconOnClick) {
+        const icon = link.querySelector('b2d-icon');
+        icon.setIcon(iconOnClick);
+        setTimeout(() => {
+          icon.setIcon(iconDefault);
+        }, iconOnClickTimeout);
+      }
+
+      return eventReturn;
+    });
+  }
+
+  return link;
+}

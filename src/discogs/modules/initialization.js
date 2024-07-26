@@ -3,7 +3,7 @@
 import { chromeListenMessage } from "../../modules/chrome.js";
 import { click } from "../../modules/html.js";
 import { setSectionHint, fillDurations, getSubmissionFormSectionNotes, selectFormatDescription, selectFormatFileType, setInputValue, getArtistNameInput, getQuantityInput, getNotesTextarea, getSubmissionNotesTextarea } from "./draft-page.js";
-import { showNotificationInfo, showNotificationWarning } from "./notification.js";
+import { showNotificationError, showNotificationInfo } from "./notification.js";
 
 let artistNameInput;
 let qtyInput;
@@ -36,13 +36,11 @@ function setupReadMetadataButton() {
   readMetadataBtn.textContent = 'Read metadata';
   readMetadataBtn.addEventListener('click', () => {
     try {
-      const metadata = JSON.parse(notesTextarea.value);
+      const metadata = getMetadataFromNotes();
       applyMetadata(metadata);
     } catch (error) {
-      console.error('[B2D] Invalid JSON metadata in Notes');
       console.error(error);
-
-      showNotificationWarning('Release metadata was not found in Notes');
+      showNotificationError(error.message);
     }
   });
 
@@ -51,6 +49,16 @@ function setupReadMetadataButton() {
 
   if (submissionNotesTextarea.value) {
     click(readMetadataBtn);
+  }
+}
+
+function getMetadataFromNotes() {
+  try {
+    return JSON.parse(notesTextarea.value);
+  } catch (error) {
+    console.error('[B2D] Invalid JSON metadata in Notes');
+    console.error(error);
+    throw new Error('Invalid metadata in Notes');
   }
 }
 

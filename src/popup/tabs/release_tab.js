@@ -45,22 +45,6 @@ function outputRelease(tab, release) {
     .join("<br>");
 
   releaseTracks.innerHTML = tracks;
-
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-  releaseContent.querySelectorAll('.js-releasePublishedDate').forEach(el => {
-    el.innerHTML = formatter.format(release.published) + el.innerHTML;
-    el.title = release.published.toLocaleString();
-    initClipboard(el.querySelector('.action-copy'), getDiscogsDateValue(release.published));
-  });
-  releaseContent.querySelectorAll('.js-releaseModifiedDate').forEach(el => {
-    el.innerHTML = formatter.format(release.modified) + el.innerHTML;
-    el.title = release.modified.toLocaleString();
-    initClipboard(el.querySelector('.action-copy'), getDiscogsDateValue(release.modified));
-  });
 }
 
 function countLinesInHtmlElement(el) {

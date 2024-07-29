@@ -1,5 +1,26 @@
 # Change log
 
+## 0.11.0 (2024-XX-YY)
+
+### Features
+
+- discogs page: Added release hints on the Discogs edit page
+- popup: Added load hints link to the release on History page
+- popup: Added clear search button to the releases and history table
+- popup: Don't display the prepared discogs release csv data in the popup
+- core: Some code refactoring. Improved module loading
+
+### Fixed
+
+- discogs page: The artist input is selected by default after parsing metadata.
+- popup: Improved initialization logic. Fixed sending chrome messages.
+
+## 0.10.2 (2024-07-17)
+
+### Fixed
+
+- popup: Fixed broken multi download feature
+
 ## 0.10.1 (2024-06-23)
 
 ### Fixed

@@ -1,5 +1,3 @@
-import { generateSubmissionNotes } from '../discogs/modules/discogs.js';
-import { getExtensionManifest } from '../modules/chrome.js';
 import { generateKeyForUrl } from '../modules/key-generator.js';
 import TrackTime from './trackTime.js';
 
@@ -137,24 +135,6 @@ export class Release {
       obj.image,
       obj.keywords
     );
-  }
-
-  /**
-   * Returns release metadata
-   * @param {Release} release
-   * @returns Object
-   */
-  toMetadata() {
-    const manifest = getExtensionManifest();
-    return {
-      version: manifest.version,
-      format: {
-        qty: this.tracksQty,
-        fileType: 'FLAC',
-        description: 'Album'
-      },
-      submissionNotes: generateSubmissionNotes(this)
-    };
   }
 }
 

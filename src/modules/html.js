@@ -1,4 +1,4 @@
-import { isArray, isObject, isString } from "./utils.js";
+import { isArray, isFunction, isObject, isString } from "./utils.js";
 
 export function hasDataAttribute(element, attributeName) {
   return element.hasAttribute(`data-${attributeName}`);
@@ -165,4 +165,82 @@ export function isHtmlElement(element) {
 
 export function getCurrentUrl() {
   return window.location.href;
+}
+
+/**
+ * Observes changes to a specified attribute on a given HTMLElement
+ * and runs a callback function when changes are detected.
+ *
+ * @param {HTMLElement} element - The element to observe.
+ * @param {string} attributeName - The name of the attribute to observe.
+ * @param {Function} callback - The function to call when the attribute changes.
+ */
+export function observeAttributeChange(element, attributeName, callback) {
+  const observer = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+          if (mutation.type === 'attributes' && mutation.attributeName === attributeName) {
+              callback(element);
+          }
+      }
+  });
+
+  const config = { attributes: true, attributeFilter: [attributeName] };
+  observer.observe(element, config);
+}
+
+/**
+ * @param {String} cssUrl
+ */
+export function injectCSSFile(cssUrl) {
+  const linkElement = document.createElement('link');
+  linkElement.rel = 'stylesheet';
+  linkElement.href = cssUrl;
+  linkElement.onload = () => {
+    console.log('[B2D] Injected css file:', cssUrl);
+  };
+
+  document.head.appendChild(linkElement);
+}
+
+export function injectJSFile(url, callback) {
+  const s = document.createElement('script');
+  s.src = url;
+  s.onload = callback;
+  (document.head||document.documentElement).appendChild(s);
+}
+
+export const createIconLink = ({
+  className = 'icon-link',
+  href = '#',
+  onClick,
+  title = '',
+  iconDefault,
+  iconOnClick,
+  iconOnClickTimeout = 3000,
+}) => {
+  const link = document.createElement("a");
+  link.classList.add(className);
+  link.title = title;
+  link.href = href;
+  link.target = '_blank';
+  link.innerHTML = `<b2d-icon name="${iconDefault}"></b2d-icon>`;
+
+  if (isFunction(onClick)) {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const eventReturn = onClick(e);
+
+      if (iconOnClick) {
+        const icon = link.querySelector('b2d-icon');
+        icon.setIcon(iconOnClick);
+        setTimeout(() => {
+          icon.setIcon(iconDefault);
+        }, iconOnClickTimeout);
+      }
+
+      return eventReturn;
+    });
+  }
+
+  return link;
 }

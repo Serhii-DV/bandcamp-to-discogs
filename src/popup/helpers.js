@@ -1,6 +1,8 @@
 import { Release, ReleaseItem } from "../app/release.js";
+import { Metadata } from "../discogs/app/metadata.js";
 import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
-import { disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
+import { chromeSendMessageToCurrentTab } from "../modules/chrome.js";
+import { createIconLink, disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
 import { generateKeyForReleaseItem } from "../modules/key-generator.js";
 import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
 
@@ -141,15 +143,49 @@ function transformReleaseItemsToReleaseListData(releases) {
 
   releases.forEach(item => {
     const release = item instanceof Release ? item.releaseItem : item;
-    const viewLink = getIconLinkHtml(release.url, 'box-arrow-up-right', 'link-bandcamp-url');
-    const searchLink = getIconLinkHtml(getSearchDiscogsReleaseUrl(release.artist, release.title), 'search', 'link-discogs-search');
+    const viewLink = createIconLink({
+      href: release.url,
+      iconDefault: 'box-arrow-up-right',
+      className: 'link-bandcamp-url',
+      title: 'View bandcamp release',
+    });
+    const searchLink = createIconLink({
+      href: getSearchDiscogsReleaseUrl(release.artist, release.title),
+      iconDefault: 'search',
+      className: 'link-discogs-search',
+      title: 'Search release on Discogs',
+    });
+    const controls = [
+      viewLink,
+      searchLink,
+    ];
+
+    if (item instanceof Release) {
+      const metadata = Metadata.fromRelease(item);
+      const applyMetadataLink = createIconLink({
+        title: 'Load release hints into the current Discogs release draft',
+        iconDefault: 'file-arrow-down',
+        iconOnClick: 'file-arrow-down-fill',
+        onClick: () => {
+          chromeSendMessageToCurrentTab({
+            type: 'metadata',
+            metadata
+          });
+
+          return true;
+        }
+      });
+      controls.push(applyMetadataLink);
+    }
+
     data.push({
-      title: `${release.artist} - ${release.title} ${viewLink} ${searchLink}`,
+      title: `${release.artist} - ${release.title}`,
       value: generateKeyForReleaseItem(release),
       id: convertToAlias(release.title),
       dataAtts: {
         title: `${release.artist} - ${release.title}`
-      }
+      },
+      controls,
     });
   });
 
@@ -164,15 +200,6 @@ export function populateReleasesList(releasesList, releases) {
   releasesList.populateData(
     transformReleaseItemsToReleaseListData(releases)
   );
-}
-
-export function getIconLinkHtml(url, icon, className) {
-  const releaseLink = document.createElement("a");
-  releaseLink.classList.add(className);
-  releaseLink.href = url;
-  releaseLink.target = '_blank';
-  releaseLink.innerHTML = `<b2d-icon name="${icon}"></b2d-icon>`;
-  return releaseLink.outerHTML;
 }
 
 export function setBackgroundImage(element, imageUrl) {

@@ -20,12 +20,12 @@ export function getSearchDiscogsReleaseUrl(artist, release) {
 }
 
 /**
- * @param {Release} release
+ * @param {String} releaseUrl
  * @returns {String}
  */
-export function generateSubmissionNotes(release) {
+export function generateSubmissionNotes(releaseUrl) {
   return replaceTokens(config.text.notes, {
     extension_url: config.extension_url,
-    release_url: release.releaseItem.url
+    release_url: releaseUrl
   });
 }

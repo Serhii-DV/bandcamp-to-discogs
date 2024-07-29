@@ -1,10 +1,12 @@
 import { Release } from "../app/release.js";
 import { releaseToDiscogsCsv } from "../discogs/modules/discogs.js";
 import { logStorage } from "../modules/storage.js";
+import { logInfo } from "../utils/console.js";
 
 const consoleCommand = document.querySelector('console-command');
 
 export function setupConsole() {
+  logInfo('Setup console');
   consoleCommand.addCommand('log.storage', () => { logStorage();});
 }
 

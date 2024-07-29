@@ -2,6 +2,7 @@ import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../../bandcamp
 import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../modules/utils.js";
 import { Release, Track } from "../../app/release.js";
 import { getDiscogsDateValue } from "./utils.js";
+import { Metadata } from "./metadata.js";
 
 /**
  * Represents a Discogs CSV entry.
@@ -55,6 +56,7 @@ export class DiscogsCsv {
    */
   static fromRelease(release) {
     const label = release.artist === release.label ? `Not On Label (${release.artist} Self-released)` : release.label;
+    const metadata = Metadata.fromRelease(release);
 
     return new DiscogsCsv({
       artist: release.releaseItem.artist,
@@ -65,7 +67,7 @@ export class DiscogsCsv {
       genres: keywordsToDiscogsGenres(release.keywords),
       styles: keywordsToDiscogsStyles(release.keywords),
       tracks: release.tracks,
-      notes: JSON.stringify(release.toMetadata()),
+      notes: JSON.stringify(metadata),
       date: release.published,
       images: release.image
     });

@@ -13,6 +13,7 @@ import { bytesToSize } from "../modules/utils.js";
 import { setupConsole, setupConsoleRelease } from "./console.js";
 import { isValidBandcampURL } from "../bandcamp/modules/html.js";
 import { isValidDiscogsReleaseEditUrl } from "../discogs/app/utils.js";
+import { logInfo } from "../utils/console.js";
 
 const btnDashboardTab = document.getElementById("dashboard-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -25,7 +26,9 @@ const btnDownloadStorage = document.getElementById('downloadHistory');
 const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
 const tabReleases = document.getElementById('releases');
 
-async function loadBandcampRelease() {
+async function proceedBandcampData() {
+  logInfo('Proceed bandcamp data');
+
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
@@ -38,7 +41,9 @@ async function loadBandcampRelease() {
   });
 }
 
-async function getDiscogsEditPageData() {
+async function proceedDiscogsEditPageData() {
+  logInfo('Proceed discogs edit page data');
+
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getDiscogsEditPageData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
@@ -122,6 +127,7 @@ function processDiscogsDraftPageResponse(response) {
 }
 
 function replaceVersion(document) {
+  logInfo('Replace extension version');
   const manifest = getExtensionManifest();
 
   // Set extension version
@@ -131,6 +137,8 @@ function replaceVersion(document) {
 }
 
 function setupNavigation() {
+  logInfo('Setup navigation');
+
   btnReleaseTab.addEventListener('click', () => {
     hide(btnDownloadReleases, btnDownloadStorage);
     show(btnDownloadRelease);
@@ -157,12 +165,15 @@ function setupNavigation() {
 function initialize(tab) {
   const currentTabUrl = tab.url;
 
+  logInfo('Popup initialization');
+  logInfo('Current URL', currentTabUrl);
+
   setupConsole();
   setupNavigation();
   replaceVersion(document);
 
   if (isValidBandcampURL(currentTabUrl)) {
-    loadBandcampRelease();
+    proceedBandcampData();
   }
 
   checkStorageSize();
@@ -171,7 +182,7 @@ function initialize(tab) {
   });
 
   if (isValidDiscogsReleaseEditUrl(currentTabUrl)) {
-    getDiscogsEditPageData();
+    proceedDiscogsEditPageData();
   }
 }
 
@@ -182,6 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function checkStorageSize() {
+  logInfo('Check storage size');
+
   getStorageSize(size => {
     document.querySelectorAll('.storage-size').forEach(el => {
       el.textContent = bytesToSize(size);

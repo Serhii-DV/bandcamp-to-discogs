@@ -1,4 +1,5 @@
-import { getDataAttribute, setDataAttribute } from "../../modules/html";
+import { getDataAttribute, input, setDataAttribute } from "../../modules/html";
+import { isEmptyArray } from "../../modules/utils";
 
 class ReleasesList extends HTMLElement {
   constructor() {
@@ -15,6 +16,9 @@ class ReleasesList extends HTMLElement {
     template.innerHTML = `
         <div class="content-header input-group input-group-sm sticky-top">
           <input type="text" id="${searchInputId}" class="form-control form-control-sm" placeholder="Search...">
+          <button id="clear-search-button" type="button" class="btn" title="Clear search">
+            <b2d-icon name="x-circle"></b2d-icon>
+          </button>
           <div class="control-buttons btn-group btn-group-sm" role="group" aria-label="Control buttons">
           </div>
           <button id="${sortingId}-button" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Sorted by default">
@@ -51,16 +55,6 @@ class ReleasesList extends HTMLElement {
     });
 
     const table = self.querySelector(".table");
-    table.addEventListener("click", event => {
-      const target = event.target;
-      if (target.nodeName === 'TD') {
-        const parentTr = target.parentElement;
-        const checkbox = parentTr.querySelector("input[type='checkbox']");
-        if (checkbox && !target.matches("label")) {
-          checkbox.click();
-        }
-      }
-    });
     table.addEventListener('change', event => {
       const target = event.target;
       if (target.type === 'checkbox') {
@@ -132,6 +126,15 @@ class ReleasesList extends HTMLElement {
     };
 
     setupSorting();
+
+    // Setup clear search button
+    const clearSearchBtn = self.querySelector('#clear-search-button');
+    clearSearchBtn.addEventListener('click', () => {
+      self
+        .setSearchValue('')
+        .refreshSearchStatus();
+      self.searchInput.focus();
+    });
   }
 
   refreshStatus() {
@@ -155,6 +158,12 @@ class ReleasesList extends HTMLElement {
       element.textContent = statusText;
     };
     self.statusElements.forEach(refreshStatusElement);
+    return self;
+  }
+
+  refreshSearchStatus() {
+    const self = this;
+    input(self.searchInput);
     return self;
   }
 
@@ -216,7 +225,10 @@ class ReleasesList extends HTMLElement {
   connectedCallback() {
     const dataAttr = this.getAttribute("data");
     const data = dataAttr ? JSON.parse(dataAttr) : [];
-    this.populateData(data);
+
+    if (!isEmptyArray(data)) {
+      this.populateData(data);
+    }
   }
 
   /**
@@ -236,12 +248,22 @@ class ReleasesList extends HTMLElement {
       setDataAttribute(row, item.dataAtts);
       row.innerHTML = `
         <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
-        <td><label for="${checkboxId}">${item.title}</label></td>
+        <td><label for="${checkboxId}">${item.title}</label><span class="controls"></span></td>
       `;
+
+      const controlsEl = row.querySelector('span.controls');
+      item.controls.forEach((control) => {
+        if (control instanceof HTMLElement) {
+          controlsEl.appendChild(control);
+        }
+      });
+
       tableBody.appendChild(row);
     });
 
-    self.refreshStatus();
+    self
+      .refreshStatus()
+      .refreshSearchStatus();
 
     return self;
   }
@@ -287,6 +309,14 @@ class ReleasesList extends HTMLElement {
     self.stateButtons.forEach(button => self.updateButtonState(button));
     return self;
   }
+
+  setSearchValue(value) {
+    const self = this;
+    self.searchInput.value = value;
+    return self;
+  }
 }
 
-customElements.define('releases-list', ReleasesList);
+if (!customElements.get('releases-list')) {
+  customElements.define('releases-list', ReleasesList);
+}

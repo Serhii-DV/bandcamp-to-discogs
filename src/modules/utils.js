@@ -131,24 +131,6 @@ export function replaceTokens(template, replacements) {
 }
 
 /**
- * @param {String} cssUrl
- */
-export function injectCSSFile(cssUrl) {
-  const linkElement = document.createElement('link');
-  linkElement.rel = 'stylesheet';
-  linkElement.href = cssUrl;
-
-  document.head.appendChild(linkElement);
-}
-
-export function injectJSFile(url, callback) {
-  const s = window.document.createElement('script');
-  s.src = url;
-  s.onload = isFunction(callback) ? callback() : () => { console.log(`B2D: Script ${url} was injected!`); };
-  (document.head||document.documentElement).appendChild(s);
-}
-
-/**
  * @param {String} inputString
  * @param {RegExp|String} delimiters
  * @returns {Array}
@@ -242,4 +224,16 @@ export function removeLeadingZeroOrColon(str) {
   // Use a regular expression to match leading zeros or colons
   // and replace them with an empty string
   return str.replace(/^(:|0)*/, '');
+}
+
+export const camelCaseToReadable = (str) => {
+  // Replace each uppercase letter with a space and that letter in lowercase
+  let result = str.replace(/([a-z])([A-Z])/g, '$1 $2');
+  // Capitalize the first letter of the resulting string
+  result = result.charAt(0).toUpperCase() + result.slice(1);
+  return result;
+}
+
+export const convertNewlinesToBreaks = (str) => {
+  return str.replace(/\n/g, '<br>');
 }

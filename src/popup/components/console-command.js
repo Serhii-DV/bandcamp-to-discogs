@@ -27,9 +27,6 @@ class ConsoleCommand extends HTMLElement {
     shadow.appendChild(template.content.cloneNode(true));
 
     self.inputElement = shadow.querySelector('input');
-    self.inputElement.addEventListener("input", event => {
-      self.runCommand(self.inputElement.value);
-    });
     self.inputElement.addEventListener("keypress", event => {
       if (event.key === "Enter") {
         self.runCommand(event.target.value);
@@ -86,7 +83,7 @@ customElements.define('console-command', ConsoleCommand);
   consoleCommand.style.display = "none";
   document.body.appendChild(consoleCommand);
 
-  document.addEventListener("keydown", event => {
+  document.addEventListener("keydown", (event) => {
     if ((event.ctrlKey || event.metaKey) && event.key === "`") {
       consoleCommand.toggle();
     }

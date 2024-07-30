@@ -1,6 +1,12 @@
 # Change log
 
-## 0.11.0 (2024-XX-YY)
+## 0.11.1 (2024-07-29)
+
+### Fixed
+
+- popup: Dashboard was not active on non-bandcamp pages
+
+## 0.11.0 (2024-07-29)
 
 ### Features
 

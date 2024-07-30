@@ -60,12 +60,12 @@ function showBandcampDataNotFoundWarning() {
 
   // Wait for dashboard content load
   const interval = 100;
-  setInterval(() => {
+  const intervalId = setInterval(() => {
     const warningBandcampDataNotFound = document.getElementById('b2d-warning-bandcamp-data-not-found');
 
     if (warningBandcampDataNotFound) {
       show(warningBandcampDataNotFound);
-      clearInterval(interval);
+      clearInterval(intervalId);
     }
   }, interval);
 }

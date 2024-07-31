@@ -2,9 +2,15 @@
 
 ## 0.11.1 (2024-07-29)
 
+### Features
+
+- popup: Added console command for printing release metadata
+
 ### Fixed
 
 - popup: Dashboard was not active on non-bandcamp pages
+- popup: Console was broken
+- popup: Fixed release Discogs search link
 
 ## 0.11.0 (2024-07-29)
 

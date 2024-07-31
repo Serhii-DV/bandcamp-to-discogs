@@ -1,7 +1,7 @@
 import { Release } from "../app/release.js";
 import { releaseToDiscogsCsv } from "../discogs/modules/discogs.js";
 import { logStorage } from "../modules/storage.js";
-import { logInfo } from "../utils/console.js";
+import { log, logInfo } from "../utils/console.js";
 
 export function setupConsole() {
   initConsole((consoleCommand) => {
@@ -15,16 +15,16 @@ export function setupConsole() {
 export function setupConsoleRelease(release, keywordsMapping) {
   initConsole((consoleCommand) => {
     consoleCommand.addCommand('log.release', () => {
-      console.log(release);
+      log('Release:', release)
     });
 
     consoleCommand.addCommand('log.keywordsMapping', () => {
-      console.log(keywordsMapping);
+      log('Keywords mapping:', keywordsMapping);
     });
 
     const discogsCsv = releaseToDiscogsCsv(release);
     consoleCommand.addCommand('log.discogsCsvNotes', () => {
-      console.log(discogsCsv.notes);
+      log('Discogs CSV notes:', discogsCsv.notes);
     });
   });
 }

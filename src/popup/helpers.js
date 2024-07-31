@@ -161,12 +161,12 @@ function transformReleaseItemsToReleaseListData(releases) {
     ];
 
     if (item instanceof Release) {
-      const metadata = Metadata.fromRelease(item);
       const applyMetadataLink = createIconLink({
         title: 'Load release hints into the current Discogs release draft',
         iconDefault: 'file-arrow-down',
         iconOnClick: 'file-arrow-down-fill',
         onClick: () => {
+          const metadata = Metadata.fromRelease(item);
           chromeSendMessageToCurrentTab({
             type: 'metadata',
             metadata

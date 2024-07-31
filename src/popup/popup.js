@@ -56,13 +56,25 @@ async function proceedDiscogsEditPageData() {
 }
 
 function showBandcampDataNotFoundWarning() {
+  showDashboard();
+
+  // Wait for dashboard content load
+  const interval = 100;
+  const intervalId = setInterval(() => {
+    const warningBandcampDataNotFound = document.getElementById('b2d-warning-bandcamp-data-not-found');
+
+    if (warningBandcampDataNotFound) {
+      show(warningBandcampDataNotFound);
+      clearInterval(intervalId);
+    }
+  }, interval);
+}
+
+function showDashboard() {
   disable(btnReleaseTab, btnCsvDataTab);
   hide(btnReleasesTab);
   show(btnDownloadReleases);
   click(btnDashboardTab);
-
-  const warningBandcampDataNotFound = document.getElementById('b2d-warning-bandcamp-data-not-found');
-  show(warningBandcampDataNotFound);
 }
 
 function processBandcampResponse(response) {
@@ -171,18 +183,17 @@ function initialize(tab) {
   setupConsole();
   setupNavigation();
   replaceVersion(document);
-
-  if (isValidBandcampURL(currentTabUrl)) {
-    proceedBandcampData();
-  }
-
   checkStorageSize();
   onExternalContentLoaded((e) => {
     replaceVersion(e.target);
   });
 
-  if (isValidDiscogsReleaseEditUrl(currentTabUrl)) {
+  if (isValidBandcampURL(currentTabUrl)) {
+    proceedBandcampData();
+  } else if (isValidDiscogsReleaseEditUrl(currentTabUrl)) {
     proceedDiscogsEditPageData();
+  } else {
+    showBandcampDataNotFoundWarning();
   }
 }
 

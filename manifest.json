@@ -61,7 +61,6 @@
         "src/modules/chrome.js",
         "src/modules/html.js",
         "src/modules/key-generator.js",
-        "src/modules/schema.js",
         "src/modules/storage.js",
         "src/modules/utils.js"
       ],

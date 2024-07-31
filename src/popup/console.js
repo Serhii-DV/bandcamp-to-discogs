@@ -1,4 +1,5 @@
 import { Release } from "../app/release.js";
+import { Metadata } from "../discogs/app/metadata.js";
 import { releaseToDiscogsCsv } from "../discogs/modules/discogs.js";
 import { logStorage } from "../modules/storage.js";
 import { log, logInfo } from "../utils/console.js";
@@ -23,8 +24,13 @@ export function setupConsoleRelease(release, keywordsMapping) {
     });
 
     const discogsCsv = releaseToDiscogsCsv(release);
-    consoleCommand.addCommand('log.discogsCsvNotes', () => {
-      log('Discogs CSV notes:', discogsCsv.notes);
+    consoleCommand.addCommand('log.discogsCsv', () => {
+      log('Discogs CSV:', discogsCsv);
+    });
+
+    const metadata = Metadata.fromRelease(release);
+    consoleCommand.addCommand('log.metadata', () => {
+      log('Release metadata:', metadata);
     });
   });
 }

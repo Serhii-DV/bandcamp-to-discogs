@@ -2,6 +2,10 @@
 
 ## 0.11.1 (2024-07-29)
 
+### Features
+
+- popup: Added console command for printing release metadata
+
 ### Fixed
 
 - popup: Dashboard was not active on non-bandcamp pages

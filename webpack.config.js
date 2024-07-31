@@ -6,6 +6,18 @@ module.exports = {
     popup: './src/popup/popup.js',
     "bandcamp-content": './src/bandcamp/modules/main.js'
   },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),

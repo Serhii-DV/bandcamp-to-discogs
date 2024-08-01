@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "tsc && webpack --mode production",
-    "dev": "tsc --noEmit && webpack serve --mode development"
+    "dev": "tsc && webpack serve --mode development"
   },
   "dependencies": {
     "bootstrap": "^5.3.2",

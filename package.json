@@ -10,6 +10,7 @@
     "dev": "tsc && webpack serve --mode development"
   },
   "dependencies": {
+    "@types/chrome": "^0.0.269",
     "bootstrap": "^5.3.2",
     "source-map-loader": "^5.0.0",
     "uuid": "^9.0.1"

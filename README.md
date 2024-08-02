@@ -14,6 +14,18 @@ Bandcamp to Discogs (B2D) - is a Google Chrome extension designed to assist in c
 
 [Bandcamp to Discogs Extension](https://chrome.google.com/webstore/detail/bandcamp-to-discogs-b2d/hipnkehalkffbdjnbbeoefmoondaciok)
 
+### Installation
+
+```bash
+npm install typescript ts-loader source-map-loader
+```
+
+Support chrome types:
+
+```bash
+npm install --save @types/chrome
+```
+
 ## Author
 
 **Serhii Diahovchenko** - [Serhii-DV](https://github.com/Serhii-DV)

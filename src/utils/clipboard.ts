@@ -1,20 +1,21 @@
 import { isFunction } from "../modules/utils";
 
-/**
- * @param {HTMLElement} element
- * @param {string} content
- * @param {Function} callback
- */
-export const initClipboard = (element, content, callback, iconFillName) => {
+type VoidCallback = (value: void) => void | PromiseLike<void>;
+
+export const initClipboard = (element: Element, content: string, callback: VoidCallback, iconFillName: string): void => {
   element.addEventListener('click', () => {
-    const icon = element.querySelector('b2d-icon');
-    const promise = copyToClipboard(content ?? element.getAttribute('data-content')).then(() => {
-      const initIconName = icon.getAttribute('name');
-      icon.setIcon(iconFillName);
-      setTimeout(() => {
-        icon.setIcon(initIconName);
-      }, 3000);
-    });
+    const promise = copyToClipboard(content ?? element.getAttribute('data-content'));
+    const icon = element.querySelector('b2d-icon') as B2DIconComponent;
+
+    if (icon) {
+      promise.then(() => {
+        const initIconName = icon.getAttribute('name');
+        icon.setIcon(iconFillName);
+        setTimeout(() => {
+          icon.setIcon(initIconName);
+        }, 3000);
+      });
+    }
 
     if (isFunction(callback)) {
       promise.then(callback);
@@ -22,11 +23,7 @@ export const initClipboard = (element, content, callback, iconFillName) => {
   });
 };
 
-/**
- * @param {string} str
- * @returns {Promise}
- */
-export const copyToClipboard = str => {
+export const copyToClipboard = (str: string): Promise<void> => {
   if (navigator && navigator.clipboard && navigator.clipboard.writeText)
     return navigator.clipboard.writeText(str);
   return Promise.reject('The Clipboard API is not available.');
@@ -34,11 +31,20 @@ export const copyToClipboard = str => {
 
 /**
  * Creates a new Clipboard link element
- * @param {string} content
- * @param {Function} onDone
- * @returns {HTMLElement}
  */
-export const createClipboardLink = ({content, onDone, iconName = 'clipboard', iconFillName = 'clipboard2-check-fill', title = ''}) => {
+export const createClipboardLink = ({
+  content,
+  onDone,
+  iconName = 'clipboard',
+  iconFillName = 'clipboard2-check-fill',
+  title = ''
+}: {
+  content: string,
+  onDone: () => void,
+  iconName?: string,
+  iconFillName?: string,
+  title?: string
+}): HTMLElement => {
   const link = document.createElement("a");
   link.classList.add('clipboard-link');
   link.title = title;

@@ -1,10 +1,10 @@
 import { safeFilename } from "./utils.js";
 
-export function arrayToCsv(rows: Array<Array<string>>): string {
+export function arrayToCsv(rows) {
   return rows.map(e => e.join(",")).join("\n");
 }
 
-export function objectsToCsv(objects: Array<Record<string, any>>): string {
+export function objectsToCsv(objects) {
   if (!objects || objects.length === 0) {
     return ''; // Return an empty string if the array is empty or not provided
   }
@@ -13,14 +13,14 @@ export function objectsToCsv(objects: Array<Record<string, any>>): string {
   const csvRows = [headers.join(',')];
 
   for (const obj of objects) {
-    const values = headers.map((header) => obj[header]);
+    const values = headers.map(header => obj[header]);
     csvRows.push(values.join(','));
   }
 
   return csvRows.join('\n');
 }
 
-export function downloadCsv(csv: string, csvFileName: string): void {
+export function downloadCsv(csv, csvFileName) {
   const blob = new Blob([csv], { type: 'text/csv' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');

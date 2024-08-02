@@ -1,6 +1,6 @@
 import { Release } from "../../app/release.js";
 import { DiscogsCsv } from "../../discogs/app/discogs-csv.js";
-import { downloadCsv, objectsToCsv } from "../../modules/csv.ts";
+import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
 import { isEmptyArray } from "../../modules/utils.js";
 import { disable, enable } from "../../modules/html.js";
 

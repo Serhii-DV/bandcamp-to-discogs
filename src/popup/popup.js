@@ -13,7 +13,7 @@ import { bytesToSize } from "../modules/utils.js";
 import { setupConsole, setupConsoleRelease } from "./console.js";
 import { isValidBandcampURL } from "../bandcamp/modules/html.js";
 import { isValidDiscogsReleaseEditUrl } from "../discogs/app/utils.js";
-import { logInfo } from "../utils/console.js";
+import { logInfo } from "../utils/console";
 
 const btnDashboardTab = document.getElementById("dashboard-tab");
 const btnReleaseTab = document.getElementById("release-tab");

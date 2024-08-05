@@ -1,5 +1,5 @@
 import { Release } from "../app/release.js";
-import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
+import { getCurrentTab, getExtensionManifest } from "../utils/chrome";
 import { loadDiscogsGenres } from "../discogs/modules/genres.js";
 import { loadKeywordMapping } from "../bandcamp/modules/mapping.js";
 import config from "../config.js";

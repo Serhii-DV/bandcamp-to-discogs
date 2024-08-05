@@ -1,5 +1,5 @@
 import { ReleaseItem } from "../../app/release.js";
-import { getCurrentTab, openTabs } from "../../modules/chrome.js";
+import { getCurrentTab, openTabs } from "../../utils/chrome";
 import { input } from "../../modules/html.js";
 import { findReleasesByUrls } from "../../modules/storage.js";
 import { populateReleasesList, removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState } from "../helpers.js";

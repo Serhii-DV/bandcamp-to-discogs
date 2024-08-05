@@ -1,4 +1,4 @@
-import { isFunction } from "./utils.js";
+import { isFunction } from "../modules/utils.js";
 
 export async function getCurrentTab(callback) {
   let queryOptions = { active: true, currentWindow: true };

@@ -3,7 +3,7 @@ import { Metadata } from "../discogs/app/metadata.js";
 import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
 import { chromeSendMessageToCurrentTab } from "../utils/chrome";
 import { createIconLink, disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
-import { generateKeyForReleaseItem } from "../modules/key-generator.js";
+import { generateKeyForReleaseItem } from "../utils/key-generator";
 import { convertToAlias, isArray, isObject, isString } from "../utils/utils";
 
 export function createBootstrapCheckbox(id, value, labelText, checked) {

@@ -60,7 +60,7 @@
         "src/discogs/modules/genres.js",
         "src/utils/chrome.ts",
         "src/modules/html.js",
-        "src/modules/key-generator.js",
+        "src/utils/key-generator.ts",
         "src/modules/storage.js",
         "src/utils/utils.ts"
       ],

@@ -1,6 +1,6 @@
 import { Release } from "../app/release.js";
 import { isValidBandcampURL } from "../bandcamp/modules/html.js";
-import { generateKeyForRelease, generateKeyForUrl, generateKeyUrlMapFromUrls, generateKeysFromUrls } from "./key-generator.js";
+import { generateKeyForRelease, generateKeyForUrl, generateKeyUrlMapFromUrls, generateKeysFromUrls } from "../utils/key-generator";
 import { isArray, isFunction, isObject } from "../utils/utils";
 
 const storage = chrome.storage.local;

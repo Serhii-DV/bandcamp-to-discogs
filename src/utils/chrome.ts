@@ -1,19 +1,16 @@
-import { isFunction } from "../modules/utils.js";
+import { Metadata } from "src/discogs/app/metadata.js";
 
-export async function getCurrentTab(callback) {
-  let queryOptions = { active: true, currentWindow: true };
-  let [tab] = isFunction(callback)
-    ? await chrome.tabs.query(queryOptions, callback)
-    : await chrome.tabs.query(queryOptions);
-  return tab;
-};
-
-export function getExtensionManifest() {
-  const manifest = chrome.runtime.getManifest();
-  return manifest;
+export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
+  const queryOptions = { active: true, currentWindow: true };
+  const tabs = await chrome.tabs.query(queryOptions);
+  return tabs[0];
 }
 
-export async function openTabs(urls, callback) {
+export function getExtensionManifest(): chrome.runtime.Manifest {
+  return chrome.runtime.getManifest();
+}
+
+export async function openTabs(urls: string[], callback: (tab: chrome.tabs.Tab) => void): Promise<unknown[]> {
   const tabPromises = [];
 
   for (const url of urls) {
@@ -32,14 +29,25 @@ export async function openTabs(urls, callback) {
   return Promise.all(tabPromises);
 }
 
-export function getExtensionUrl(path) {
+export function getExtensionUrl(path: string): string {
   return chrome.runtime.getURL(path);
 }
 
-export const chromeSendMessageToCurrentTab = (message, responseCallback) => {
-  getCurrentTab().then((tab) => {
-    if (tab) {
+interface MetadataMessage {
+  type: string;
+  metadata: Metadata;
+}
+
+export function chromeSendMessageToCurrentTab(
+  message: MetadataMessage,
+  responseCallback?: (response: any) => void
+): void {
+  getCurrentTab().then((tab: chrome.tabs.Tab | undefined) => {
+    if (!tab?.id) return;
+    if (responseCallback) {
       chrome.tabs.sendMessage(tab.id, message, responseCallback);
+    } else {
+      chrome.tabs.sendMessage(tab.id, message);
     }
   });
 }

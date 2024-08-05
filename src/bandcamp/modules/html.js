@@ -1,5 +1,5 @@
 import { getDataAttribute } from "../../modules/html.js";
-import { removeInvisibleChars, trimCharactersFromString } from "../../modules/utils.js";
+import { removeInvisibleChars, trimCharactersFromString } from "../../utils/utils";
 
 export function getMusicAlbumSchemaData() {
   const jsonLdScript = document.querySelector('script[type="application/ld+json"]');

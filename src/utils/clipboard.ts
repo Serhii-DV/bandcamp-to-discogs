@@ -1,4 +1,4 @@
-import { isFunction } from "../modules/utils";
+import { isFunction } from "./utils";
 
 type VoidCallback = (value: void) => void | PromiseLike<void>;
 

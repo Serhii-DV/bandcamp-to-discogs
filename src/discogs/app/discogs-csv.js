@@ -1,5 +1,5 @@
 import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../../bandcamp/modules/bandcamp.js";
-import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../modules/utils.js";
+import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../utils/utils";
 import { Release, Track } from "../../app/release.js";
 import { getDiscogsDateValue } from "./utils.js";
 import { Metadata } from "./metadata.js";

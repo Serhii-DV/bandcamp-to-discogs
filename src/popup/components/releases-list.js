@@ -1,5 +1,5 @@
 import { getDataAttribute, input, setDataAttribute } from "../../modules/html";
-import { isEmptyArray } from "../../modules/utils";
+import { isEmptyArray } from "../../utils/utils";
 
 class ReleasesList extends HTMLElement {
   constructor() {

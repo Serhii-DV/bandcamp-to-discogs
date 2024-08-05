@@ -58,11 +58,11 @@
         "src/discogs/app/discogs-csv.js",
         "src/discogs/modules/discogs.js",
         "src/discogs/modules/genres.js",
-        "src/modules/chrome.js",
+        "src/utils/chrome.ts",
         "src/modules/html.js",
         "src/modules/key-generator.js",
         "src/modules/storage.js",
-        "src/modules/utils.js"
+        "src/utils/utils.ts"
       ],
       "matches": ["https://*.bandcamp.com/*"]
     },
@@ -75,9 +75,9 @@
         "src/discogs/modules/metadata.js",
         "src/discogs/modules/notification.js",
         "src/discogs/notification.css",
-        "src/modules/chrome.js",
+        "src/utils/chrome.ts",
         "src/modules/html.js",
-        "src/modules/utils.js"
+        "src/utils/utils.ts"
       ],
       "matches": ["https://www.discogs.com/*"]
     }

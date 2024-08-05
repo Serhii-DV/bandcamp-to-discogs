@@ -9,7 +9,7 @@ import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
 import { getStorageSize } from "../modules/storage.js";
-import { bytesToSize } from "../modules/utils.js";
+import { bytesToSize } from "../utils/utils";
 import { setupConsole, setupConsoleRelease } from "./console.js";
 import { isValidBandcampURL } from "../bandcamp/modules/html.js";
 import { isValidDiscogsReleaseEditUrl } from "../discogs/app/utils.js";

@@ -1,4 +1,4 @@
-import { safeFilename } from "../modules/utils.js";
+import { safeFilename } from "./utils";
 
 export function arrayToCsv(rows: string[][]): string {
   return rows.map((e: string[]) => e.join(",")).join("\n");

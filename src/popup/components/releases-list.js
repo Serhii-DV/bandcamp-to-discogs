@@ -1,5 +1,5 @@
 import { getDataAttribute, input, setDataAttribute } from "../../modules/html";
-import { isEmptyArray } from "../../utils/utils";
+import { hasClass, isEmptyArray } from "../../utils/utils";
 
 class ReleasesList extends HTMLElement {
   constructor() {
@@ -209,7 +209,7 @@ class ReleasesList extends HTMLElement {
 
     checkbox.checked = checked;
 
-    if (checkbox.classList.contains('release-checkbox')) {
+    if (hasClass(checkbox, 'release-checkbox')) {
       const tr = checkbox.closest('tr');
       const className = 'table-active';
 

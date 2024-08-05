@@ -1,33 +1,26 @@
-/**
- * @param {String} string
- * @param {String} pad
- * @param {Number} length
- * @returns {String}
- */
-export function padStringLeft(string, pad, length) {
+export function padStringLeft(string: string, pad: string, length: number): string {
   const padding = string.length >= length ? '' : pad.repeat(length - string.length);
   return padding + string;
 }
 
 /** @see https://stackoverflow.com/a/8485137/3227570 */
-export function safeFilename(value) {
+export function safeFilename(value: string): string {
   return transliterate(value).replace(/[^a-zA-Z0-9]/gi, '_').toLowerCase();
 }
 
 /** @see https://stackoverflow.com/a/11404121 */
-const transliterationMap = {
+const transliterationMap: Record<string, string> = {
   "Ё": "YO", "Й": "I", "Ц": "TS", "У": "U", "К": "K", "Е": "E", "Н": "N", "Г": "G", "Ш": "SH", "Щ": "SCH", "З": "Z", "Х": "H", "Ъ": "'", "ё": "yo", "й": "i", "ц": "ts", "у": "u", "к": "k", "е": "e", "н": "n", "г": "g", "ш": "sh", "щ": "sch", "з": "z", "х": "h", "ъ": "'", "Ф": "F", "Ы": "I", "В": "V", "А": "A", "П": "P", "Р": "R", "О": "O", "Л": "L", "Д": "D", "Ж": "ZH", "Э": "E", "ф": "f", "ы": "i", "в": "v", "а": "a", "п": "p", "р": "r", "о": "o", "л": "l", "д": "d", "ж": "zh", "э": "e", "Я": "Ya", "Ч": "CH", "С": "S", "М": "M", "И": "I", "Т": "T", "Ь": "'", "Б": "B", "Ю": "YU", "я": "ya", "ч": "ch", "с": "s", "м": "m", "и": "i", "т": "t", "ь": "'", "б": "b", "ю": "yu"
 };
 
-function transliterate(word) {
+function transliterate(word: string): string {
   return Array.from(word).map(char => transliterationMap[char] || char).join("");
 }
 
 /** @see https://flexiple.com/javascript/javascript-capitalize-first-letter/ */
-export function capitalizeEachWord(str) {
+export function capitalizeEachWord(str: string): string {
   const words = str.split(" ");
-
-  const capitalizedWords = words.map(word => {
+  const capitalizedWords = words.map((word: string) => {
     const firstLetter = word.charAt(0).toUpperCase();
     const restOfWord = word.slice(1);
     return `${firstLetter}${restOfWord}`;
@@ -36,122 +29,75 @@ export function capitalizeEachWord(str) {
   return capitalizedWords.join(" ");
 }
 
-export function convertToAlias(str) {
+export function convertToAlias(str: string): string {
   const slug = str.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const trimmedSlug = slug.replace(/^-+|-+$/g, '');
   return trimmedSlug;
 }
 
-export function isEmptyObject(obj) {
+export function isEmptyObject(obj: object): boolean {
   for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
       return false;
     }
   }
   return true;
 }
 
-export function isString(value) {
+export function isString(value: any): boolean {
   return typeof value === 'string';
 }
 
-export function isObject(value) {
+export function isObject(value: any): boolean {
   return Object.prototype.toString.call(value) === '[object Object]';
 }
 
-export function isArray(value) {
+export function isArray(value: any): boolean {
   return Array.isArray(value);
 }
 
-export function isFunction(value) {
+export function isFunction(value: any): boolean {
   return typeof value === 'function';
 }
 
-/**
- * @param {Array} value
- * @returns {Boolean}
- */
-export function isEmptyArray(value) {
+export function isEmptyArray(value: any[]): boolean {
   return !isArray(value) || value.length === 0;
 }
 
-/**
- * @param {Array<Array<String>>}
- * @return {Array<String>}
- */
-export function arrayToFlat(arr) {
-  return [].concat(...arr);
+export function arrayUnique(arr: string[][]): string[] {
+  return [...new Set(arr.flat())];
 }
 
-/**
- * @param {Array<Array<String>|String>}
- * @return {Array<String>}
- */
-export function arrayUnique(arr) {
-  return [...new Set(arrayToFlat(arr))];
-}
-
-/**
- * @param {Element} element
- * @param {String} className
- * @returns {Boolean}
- */
-export function hasClass(element, className) {
+export function hasClass(element: Element, className: string) {
   return element.classList.contains(className);
 }
 
 /**
- * @param {String} url
- * @param {Element} targetElement
- * @returns {Promise}
- */
-export function loadHTMLContent(url, targetElement) {
-  return fetch(url)
-      .then(response => response.text())
-      .then(htmlContent => {
-          targetElement.innerHTML = htmlContent;
-          return targetElement;
-      })
-      .catch(error => console.error('Error loading HTML content:', error));
-}
-
-/**
  * Replace tokens in a template string with their corresponding values.
- * @param {string} template - The template string with tokens to be replaced.
- * @param {object} replacements - An object containing key-value pairs for replacements.
- * @returns {string} - The template string with tokens replaced by their values.
  */
-export function replaceTokens(template, replacements) {
+export function replaceTokens(template: string, replacements: Record<string, string | undefined>): string {
   for (const key in replacements) {
-    if (replacements.hasOwnProperty(key)) {
-      template = template.replace(`{${key}}`, replacements[key]);
+    if (Object.prototype.hasOwnProperty.call(replacements, key)) {
+      template = template.replace(new RegExp(`{${key}}`, 'g'), replacements[key] ?? '');
     }
   }
   return template;
 }
 
-/**
- * @param {String} inputString
- * @param {RegExp|String} delimiters
- * @returns {Array}
- */
-export function splitString(inputString, delimiters) {
+export function splitString(inputString: string, delimiters: RegExp | string): string[] {
   const resultArray = inputString.split(delimiters);
   return resultArray
-    .map(item => item.trim())
-    .filter(item => item !== '');
+    .map((item: string) => item.trim())
+    .filter((item: string) => item !== '');
 }
 
-export function containsOneOf(string1, arrayOfStrings) {
-  // This function checks if a string contains one of the strings in an array of strings.
-
-  // Args:
-  //   string1: The string to check.
-  //   arrayOfStrings: The array of strings to look for.
-
-  // Returns:
-  //   True if string1 contains one of the strings in arrayOfStrings, False otherwise.
-
+/**
+ * Checks if a string contains any of the strings in a given array.
+ * @param string1 - The string to check.
+ * @param arrayOfStrings - An array of strings to look for.
+ * @returns True if `string1` contains any of the strings in `arrayOfStrings`; otherwise, false.
+ */
+export function containsOneOf(string1: string, arrayOfStrings: string[]): boolean {
   for (const string2 of arrayOfStrings) {
     if (string1.includes(string2)) {
       return true;
@@ -160,24 +106,28 @@ export function containsOneOf(string1, arrayOfStrings) {
   return false;
 }
 
-export function countOccurrences(arr) {
-  const count = new Map();
-  const items = new Map();
-  const result = [];
+/**
+ * Counts the occurrences of each unique element in an array and formats the result.
+ * @param arr - The array of strings to count occurrences in.
+ * @returns An array of strings where each string represents an item and its count (if greater than 1).
+ */
+export function countOccurrences(arr: string[]): string[] {
+  const count = new Map<string, number>();
+  const items = new Map<string, string>();
+  const result: string[] = [];
 
-  // Count occurrences of each element in the array
   for (const item of arr) {
-      const key = item.toLowerCase();
+    const key = item.toLowerCase();
 
-      if (!items.has(key)) {
-        items.set(key, item);
-      }
+    if (!items.has(key)) {
+      items.set(key, item);
+    }
 
-      count.set(key, (count.get(key) || 0) + 1);
+    count.set(key, (count.get(key) || 0) + 1);
   }
 
   for (const [key, item] of items) {
-    const value = count.get(key);
+    const value = count.get(key) || 0;
     if (value > 1) {
       result.push(`${item} (${value})`);
     } else {
@@ -188,12 +138,11 @@ export function countOccurrences(arr) {
   return result;
 }
 
-export function removeBrackets(inputString) {
-  // Use a regular expression to remove the brackets and their contents
+export function removeBrackets(inputString: string): string {
   return inputString.replace(/\s*\([^)]*\)/, '');
 }
 
-export function trimCharactersFromString(inputString, charactersToTrim) {
+export function trimCharactersFromString(inputString: string, charactersToTrim: string): string {
   // Escape special characters within the provided string and construct the regex pattern
   const escapedCharacters = charactersToTrim.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
   const regexPattern = new RegExp(`^[${escapedCharacters}]+|[${escapedCharacters}]+$`, 'g');
@@ -202,38 +151,34 @@ export function trimCharactersFromString(inputString, charactersToTrim) {
   return trimmedString;
 }
 
-export function removeInvisibleChars(inputString) {
+export function removeInvisibleChars(inputString: string): string {
   // Define the invisible character(s) you want to remove (for example, non-breaking space)
   const invisibleCharsRegex = /[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]|&lrm;/g;
-  // Use the regular expression to remove invisible characters
   const cleanedString = inputString.replace(invisibleCharsRegex, '');
 
   return cleanedString;
 }
 
-export function bytesToSize(bytes) {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+export function bytesToSize(bytes: number): string {
+  const sizes: string[] = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 
-  if (bytes === 0) return '0 Byte';
+  if (bytes === 0) return '0 Bytes';
 
-  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-  return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  const roundedSize = (bytes / Math.pow(1024, i)).toFixed(2);
+  return `${roundedSize} ${sizes[i]}`;
 }
 
-export function removeLeadingZeroOrColon(str) {
-  // Use a regular expression to match leading zeros or colons
-  // and replace them with an empty string
+export function removeLeadingZeroOrColon(str: string): string {
   return str.replace(/^(:|0)*/, '');
 }
 
-export const camelCaseToReadable = (str) => {
-  // Replace each uppercase letter with a space and that letter in lowercase
+export function camelCaseToReadable(str: string): string {
   let result = str.replace(/([a-z])([A-Z])/g, '$1 $2');
-  // Capitalize the first letter of the resulting string
   result = result.charAt(0).toUpperCase() + result.slice(1);
   return result;
 }
 
-export const convertNewlinesToBreaks = (str) => {
+export function convertNewlinesToBreaks(str: string): string {
   return str.replace(/\n/g, '<br>');
 }

@@ -2,7 +2,7 @@ import { Release, ReleaseItem } from "../app/release.js";
 import { Metadata } from "../discogs/app/metadata.js";
 import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
 import { chromeSendMessageToCurrentTab } from "../utils/chrome";
-import { createIconLink, disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
+import { createIconLink, disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../utils/html";
 import { generateKeyForReleaseItem } from "../utils/key-generator";
 import { convertToAlias, isArray, isObject, isString } from "../utils/utils";
 

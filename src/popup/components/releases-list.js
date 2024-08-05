@@ -1,4 +1,4 @@
-import { getDataAttribute, input, setDataAttribute } from "../../modules/html";
+import { getDataAttribute, input, setDataAttribute } from "../../utils/html";
 import { hasClass, isEmptyArray } from "../../utils/utils";
 
 class ReleasesList extends HTMLElement {

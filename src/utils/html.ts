@@ -1,4 +1,4 @@
-import { isArray, isFunction, isObject, isString } from "../utils/utils";
+import { isArray, isFunction, isObject, isString } from "./utils";
 
 export function hasDataAttribute(element, attributeName) {
   return element.hasAttribute(`data-${attributeName}`);

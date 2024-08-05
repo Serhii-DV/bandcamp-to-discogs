@@ -1,4 +1,4 @@
-import { getDataAttribute } from "../../modules/html.js";
+import { getDataAttribute } from "../../utils/html";
 import { removeInvisibleChars, trimCharactersFromString } from "../../utils/utils";
 
 export function getMusicAlbumSchemaData() {

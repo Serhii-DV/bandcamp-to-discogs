@@ -59,7 +59,7 @@
         "src/discogs/modules/discogs.js",
         "src/discogs/modules/genres.js",
         "src/utils/chrome.ts",
-        "src/modules/html.js",
+        "src/utils/html.ts",
         "src/utils/key-generator.ts",
         "src/modules/storage.js",
         "src/utils/utils.ts"
@@ -76,7 +76,7 @@
         "src/discogs/modules/notification.js",
         "src/discogs/notification.css",
         "src/utils/chrome.ts",
-        "src/modules/html.js",
+        "src/utils/html.ts",
         "src/utils/utils.ts"
       ],
       "matches": ["https://www.discogs.com/*"]

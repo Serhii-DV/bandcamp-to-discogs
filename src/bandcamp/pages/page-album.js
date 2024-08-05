@@ -1,6 +1,6 @@
 import { Release, Track, TrackDuration } from "../../app/release.js";
 import TrackTime from "../../app/trackTime.js";
-import { getCurrentUrl } from "../../modules/html.js";
+import { getCurrentUrl } from "../../utils/html";
 import { findReleaseByUrl, saveRelease } from "../../modules/storage.js";
 import { getMusicAlbumSchemaData } from "../modules/html.js";
 

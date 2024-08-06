@@ -37,11 +37,15 @@ export function convertToAlias(str: string): string {
 
 export function isEmptyObject(obj: object): boolean {
   for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+    if (hasOwnProperty(obj, key)) {
       return false;
     }
   }
   return true;
+}
+
+export function hasOwnProperty(obj: object, key: string): boolean {
+  return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
 export function isString(value: any): boolean {
@@ -77,7 +81,7 @@ export function hasClass(element: Element, className: string) {
  */
 export function replaceTokens(template: string, replacements: Record<string, string | undefined>): string {
   for (const key in replacements) {
-    if (Object.prototype.hasOwnProperty.call(replacements, key)) {
+    if (hasOwnProperty(replacements, key)) {
       template = template.replace(new RegExp(`{${key}}`, 'g'), replacements[key] ?? '');
     }
   }

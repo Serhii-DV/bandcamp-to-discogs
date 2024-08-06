@@ -1,4 +1,5 @@
 {
+  "version": "0.12.0",
   "devDependencies": {
     "@types/chrome": "^0.0.269",
     "@types/uuid": "^10.0.0",

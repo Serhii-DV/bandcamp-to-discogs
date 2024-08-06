@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require("webpack");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
+const packageJson = require('./package.json');
 
 module.exports = {
   entry: {
@@ -34,6 +36,20 @@ module.exports = {
     new CleanWebpackPlugin({
       verbose: true,
       cleanStaleWebpackAssets: false,
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: "src/manifest.json",
+          to: path.join(__dirname, "dist"),
+          force: true,
+          transform: function (content, path) {
+            let manifest = JSON.parse(content.toString());
+            manifest.version = packageJson.version;
+            return Buffer.from(JSON.stringify(manifest, null, "\t"));
+          },
+        },
+      ],
     }),
   ],
   output: {

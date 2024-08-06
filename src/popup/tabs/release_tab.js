@@ -1,8 +1,8 @@
 import { Release } from "../../app/release.js";
 import { getDiscogsDateValue } from "../../discogs/app/utils.js";
 import { getSearchDiscogsReleaseUrl } from "../../discogs/modules/discogs.js";
-import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../modules/utils.js";
-import { initClipboard } from "../../utils/clipboard.js";
+import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../utils/utils";
+import { initClipboard } from "../../utils/clipboard";
 import { setBackgroundImage } from "../helpers.js";
 import { setupBtnToDownloadReleasesAsCsv } from "./download_tab.js";
 

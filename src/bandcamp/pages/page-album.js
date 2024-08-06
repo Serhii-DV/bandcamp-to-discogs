@@ -1,7 +1,7 @@
 import { Release, Track, TrackDuration } from "../../app/release.js";
 import TrackTime from "../../app/trackTime.js";
-import { getCurrentUrl } from "../../modules/html.js";
-import { findReleaseByUrl, saveRelease } from "../../modules/storage.js";
+import { getCurrentUrl } from "../../utils/html";
+import { findReleaseByUrl, saveRelease } from "../../utils/storage";
 import { getMusicAlbumSchemaData } from "../modules/html.js";
 
 // Setup logic for BC albums page

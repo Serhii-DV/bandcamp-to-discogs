@@ -1,19 +1,19 @@
 import { Release } from "../app/release.js";
-import { getCurrentTab, getExtensionManifest } from "../modules/chrome.js";
+import { getCurrentTab, getExtensionManifest } from "../utils/chrome";
 import { loadDiscogsGenres } from "../discogs/modules/genres.js";
 import { loadKeywordMapping } from "../bandcamp/modules/mapping.js";
 import config from "../config.js";
 import { setHistoryTabSearchValue, setupHistoryTab } from "./tabs/history_tab.js";
-import { disable, enable, hide, show, click } from "../modules/html.js";
+import { disable, enable, hide, show, click } from "../utils/html";
 import { setupReleasesTab } from "./tabs/releases_tab.js";
 import { setupReleaseTab } from "./tabs/release_tab.js";
 import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
-import { getStorageSize } from "../modules/storage.js";
-import { bytesToSize } from "../modules/utils.js";
+import { getStorageSize } from "../utils/storage";
+import { bytesToSize } from "../utils/utils";
 import { setupConsole, setupConsoleRelease } from "./console.js";
 import { isValidBandcampURL } from "../bandcamp/modules/html.js";
 import { isValidDiscogsReleaseEditUrl } from "../discogs/app/utils.js";
-import { logInfo } from "../utils/console.js";
+import { logInfo } from "../utils/console";
 
 const btnDashboardTab = document.getElementById("dashboard-tab");
 const btnReleaseTab = document.getElementById("release-tab");

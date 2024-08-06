@@ -1,6 +1,6 @@
 // Notifications
 
-import { isFunction } from "../../modules/utils.js";
+import { isFunction } from "../../utils/utils";
 
 export const showNotificationDebug = (message, onShow) => { showNotification('debug', message, onShow); }
 export const showNotificationInfo = (message, onShow) => { showNotification('info', message, onShow); }

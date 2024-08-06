@@ -1,4 +1,4 @@
-import { camelCaseToReadable, isArray, isObject } from "../../modules/utils.js";
+import { camelCaseToReadable, isArray, isObject } from "../../utils/utils";
 
 export const getArtistNameInput = () => {
   return document.getElementById('artist-name-input');

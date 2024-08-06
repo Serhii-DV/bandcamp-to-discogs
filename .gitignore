@@ -1,5 +1,7 @@
 # Node.js
 node_modules/
+dist/
+built/
 
 # npm
 npm-debug.log

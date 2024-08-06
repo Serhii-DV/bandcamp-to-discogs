@@ -61,7 +61,7 @@
         "src/utils/chrome.ts",
         "src/utils/html.ts",
         "src/utils/key-generator.ts",
-        "src/modules/storage.js",
+        "src/utils/storage.ts",
         "src/utils/utils.ts"
       ],
       "matches": ["https://*.bandcamp.com/*"]

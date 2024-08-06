@@ -1,123 +1,126 @@
-import { isArray, isFunction, isObject, isString } from "./utils";
+import { log } from "./console";
+import { isFunction, isString } from "./utils";
 
-export function hasDataAttribute(element, attributeName) {
+export function hasDataAttribute(element: HTMLElement, attributeName: string): boolean {
   return element.hasAttribute(`data-${attributeName}`);
 }
 
-export function setDataAttribute(element, attributeName, attributeValue = '') {
-  if (isObject(attributeName)) {
-    const obj = attributeName;
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        setDataAttribute(element, key, obj[key]);
-      }
-    }
+export function setDataAttribute(
+  element: HTMLElement,
+  attributeName: string | Record<string, string>,
+  attributeValue: string = ''
+): void {
+  if (isString(attributeName)) {
+    element.setAttribute(`data-${attributeName}`, attributeValue);
     return;
   }
-  element.setAttribute(`data-${attributeName}`, attributeValue);
+
+  const obj = attributeName as Record<string, string>;
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      setDataAttribute(element, key, obj[key]);
+    }
+  }
 }
 
-export function getDataAttribute(element, attributeName, defaultValue = undefined) {
-  return hasDataAttribute(element, attributeName) ? element.getAttribute(`data-${attributeName}`) : defaultValue;
+export function getDataAttribute(
+  element: HTMLElement,
+  attributeName: string,
+  defaultValue: string = ''
+): string {
+  if (hasDataAttribute(element, attributeName)) {
+    const value = element.getAttribute(`data-${attributeName}`);
+    return value !== null ? value : defaultValue;
+  }
+  return defaultValue;
 }
 
-export function show(...element) {
-  element.forEach(el => isArray(el) ? show(...el) : el.classList.remove('visually-hidden'));
+export function show(...elements: (HTMLElement | null | (HTMLElement | null)[])[]): void {
+  elements.forEach(el => {
+    if (Array.isArray(el)) {
+      show(...el);
+    } else if (el) {
+      el.classList.remove('visually-hidden');
+    }
+  });
 }
 
-export function hide(...element) {
-  element.forEach(el => isArray(el) ? hide(...el) : el.classList.add('visually-hidden'));
+export function hide(...elements: (HTMLElement | null | (HTMLElement | null)[])[]): void {
+  elements.forEach(el => {
+    if (Array.isArray(el)) {
+      hide(...el);
+    } else if (el) {
+      el.classList.add('visually-hidden');
+    }
+  });
 }
 
-export function disable(...element) {
-  element.forEach(el => isArray(el) ? disable(...el) : (el.disabled = true));
+export function disable(...elements: (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null | (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null)[])[]): void {
+  elements.forEach(el => {
+    if (Array.isArray(el)) {
+      disable(...el);
+    } else if (el) {
+      (el as HTMLInputElement | HTMLButtonElement | HTMLSelectElement).disabled = true;
+    }
+  });
 }
 
-export function enable(...element) {
-  element.forEach(el => isArray(el) ? enable(...el) : (el.disabled = false));
+export function enable(...elements: (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null | (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null)[])[]): void {
+  elements.forEach(el => {
+    if (Array.isArray(el)) {
+      enable(...el);
+    } else if (el) {
+      (el as HTMLInputElement | HTMLButtonElement | HTMLSelectElement).disabled = false;
+    }
+  });
 }
 
 /**
  * Triggers click event on the element
- * @param {Element} element
  */
-export function click(element) {
-  var event = new MouseEvent("click", {
-      bubbles: true,
-      cancelable: true,
-      view: window
+export function click(element: HTMLElement): HTMLElement {
+  const event = new MouseEvent("click", {
+    bubbles: true,
+    cancelable: true,
+    view: window
   });
   element.dispatchEvent(event);
   return element;
 }
 
 /**
- * Triggers input event on element
- * @param {Element} element
+ * Sets the value of an HTML input element and triggers an 'input' event if the value has changed.
  */
-export function input(element, value) {
-  if (isString(value)) {
-    // Trigger input event only when the value has changed
-    if (element.value !== value) {
-      element.value = value;
-      triggerInputEvent(element);
-    }
-
+export function input(element: HTMLInputElement, value?: string): HTMLInputElement {
+  if (value && element.value === value) {
     return element;
   }
 
+  if (value) {
+    element.value = value;
+  }
+
   triggerInputEvent(element);
+
   return element;
 }
 
-function triggerInputEvent(element) {
-  element.dispatchEvent(new Event('input'));
+function triggerInputEvent(element: HTMLInputElement): HTMLInputElement {
+  element.dispatchEvent(new Event('input', { bubbles: true }));
   return element;
 }
 
-/**
- * @param {String} htmlString
- * @returns {Element}
- */
-export function createElementFromHTML(htmlString) {
+export function createElementFromHTML(htmlString: string): Element | null {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = htmlString.trim();
-  return tempDiv.firstChild;
+  return tempDiv.firstChild as Element | null;
 }
 
-export function createSelectListFromArray(arrayOfObjects, selectId) {
-  const selectElement = document.createElement('select');
-  selectElement.id = selectId; // Set the id for the select element
-
-  arrayOfObjects.forEach((obj) => {
-    const optionElement = document.createElement('option');
-    optionElement.value = obj.value;
-    optionElement.text = obj.text;
-    selectElement.appendChild(optionElement);
-  });
-
-  return selectElement;
-}
-
-export function createDataListFromArray(arrayOfObjects, selectId) {
-  const selectElement = document.createElement('select');
-  selectElement.id = selectId; // Set the id for the select element
-
-  arrayOfObjects.forEach((obj) => {
-    const optionElement = document.createElement('option');
-    optionElement.value = obj.value;
-    optionElement.text = obj.text;
-    selectElement.appendChild(optionElement);
-  });
-
-  return selectElement;
-}
-
-export function createDatalistFromArray(dataArray, datalistId) {
+export function createDatalistFromArray(dataArray: string[], datalistId: string): HTMLDataListElement {
   const datalist = document.createElement('datalist');
   datalist.id = datalistId;
 
-  dataArray.forEach((optionText) => {
+  dataArray.forEach(optionText => {
     const option = document.createElement('option');
     option.value = optionText;
     datalist.appendChild(option);
@@ -126,28 +129,50 @@ export function createDatalistFromArray(dataArray, datalistId) {
   return datalist;
 }
 
-export function contentChangeWithPolling(element, callback, interval = 1000) {
+/**
+ * Polls for changes in the content of an HTML element and calls a callback when the content changes.
+ * @param element - The HTML element to monitor for content changes.
+ * @param callback - The function to call when the content changes.
+ * @param interval - The interval, in milliseconds, at which to poll for changes. Defaults to 1000 ms.
+ * @returns A function to stop the polling.
+ */
+export function contentChangeWithPolling(
+  element: HTMLElement,
+  callback: (newContent: string) => void,
+  interval: number = 1000
+): () => void {
   let previousContent = element.textContent;
 
   const poller = setInterval(() => {
     const currentContent = element.textContent;
     if (currentContent !== previousContent) {
-      callback(currentContent);
+      callback(currentContent || '');
       previousContent = currentContent;
     }
   }, interval);
 
-  // Optionally, you can return a function to stop the polling when needed
+  // Return a function to stop the polling
   return function stopPolling() {
     clearInterval(poller);
   };
 }
 
-export function selectElementWithContent(rootElement, querySelector, content) {
+/**
+ * Selects an element within a root element that contains specific content.
+ * @param rootElement - The root element to search within.
+ * @param querySelector - The CSS selector to match elements.
+ * @param content - The content to look for within the elements.
+ * @returns The first element that contains the specified content, or `null` if none found.
+ */
+export function selectElementWithContent(
+  rootElement: Element,
+  querySelector: string,
+  content: string
+): Element | null {
   const elements = rootElement.querySelectorAll(querySelector);
 
   for (const element of elements) {
-    if (element.textContent.includes(content)) {
+    if (element.textContent?.includes(content)) {
       return element;
     }
   }
@@ -155,15 +180,9 @@ export function selectElementWithContent(rootElement, querySelector, content) {
   return null;
 }
 
-export function isElementDisplayNone(element) {
-  return window.getComputedStyle(element).display === 'none';
-}
-
-export function isHtmlElement(element) {
-  return element instanceof HTMLElement;
-}
-
-export function getCurrentUrl() {
+/**
+ */
+export function getCurrentUrl(): string {
   return window.location.href;
 }
 
@@ -171,17 +190,21 @@ export function getCurrentUrl() {
  * Observes changes to a specified attribute on a given HTMLElement
  * and runs a callback function when changes are detected.
  *
- * @param {HTMLElement} element - The element to observe.
- * @param {string} attributeName - The name of the attribute to observe.
- * @param {Function} callback - The function to call when the attribute changes.
+ * @param element - The element to observe.
+ * @param attributeName - The name of the attribute to observe.
+ * @param callback - The function to call when the attribute changes.
  */
-export function observeAttributeChange(element, attributeName, callback) {
+export function observeAttributeChange(
+  element: HTMLElement,
+  attributeName: string,
+  callback: (element: HTMLElement) => void
+): void {
   const observer = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
-          if (mutation.type === 'attributes' && mutation.attributeName === attributeName) {
-              callback(element);
-          }
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'attributes' && mutation.attributeName === attributeName) {
+        callback(element);
       }
+    }
   });
 
   const config = { attributes: true, attributeFilter: [attributeName] };
@@ -189,35 +212,51 @@ export function observeAttributeChange(element, attributeName, callback) {
 }
 
 /**
- * @param {String} cssUrl
+ * Injects a CSS file into the document by creating a link element.
  */
-export function injectCSSFile(cssUrl) {
+export function injectCSSFile(cssUrl: string): void {
   const linkElement = document.createElement('link');
   linkElement.rel = 'stylesheet';
   linkElement.href = cssUrl;
   linkElement.onload = () => {
-    console.log('[B2D] Injected css file:', cssUrl);
+    log('Injected css file:', cssUrl);
   };
 
   document.head.appendChild(linkElement);
 }
 
-export function injectJSFile(url, callback) {
-  const s = document.createElement('script');
-  s.src = url;
-  s.onload = callback;
-  (document.head||document.documentElement).appendChild(s);
+/**
+ * Injects a JavaScript file into the document by creating a script element.
+ */
+export function injectJSFile(
+  url: string,
+  callback: ((this: GlobalEventHandlers, ev: Event) => any) | null = null
+): void {
+  const scriptElement = document.createElement('script');
+  scriptElement.src = url;
+  scriptElement.onload = callback;
+  (document.head || document.documentElement).appendChild(scriptElement);
+}
+
+interface CreateIconLinkParams {
+  className?: string;
+  href?: string;
+  onClick?: (event: MouseEvent) => any;
+  title?: string;
+  iconDefault: string;
+  iconOnClick?: string;
+  iconOnClickTimeout?: number;
 }
 
 export const createIconLink = ({
   className = 'icon-link',
   href = '#',
-  onClick,
+  onClick = () => {},
   title = '',
   iconDefault,
   iconOnClick,
   iconOnClickTimeout = 3000,
-}) => {
+}: CreateIconLinkParams): HTMLAnchorElement => {
   const link = document.createElement("a");
   link.classList.add(className);
   link.title = title;
@@ -226,16 +265,16 @@ export const createIconLink = ({
   link.innerHTML = `<b2d-icon name="${iconDefault}"></b2d-icon>`;
 
   if (isFunction(onClick)) {
-    link.addEventListener('click', (e) => {
+    link.addEventListener('click', (e: MouseEvent) => {
       e.preventDefault();
       const eventReturn = onClick(e);
 
       if (iconOnClick) {
         const icon = link.querySelector('b2d-icon');
-        icon.setIcon(iconOnClick);
-        setTimeout(() => {
-          icon.setIcon(iconDefault);
-        }, iconOnClickTimeout);
+        if (icon instanceof B2DIconComponent) {
+          icon.setIcon(iconOnClick);
+          setTimeout(() => { icon.setIcon(iconDefault) }, iconOnClickTimeout);
+        }
       }
 
       return eventReturn;
@@ -243,4 +282,4 @@ export const createIconLink = ({
   }
 
   return link;
-}
+};

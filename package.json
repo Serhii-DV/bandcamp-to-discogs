@@ -2,6 +2,7 @@
   "devDependencies": {
     "@types/chrome": "^0.0.269",
     "@types/uuid": "^10.0.0",
+    "clean-webpack-plugin": "^4.0.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
     "webpack": "^5.93.0",
@@ -14,7 +15,6 @@
     "dev": "tsc && webpack serve --config webpack.dev.js"
   },
   "dependencies": {
-    "@types/chrome": "^0.0.269",
     "bootstrap": "^5.3.3",
     "source-map-loader": "^5.0.0",
     "uuid": "^10.0.0"

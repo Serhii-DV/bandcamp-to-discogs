@@ -1,5 +1,12 @@
 # Change log
 
+## 0.12.0 (2024-XX-YY)
+
+### Features
+
+- core: Start using TypoScript with JS
+- core: Converted modules to TS utils
+
 ## 0.11.1 (2024-07-31)
 
 ### Features

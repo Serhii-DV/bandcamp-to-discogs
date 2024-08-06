@@ -1,7 +1,7 @@
 import { ReleaseItem } from "../../app/release.js";
-import { getCurrentTab, openTabs } from "../../modules/chrome.js";
-import { input } from "../../modules/html.js";
-import { findReleasesByUrls } from "../../modules/storage.js";
+import { getCurrentTab, openTabs } from "../../utils/chrome";
+import { input } from "../../utils/html";
+import { findReleasesByUrls } from "../../utils/storage";
 import { populateReleasesList, removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState } from "../helpers.js";
 import { downloadReleasesCsv } from "./download_tab.js";
 

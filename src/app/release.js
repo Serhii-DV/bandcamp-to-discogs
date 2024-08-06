@@ -1,4 +1,4 @@
-import { generateKeyForUrl } from '../modules/key-generator.js';
+import { generateKeyForUrl } from '../utils/key-generator';
 import TrackTime from './trackTime.js';
 
 export class ReleaseItem {

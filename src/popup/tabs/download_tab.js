@@ -1,8 +1,8 @@
 import { Release } from "../../app/release.js";
 import { DiscogsCsv } from "../../discogs/app/discogs-csv.js";
-import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
-import { isEmptyArray } from "../../modules/utils.js";
-import { disable, enable } from "../../modules/html.js";
+import { downloadCsv, objectsToCsv } from "../../utils/csv";
+import { isEmptyArray } from "../../utils/utils";
+import { disable, enable } from "../../utils/html";
 
 /**
  * @param {Element} button

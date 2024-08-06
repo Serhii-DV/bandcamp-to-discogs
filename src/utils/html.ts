@@ -251,7 +251,7 @@ interface CreateIconLinkParams {
 export const createIconLink = ({
   className = 'icon-link',
   href = '#',
-  onClick = () => {},
+  onClick,
   title = '',
   iconDefault,
   iconOnClick,
@@ -264,7 +264,7 @@ export const createIconLink = ({
   link.target = '_blank';
   link.innerHTML = `<b2d-icon name="${iconDefault}"></b2d-icon>`;
 
-  if (isFunction(onClick)) {
+  if (onClick && isFunction(onClick)) {
     link.addEventListener('click', (e: MouseEvent) => {
       e.preventDefault();
       const eventReturn = onClick(e);

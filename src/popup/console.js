@@ -1,7 +1,7 @@
 import { Release } from "../app/release.js";
 import { Metadata } from "../discogs/app/metadata.js";
 import { releaseToDiscogsCsv } from "../discogs/modules/discogs.js";
-import { logStorage } from "../utils/storage.js";
+import { logStorage } from "../utils/storage";
 import { log, logInfo } from "../utils/console";
 
 export function setupConsole() {

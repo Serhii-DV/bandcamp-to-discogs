@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require("webpack");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -29,6 +30,7 @@ module.exports = {
     extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
   },
   plugins: [
+    new webpack.ProgressPlugin(),
     new CleanWebpackPlugin({
       verbose: true,
       cleanStaleWebpackAssets: false,

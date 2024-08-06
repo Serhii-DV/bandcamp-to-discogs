@@ -1,21 +1,32 @@
 import { Release } from "../app/release.js";
-import { isValidBandcampURL } from "../bandcamp/modules/html.js";
-import { generateKeyForRelease, generateKeyForUrl, generateKeyUrlMapFromUrls, generateKeysFromUrls } from "./key-generator.js";
-import { isArray, isFunction, isObject } from "./utils.js";
+import { log, logError } from "./console";
+import { generateKeyForRelease, generateKeyForUrl, generateKeysFromUrls } from "./key-generator";
+import { hasOwnProperty, isArray, isFunction, isObject } from "./utils";
 
 const storage = chrome.storage.local;
 
+interface StorageData {
+  [key: string]: any;
+}
+
+type ReleaseCallback = (release: Release) => void;
+type ReleasesCallback = (releases: Release[]) => void;
+
 export function logStorage() {
-  console.log('B2D: Storage data');
+  log('Storage data');
   storage.get(null, (data) => console.log(data));
 }
 
-export function findAllReleases(onFind) {
-  storage.get(null, (data) => {
-    const releases = [];
+/**
+ * Finds all releases from storage and executes a callback function with the releases.
+ * @param onFind - The callback function to call with the found releases.
+ */
+export function findAllReleases(onFind?: ReleasesCallback): void {
+  storage.get(null, (data: StorageData) => {
+    const releases: Release[] = [];
 
     for (const key in data) {
-      if (!data.hasOwnProperty(key) && !isObject(data[key])) {
+      if (!hasOwnProperty(data, key) || !isObject(data[key])) {
         continue;
       }
 
@@ -26,126 +37,109 @@ export function findAllReleases(onFind) {
       }
     }
 
-    if (isFunction(onFind)) onFind(releases);
+    if (onFind && isFunction(onFind)) {
+      onFind(releases);
+    }
   });
 }
 
-export function findReleaseByUrl(url, onFind, onMissing) {
+/**
+ * Finds a release by URL and executes the appropriate callback.
+ * @param url - The URL to find the release for.
+ * @param onFind - The callback function to call if the release is found.
+ * @param onMissing - The callback function to call if the release is not found.
+ */
+export function findReleaseByUrl(
+  url: string,
+  onFind?: ReleaseCallback,
+  onMissing?: (key: string) => void
+): void {
   const key = generateKeyForUrl(url);
-  storage.get([key], (result) => {
+
+  storage.get([key], (result: StorageData) => {
     if (isObject(result[key])) {
       try {
         const release = Release.fromStorageObject(result[key]);
-        if (isFunction(onFind)) onFind(release);
+        if (onFind && isFunction(onFind)) {
+          onFind(release);
+        }
       } catch (error) {
-        console.log("B2D: Broken storage data for release", result[key]);
+        log("Broken storage data for release", result[key]);
         clearStorageByKey(key);
       }
     } else {
-      console.log("B2D: Release data doesn't exists", key);
-      if (isFunction(onMissing)) onMissing(key);
+      log("Release data is missing", key);
+      if (onMissing && isFunction(onMissing)) {
+        onMissing(key);
+      }
     }
   });
-
 }
 
-export function findReleasesByUrls(urls, onFind) {
+/**
+ * Finds releases by their URLs and executes a callback with the found releases.
+ */
+export function findReleasesByUrls(urls: string[], onFind?: ReleasesCallback): void {
   const keys = generateKeysFromUrls(urls);
-  storage.get(keys, result => {
-    let releases = Object
+
+  storage.get(keys, (result: StorageData) => {
+    const releases: Release[] = Object
       .values(result)
-      .map(function(obj) {
+      .map((obj: any) => {
         try {
           return Release.fromStorageObject(obj);
         } catch (error) {
-          console.log("B2D: Broken storage object. " + JSON.stringify(error), obj);
+          log("Broken storage object.", JSON.stringify(error), obj);
           return null;
         }
       })
-      .filter(obj => obj instanceof Release);
-    if (isFunction(onFind)) onFind(releases);
-  });
-}
+      .filter((obj: Release | null): obj is Release => obj instanceof Release);
 
-export function findMissingUrls(urls, onFind) {
-  const keyUrlMap = generateKeyUrlMapFromUrls(urls);
-  const keys = Object.keys(keyUrlMap);
-  storage.get(keys, result => {
-    const foundKeys = Object.keys(result);
-    const missingKeys = keys.filter(key => !foundKeys.includes(key));
-    const missingUrls = missingKeys.map(key => keyUrlMap[key]);
-    if (isFunction(onFind)) onFind(missingUrls);
+    if (onFind && isFunction(onFind)) {
+      onFind(releases);
+    }
   });
 }
 
 /**
- * @param {Release} release
+ * Saves a Release object to local storage.
  */
-export function saveRelease(release) {
+export function saveRelease(release: Release): void {
   const key = generateKeyForRelease(release);
   storage.set({ [key]: release.toStorageObject() }, () => {
-    console.log("B2D: Release data was saved in the local storage");
+    log("Release data was saved in the local storage");
   });
 }
 
 /**
- * @param {String} key
- * @param {Array} categoryValues
+ * Clears all data from local storage.
  */
-export function addReleaseHistory(key, categoryValues) {
-  storage.get([key], (data) => {
-    let releaseData = data[key] || null;
-    if (releaseData === null) return;
-    let history = releaseData.history || {};
-
-    const date = new Date();
-    const dateStr = date.toISOString();
-
-    for (let category in categoryValues) {
-      if (!categoryValues.hasOwnProperty(category)) continue;
-
-      let historyCategory = history[category] || [];
-      if (!isArray(historyCategory)) continue;
-
-      const historyValue = {
-        date: dateStr,
-        value: categoryValues[category]
-      };
-
-      addUniqueValueObjectToArray(historyCategory, historyValue);
-      history[category] = historyCategory;
-    }
-
-    releaseData.history = history;
-
-    storage.set({ [key]: releaseData }, () => {
-      console.log("B2D: Release history for categories was saved successfully", categoryValues);
-    });
-  });
-}
-
-function addUniqueValueObjectToArray(arr, obj) {
-  if (arr.length === 0 || arr[arr.length - 1].value !== obj.value) {
-      arr.push(obj);
-  }
-}
-
-export function clearStorage() {
+export function clearStorage(): void {
   storage.clear();
 }
 
-export function clearStorageByKey(key, onDone) {
-  isArray(key)
-    ? key.forEach(k => clearStorageByKey(k, onDone))
-    : storage.remove(key, () => {
-      if (chrome.runtime.lastError) {
-        console.error(`Error clearing local storage item with key "${key}": ${chrome.runtime.lastError}`);
-      }
+/**
+ * Clears storage items by their keys and executes a callback when done.
+ */
+export function clearStorageByKey(key: string | string[], onDone?: (() => void)): void {
+  if (isArray(key)) {
+    (key as string[]).forEach(k => clearStorageByKey(k, onDone));
+    return;
+  }
 
-      if (isFunction(onDone)) onDone();
-    });
+  storage.remove(key, () => {
+    if (chrome.runtime.lastError) {
+      logError(`Error clearing local storage item with key "${key}": ${chrome.runtime.lastError.message}`)
+    }
+    if (onDone && isFunction(onDone)) {
+      onDone();
+    }
+  });
 }
 
-export function getStorageSize(callable) {
-  storage.getBytesInUse(null, callable);
+/**
+ * Retrieves the total number of bytes in use by the storage and invokes the callback with this value.
+ */
+export function getStorageSize(callback: (bytesInUse: number) => void) {
+  storage.getBytesInUse(null, callback);
 }

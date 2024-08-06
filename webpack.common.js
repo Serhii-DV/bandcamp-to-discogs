@@ -40,5 +40,4 @@ module.exports = {
     },
     hot: false,
   },
-  devtool: 'source-map',
 };

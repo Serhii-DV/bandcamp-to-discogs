@@ -14,7 +14,6 @@
   "content_scripts": [
     {
       "js": [
-        "isotope.pkgd.min.js",
         "bandcamp.content.js"
       ],
       "matches": ["https://*.bandcamp.com/*"],

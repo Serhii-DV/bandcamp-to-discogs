@@ -106,11 +106,6 @@ module.exports = {
           force: true,
         },
         {
-          from: "assets/isotope/isotope.pkgd.min.js",
-          to: path.join(__dirname, "dist"),
-          force: true,
-        },
-        {
           from: "src/bandcamp/styles.css",
           to: path.join(__dirname, "dist/bandcamp.styles.css"),
           force: true,

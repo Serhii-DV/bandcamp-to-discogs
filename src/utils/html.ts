@@ -1,4 +1,4 @@
-import { B2DIconComponent } from "../popup/components/icon.js";
+import { B2DIconComponent } from "../popup/components/icon";
 import { log } from "./console";
 import { isFunction, isString } from "./utils";
 

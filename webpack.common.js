@@ -3,6 +3,7 @@ const webpack = require("webpack");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const packageJson = require('./package.json');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -38,6 +39,15 @@ module.exports = {
       verbose: true,
       cleanStaleWebpackAssets: false,
     }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, "src", "popup", "popup.html"),
+      filename: "popup.html",
+      // Entry point scripts
+      chunks: [
+        "popup.vendors",
+        "popup"
+      ]
+    }),
     new CopyPlugin({
       patterns: [
         {
@@ -52,11 +62,6 @@ module.exports = {
         },
         {
           from: "images/**",
-          to: path.join(__dirname, "dist"),
-          force: true,
-        },
-        {
-          from: "src/popup/popup.html",
           to: path.join(__dirname, "dist"),
           force: true,
         },

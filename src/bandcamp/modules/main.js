@@ -12,7 +12,7 @@ export function main () {
     setupPageAlbum();
   }
 
-  injectCSSFile(chrome.runtime.getURL('src/bandcamp/styles.css'));
+  injectCSSFile(chrome.runtime.getURL('styles.css'));
 }
 
 main();

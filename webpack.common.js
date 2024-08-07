@@ -8,7 +8,8 @@ module.exports = {
   entry: {
     vendors: './src/popup/vendors.js',
     popup: './src/popup/popup.js',
-    "bandcamp-content": './src/bandcamp/modules/main.js'
+    "content-bandcamp": './src/bandcamp/modules/main.js',
+    "content-discogs": './src/discogs/modules/content-main.js',
   },
   module: {
     rules: [
@@ -48,6 +49,71 @@ module.exports = {
             manifest.version = packageJson.version;
             return Buffer.from(JSON.stringify(manifest, null, "\t"));
           },
+        },
+        {
+          from: "images/**",
+          to: path.join(__dirname, "dist"),
+          force: true,
+        },
+        {
+          from: "src/popup/popup.html",
+          to: path.join(__dirname, "dist"),
+          force: true,
+        },
+        {
+          from: "src/popup/popup.css",
+          to: path.join(__dirname, "dist"),
+          force: true,
+        },
+        {
+          from: "src/popup/content/about.html",
+          to: path.join(__dirname, "dist/content"),
+          force: true,
+        },
+        {
+          from: "src/popup/content/dashboard.html",
+          to: path.join(__dirname, "dist/content"),
+          force: true,
+        },
+        {
+          from: "src/popup/content/discogs_tab.html",
+          to: path.join(__dirname, "dist/content"),
+          force: true,
+        },
+        {
+          from: "src/popup/content/history_tab.html",
+          to: path.join(__dirname, "dist/content"),
+          force: true,
+        },
+        {
+          from: "src/popup/content/release_tab.html",
+          to: path.join(__dirname, "dist/content"),
+          force: true,
+        },
+        {
+          from: "src/popup/content/releases_tab.html",
+          to: path.join(__dirname, "dist/content"),
+          force: true,
+        },
+        {
+          from: "src/discogs/css/b2d.css",
+          to: path.join(__dirname, "dist"),
+          force: true,
+        },
+        {
+          from: "src/discogs/notification.css",
+          to: path.join(__dirname, "dist"),
+          force: true,
+        },
+        {
+          from: "assets/isotope/isotope.pkgd.min.js",
+          to: path.join(__dirname, "dist"),
+          force: true,
+        },
+        {
+          from: "src/bandcamp/styles.css",
+          to: path.join(__dirname, "dist"),
+          force: true,
         },
       ],
     }),

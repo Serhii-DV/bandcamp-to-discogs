@@ -121,6 +121,6 @@ export class B2DIconComponent extends HTMLElement {
   }
 }
 
-if (!customElements.get("b2d-icon")) {
+if (customElements && !customElements.get("b2d-icon")) {
   customElements.define("b2d-icon", B2DIconComponent);
 }

@@ -6,29 +6,25 @@ export class B2DIconComponent extends HTMLElement {
     self.setIcon(self.getAttribute("name"));
   }
 
-  setIcon(iconName) {
+  setIcon(iconName: string | null): void {
+    if (iconName === null) return;
+
     const self = this;
-    const iconHtml = self.getIconHtml(iconName);
-    self.innerHTML = iconHtml;
+    self.innerHTML = self.getIconHtml(iconName) ?? '';
 
-    const hasWidth = self.getAttribute("width");
-    const hasHeight = self.getAttribute("height");
+    const width = self.getAttribute("width");
+    const height = self.getAttribute("height");
 
-    if (hasWidth || hasHeight) {
+    if (width || height) {
       const svg = self.querySelector('svg');
       const img = self.querySelector('img');
       const el = svg === null ? img : svg;
-
-      if (hasWidth) {
-        el.setAttribute("width", self.getAttribute("width"));
-      }
-      if (hasHeight) {
-        el.setAttribute("height", self.getAttribute("height"));
-      }
+      if (el && width) el.setAttribute("width", width);
+      if (el && height) el.setAttribute("height", height);
     }
   }
 
-  getIconHtml(iconName) {
+  getIconHtml(iconName: string): string | undefined {
     const icons = [
       { name: 'card-text', html: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
       <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>

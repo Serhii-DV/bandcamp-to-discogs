@@ -6,8 +6,8 @@ import { closeNotification, showNotificationError, showNotificationInfo } from "
 export function main () {
   console.log('[B2D] Running discogs content main logic (content-main.js)');
 
-  injectCSSFile(chrome.runtime.getURL('b2d.css'));
-  injectCSSFile(chrome.runtime.getURL('notification.css'));
+  injectCSSFile(chrome.runtime.getURL('discogs.b2d.css'));
+  injectCSSFile(chrome.runtime.getURL('discogs.notification.css'));
 
   showNotificationInfo('Waiting for metadata parsing...');
 

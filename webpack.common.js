@@ -6,10 +6,10 @@ const packageJson = require('./package.json');
 
 module.exports = {
   entry: {
-    vendors: './src/popup/vendors.js',
+    "popup.vendors": './src/popup/vendors.js',
     popup: './src/popup/popup.js',
-    "content-bandcamp": './src/bandcamp/modules/main.js',
-    "content-discogs": './src/discogs/modules/content-main.js',
+    "bandcamp.content": './src/bandcamp/modules/main.js',
+    "discogs.content": './src/discogs/modules/content-main.js',
   },
   module: {
     rules: [
@@ -97,12 +97,12 @@ module.exports = {
         },
         {
           from: "src/discogs/css/b2d.css",
-          to: path.join(__dirname, "dist"),
+          to: path.join(__dirname, "dist/discogs.b2d.css"),
           force: true,
         },
         {
           from: "src/discogs/notification.css",
-          to: path.join(__dirname, "dist"),
+          to: path.join(__dirname, "dist/discogs.notification.css"),
           force: true,
         },
         {
@@ -112,7 +112,7 @@ module.exports = {
         },
         {
           from: "src/bandcamp/styles.css",
-          to: path.join(__dirname, "dist"),
+          to: path.join(__dirname, "dist/bandcamp.styles.css"),
           force: true,
         },
       ],

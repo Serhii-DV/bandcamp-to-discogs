@@ -1,4 +1,4 @@
-class B2DIconComponent extends HTMLElement {
+export class B2DIconComponent extends HTMLElement {
   constructor() {
     super();
 
@@ -125,4 +125,6 @@ class B2DIconComponent extends HTMLElement {
   }
 }
 
-customElements.define("b2d-icon", B2DIconComponent);
+if (!customElements.get("b2d-icon")) {
+  customElements.define("b2d-icon", B2DIconComponent);
+}

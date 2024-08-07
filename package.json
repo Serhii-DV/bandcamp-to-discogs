@@ -17,8 +17,8 @@
     "webpack-merge": "^6.0.1"
   },
   "scripts": {
-    "build": "tsc && webpack --config webpack.prod.js",
-    "dev": "tsc && webpack serve --config webpack.dev.js"
+    "build": "tsc && webpack --mode=production",
+    "dev": "tsc && webpack serve --mode=development"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",

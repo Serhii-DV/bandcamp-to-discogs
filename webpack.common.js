@@ -4,8 +4,10 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const packageJson = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 module.exports = {
+  mode: process.env.NODE_ENV,
   entry: {
     popup: './src/popup/popup.js',
     "bandcamp.content": './src/bandcamp/modules/main.js',
@@ -53,6 +55,11 @@ module.exports = {
           transform: function (content, path) {
             let manifest = JSON.parse(content.toString());
             manifest.version = packageJson.version;
+
+            if (isDevelopment) {
+              manifest.version += '-dev';
+            }
+
             return Buffer.from(JSON.stringify(manifest, null, "\t"));
           },
         },

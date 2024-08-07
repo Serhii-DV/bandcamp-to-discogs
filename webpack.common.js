@@ -110,6 +110,16 @@ module.exports = {
           to: path.join(__dirname, "dist/bandcamp.styles.css"),
           force: true,
         },
+        {
+          from: "src/data/discogs_genres.json",
+          to: path.join(__dirname, "dist/data"),
+          force: true,
+        },
+        {
+          from: "src/data/keyword_mapping.json",
+          to: path.join(__dirname, "dist/data"),
+          force: true,
+        },
       ],
     }),
   ],

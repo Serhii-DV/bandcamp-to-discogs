@@ -5,6 +5,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const packageJson = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development';
@@ -19,8 +20,8 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /.s?css$/,
-          use: ["css-loader"],
+          test: /\.css$/i,
+          use: [MiniCssExtractPlugin.loader, "css-loader"],
         },
         {
           test: /\.tsx?$/,
@@ -51,6 +52,9 @@ module.exports = (env, argv) => {
       new CleanWebpackPlugin({
         verbose: true,
         cleanStaleWebpackAssets: false,
+      }),
+      new MiniCssExtractPlugin({
+        filename: '[name].css'
       }),
       new HtmlWebpackPlugin({
         template: path.join(__dirname, "src", "popup", "popup.html"),
@@ -113,16 +117,6 @@ module.exports = (env, argv) => {
           {
             from: "src/popup/content/releases_tab.html",
             to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/discogs/css/b2d.css",
-            to: path.join(__dirname, "dist/discogs.b2d.css"),
-            force: true,
-          },
-          {
-            from: "src/discogs/notification.css",
-            to: path.join(__dirname, "dist/discogs.notification.css"),
             force: true,
           },
           {

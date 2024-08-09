@@ -52,8 +52,7 @@
     },
     {
       "resources": [
-        "discogs.b2d.css",
-        "discogs.notification.css"
+        "discogs.content.css"
       ],
       "matches": ["https://www.discogs.com/*"]
     }

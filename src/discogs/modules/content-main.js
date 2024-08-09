@@ -4,13 +4,16 @@ import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
 import { closeNotification, showNotificationError, showNotificationInfo } from "./notification.js";
 import { log } from "../../../src/utils/console";
 
+import "../css/b2d.css";
+import "../notification.css";
+
 main();
 
 function main() {
   log('Running discogs content main logic (content-main.js)');
 
-  injectCSSFile(chrome.runtime.getURL('discogs.b2d.css'));
-  injectCSSFile(chrome.runtime.getURL('discogs.notification.css'));
+  // Inject concatenated discogs content css
+  injectCSSFile(chrome.runtime.getURL('discogs.content.css'));
 
   showNotificationInfo('Waiting for metadata parsing...');
 

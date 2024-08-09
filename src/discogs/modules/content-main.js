@@ -5,7 +5,7 @@ import { closeNotification, showNotificationError, showNotificationInfo } from "
 import { log } from "../../../src/utils/console";
 
 import "../css/b2d.css";
-import "../notification.css";
+import "../css/notification.css";
 
 main();
 

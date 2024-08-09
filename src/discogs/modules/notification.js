@@ -1,5 +1,6 @@
 // Notifications
 
+import { getExtensionManifest } from "../../utils/chrome";
 import { isFunction } from "../../utils/utils";
 
 export const showNotificationDebug = (message, onShow) => { showNotification('debug', message, onShow); }
@@ -17,9 +18,10 @@ function createNotificationStack() {
 }
 
 export const showNotification = (type, message, onShow) => {
+  const manifest = getExtensionManifest();
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
-  notification.innerHTML = `<div class="header">Bandcamp to Discogs</div>${message}<span class="notification-close">×</span>`;
+  notification.innerHTML = `<div class="header"><b>${manifest.name}</b> ${manifest.version}</div>${message}<span class="notification-close">×</span>`;
 
   const closeButton = notification.querySelector('.notification-close');
   closeButton.addEventListener('click', function () {

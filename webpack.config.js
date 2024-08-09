@@ -15,7 +15,7 @@ module.exports = (env, argv) => {
     entry: {
       popup: './src/popup/popup.js',
       "bandcamp.content": './src/bandcamp/modules/main.js',
-      "discogs.content": './src/discogs/modules/content-main.js',
+      "discogs.content": './src/discogs/content.js',
     },
     module: {
       rules: [

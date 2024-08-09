@@ -1,16 +1,16 @@
-import { injectCSSFile } from "../../utils/html";
-import { initialize } from "./initialization.js";
-import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
-import { closeNotification, showNotificationError, showNotificationInfo } from "./notification.js";
-import { log } from "../../../src/utils/console";
+import { injectCSSFile } from "../utils/html";
+import { initialize } from "./modules/initialization.js";
+import { getArtistNameInput, getReleaseTitleInput } from "./modules/draft-page.js";
+import { closeNotification, showNotificationError, showNotificationInfo } from "./modules/notification.js";
+import { log } from "../utils/console";
 
-import "../css/b2d.css";
-import "../css/notification.css";
+import "./css/b2d.css";
+import "./css/notification.css";
 
 main();
 
 function main() {
-  log('Running discogs content main logic (content-main.js)');
+  log('Running discogs content main logic (src/discogs/content.js)');
 
   // Inject concatenated discogs content css
   injectCSSFile(chrome.runtime.getURL('discogs.content.css'));

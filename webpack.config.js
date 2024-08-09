@@ -14,7 +14,7 @@ module.exports = (env, argv) => {
   const config = {
     entry: {
       popup: './src/popup/popup.js',
-      "bandcamp.content": './src/bandcamp/modules/main.js',
+      "bandcamp.content": './src/bandcamp/content.js',
       "discogs.content": './src/discogs/content.js',
     },
     module: {

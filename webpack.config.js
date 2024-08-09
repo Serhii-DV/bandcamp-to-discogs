@@ -6,6 +6,7 @@ const packageJson = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development';
@@ -44,11 +45,16 @@ module.exports = (env, argv) => {
           test: /\.js$/,
           loader: "source-map-loader"
         },
+        {
+          test: /\.json$/i,
+          type: "asset/resource",
+        },
       ],
     },
     optimization: {
       minimizer: [
         new CssMinimizerPlugin(),
+        new JsonMinimizerPlugin(),
       ],
     },
     resolve: {

@@ -24,6 +24,13 @@ module.exports = (env, argv) => {
           use: [MiniCssExtractPlugin.loader, "css-loader"],
         },
         {
+          test: /\.(png|jpg|gif)$/i,
+          type: 'asset/resource',
+          generator: {
+            filename: 'images/[name][ext]',
+          },
+        },
+        {
           test: /\.tsx?$/,
           use: {
             loader: 'ts-loader',
@@ -118,11 +125,6 @@ module.exports = (env, argv) => {
           {
             from: "src/popup/content/releases_tab.html",
             to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/bandcamp/styles.css",
-            to: path.join(__dirname, "dist/bandcamp.styles.css"),
             force: true,
           },
           {

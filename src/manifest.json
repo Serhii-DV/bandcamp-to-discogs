@@ -46,7 +46,7 @@
     {
       "resources": [
         "images/b2d_logo_16.png",
-        "bandcamp.styles.css"
+        "bandcamp.content.css"
       ],
       "matches": ["https://*.bandcamp.com/*"]
     },

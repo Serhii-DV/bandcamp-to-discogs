@@ -4,6 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const packageJson = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development';
@@ -18,6 +19,10 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
+          test: /.s?css$/,
+          use: ["css-loader"],
+        },
+        {
           test: /\.tsx?$/,
           use: {
             loader: 'ts-loader',
@@ -31,6 +36,11 @@ module.exports = (env, argv) => {
           test: /\.js$/,
           loader: "source-map-loader"
         },
+      ],
+    },
+    optimization: {
+      minimizer: [
+        new CssMinimizerPlugin(),
       ],
     },
     resolve: {

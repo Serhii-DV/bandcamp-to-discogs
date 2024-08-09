@@ -6,6 +6,9 @@
 
 - core: Start using TypoScript with JS
 - core: Converted modules to TS utils
+- core: Minimize CSS files
+- core: Minimize JSON data files
+- core: Content scripts loading refactored
 
 ## 0.11.1 (2024-07-31)
 

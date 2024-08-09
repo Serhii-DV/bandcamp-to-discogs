@@ -73,7 +73,8 @@ module.exports = (env, argv) => {
               manifest.version = packageJson.version;
 
               if (isDevelopment) {
-                manifest.name += ' [Dev]';
+                const currentDateTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                manifest.name += ` [Dev ${currentDateTime}]`;
               }
 
               return Buffer.from(JSON.stringify(manifest, null, "\t"));

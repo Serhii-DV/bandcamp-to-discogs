@@ -2,6 +2,7 @@ import Isotope from "isotope-layout";
 import { contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, selectElementWithContent, setDataAttribute } from "../../utils/html";
 import { containsOneOf, splitString, isEmptyArray, countOccurrences, removeBrackets } from "../../utils/utils";
 import { getBandPhotoSrc, getReleasesData } from "../modules/html.js";
+import { log } from "../../utils/console";
 
 // Setup logic for BC music page
 export function setupPageMusic() {
@@ -61,7 +62,7 @@ function setupIsotope() {
 
   setupArtistFilterElement(artistFilterWidget, iso, albumAmountWidget);
 
-  console.log('B2D: Isotope setuped correctly');
+  log('Isotope setup was correct');
 }
 
 function getReleases() {

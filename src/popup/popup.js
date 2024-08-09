@@ -21,7 +21,7 @@ import { bytesToSize } from "../utils/utils";
 import { setupConsole, setupConsoleRelease } from "./console.js";
 import { isValidBandcampURL } from "../bandcamp/modules/html.js";
 import { isValidDiscogsReleaseEditUrl } from "../discogs/app/utils.js";
-import { logInfo } from "../utils/console";
+import { log, logInfo } from "../utils/console";
 
 const btnDashboardTab = document.getElementById("dashboard-tab");
 const btnReleaseTab = document.getElementById("release-tab");
@@ -53,6 +53,7 @@ async function proceedDiscogsEditPageData() {
   logInfo('Proceed discogs edit page data');
 
   getCurrentTab().then((tab) => {
+    log('Sending message `getDiscogsEditPageData` to current tab', tab);
     chrome.tabs.sendMessage(tab.id, { type: 'getDiscogsEditPageData' }, (response) => {
       if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
         return;

@@ -2,9 +2,12 @@ import { injectCSSFile } from "../../utils/html";
 import { initialize } from "./initialization.js";
 import { getArtistNameInput, getReleaseTitleInput } from "./draft-page.js";
 import { closeNotification, showNotificationError, showNotificationInfo } from "./notification.js";
+import { log } from "../../../src/utils/console";
 
-export function main () {
-  console.log('[B2D] Running discogs content main logic (content-main.js)');
+main();
+
+function main() {
+  log('Running discogs content main logic (content-main.js)');
 
   injectCSSFile(chrome.runtime.getURL('discogs.b2d.css'));
   injectCSSFile(chrome.runtime.getURL('discogs.notification.css'));

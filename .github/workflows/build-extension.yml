@@ -1,4 +1,4 @@
-name: Build and Zip Chrome Extension
+name: Build Chrome Extension
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - feature/dist_zip_workflow
 
 jobs:
-  build_and_zip:
+  build_extension:
     runs-on: ubuntu-latest
 
     steps:

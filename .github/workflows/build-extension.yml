@@ -3,7 +3,7 @@ name: Build Chrome Extension
 on:
   push:
     branches:
-      - feature/dist_zip_workflow
+      - main
 
 jobs:
   build_extension:

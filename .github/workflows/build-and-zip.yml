@@ -1,0 +1,34 @@
+name: Build and Zip Chrome Extension
+
+on:
+  push:
+    branches:
+      - feature/dist_zip_workflow
+
+jobs:
+  build_and_zip:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run npm build
+      run: npm run build
+
+    - name: Zip dist folder
+      run: zip -r dist.zip dist/
+
+    - name: Upload ZIP file as an artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: chrome-extension-dist
+        path: dist.zip

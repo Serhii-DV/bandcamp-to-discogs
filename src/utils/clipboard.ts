@@ -1,3 +1,4 @@
+import { B2DIconComponent } from "src/popup/components/icon";
 import { isFunction } from "./utils";
 
 type VoidCallback = (value: void) => void | PromiseLike<void>;

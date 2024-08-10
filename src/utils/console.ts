@@ -1,20 +1,26 @@
+import { getExtensionManifest } from "./chrome";
+
 // `update_url` field is not present in the manifest. If this field is absent, the extension is in development mode.
 const isDevMode = !('update_url' in chrome.runtime.getManifest());
 
 export const log = (...args: any[]): void => {
   if (!isDevMode) return;
-  const timestamp = new Date().toISOString();
-  console.log(`[B2D][DEBUG] ${timestamp}:`, ...args);
+  console.log(getLogPrefix('debug'), ...args);
 }
 
 export const logInfo = (...args: any[]): void => {
   if (!isDevMode) return;
-  const timestamp = new Date().toISOString();
-  console.info(`[B2D][INFO] ${timestamp}:`, ...args);
+  console.info(getLogPrefix('info'), ...args);
 }
 
 export const logError = (...args: any[]): void => {
   if (!isDevMode) return;
-  const timestamp = new Date().toISOString();
-  console.error(`[B2D][ERROR] ${timestamp}:`, ...args);
+  console.error(getLogPrefix('error'), ...args);
+}
+
+const manifest = getExtensionManifest();
+
+function getLogPrefix(level: string): string {
+  const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  return `[b2d][${manifest.version}][${level}][${timestamp}]:`;
 }

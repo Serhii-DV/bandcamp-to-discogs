@@ -24,11 +24,13 @@ jobs:
     - name: Run npm build
       run: npm run build
 
-    - name: Zip contents of dist folder
-      run: cd dist && zip -r ../dist.zip ./*
+    - name: Create ZIP from dist folder
+      run: |
+        cd dist
+        zip -r ../bandcamp-to-discogs-extension.zip ./*
 
     - name: Upload ZIP file as an artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: bandcamp-to-discogs-extension
-        path: dist.zip
+        path: bandcamp-to-discogs-extension.zip

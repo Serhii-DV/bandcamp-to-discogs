@@ -1,5 +1,8 @@
 import bootstrap from 'bootstrap';
 
+// Popup styles
+import "./popup.css";
+
 // Custom components
 import { B2DIconComponent } from './components/icon';
 import { ConsoleCommand } from './components/console-command.js';

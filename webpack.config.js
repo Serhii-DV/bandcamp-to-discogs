@@ -108,11 +108,6 @@ module.exports = (env, argv) => {
             force: true,
           },
           {
-            from: "src/popup/popup.css",
-            to: path.join(__dirname, "dist"),
-            force: true,
-          },
-          {
             from: "src/data/discogs_genres.json",
             to: path.join(__dirname, "dist/data"),
             force: true,

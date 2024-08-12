@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
+const fs = require('fs');
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development';
@@ -70,8 +71,16 @@ module.exports = (env, argv) => {
         filename: '[name].css'
       }),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, "src", "popup", "popup.html"),
+        template: "./src/popup/popup.ejs",
         filename: "popup.html",
+        templateParameters: {
+          tabContentDashboard: fs.readFileSync('./src/popup/content/dashboard.html', 'utf-8'),
+          tabContentRelease: fs.readFileSync('./src/popup/content/release_tab.html', 'utf-8'),
+          tabContentReleases: fs.readFileSync('./src/popup/content/releases_tab.html', 'utf-8'),
+          tabContentHistory: fs.readFileSync('./src/popup/content/history_tab.html', 'utf-8'),
+          tabContentAbout: fs.readFileSync('./src/popup/content/about.html', 'utf-8'),
+        },
+        minify: true,
         // Entry point scripts
         chunks: ["popup"]
       }),

@@ -3,7 +3,6 @@ import bootstrap from 'bootstrap';
 // Custom components
 import { B2DIconComponent } from './components/icon';
 import { ConsoleCommand } from './components/console-command.js';
-import { ExternalContent } from './components/external-content.js';
 import { ReleasesList } from './components/releases-list.js';
 
 import { Release } from "../app/release.js";
@@ -193,9 +192,6 @@ function initialize(tab) {
   setupNavigation();
   replaceVersion(document);
   checkStorageSize();
-  onExternalContentLoaded((e) => {
-    replaceVersion(e.target);
-  });
 
   if (isValidBandcampURL(currentTabUrl)) {
     proceedBandcampData();
@@ -220,15 +216,5 @@ function checkStorageSize() {
       el.textContent = bytesToSize(size);
       el.setAttribute('title', `Storage size (${size} bytes)`)
     });
-  });
-}
-
-/**
- * Run some specific logic for external content
- */
-function onExternalContentLoaded(fn) {
-  const externalContentElements = document.querySelectorAll('external-content');
-  externalContentElements.forEach(el => {
-    el.addEventListener('externalContentLoaded', fn);
   });
 }

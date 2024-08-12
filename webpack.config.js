@@ -113,36 +113,6 @@ module.exports = (env, argv) => {
             force: true,
           },
           {
-            from: "src/popup/content/about.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/dashboard.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/discogs_tab.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/history_tab.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/release_tab.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/releases_tab.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
             from: "src/data/discogs_genres.json",
             to: path.join(__dirname, "dist/data"),
             force: true,

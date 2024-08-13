@@ -1,8 +1,14 @@
-import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../../bandcamp/modules/bandcamp.js";
-import { capitalizeEachWord, removeLeadingZeroOrColon } from "../../utils/utils";
-import { Release, Track } from "../../app/release.js";
-import { getDiscogsDateValue } from "./utils.js";
-import { Metadata } from "./metadata.js";
+import {
+  keywordsToDiscogsGenres,
+  keywordsToDiscogsStyles
+} from '../../bandcamp/modules/bandcamp.js';
+import {
+  capitalizeEachWord,
+  removeLeadingZeroOrColon
+} from '../../utils/utils';
+import { Release, Track } from '../../app/release.js';
+import { getDiscogsDateValue } from './utils.js';
+import { Metadata } from './metadata.js';
 
 /**
  * Represents a Discogs CSV entry.
@@ -55,7 +61,10 @@ export class DiscogsCsv {
    * @return {DiscogsCsv} - The converted DiscogsCsv instance.
    */
   static fromRelease(release) {
-    const label = release.artist === release.label ? `Not On Label (${release.artist} Self-released)` : release.label;
+    const label =
+      release.artist === release.label
+        ? `Not On Label (${release.artist} Self-released)`
+        : release.label;
     const metadata = Metadata.fromRelease(release);
 
     return new DiscogsCsv({
@@ -108,7 +117,9 @@ export class DiscogsCsv {
    * @returns {String} - The concatenated genre string.
    */
   getGenre() {
-    return this.genres.filter(genre => genre !== 'Folk, World, & Country').join(', ');
+    return this.genres
+      .filter((genre) => genre !== 'Folk, World, & Country')
+      .join(', ');
   }
 
   /**
@@ -133,8 +144,11 @@ export class DiscogsCsv {
    */
   toCsvObject() {
     const tracks = this.tracks
-      .map(track => `${capitalizeEachWord(track.title)} ${removeLeadingZeroOrColon(track.time.value)}`)
-      .join("\r");
+      .map(
+        (track) =>
+          `${capitalizeEachWord(track.title)} ${removeLeadingZeroOrColon(track.time.value)}`
+      )
+      .join('\r');
     const notes = this.notes ? this.notes.replace(/"/g, '""') : '';
 
     return {

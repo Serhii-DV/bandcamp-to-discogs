@@ -1,7 +1,7 @@
-import { safeFilename } from "./utils";
+import { safeFilename } from './utils';
 
 export function arrayToCsv(rows: string[][]): string {
-  return rows.map((e: string[]) => e.join(",")).join("\n");
+  return rows.map((e: string[]) => e.join(',')).join('\n');
 }
 
 export function objectsToCsv(objects: object[]): string {
@@ -13,7 +13,9 @@ export function objectsToCsv(objects: object[]): string {
   const csvRows = [headers.join(',')];
 
   for (const obj of objects) {
-    const values = headers.map(header => (obj as Record<string, any>)[header]);
+    const values = headers.map(
+      (header) => (obj as Record<string, any>)[header]
+    );
     csvRows.push(values.join(','));
   }
 

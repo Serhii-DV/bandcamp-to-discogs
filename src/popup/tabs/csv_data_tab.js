@@ -1,19 +1,21 @@
-import { Release } from "../../app/release.js";
-import { releaseToDiscogsCsv } from "../../discogs/modules/discogs.js";
-import { objectToHtmlElement } from "../helpers.js";
+import { Release } from '../../app/release.js';
+import { releaseToDiscogsCsv } from '../../discogs/modules/discogs.js';
+import { objectToHtmlElement } from '../helpers.js';
 
 export function setupCsvDataTab(release, btnCsvData) {
-
   btnCsvData.addEventListener('click', () => {
     const csvDataTabPane = document.getElementById('csvData');
     csvDataTabPane.innerHTML = '';
 
     if (release instanceof Release) {
       const discogsCsv = releaseToDiscogsCsv(release);
-      appendObjectDataAsTable('Discogs CSV data', discogsCsv.toCsvObject(), csvDataTabPane);
+      appendObjectDataAsTable(
+        'Discogs CSV data',
+        discogsCsv.toCsvObject(),
+        csvDataTabPane
+      );
     }
   });
-
 }
 
 function appendObjectDataAsTable(headline, obj, el) {

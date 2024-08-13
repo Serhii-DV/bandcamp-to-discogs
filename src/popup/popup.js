@@ -1,33 +1,36 @@
 import bootstrap from 'bootstrap';
 
 // Popup styles
-import "./popup.css";
+import './popup.css';
 
 // Custom components
 import { B2DIconComponent } from './components/icon';
 import { ConsoleCommand } from './components/console-command.js';
 import { ReleasesList } from './components/releases-list.js';
 
-import { Release } from "../app/release.js";
-import { getCurrentTab, getExtensionManifest } from "../utils/chrome";
-import { loadDiscogsGenres } from "../discogs/modules/genres.js";
-import { loadKeywordMapping } from "../bandcamp/modules/mapping.js";
-import config from "../config.js";
-import { setHistoryTabSearchValue, setupHistoryTab } from "./tabs/history_tab.js";
-import { disable, enable, hide, show, click } from "../utils/html";
-import { setupReleasesTab } from "./tabs/releases_tab.js";
-import { setupReleaseTab } from "./tabs/release_tab.js";
-import { setupCsvDataTab } from "./tabs/csv_data_tab.js";
-import { getStorageSize } from "../utils/storage";
-import { bytesToSize } from "../utils/utils";
-import { setupConsole, setupConsoleRelease } from "./console.js";
-import { isValidBandcampURL } from "../bandcamp/modules/html.js";
-import { isValidDiscogsReleaseEditUrl } from "../discogs/app/utils.js";
-import { log, logInfo } from "../utils/console";
+import { Release } from '../app/release.js';
+import { getCurrentTab, getExtensionManifest } from '../utils/chrome';
+import { loadDiscogsGenres } from '../discogs/modules/genres.js';
+import { loadKeywordMapping } from '../bandcamp/modules/mapping.js';
+import config from '../config.js';
+import {
+  setHistoryTabSearchValue,
+  setupHistoryTab
+} from './tabs/history_tab.js';
+import { disable, enable, hide, show, click } from '../utils/html';
+import { setupReleasesTab } from './tabs/releases_tab.js';
+import { setupReleaseTab } from './tabs/release_tab.js';
+import { setupCsvDataTab } from './tabs/csv_data_tab.js';
+import { getStorageSize } from '../utils/storage';
+import { bytesToSize } from '../utils/utils';
+import { setupConsole, setupConsoleRelease } from './console.js';
+import { isValidBandcampURL } from '../bandcamp/modules/html.js';
+import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
+import { log, logInfo } from '../utils/console';
 
-const btnDashboardTab = document.getElementById("dashboard-tab");
-const btnReleaseTab = document.getElementById("release-tab");
-const btnReleasesTab = document.getElementById("releases-tab");
+const btnDashboardTab = document.getElementById('dashboard-tab');
+const btnReleaseTab = document.getElementById('release-tab');
+const btnReleasesTab = document.getElementById('releases-tab');
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
 const btnDownloadRelease = document.getElementById('downloadRelease');
@@ -41,7 +44,12 @@ async function proceedBandcampData() {
 
   getCurrentTab().then((tab) => {
     chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
-      if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
+      if (
+        response === null ||
+        typeof response === 'undefined' ||
+        Object.keys(response).length === 0 ||
+        typeof response.data === 'undefined'
+      ) {
         showBandcampDataNotFoundWarning();
         return;
       }
@@ -56,13 +64,22 @@ async function proceedDiscogsEditPageData() {
 
   getCurrentTab().then((tab) => {
     log('Sending message `getDiscogsEditPageData` to current tab', tab);
-    chrome.tabs.sendMessage(tab.id, { type: 'getDiscogsEditPageData' }, (response) => {
-      if (response === null || typeof response === 'undefined' || Object.keys(response).length === 0 || typeof response.data === 'undefined') {
-        return;
-      }
+    chrome.tabs.sendMessage(
+      tab.id,
+      { type: 'getDiscogsEditPageData' },
+      (response) => {
+        if (
+          response === null ||
+          typeof response === 'undefined' ||
+          Object.keys(response).length === 0 ||
+          typeof response.data === 'undefined'
+        ) {
+          return;
+        }
 
-      processDiscogsDraftPageResponse(response);
-    });
+        processDiscogsDraftPageResponse(response);
+      }
+    );
   });
 }
 
@@ -72,7 +89,9 @@ function showBandcampDataNotFoundWarning() {
   // Wait for dashboard content load
   const interval = 100;
   const intervalId = setInterval(() => {
-    const warningBandcampDataNotFound = document.getElementById('b2d-warning-bandcamp-data-not-found');
+    const warningBandcampDataNotFound = document.getElementById(
+      'b2d-warning-bandcamp-data-not-found'
+    );
 
     if (warningBandcampDataNotFound) {
       show(warningBandcampDataNotFound);
@@ -97,14 +116,14 @@ function processBandcampResponse(response) {
     return;
   }
 
-  loadDiscogsGenres(config.genres_url).then(genres => {
-    loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
+  loadDiscogsGenres(config.genres_url).then((genres) => {
+    loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
       if (isRelease) {
         processBandcampReleaseData(response.data, keywordsMapping);
       } else {
         processBandcampReleasesData(response);
       }
-    })
+    });
   });
 }
 
@@ -154,7 +173,7 @@ function replaceVersion(document) {
   const manifest = getExtensionManifest();
 
   // Set extension version
-  document.querySelectorAll('.version').forEach(el => {
+  document.querySelectorAll('.version').forEach((el) => {
     el.textContent = manifest.version;
   });
 }
@@ -178,10 +197,7 @@ function setupNavigation() {
   btnHistoryTab.addEventListener('click', () => {
     hide(btnDownloadRelease, btnDownloadReleases);
     show(btnDownloadStorage);
-    setupHistoryTab(
-      document.getElementById('history'),
-      btnDownloadStorage
-    );
+    setupHistoryTab(document.getElementById('history'), btnDownloadStorage);
   });
 }
 
@@ -214,10 +230,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function checkStorageSize() {
   logInfo('Check storage size');
 
-  getStorageSize(size => {
-    document.querySelectorAll('.storage-size').forEach(el => {
+  getStorageSize((size) => {
+    document.querySelectorAll('.storage-size').forEach((el) => {
       el.textContent = bytesToSize(size);
-      el.setAttribute('title', `Storage size (${size} bytes)`)
+      el.setAttribute('title', `Storage size (${size} bytes)`);
     });
   });
 }

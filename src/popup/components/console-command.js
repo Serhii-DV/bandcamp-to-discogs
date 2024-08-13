@@ -27,8 +27,8 @@ class ConsoleCommand extends HTMLElement {
     shadow.appendChild(template.content.cloneNode(true));
 
     self.inputElement = shadow.querySelector('input');
-    self.inputElement.addEventListener("keypress", event => {
-      if (event.key === "Enter") {
+    self.inputElement.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
         self.runCommand(event.target.value);
       }
     });
@@ -59,20 +59,20 @@ class ConsoleCommand extends HTMLElement {
 
   show() {
     const self = this;
-    self.style.display = "block";
+    self.style.display = 'block';
     self.inputElement.focus();
     return self;
   }
 
   hide() {
     const self = this;
-    self.style.display = "none";
+    self.style.display = 'none';
     return self;
   }
 
   toggle() {
     const self = this;
-    return self.style.display === "none" ? self.show() : self.hide();
+    return self.style.display === 'none' ? self.show() : self.hide();
   }
 }
 
@@ -80,11 +80,11 @@ customElements.define('console-command', ConsoleCommand);
 
 (() => {
   const consoleCommand = document.createElement('console-command');
-  consoleCommand.style.display = "none";
+  consoleCommand.style.display = 'none';
   document.body.appendChild(consoleCommand);
 
-  document.addEventListener("keydown", (event) => {
-    if ((event.ctrlKey || event.metaKey) && event.key === "`") {
+  document.addEventListener('keydown', (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === '`') {
       consoleCommand.toggle();
     }
   });

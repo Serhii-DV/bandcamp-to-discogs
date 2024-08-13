@@ -1,6 +1,6 @@
 import { ReleaseItem } from 'src/app/release';
 import { Release } from 'src/app/release';
-import { v5 as uuid5} from 'uuid';
+import { v5 as uuid5 } from 'uuid';
 
 export function generateKeyForUrl(url: string): string {
   const uuid = uuid5(url, uuid5.URL);
@@ -22,7 +22,9 @@ export function generateKeysFromUrls(urls: string[]): string[] {
   return keys;
 }
 
-export function generateKeyUrlMapFromUrls(urls: string[]): Record<string, string> {
+export function generateKeyUrlMapFromUrls(
+  urls: string[]
+): Record<string, string> {
   const keyUrlMap: Record<string, string> = {};
 
   urls.forEach((url: string) => {

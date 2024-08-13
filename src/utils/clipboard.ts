@@ -1,11 +1,18 @@
-import { B2DIconComponent } from "src/popup/components/icon";
-import { isFunction } from "./utils";
+import { B2DIconComponent } from 'src/popup/components/icon';
+import { isFunction } from './utils';
 
 type VoidCallback = (value: void) => void | PromiseLike<void>;
 
-export const initClipboard = (element: Element, content: string, callback: VoidCallback, iconFillName: string): void => {
+export const initClipboard = (
+  element: Element,
+  content: string,
+  callback: VoidCallback,
+  iconFillName: string
+): void => {
   element.addEventListener('click', () => {
-    const promise = copyToClipboard(content ?? element.getAttribute('data-content'));
+    const promise = copyToClipboard(
+      content ?? element.getAttribute('data-content')
+    );
     const icon = element.querySelector('b2d-icon') as B2DIconComponent;
 
     if (icon) {
@@ -40,13 +47,13 @@ export const createClipboardLink = ({
   iconFillName = 'clipboard2-check-fill',
   title = ''
 }: {
-  content: string,
-  onDone: () => void,
-  iconName?: string,
-  iconFillName?: string,
-  title?: string
+  content: string;
+  onDone: () => void;
+  iconName?: string;
+  iconFillName?: string;
+  title?: string;
 }): HTMLElement => {
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.classList.add('clipboard-link');
   link.title = title;
   link.href = '#';

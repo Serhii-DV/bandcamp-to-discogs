@@ -1,8 +1,11 @@
-import { Release } from "../../app/release.js";
-import { keywordsToDiscogsGenres, keywordsToDiscogsStyles } from "../../bandcamp/modules/bandcamp.js";
-import { getExtensionManifest } from "../../utils/chrome";
-import { generateSubmissionNotes } from "../modules/discogs.js";
-import { getDiscogsDateValue } from "./utils.js";
+import { Release } from '../../app/release.js';
+import {
+  keywordsToDiscogsGenres,
+  keywordsToDiscogsStyles
+} from '../../bandcamp/modules/bandcamp.js';
+import { getExtensionManifest } from '../../utils/chrome';
+import { generateSubmissionNotes } from '../modules/discogs.js';
+import { getDiscogsDateValue } from './utils.js';
 
 export class Metadata {
   /**
@@ -119,7 +122,7 @@ export class Metadata {
       genres: {
         keywords: release.keywords,
         autoDetectedGenres: discogsGenres,
-        autoDetectedStyles: discogsStyles,
+        autoDetectedStyles: discogsStyles
       },
       releaseUrl: release.url
     });

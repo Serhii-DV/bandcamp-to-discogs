@@ -1,4 +1,4 @@
-import { Metadata } from "src/discogs/app/metadata.js";
+import { Metadata } from 'src/discogs/app/metadata.js';
 
 export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
   const queryOptions = { active: true, currentWindow: true };
@@ -10,7 +10,10 @@ export function getExtensionManifest(): chrome.runtime.Manifest {
   return chrome.runtime.getManifest();
 }
 
-export async function openTabs(urls: string[], callback: (tab: chrome.tabs.Tab) => void): Promise<unknown[]> {
+export async function openTabs(
+  urls: string[],
+  callback: (tab: chrome.tabs.Tab) => void
+): Promise<unknown[]> {
   const tabPromises = [];
 
   for (const url of urls) {

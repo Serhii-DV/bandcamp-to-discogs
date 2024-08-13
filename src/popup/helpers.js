@@ -1,10 +1,17 @@
-import { Release, ReleaseItem } from "../app/release.js";
-import { Metadata } from "../discogs/app/metadata.js";
-import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
-import { chromeSendMessageToCurrentTab } from "../utils/chrome";
-import { createIconLink, disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../utils/html";
-import { generateKeyForReleaseItem } from "../utils/key-generator";
-import { convertToAlias, isArray, isObject, isString } from "../utils/utils";
+import { Release, ReleaseItem } from '../app/release.js';
+import { Metadata } from '../discogs/app/metadata.js';
+import { getSearchDiscogsReleaseUrl } from '../discogs/modules/discogs.js';
+import { chromeSendMessageToCurrentTab } from '../utils/chrome';
+import {
+  createIconLink,
+  disable,
+  enable,
+  getDataAttribute,
+  hasDataAttribute,
+  setDataAttribute
+} from '../utils/html';
+import { generateKeyForReleaseItem } from '../utils/key-generator';
+import { convertToAlias, isArray, isObject, isString } from '../utils/utils';
 
 /**
  * Converts a JavaScript object to an HTML element representing a table.
@@ -16,16 +23,16 @@ export function objectToHtmlElement(data) {
     return document.createTextNode(data);
   }
 
-  const table = document.createElement("table");
-  table.classList.add("table", "table-sm", "table-striped", "table-bordered");
+  const table = document.createElement('table');
+  table.classList.add('table', 'table-sm', 'table-striped', 'table-bordered');
 
   for (const [key, value] of Object.entries(data)) {
-    const row = document.createElement("tr");
-    const keyCell = document.createElement("th");
-    const valueCell = document.createElement("td");
+    const row = document.createElement('tr');
+    const keyCell = document.createElement('th');
+    const valueCell = document.createElement('td');
 
-    keyCell.classList.add("w-25");
-    valueCell.classList.add("w-auto");
+    keyCell.classList.add('w-25');
+    valueCell.classList.add('w-auto');
 
     keyCell.textContent = key;
 
@@ -33,11 +40,13 @@ export function objectToHtmlElement(data) {
       valueCell.appendChild(objectToHtmlElement(value));
     } else if (isArray(value)) {
       valueCell.innerHTML = value
-        .map(item => (isString(item) ? item : objectToHtmlElement(item).outerHTML))
-        .join(", ");
+        .map((item) =>
+          isString(item) ? item : objectToHtmlElement(item).outerHTML
+        )
+        .join(', ');
     } else {
       valueCell.innerHTML = isString(value)
-        ? value.replace(/[\r\n]+/g, "<br/>")
+        ? value.replace(/[\r\n]+/g, '<br/>')
         : value;
     }
 
@@ -56,24 +65,21 @@ export function objectToHtmlElement(data) {
 function transformReleaseItemsToReleaseListData(releases) {
   const data = [];
 
-  releases.forEach(item => {
+  releases.forEach((item) => {
     const release = item instanceof Release ? item.releaseItem : item;
     const viewLink = createIconLink({
       href: release.url,
       iconDefault: 'box-arrow-up-right',
       className: 'link-bandcamp-url',
-      title: 'View bandcamp release',
+      title: 'View bandcamp release'
     });
     const searchLink = createIconLink({
       href: getSearchDiscogsReleaseUrl(release.artist, release.title),
       iconDefault: 'search',
       className: 'link-discogs-search',
-      title: 'Search release on Discogs',
+      title: 'Search release on Discogs'
     });
-    const controls = [
-      viewLink,
-      searchLink,
-    ];
+    const controls = [viewLink, searchLink];
 
     if (item instanceof Release) {
       const applyMetadataLink = createIconLink({
@@ -100,7 +106,7 @@ function transformReleaseItemsToReleaseListData(releases) {
       dataAtts: {
         title: `${release.artist} - ${release.title}`
       },
-      controls,
+      controls
     });
   });
 
@@ -112,13 +118,11 @@ function transformReleaseItemsToReleaseListData(releases) {
  * @param {Array<ReleaseItem>|Array<Release>} releases
  */
 export function populateReleasesList(releasesList, releases) {
-  releasesList.populateData(
-    transformReleaseItemsToReleaseListData(releases)
-  );
+  releasesList.populateData(transformReleaseItemsToReleaseListData(releases));
 }
 
 export function setBackgroundImage(element, imageUrl) {
-  if (!element instanceof HTMLElement) return;
+  if ((!element) instanceof HTMLElement) return;
   element.style.backgroundImage = `url(${imageUrl})`;
 }
 

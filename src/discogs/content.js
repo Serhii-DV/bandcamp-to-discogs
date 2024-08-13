@@ -1,11 +1,18 @@
-import { injectCSSFile } from "../utils/html";
-import { initialize } from "./modules/initialization.js";
-import { getArtistNameInput, getReleaseTitleInput } from "./modules/draft-page.js";
-import { closeNotification, showNotificationError, showNotificationInfo } from "./modules/notification.js";
-import { log } from "../utils/console";
+import { injectCSSFile } from '../utils/html';
+import { initialize } from './modules/initialization.js';
+import {
+  getArtistNameInput,
+  getReleaseTitleInput
+} from './modules/draft-page.js';
+import {
+  closeNotification,
+  showNotificationError,
+  showNotificationInfo
+} from './modules/notification.js';
+import { log } from '../utils/console';
 
-import "./css/b2d.css";
-import "./css/notification.css";
+import './css/b2d.css';
+import './css/notification.css';
 
 main();
 
@@ -38,7 +45,8 @@ function main() {
 
 const showNotInitializedMessage = (message) => {
   showNotificationError(
-    message + '<br><button class="button button-small button-blue action-restart">Restart initialization</button>',
+    message +
+      '<br><button class="button button-small button-blue action-restart">Restart initialization</button>',
     (notification) => {
       notification
         .querySelector('.action-restart')
@@ -48,7 +56,7 @@ const showNotInitializedMessage = (message) => {
         });
     }
   );
-}
+};
 
 function setupSendMessageToPopup() {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -64,7 +72,7 @@ function prepareSendMessageData() {
 
   return {
     data: {
-      artistName: artistNameInput.value + ' - ' + releaseTitleInput.value,
+      artistName: artistNameInput.value + ' - ' + releaseTitleInput.value
     }
   };
 }

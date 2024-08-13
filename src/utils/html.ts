@@ -1,8 +1,11 @@
-import { B2DIconComponent } from "../popup/components/icon";
-import { log } from "./console";
-import { isFunction, isString } from "./utils";
+import { B2DIconComponent } from '../popup/components/icon';
+import { log } from './console';
+import { isFunction, isString } from './utils';
 
-export function hasDataAttribute(element: HTMLElement, attributeName: string): boolean {
+export function hasDataAttribute(
+  element: HTMLElement,
+  attributeName: string
+): boolean {
   return element.hasAttribute(`data-${attributeName}`);
 }
 
@@ -36,8 +39,10 @@ export function getDataAttribute(
   return defaultValue;
 }
 
-export function show(...elements: (HTMLElement | null | (HTMLElement | null)[])[]): void {
-  elements.forEach(el => {
+export function show(
+  ...elements: (HTMLElement | null | (HTMLElement | null)[])[]
+): void {
+  elements.forEach((el) => {
     if (Array.isArray(el)) {
       show(...el);
     } else if (el) {
@@ -46,8 +51,10 @@ export function show(...elements: (HTMLElement | null | (HTMLElement | null)[])[
   });
 }
 
-export function hide(...elements: (HTMLElement | null | (HTMLElement | null)[])[]): void {
-  elements.forEach(el => {
+export function hide(
+  ...elements: (HTMLElement | null | (HTMLElement | null)[])[]
+): void {
+  elements.forEach((el) => {
     if (Array.isArray(el)) {
       hide(...el);
     } else if (el) {
@@ -56,22 +63,42 @@ export function hide(...elements: (HTMLElement | null | (HTMLElement | null)[])[
   });
 }
 
-export function disable(...elements: (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null | (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null)[])[]): void {
-  elements.forEach(el => {
+export function disable(
+  ...elements: (
+    | HTMLInputElement
+    | HTMLButtonElement
+    | HTMLSelectElement
+    | null
+    | (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null)[]
+  )[]
+): void {
+  elements.forEach((el) => {
     if (Array.isArray(el)) {
       disable(...el);
     } else if (el) {
-      (el as HTMLInputElement | HTMLButtonElement | HTMLSelectElement).disabled = true;
+      (
+        el as HTMLInputElement | HTMLButtonElement | HTMLSelectElement
+      ).disabled = true;
     }
   });
 }
 
-export function enable(...elements: (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null | (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null)[])[]): void {
-  elements.forEach(el => {
+export function enable(
+  ...elements: (
+    | HTMLInputElement
+    | HTMLButtonElement
+    | HTMLSelectElement
+    | null
+    | (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null)[]
+  )[]
+): void {
+  elements.forEach((el) => {
     if (Array.isArray(el)) {
       enable(...el);
     } else if (el) {
-      (el as HTMLInputElement | HTMLButtonElement | HTMLSelectElement).disabled = false;
+      (
+        el as HTMLInputElement | HTMLButtonElement | HTMLSelectElement
+      ).disabled = false;
     }
   });
 }
@@ -80,7 +107,7 @@ export function enable(...elements: (HTMLInputElement | HTMLButtonElement | HTML
  * Triggers click event on the element
  */
 export function click(element: HTMLElement): HTMLElement {
-  const event = new MouseEvent("click", {
+  const event = new MouseEvent('click', {
     bubbles: true,
     cancelable: true,
     view: window
@@ -92,7 +119,10 @@ export function click(element: HTMLElement): HTMLElement {
 /**
  * Sets the value of an HTML input element and triggers an 'input' event if the value has changed.
  */
-export function input(element: HTMLInputElement, value?: string): HTMLInputElement {
+export function input(
+  element: HTMLInputElement,
+  value?: string
+): HTMLInputElement {
   if (value && element.value === value) {
     return element;
   }
@@ -117,11 +147,14 @@ export function createElementFromHTML(htmlString: string): Element | null {
   return tempDiv.firstChild as Element | null;
 }
 
-export function createDatalistFromArray(dataArray: string[], datalistId: string): HTMLDataListElement {
+export function createDatalistFromArray(
+  dataArray: string[],
+  datalistId: string
+): HTMLDataListElement {
   const datalist = document.createElement('datalist');
   datalist.id = datalistId;
 
-  dataArray.forEach(optionText => {
+  dataArray.forEach((optionText) => {
     const option = document.createElement('option');
     option.value = optionText;
     datalist.appendChild(option);
@@ -202,7 +235,10 @@ export function observeAttributeChange(
 ): void {
   const observer = new MutationObserver((mutationsList) => {
     for (const mutation of mutationsList) {
-      if (mutation.type === 'attributes' && mutation.attributeName === attributeName) {
+      if (
+        mutation.type === 'attributes' &&
+        mutation.attributeName === attributeName
+      ) {
         callback(element);
       }
     }
@@ -256,9 +292,9 @@ export const createIconLink = ({
   title = '',
   iconDefault,
   iconOnClick,
-  iconOnClickTimeout = 3000,
+  iconOnClickTimeout = 3000
 }: CreateIconLinkParams): HTMLAnchorElement => {
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.classList.add(className);
   link.title = title;
   link.href = href;
@@ -274,7 +310,9 @@ export const createIconLink = ({
         const icon = link.querySelector('b2d-icon');
         if (icon instanceof B2DIconComponent) {
           icon.setIcon(iconOnClick);
-          setTimeout(() => { icon.setIcon(iconDefault) }, iconOnClickTimeout);
+          setTimeout(() => {
+            icon.setIcon(iconDefault);
+          }, iconOnClickTimeout);
         }
       }
 

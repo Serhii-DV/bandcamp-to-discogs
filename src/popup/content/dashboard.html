@@ -1,14 +1,21 @@
 <h2 class="display-6">Dashboard</h2>
-<div id="b2d-warning-bandcamp-data-not-found" class="visually-hidden alert alert-warning d-flex align-items-center" role="alert">
+<div
+  id="b2d-warning-bandcamp-data-not-found"
+  class="visually-hidden alert alert-warning d-flex align-items-center"
+  role="alert"
+>
   <b2d-icon name="exclamation-triangle" width="32" height="32"></b2d-icon>
-  <div class="ms-3">
-    You are not on the Bandcamp artist or release page.
-  </div>
+  <div class="ms-3">You are not on the Bandcamp artist or release page.</div>
 </div>
 <div class="justify-content-center">
   <form action="https://bandcamp.com/search" method="get" target="_blank">
     <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Bandcamp search for music" name="q">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Bandcamp search for music"
+        name="q"
+      />
       <button class="btn btn-outline-secondary" type="submit">
         <b2d-icon name="bandcamp-png"></b2d-icon>
       </button>
@@ -16,7 +23,12 @@
   </form>
   <form action="https://www.discogs.com/search" method="get" target="_blank">
     <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Discogs search for artist or release" name="q">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Discogs search for artist or release"
+        name="q"
+      />
       <button class="btn btn-secondary" type="submit">
         <b2d-icon name="discogs-png"></b2d-icon>
       </button>

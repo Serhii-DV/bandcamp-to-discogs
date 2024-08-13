@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require("webpack");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const packageJson = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -63,10 +62,6 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new webpack.ProgressPlugin(),
-      new CleanWebpackPlugin({
-        verbose: true,
-        cleanStaleWebpackAssets: false,
-      }),
       new MiniCssExtractPlugin({
         filename: '[name].css'
       }),
@@ -123,6 +118,7 @@ module.exports = (env, argv) => {
     output: {
       filename: '[name].js',
       path: path.resolve(__dirname, 'dist'),
+      clean: true,
     },
     devtool: isDevelopment ? 'inline-source-map' : 'source-map',
     devServer: {

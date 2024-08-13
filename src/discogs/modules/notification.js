@@ -1,12 +1,20 @@
 // Notifications
 
-import { getExtensionManifest } from "../../utils/chrome";
-import { isFunction } from "../../utils/utils";
+import { getExtensionManifest } from '../../utils/chrome';
+import { isFunction } from '../../utils/utils';
 
-export const showNotificationDebug = (message, onShow) => { showNotification('debug', message, onShow); }
-export const showNotificationInfo = (message, onShow) => { showNotification('info', message, onShow); }
-export const showNotificationWarning = (message, onShow) => { showNotification('warning', message, onShow); }
-export const showNotificationError = (message, onShow) => { showNotification('error', message, onShow); }
+export const showNotificationDebug = (message, onShow) => {
+  showNotification('debug', message, onShow);
+};
+export const showNotificationInfo = (message, onShow) => {
+  showNotification('info', message, onShow);
+};
+export const showNotificationWarning = (message, onShow) => {
+  showNotification('warning', message, onShow);
+};
+export const showNotificationError = (message, onShow) => {
+  showNotification('error', message, onShow);
+};
 
 const notificationStack = createNotificationStack();
 
@@ -37,8 +45,8 @@ export const showNotification = (type, message, onShow) => {
   setTimeout(function () {
     closeNotification(notification);
   }, 20000); // Remove notification after 20 seconds
-}
+};
 
 export const closeNotification = (notification) => {
   notificationStack.removeChild(notification);
-}
+};

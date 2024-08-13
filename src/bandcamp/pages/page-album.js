@@ -1,8 +1,8 @@
-import { Release, Track, TrackDuration } from "../../app/release.js";
-import TrackTime from "../../app/trackTime.js";
-import { getCurrentUrl } from "../../utils/html";
-import { findReleaseByUrl, saveRelease } from "../../utils/storage";
-import { getMusicAlbumSchemaData } from "../modules/html.js";
+import { Release, Track, TrackDuration } from '../../app/release.js';
+import TrackTime from '../../app/trackTime.js';
+import { getCurrentUrl } from '../../utils/html';
+import { findReleaseByUrl, saveRelease } from '../../utils/storage';
+import { getMusicAlbumSchemaData } from '../modules/html.js';
 
 // Setup logic for BC albums page
 export function setupPageAlbum() {
@@ -23,11 +23,14 @@ function createReleaseFromSchema(schema) {
   const datePublished = new Date(schema.datePublished);
   const dateModified = new Date(schema.dateModified);
   const tracks = schema.track.numberOfItems
-    ? schema.track.itemListElement.map(track => new Track(
-      track.position,
-      track.item.name,
-      TrackTime.fromDuration(track.item.duration)
-    ))
+    ? schema.track.itemListElement.map(
+        (track) =>
+          new Track(
+            track.position,
+            track.item.name,
+            TrackTime.fromDuration(track.item.duration)
+          )
+      )
     : [];
   const url = schema.mainEntityOfPage;
   const image = schema.image;

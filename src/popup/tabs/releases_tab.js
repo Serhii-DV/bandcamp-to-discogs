@@ -1,29 +1,46 @@
-import { ReleaseItem } from "../../app/release.js";
-import { getCurrentTab, openTabs } from "../../utils/chrome";
-import { input } from "../../utils/html";
-import { findReleasesByUrls } from "../../utils/storage";
-import { populateReleasesList, removeButtonLoadingState, setBackgroundImage, setButtonInLoadingState } from "../helpers.js";
-import { downloadReleasesCsv } from "./download_tab.js";
+import { ReleaseItem } from '../../app/release.js';
+import { getCurrentTab, openTabs } from '../../utils/chrome';
+import { input } from '../../utils/html';
+import { findReleasesByUrls } from '../../utils/storage';
+import {
+  populateReleasesList,
+  removeButtonLoadingState,
+  setBackgroundImage,
+  setButtonInLoadingState
+} from '../helpers.js';
+import { downloadReleasesCsv } from './download_tab.js';
 
-export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue, btnNavDownload) {
+export function setupReleasesTab(
+  tab,
+  releasesData,
+  bgImageSrc,
+  searchValue,
+  btnNavDownload
+) {
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
   const releasesList = tab.querySelector('#releasesTabLIst');
   const downloadCsvFile = async (event) => {
     const button = event.target;
     setButtonInLoadingState(button);
 
-    const bcLinks = releasesList.querySelectorAll('.release-item.table-active .link-bandcamp-url');
-    const checkedUrls = Array.from(bcLinks).map(link => link.getAttribute('href'));
+    const bcLinks = releasesList.querySelectorAll(
+      '.release-item.table-active .link-bandcamp-url'
+    );
+    const checkedUrls = Array.from(bcLinks).map((link) =>
+      link.getAttribute('href')
+    );
 
     openTabs(checkedUrls, (tab) => {
-      chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: waitForBandcampData
-      }).then(() => {});
+      chrome.scripting
+        .executeScript({
+          target: { tabId: tab.id },
+          func: waitForBandcampData
+        })
+        .then(() => {});
     }).then(() => {
       setTimeout(() => {
         // Read data from the storage
-        findReleasesByUrls(checkedUrls, releases => {
+        findReleasesByUrls(checkedUrls, (releases) => {
           downloadReleasesCsv(releases);
           removeButtonLoadingState(button);
         });
@@ -40,7 +57,7 @@ export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue, btn
     );
 
   const releaseItems = [];
-  releasesData.forEach(obj => releaseItems.push(ReleaseItem.fromObject(obj)));
+  releasesData.forEach((obj) => releaseItems.push(ReleaseItem.fromObject(obj)));
   populateReleasesList(releasesList, releaseItems);
 
   let activeTab;

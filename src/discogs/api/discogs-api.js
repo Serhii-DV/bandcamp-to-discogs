@@ -14,7 +14,7 @@ export class DiscogsAPI {
 
     const response = await fetch(fullUrl, {
       method: 'GET',
-      headers: requestHeaders,
+      headers: requestHeaders
     });
 
     if (!response.ok) {
@@ -32,23 +32,27 @@ export class DiscogsAPI {
       oauth_signature_method: 'HMAC-SHA1',
       oauth_timestamp: Math.floor(Date.now() / 1000),
       oauth_token: this.token,
-      oauth_version: '1.0',
+      oauth_version: '1.0'
     };
 
-    const signatureBaseString = this.buildSignatureBaseString(method, url, oauthHeaders);
+    const signatureBaseString = this.buildSignatureBaseString(
+      method,
+      url,
+      oauthHeaders
+    );
     const signature = this.calculateSignature(signatureBaseString);
 
     oauthHeaders.oauth_signature = signature;
 
     return {
-      Authorization: this.buildAuthorizationHeader(oauthHeaders),
+      Authorization: this.buildAuthorizationHeader(oauthHeaders)
     };
   }
 
   buildSignatureBaseString(method, url, oauthHeaders) {
     const normalizedHeaders = Object.keys(oauthHeaders)
       .sort()
-      .map(key => `${key}=${encodeURIComponent(oauthHeaders[key])}`)
+      .map((key) => `${key}=${encodeURIComponent(oauthHeaders[key])}`)
       .join('&');
 
     return `${method}&${encodeURIComponent(url)}&${encodeURIComponent(normalizedHeaders)}`;
@@ -68,8 +72,11 @@ export class DiscogsAPI {
   }
 
   buildAuthorizationHeader(oauthHeaders) {
-    return 'OAuth ' + Object.keys(oauthHeaders)
-      .map(key => `${key}="${encodeURIComponent(oauthHeaders[key])}"`)
-      .join(', ');
+    return (
+      'OAuth ' +
+      Object.keys(oauthHeaders)
+        .map((key) => `${key}="${encodeURIComponent(oauthHeaders[key])}"`)
+        .join(', ')
+    );
   }
 }

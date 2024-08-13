@@ -10,11 +10,12 @@ let genres = {};
 
 export async function loadDiscogsGenres(url) {
   return fetch(url)
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       genres = data;
       return genres;
-    }).catch(reason => {
+    })
+    .catch((reason) => {
       genres = {};
     });
 }

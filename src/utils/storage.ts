@@ -1,7 +1,11 @@
-import { Release } from "../app/release.js";
-import { log, logError } from "./console";
-import { generateKeyForRelease, generateKeyForUrl, generateKeysFromUrls } from "./key-generator";
-import { hasOwnProperty, isArray, isFunction, isObject } from "./utils";
+import { Release } from '../app/release.js';
+import { log, logError } from './console';
+import {
+  generateKeyForRelease,
+  generateKeyForUrl,
+  generateKeysFromUrls
+} from './key-generator';
+import { hasOwnProperty, isArray, isFunction, isObject } from './utils';
 
 const storage = chrome.storage.local;
 
@@ -64,11 +68,11 @@ export function findReleaseByUrl(
           onFind(release);
         }
       } catch (error) {
-        log("Broken storage data for release", result[key]);
+        log('Broken storage data for release', result[key]);
         clearStorageByKey(key);
       }
     } else {
-      log("Release data is missing", key);
+      log('Release data is missing', key);
       if (onMissing && isFunction(onMissing)) {
         onMissing(key);
       }
@@ -79,17 +83,19 @@ export function findReleaseByUrl(
 /**
  * Finds releases by their URLs and executes a callback with the found releases.
  */
-export function findReleasesByUrls(urls: string[], onFind?: ReleasesCallback): void {
+export function findReleasesByUrls(
+  urls: string[],
+  onFind?: ReleasesCallback
+): void {
   const keys = generateKeysFromUrls(urls);
 
   storage.get(keys, (result: StorageData) => {
-    const releases: Release[] = Object
-      .values(result)
+    const releases: Release[] = Object.values(result)
       .map((obj: any) => {
         try {
           return Release.fromStorageObject(obj);
         } catch (error) {
-          log("Broken storage object.", JSON.stringify(error), obj);
+          log('Broken storage object.', JSON.stringify(error), obj);
           return null;
         }
       })
@@ -107,7 +113,7 @@ export function findReleasesByUrls(urls: string[], onFind?: ReleasesCallback): v
 export function saveRelease(release: Release): void {
   const key = generateKeyForRelease(release);
   storage.set({ [key]: release.toStorageObject() }, () => {
-    log("Release data was saved in the local storage");
+    log('Release data was saved in the local storage');
   });
 }
 
@@ -121,15 +127,20 @@ export function clearStorage(): void {
 /**
  * Clears storage items by their keys and executes a callback when done.
  */
-export function clearStorageByKey(key: string | string[], onDone?: (() => void)): void {
+export function clearStorageByKey(
+  key: string | string[],
+  onDone?: () => void
+): void {
   if (isArray(key)) {
-    (key as string[]).forEach(k => clearStorageByKey(k, onDone));
+    (key as string[]).forEach((k) => clearStorageByKey(k, onDone));
     return;
   }
 
   storage.remove(key, () => {
     if (chrome.runtime.lastError) {
-      logError(`Error clearing local storage item with key "${key}": ${chrome.runtime.lastError.message}`)
+      logError(
+        `Error clearing local storage item with key "${key}": ${chrome.runtime.lastError.message}`
+      );
     }
     if (onDone && isFunction(onDone)) {
       onDone();

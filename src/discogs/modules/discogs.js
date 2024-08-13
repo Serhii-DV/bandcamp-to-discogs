@@ -1,7 +1,7 @@
-import { DiscogsCsv } from "../app/discogs-csv.js";
-import { Release } from "../../app/release.js";
-import config from "../../config.js";
-import { replaceTokens } from "../../utils/utils";
+import { DiscogsCsv } from '../app/discogs-csv.js';
+import { Release } from '../../app/release.js';
+import config from '../../config.js';
+import { replaceTokens } from '../../utils/utils';
 
 /**
  * @param {Release} release
@@ -12,11 +12,16 @@ export function releaseToDiscogsCsv(release) {
 }
 
 export function getSearchDiscogsArtistUrl(artist) {
-  return replaceTokens(config.discogs_search_artist_url, {artist: encodeURIComponent(artist)});
+  return replaceTokens(config.discogs_search_artist_url, {
+    artist: encodeURIComponent(artist)
+  });
 }
 
 export function getSearchDiscogsReleaseUrl(artist, release) {
-  return replaceTokens(config.discogs_search_release_url, {artist: encodeURIComponent(artist), release: encodeURIComponent(release)});
+  return replaceTokens(config.discogs_search_release_url, {
+    artist: encodeURIComponent(artist),
+    release: encodeURIComponent(release)
+  });
 }
 
 /**

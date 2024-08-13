@@ -16,17 +16,8 @@
     "Piedmont Blues",
     "Texas Blues"
   ],
-  "Brass & Military": [
-    "Brass Band",
-    "Marches",
-    "Military",
-    "Pipe & Drum"
-  ],
-  "Children’s": [
-    "Educational",
-    "Nursery Rhymes",
-    "Story"
-  ],
+  "Brass & Military": ["Brass Band", "Marches", "Military", "Pipe & Drum"],
+  "Children’s": ["Educational", "Nursery Rhymes", "Story"],
   "Classical": [
     "Baroque",
     "Choral",

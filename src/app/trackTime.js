@@ -21,9 +21,9 @@ class TrackTime {
    * @param {number} seconds - The seconds component of the time.
    */
   constructor(hours, minutes, seconds) {
-      this.#hours = hours;
-      this.#minutes = minutes;
-      this.#seconds = seconds;
+    this.#hours = hours;
+    this.#minutes = minutes;
+    this.#seconds = seconds;
   }
 
   get value() {
@@ -43,7 +43,7 @@ class TrackTime {
       hour12: false,
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
+      second: '2-digit'
     });
 
     return formatter.format(this.toDate());
@@ -71,7 +71,7 @@ class TrackTime {
     const timeFormat = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
 
     if (!timeFormat.test(timeString)) {
-        throw new Error("Invalid time format. Please use HH:MM:SS.");
+      throw new Error('Invalid time format. Please use HH:MM:SS.');
     }
 
     const [hours, minutes, seconds] = timeString.split(':');

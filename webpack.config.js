@@ -124,25 +124,15 @@ module.exports = (env, argv) => {
       filename: '[name].js',
       path: path.resolve(__dirname, 'dist'),
     },
+    devtool: isDevelopment ? 'inline-source-map' : 'source-map',
     devServer: {
-      static: {
-        directory: path.resolve(__dirname, 'dist'),
-      },
+      static: isDevelopment ? './dist' : { directory: path.resolve(__dirname, 'dist') },
       devMiddleware: {
         writeToDisk: true,
       },
       hot: false,
     },
   };
-
-  if (isDevelopment) {
-    config.devtool = 'inline-source-map';
-    config.devServer.static = './dist';
-  }
-
-  if (isProduction) {
-    config.devtool = 'source-map';
-  }
 
   return config;
 };

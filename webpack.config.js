@@ -123,7 +123,7 @@ module.exports = (env, argv) => {
       path: path.resolve(__dirname, 'dist'),
       clean: true,
     },
-    devtool: isDevelopment ? 'eval-cheap-module-source-map' : 'source-map',
+    devtool: isDevelopment ? 'inline-source-map' : 'source-map',
     devServer: {
       static: isDevelopment ? './dist' : { directory: path.resolve(__dirname, 'dist') },
       devMiddleware: {

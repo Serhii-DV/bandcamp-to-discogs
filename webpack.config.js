@@ -40,11 +40,13 @@ module.exports = (env, argv) => {
               transpileOnly: true
             }
           },
+          include: path.resolve(__dirname, 'src'),
           exclude: /node_modules/,
         },
         {
           test: /\.js$/,
-          loader: "source-map-loader"
+          loader: "source-map-loader",
+          include: path.resolve(__dirname, 'src'),
         },
         {
           test: /\.json$/i,
@@ -121,7 +123,7 @@ module.exports = (env, argv) => {
       path: path.resolve(__dirname, 'dist'),
       clean: true,
     },
-    devtool: isDevelopment ? 'inline-source-map' : 'source-map',
+    devtool: isDevelopment ? 'eval-cheap-module-source-map' : 'source-map',
     devServer: {
       static: isDevelopment ? './dist' : { directory: path.resolve(__dirname, 'dist') },
       devMiddleware: {

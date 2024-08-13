@@ -26,7 +26,7 @@
     "webpack-merge": "^6.0.1"
   },
   "scripts": {
-    "build": "tsc && webpack --mode=production",
-    "dev": "tsc && webpack serve --mode=development"
+    "build": "tsc && webpack --env prod",
+    "dev": "tsc && webpack serve"
   }
 }

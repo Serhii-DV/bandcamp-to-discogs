@@ -9,10 +9,11 @@ const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 const fs = require('fs');
 
 module.exports = (env, argv) => {
-  const isDevelopment = argv.mode === 'development';
-  const isProduction = argv.mode === 'production';
+  const isProduction = env.prod === true;
+  const isDevelopment = !isProduction;
 
   const config = {
+    mode: isProduction ? 'production' : 'development',
     entry: {
       popup: './src/popup/popup.js',
       "bandcamp.content": './src/bandcamp/content.js',

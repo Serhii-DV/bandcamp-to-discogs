@@ -1,18 +1,19 @@
 const path = require('path');
 const webpack = require("webpack");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const packageJson = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
+const fs = require('fs');
 
 module.exports = (env, argv) => {
-  const isDevelopment = argv.mode === 'development';
-  const isProduction = argv.mode === 'production';
+  const isProduction = env.prod === true;
+  const isDevelopment = !isProduction;
 
   const config = {
+    mode: isProduction ? 'production' : 'development',
     entry: {
       popup: './src/popup/popup.js',
       "bandcamp.content": './src/bandcamp/content.js',
@@ -25,7 +26,7 @@ module.exports = (env, argv) => {
           use: [MiniCssExtractPlugin.loader, "css-loader"],
         },
         {
-          test: /\.(png|jpg|gif)$/i,
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
           type: 'asset/resource',
           generator: {
             filename: 'images/[name][ext]',
@@ -39,11 +40,13 @@ module.exports = (env, argv) => {
               transpileOnly: true
             }
           },
+          include: path.resolve(__dirname, 'src'),
           exclude: /node_modules/,
         },
         {
           test: /\.js$/,
-          loader: "source-map-loader"
+          loader: "source-map-loader",
+          include: path.resolve(__dirname, 'src'),
         },
         {
           test: /\.json$/i,
@@ -62,16 +65,20 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new webpack.ProgressPlugin(),
-      new CleanWebpackPlugin({
-        verbose: true,
-        cleanStaleWebpackAssets: false,
-      }),
       new MiniCssExtractPlugin({
         filename: '[name].css'
       }),
       new HtmlWebpackPlugin({
-        template: path.join(__dirname, "src", "popup", "popup.html"),
+        template: "./src/popup/popup.ejs",
         filename: "popup.html",
+        templateParameters: {
+          tabContentDashboard: fs.readFileSync('./src/popup/content/dashboard.html', 'utf-8'),
+          tabContentRelease: fs.readFileSync('./src/popup/content/release_tab.html', 'utf-8'),
+          tabContentReleases: fs.readFileSync('./src/popup/content/releases_tab.html', 'utf-8'),
+          tabContentHistory: fs.readFileSync('./src/popup/content/history_tab.html', 'utf-8'),
+          tabContentAbout: fs.readFileSync('./src/popup/content/about.html', 'utf-8'),
+        },
+        minify: true,
         // Entry point scripts
         chunks: ["popup"]
       }),
@@ -99,41 +106,6 @@ module.exports = (env, argv) => {
             force: true,
           },
           {
-            from: "src/popup/popup.css",
-            to: path.join(__dirname, "dist"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/about.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/dashboard.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/discogs_tab.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/history_tab.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/release_tab.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
-            from: "src/popup/content/releases_tab.html",
-            to: path.join(__dirname, "dist/content"),
-            force: true,
-          },
-          {
             from: "src/data/discogs_genres.json",
             to: path.join(__dirname, "dist/data"),
             force: true,
@@ -149,26 +121,17 @@ module.exports = (env, argv) => {
     output: {
       filename: '[name].js',
       path: path.resolve(__dirname, 'dist'),
+      clean: true,
     },
+    devtool: isDevelopment ? 'inline-source-map' : 'source-map',
     devServer: {
-      static: {
-        directory: path.resolve(__dirname, 'dist'),
-      },
+      static: isDevelopment ? './dist' : { directory: path.resolve(__dirname, 'dist') },
       devMiddleware: {
         writeToDisk: true,
       },
       hot: false,
     },
   };
-
-  if (isDevelopment) {
-    config.devtool = 'inline-source-map';
-    config.devServer.static = './dist';
-  }
-
-  if (isProduction) {
-    config.devtool = 'source-map';
-  }
 
   return config;
 };

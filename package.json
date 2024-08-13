@@ -1,15 +1,17 @@
 {
   "version": "0.12.0",
   "devDependencies": {
+    "@swc/html": "^0.0.28",
     "@types/chrome": "^0.0.269",
     "@types/isotope-layout": "^3.0.13",
     "@types/uuid": "^10.0.0",
     "@webcomponents/custom-elements": "^1.6.0",
     "bootstrap": "^5.3.3",
-    "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.0",
+    "html-loader": "^5.1.0",
+    "html-minimizer-webpack-plugin": "^5.0.0",
     "html-webpack-plugin": "^5.6.0",
     "isotope-layout": "^3.0.6",
     "json-minimizer-webpack-plugin": "^5.0.0",
@@ -24,7 +26,7 @@
     "webpack-merge": "^6.0.1"
   },
   "scripts": {
-    "build": "tsc && webpack --mode=production",
-    "dev": "tsc && webpack serve --mode=development"
+    "build": "tsc && webpack --env prod",
+    "dev": "tsc && webpack serve"
   }
 }

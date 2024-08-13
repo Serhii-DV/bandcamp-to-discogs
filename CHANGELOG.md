@@ -9,6 +9,8 @@
 - core: Minimize CSS files
 - core: Minimize JSON data files
 - core: Content scripts loading refactored
+- core: Minimize popup HTML file
+- core: Removed `External Content` custom component
 
 ## 0.11.1 (2024-07-31)
 

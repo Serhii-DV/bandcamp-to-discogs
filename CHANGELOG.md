@@ -11,6 +11,7 @@
 - core: Content scripts loading refactored
 - core: Minimize popup HTML file
 - core: Removed `External Content` custom component
+- core: Start using `eslint` and `prettier` tools
 
 ## 0.11.1 (2024-07-31)
 

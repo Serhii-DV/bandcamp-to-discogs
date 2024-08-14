@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 export class DiscogsAPI {
   constructor(consumerKey, consumerSecret, token, tokenSecret) {
     this.consumerKey = consumerKey;
@@ -60,7 +62,6 @@ export class DiscogsAPI {
 
   calculateSignature(signatureBaseString) {
     const signingKey = `${encodeURIComponent(this.consumerSecret)}&${encodeURIComponent(this.tokenSecret)}`;
-    const crypto = require('crypto');
     return crypto
       .createHmac('sha1', signingKey)
       .update(signatureBaseString)

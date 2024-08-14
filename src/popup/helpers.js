@@ -1,4 +1,4 @@
-import { Release, ReleaseItem } from '../app/release.js';
+import { Release } from '../app/release.js';
 import { Metadata } from '../discogs/app/metadata.js';
 import { getSearchDiscogsReleaseUrl } from '../discogs/modules/discogs.js';
 import { chromeSendMessageToCurrentTab } from '../utils/chrome';

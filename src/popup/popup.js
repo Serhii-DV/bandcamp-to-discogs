@@ -1,12 +1,12 @@
-import bootstrap from 'bootstrap';
+import 'bootstrap';
 
 // Popup styles
 import './popup.css';
 
 // Custom components
-import { B2DIconComponent } from './components/icon';
-import { ConsoleCommand } from './components/console-command.js';
-import { ReleasesList } from './components/releases-list.js';
+import './components/icon';
+import './components/console-command.js';
+import './components/releases-list.js';
 
 import { Release } from '../app/release.js';
 import { getCurrentTab, getExtensionManifest } from '../utils/chrome';
@@ -116,7 +116,7 @@ function processBandcampResponse(response) {
     return;
   }
 
-  loadDiscogsGenres(config.genres_url).then((genres) => {
+  loadDiscogsGenres(config.genres_url).then(() => {
     loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
       if (isRelease) {
         processBandcampReleaseData(response.data, keywordsMapping);

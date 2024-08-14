@@ -1,5 +1,10 @@
 import { getGenreByStyle } from '../../discogs/modules/genres.js';
-import { isEmptyObject, isObject, isString } from '../../utils/utils';
+import {
+  hasOwnProperty,
+  isEmptyObject,
+  isObject,
+  isString
+} from '../../utils/utils';
 
 let mapping = {};
 
@@ -13,7 +18,7 @@ function createMapping(keywordMapping) {
   const mapping = {};
 
   for (const key in keywordMapping) {
-    if (keywordMapping.hasOwnProperty(key)) {
+    if (hasOwnProperty(keywordMapping, key)) {
       const value = keywordMapping[key];
       if (value !== '') {
         mapping[key] = isString(value) ? new Style(value) : value;
@@ -46,7 +51,7 @@ export async function loadKeywordMapping(url) {
       keywordMapping = data;
       return keywordMapping;
     })
-    .catch((reason) => {
+    .catch(() => {
       keywordMapping = {};
     });
 }

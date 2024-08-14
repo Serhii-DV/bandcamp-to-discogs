@@ -1,11 +1,8 @@
-import { Release } from '../../app/release.js';
-import { getDiscogsDateValue } from '../../discogs/app/utils.js';
 import { getSearchDiscogsReleaseUrl } from '../../discogs/modules/discogs.js';
 import {
   capitalizeEachWord,
   removeLeadingZeroOrColon
 } from '../../utils/utils';
-import { initClipboard } from '../../utils/clipboard';
 import { setBackgroundImage } from '../helpers.js';
 import { setupBtnToDownloadReleasesAsCsv } from './download_tab.js';
 
@@ -37,7 +34,6 @@ function outputRelease(tab, release) {
   const releaseArtist = tab.querySelector('#release-artist');
   const releaseTitle = tab.querySelector('#release-title');
   const releaseDate = tab.querySelector('#release-year');
-  const releaseContent = tab.querySelector('.release-content');
   const releaseTracks = tab.querySelector('#release-tracks');
 
   setBackgroundImage(document.querySelector('.bg-image'), release.image);

@@ -1,3 +1,5 @@
+import { hasOwnProperty } from '../../utils/utils';
+
 /**
  * @param {String} style
  * @returns {String}
@@ -15,14 +17,14 @@ export async function loadDiscogsGenres(url) {
       genres = data;
       return genres;
     })
-    .catch((reason) => {
+    .catch(() => {
       genres = {};
     });
 }
 
 function getPropertyByElement(obj, element) {
   for (const prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
+    if (hasOwnProperty(obj, prop)) {
       const subGenres = obj[prop];
       if (subGenres.includes(element)) {
         return prop;

@@ -1,4 +1,3 @@
-import { Release } from '../../app/release.js';
 import { DiscogsCsv } from '../../discogs/app/discogs-csv.js';
 import { downloadCsv, objectsToCsv } from '../../utils/csv';
 import { isEmptyArray } from '../../utils/utils';

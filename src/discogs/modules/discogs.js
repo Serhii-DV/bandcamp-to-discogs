@@ -1,5 +1,4 @@
 import { DiscogsCsv } from '../app/discogs-csv.js';
-import { Release } from '../../app/release.js';
 import config from '../../config.js';
 import { replaceTokens } from '../../utils/utils';
 

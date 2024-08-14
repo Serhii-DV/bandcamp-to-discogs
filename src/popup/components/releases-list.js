@@ -177,7 +177,7 @@ class ReleasesList extends HTMLElement {
   }
 
   getPrefixed(str) {
-    return this.getPrefix() + '__' + str ?? '';
+    return this.getPrefix() + '__' + (str ?? '');
   }
 
   /**

@@ -5,7 +5,8 @@ export default [
   js.configs.recommended,
   {
     ignores: [
-      "dist/**"
+      "dist/**",
+      "webpack.config.js"
     ]
   },
   {

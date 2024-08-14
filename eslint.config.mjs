@@ -1,4 +1,7 @@
-module.exports = [
+import js from "@eslint/js";
+
+export default [
+  js.configs.recommended,
   {
     ignores: [
       "dist/**"
@@ -10,6 +13,7 @@ module.exports = [
       "src/**.ts"
     ],
     rules: {
+      "no-unused-vars": "error",
       semi: "error"
     }
   }

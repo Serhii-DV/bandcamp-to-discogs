@@ -1,5 +1,10 @@
 import { getGenreByStyle } from '../../discogs/modules/genres.js';
-import { hasOwnProperty, isEmptyObject, isObject, isString } from '../../utils/utils';
+import {
+  hasOwnProperty,
+  isEmptyObject,
+  isObject,
+  isString
+} from '../../utils/utils';
 
 let mapping = {};
 

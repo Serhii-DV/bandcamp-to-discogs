@@ -1,4 +1,4 @@
-import { camelCaseToReadable, isArray, isObject } from '../../utils/utils';
+import { camelCaseToReadable, hasOwnProperty, isArray, isObject } from '../../utils/utils';
 
 export const getArtistNameInput = () => {
   return document.getElementById('artist-name-input');
@@ -135,7 +135,7 @@ export const setSectionHint = ({ section, title, text }) => {
   if (isObject(text)) {
     let textArr = [];
     for (const key in text) {
-      if (text.hasOwnProperty(key)) {
+      if (hasOwnProperty(text, key)) {
         textArr.push({
           title: camelCaseToReadable(key),
           value: text[key]

@@ -7,6 +7,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 const fs = require('fs');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isProduction = env.prod === true;
@@ -67,6 +68,10 @@ module.exports = (env, argv) => {
       new webpack.ProgressPlugin(),
       new MiniCssExtractPlugin({
         filename: '[name].css'
+      }),
+      new ESLintPlugin({
+        configType: 'flat',
+        fix: true
       }),
       new HtmlWebpackPlugin({
         template: "./src/popup/popup.ejs",

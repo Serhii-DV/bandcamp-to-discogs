@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import globals from "globals";
 
 export default [
   js.configs.recommended,
@@ -8,6 +9,14 @@ export default [
     ]
   },
   {
+    languageOptions: {
+      globals: {
+          ...globals.browser,
+          ...globals.webextensions
+      }
+    }
+  },
+  {
     files: [
       "src/**.js",
       "src/**.ts"
@@ -15,6 +24,6 @@ export default [
     rules: {
       "no-unused-vars": "error",
       semi: "error"
-    }
+    },
   }
 ];

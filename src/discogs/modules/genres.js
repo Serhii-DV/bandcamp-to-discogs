@@ -1,4 +1,4 @@
-import { hasOwnProperty } from "src/utils/utils";
+import { hasOwnProperty } from "../../utils/utils";
 
 /**
  * @param {String} style

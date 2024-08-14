@@ -1,4 +1,3 @@
-import { Release } from '../../app/release.js';
 import {
   keywordsToDiscogsGenres,
   keywordsToDiscogsStyles

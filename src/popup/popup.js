@@ -116,7 +116,7 @@ function processBandcampResponse(response) {
     return;
   }
 
-  loadDiscogsGenres(config.genres_url).then((genres) => {
+  loadDiscogsGenres(config.genres_url).then(() => {
     loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
       if (isRelease) {
         processBandcampReleaseData(response.data, keywordsMapping);

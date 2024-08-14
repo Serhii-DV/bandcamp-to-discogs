@@ -46,7 +46,7 @@ export async function loadKeywordMapping(url) {
       keywordMapping = data;
       return keywordMapping;
     })
-    .catch((reason) => {
+    .catch(() => {
       keywordMapping = {};
     });
 }

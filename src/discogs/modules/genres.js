@@ -17,7 +17,7 @@ export async function loadDiscogsGenres(url) {
       genres = data;
       return genres;
     })
-    .catch((reason) => {
+    .catch(() => {
       genres = {};
     });
 }

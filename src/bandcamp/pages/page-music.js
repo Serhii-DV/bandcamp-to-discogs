@@ -120,7 +120,7 @@ function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
     window.scrollBy(0, -1);
   });
 
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((message) => {
     if (message.type === 'releases-list-search') {
       input(artistFilter, message.search);
     }

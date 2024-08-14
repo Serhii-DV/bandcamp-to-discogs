@@ -1,5 +1,4 @@
 import { DiscogsCsv } from '../../discogs/app/discogs-csv.js';
-import { ReleasesList } from '../components/releases-list.js';
 import { downloadCsv, objectsToCsv } from '../../utils/csv.ts';
 import {
   createElementFromHTML,
@@ -32,8 +31,8 @@ export function setupHistoryTab(tab, btnDownloadCsv) {
     setDataAttribute(tab, 'buttons-initialized');
   }
 
-  loadDiscogsGenres(config.genres_url).then((genres) => {
-    loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
+  loadDiscogsGenres(config.genres_url).then(() => {
+    loadKeywordMapping(config.keyword_mapping_url).then(() => {
       updateReleasesListData(releasesList);
     });
   });

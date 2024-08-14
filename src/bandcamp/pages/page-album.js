@@ -1,4 +1,4 @@
-import { Release, Track, TrackDuration } from '../../app/release.js';
+import { Release, Track } from '../../app/release.js';
 import TrackTime from '../../app/trackTime.js';
 import { getCurrentUrl } from '../../utils/html';
 import { findReleaseByUrl, saveRelease } from '../../utils/storage';
@@ -54,7 +54,7 @@ function createReleaseFromSchema(schema) {
  */
 function setupRelease(release) {
   // Save release data to the storage if it doesn't exist
-  findReleaseByUrl(getCurrentUrl(), null, (key) => {
+  findReleaseByUrl(getCurrentUrl(), null, () => {
     saveRelease(release);
   });
 }

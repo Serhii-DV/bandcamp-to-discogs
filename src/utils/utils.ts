@@ -1,4 +1,4 @@
-import { transliterate } from "./transliterate";
+import { transliterate } from './transliterate';
 
 export function padStringLeft(
   string: string,

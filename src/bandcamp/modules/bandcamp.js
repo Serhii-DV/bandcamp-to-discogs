@@ -1,5 +1,5 @@
-import { arrayUnique, isArray, isString } from "../../modules/utils.js";
-import { Style, getMapping } from "./mapping.js";
+import { arrayUnique, isArray, isString } from '../../utils/utils';
+import { Style, getMapping } from './mapping.js';
 
 /**
  * @param {String} keyword

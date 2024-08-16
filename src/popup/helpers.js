@@ -1,34 +1,17 @@
-import { Release, ReleaseItem } from "../app/release.js";
-import { Metadata } from "../discogs/app/metadata.js";
-import { getSearchDiscogsReleaseUrl } from "../discogs/modules/discogs.js";
-import { chromeSendMessageToCurrentTab } from "../modules/chrome.js";
-import { createIconLink, disable, enable, getDataAttribute, hasDataAttribute, setDataAttribute } from "../modules/html.js";
-import { generateKeyForReleaseItem } from "../modules/key-generator.js";
-import { convertToAlias, isArray, isObject, isString } from "../modules/utils.js";
-
-export function createBootstrapCheckbox(id, value, labelText, checked) {
-  // Create the checkbox input element
-  const checkboxInput = document.createElement("input");
-  checkboxInput.classList.add("form-check-input");
-  checkboxInput.type = "checkbox";
-  checkboxInput.id = id;
-  checkboxInput.value = value;
-  checkboxInput.checked = checked;
-
-  // Create the label element
-  const label = document.createElement("label");
-  label.classList.add("form-check-label");
-  label.htmlFor = id;
-  label.innerHTML = labelText;
-
-  // Create the div container for the checkbox and label
-  const container = document.createElement("div");
-  container.classList.add("form-check");
-  container.appendChild(checkboxInput);
-  container.appendChild(label);
-
-  return container;
-}
+import { Release } from '../app/release.js';
+import { Metadata } from '../discogs/app/metadata.js';
+import { getSearchDiscogsReleaseUrl } from '../discogs/modules/discogs.js';
+import { chromeSendMessageToCurrentTab } from '../utils/chrome';
+import {
+  createIconLink,
+  disable,
+  enable,
+  getDataAttribute,
+  hasDataAttribute,
+  setDataAttribute
+} from '../utils/html';
+import { generateKeyForReleaseItem } from '../utils/key-generator';
+import { convertToAlias, isArray, isObject, isString } from '../utils/utils';
 
 /**
  * Converts a JavaScript object to an HTML element representing a table.
@@ -40,16 +23,16 @@ export function objectToHtmlElement(data) {
     return document.createTextNode(data);
   }
 
-  const table = document.createElement("table");
-  table.classList.add("table", "table-sm", "table-striped", "table-bordered");
+  const table = document.createElement('table');
+  table.classList.add('table', 'table-sm', 'table-striped', 'table-bordered');
 
   for (const [key, value] of Object.entries(data)) {
-    const row = document.createElement("tr");
-    const keyCell = document.createElement("th");
-    const valueCell = document.createElement("td");
+    const row = document.createElement('tr');
+    const keyCell = document.createElement('th');
+    const valueCell = document.createElement('td');
 
-    keyCell.classList.add("w-25");
-    valueCell.classList.add("w-auto");
+    keyCell.classList.add('w-25');
+    valueCell.classList.add('w-auto');
 
     keyCell.textContent = key;
 
@@ -57,11 +40,13 @@ export function objectToHtmlElement(data) {
       valueCell.appendChild(objectToHtmlElement(value));
     } else if (isArray(value)) {
       valueCell.innerHTML = value
-        .map(item => (isString(item) ? item : objectToHtmlElement(item).outerHTML))
-        .join(", ");
+        .map((item) =>
+          isString(item) ? item : objectToHtmlElement(item).outerHTML
+        )
+        .join(', ');
     } else {
       valueCell.innerHTML = isString(value)
-        ? value.replace(/[\r\n]+/g, "<br/>")
+        ? value.replace(/[\r\n]+/g, '<br/>')
         : value;
     }
 
@@ -74,91 +59,27 @@ export function objectToHtmlElement(data) {
 }
 
 /**
- * Converts an object into a nested HTML <details> element with key-value pairs.
- *
- * @param {Object} obj - The input object to be converted into a details element.
- * @param {string} [title=''] - An optional title for the top-level <summary> element.
- * @returns {HTMLElement} The generated <details> element representing the object's structure.
- */
-export function objectToDetailsElement(obj, title = '') {
-  const detailsElement = document.createElement('details');
-  const summaryElement = document.createElement('summary');
-  summaryElement.textContent = title;
-  detailsElement.appendChild(summaryElement);
-
-  Object.entries(obj).forEach(([key, value]) => {
-    if ((isObject(value) || isArray(value)) && value !== null) {
-      const nestedDetails = objectToDetailsElement(value, key);
-      detailsElement.appendChild(nestedDetails);
-    } else {
-      const keyValueDetails = createKeyValueDetails(key, value);
-      detailsElement.appendChild(keyValueDetails);
-    }
-  });
-
-  return detailsElement;
-}
-
-/**
- * Creates a <details> element with a key-value pair.
- *
- * @param {string} key - The key (property name) of the object property.
- * @param {*} value - The value associated with the key.
- * @returns {HTMLElement} The generated <details> element representing the key-value pair.
- */
-export function createKeyValueDetails(key, value) {
-  const keyValueDetails = document.createElement('details');
-  const summaryElement = document.createElement('summary');
-  summaryElement.textContent = key;
-  keyValueDetails.appendChild(summaryElement);
-
-  const valueElement = document.createElement('div');
-
-  if (value instanceof HTMLElement) {
-    valueElement.appendChild(value);
-  } else {
-    valueElement.textContent = value instanceof Date ? value.toISOString() : value;
-  }
-
-  keyValueDetails.appendChild(valueElement);
-
-  return keyValueDetails;
-}
-
-/**
- * @param {Element} button
- * @param {Array<Element>} checkboxes
- */
-export function updateButtonState(button, checkboxes) {
-  const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-  button.disabled = !anyCheckboxChecked;
-}
-
-/**
  * @param {Array<ReleaseItem>|Array<Release>} releases
  * @return {Array}
  */
 function transformReleaseItemsToReleaseListData(releases) {
   const data = [];
 
-  releases.forEach(item => {
+  releases.forEach((item) => {
     const release = item instanceof Release ? item.releaseItem : item;
     const viewLink = createIconLink({
       href: release.url,
       iconDefault: 'box-arrow-up-right',
       className: 'link-bandcamp-url',
-      title: 'View bandcamp release',
+      title: 'View bandcamp release'
     });
     const searchLink = createIconLink({
       href: getSearchDiscogsReleaseUrl(release.artist, release.title),
       iconDefault: 'search',
       className: 'link-discogs-search',
-      title: 'Search release on Discogs',
+      title: 'Search release on Discogs'
     });
-    const controls = [
-      viewLink,
-      searchLink,
-    ];
+    const controls = [viewLink, searchLink];
 
     if (item instanceof Release) {
       const applyMetadataLink = createIconLink({
@@ -185,7 +106,7 @@ function transformReleaseItemsToReleaseListData(releases) {
       dataAtts: {
         title: `${release.artist} - ${release.title}`
       },
-      controls,
+      controls
     });
   });
 
@@ -197,13 +118,11 @@ function transformReleaseItemsToReleaseListData(releases) {
  * @param {Array<ReleaseItem>|Array<Release>} releases
  */
 export function populateReleasesList(releasesList, releases) {
-  releasesList.populateData(
-    transformReleaseItemsToReleaseListData(releases)
-  );
+  releasesList.populateData(transformReleaseItemsToReleaseListData(releases));
 }
 
 export function setBackgroundImage(element, imageUrl) {
-  if (!element instanceof HTMLElement) return;
+  if ((!element) instanceof HTMLElement) return;
   element.style.backgroundImage = `url(${imageUrl})`;
 }
 

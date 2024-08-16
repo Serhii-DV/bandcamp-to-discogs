@@ -52,26 +52,55 @@ body {
   padding: 0 10px 10px;
 }
 
-.lines-a1-t1 .release-content { height: 240px; }
-.lines-a1-t2 .release-content { height: 210px; }
-.lines-a1-t3 .release-content { height: 210px; }
+.lines-a1-t1 .release-content {
+  height: 240px;
+}
+.lines-a1-t2 .release-content {
+  height: 210px;
+}
+.lines-a1-t3 .release-content {
+  height: 210px;
+}
 
-.lines-a2-t1 .release-content { height: 200px; }
-.lines-a2-t2 .release-content { height: 200px; }
-.lines-a2-t3 .release-content { height: 200px; }
+.lines-a2-t1 .release-content {
+  height: 200px;
+}
+.lines-a2-t2 .release-content {
+  height: 200px;
+}
+.lines-a2-t3 .release-content {
+  height: 200px;
+}
 
-.lines-a3-t1 .release-content { height: 220px; }
-.lines-a3-t2 .release-content { height: 190px; }
-.lines-a3-t3 .release-content { height: 190px; }
+.lines-a3-t1 .release-content {
+  height: 220px;
+}
+.lines-a3-t2 .release-content {
+  height: 190px;
+}
+.lines-a3-t3 .release-content {
+  height: 190px;
+}
 
-.lines-a4-t1 .release-content { height: 190px; }
-.lines-a4-t2 .release-content { height: 190px; }
-.lines-a4-t3 .release-content { height: 190px; }
+.lines-a4-t1 .release-content {
+  height: 190px;
+}
+.lines-a4-t2 .release-content {
+  height: 190px;
+}
+.lines-a4-t3 .release-content {
+  height: 190px;
+}
 
-.lines-a5-t1 .release-content { height: 190px; }
-.lines-a5-t2 .release-content { height: 190px; }
-.lines-a5-t3 .release-content { height: 190px; }
-
+.lines-a5-t1 .release-content {
+  height: 190px;
+}
+.lines-a5-t2 .release-content {
+  height: 190px;
+}
+.lines-a5-t3 .release-content {
+  height: 190px;
+}
 
 /* Style for the tree view */
 details {

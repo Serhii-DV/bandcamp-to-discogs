@@ -1,6 +1,21 @@
-import { contentChangeWithPolling, createDatalistFromArray, createElementFromHTML, input, selectElementWithContent, setDataAttribute } from "../../modules/html.js";
-import { containsOneOf, splitString, isEmptyArray, countOccurrences, removeBrackets } from "../../modules/utils.js";
-import { getBandPhotoSrc, getReleasesData } from "../modules/html.js";
+import Isotope from 'isotope-layout';
+import {
+  contentChangeWithPolling,
+  createDatalistFromArray,
+  createElementFromHTML,
+  input,
+  selectElementWithContent,
+  setDataAttribute
+} from '../../utils/html';
+import {
+  containsOneOf,
+  splitString,
+  isEmptyArray,
+  countOccurrences,
+  removeBrackets
+} from '../../utils/utils';
+import { getBandPhotoSrc, getReleasesData } from '../modules/html.js';
+import { log } from '../../utils/console';
 
 // Setup logic for BC music page
 export function setupPageMusic() {
@@ -20,7 +35,7 @@ function setupSendMessageToPopup() {
         data: window.B2D.pageReleases,
         popup: {
           imageSrc: getBandPhotoSrc(),
-          search: getArtistFilterValue(),
+          search: getArtistFilterValue()
         }
       });
     }
@@ -43,13 +58,21 @@ function setupIsotope() {
 
   const releases = getReleases();
 
-  releases.forEach(release => {
-    const gridElement = grid.querySelector('[data-item-id="' + release.item_id + '"]');
-    setDataAttribute(gridElement, 'filter-artist', (release.artist + ' - ' + release.title).toLowerCase());
+  releases.forEach((release) => {
+    const gridElement = grid.querySelector(
+      '[data-item-id="' + release.item_id + '"]'
+    );
+    setDataAttribute(
+      gridElement,
+      'filter-artist',
+      (release.artist + ' - ' + release.title).toLowerCase()
+    );
   });
 
   const artistFilterWidget = createArtistFilterWidget(releases);
-  const filterBlock = createElementFromHTML(`<div class="b2d-widget-container"></div>`);
+  const filterBlock = createElementFromHTML(
+    `<div class="b2d-widget-container"></div>`
+  );
   const albumAmountWidget = createAlbumAmountWidget(releases);
 
   filterBlock.append(artistFilterWidget);
@@ -60,7 +83,7 @@ function setupIsotope() {
 
   setupArtistFilterElement(artistFilterWidget, iso, albumAmountWidget);
 
-  console.log('B2D: Isotope setuped correctly');
+  log('Isotope setup was correct');
 }
 
 function getReleases() {
@@ -84,41 +107,55 @@ function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
     artistFilter.value = selectedValue;
 
     selectedValue = selectedValue.toLowerCase();
-    const filter = selectedValue ? `[data-filter-artist*="${selectedValue}"]` : '*';
+    const filter = selectedValue
+      ? `[data-filter-artist*="${selectedValue}"]`
+      : '*';
     iso.arrange({ filter: filter });
 
-    albumAmountWidget.querySelector('.b2d-visible').innerHTML = iso.getFilteredItemElements().length;
+    albumAmountWidget.querySelector('.b2d-visible').innerHTML =
+      iso.getFilteredItemElements().length;
 
     // try to updata images
     window.scrollBy(0, 1);
     window.scrollBy(0, -1);
   });
 
-
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  chrome.runtime.onMessage.addListener((message) => {
     if (message.type === 'releases-list-search') {
       input(artistFilter, message.search);
     }
   });
 
   // Check if Bandcamp filter exists
-  const bandSelectorContainer = document.querySelector('.leftMiddleColumns .label-band-selector-container');
+  const bandSelectorContainer = document.querySelector(
+    '.leftMiddleColumns .label-band-selector-container'
+  );
 
   if (bandSelectorContainer) {
-    let bandMenuTitle = selectElementWithContent(bandSelectorContainer, '.bands-menu-title span', 'artists');
+    let bandMenuTitle = selectElementWithContent(
+      bandSelectorContainer,
+      '.bands-menu-title span',
+      'artists'
+    );
 
     if (!bandMenuTitle) {
-      bandMenuTitle = bandSelectorContainer.querySelector('.bands-menu-title span.name');
+      bandMenuTitle = bandSelectorContainer.querySelector(
+        '.bands-menu-title span.name'
+      );
     }
 
     if (bandMenuTitle) {
-      contentChangeWithPolling(bandMenuTitle, (newContent) => {
-        if (newContent === 'artists') {
-          newContent = '';
-        }
+      contentChangeWithPolling(
+        bandMenuTitle,
+        (newContent) => {
+          if (newContent === 'artists') {
+            newContent = '';
+          }
 
-        input(artistFilter, newContent);
-      }, 500);
+          input(artistFilter, newContent);
+        },
+        500
+      );
     }
   }
 }
@@ -141,7 +178,9 @@ function getArtistListData(releases) {
   filterData.push(...countOccurrences(artistsData));
 
   // add artists with release titles
-  releases.forEach((release) => releasesData.push(release.artist + ' - ' + release.title));
+  releases.forEach((release) =>
+    releasesData.push(release.artist + ' - ' + release.title)
+  );
   releasesData.sort();
   filterData.push(...releasesData);
 
@@ -150,12 +189,16 @@ function getArtistListData(releases) {
 
 function createArtistFilterWidget(releases) {
   let artistFilterElement = createElementFromHTML(
-`<div class="b2d-widget">
+    `<div class="b2d-widget">
   <label for="b2dArtistFilter">Artist / Album:</label>
   <input list="artist-filter-data" id="b2dArtistFilter" name="artist-filter" />
-</div>`);
+</div>`
+  );
   const artistFilterData = getArtistListData(releases);
-  const artistFilterDatalist = createDatalistFromArray(artistFilterData, 'artist-filter-data');
+  const artistFilterDatalist = createDatalistFromArray(
+    artistFilterData,
+    'artist-filter-data'
+  );
 
   artistFilterElement.append(artistFilterDatalist);
 
@@ -164,7 +207,8 @@ function createArtistFilterWidget(releases) {
 
 function createAlbumAmountWidget(releases) {
   return createElementFromHTML(
-`<div class="b2d-albumAmount b2d-widget" title="The amount of releases on the page">
+    `<div class="b2d-albumAmount b2d-widget" title="The amount of releases on the page">
 Releases: <span class="b2d-visible">${releases.length}</span> / <span class="b2d-total">${releases.length}</span>
-</div>`);
+</div>`
+  );
 }

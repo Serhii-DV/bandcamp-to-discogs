@@ -50,13 +50,15 @@ export class PageTypeDetector {
     }
 
     return new PageType(value);
-  }
+  };
 
   isAlbum = () => this.url.includes('/album/');
-  isArtists = () => this.url.includes('/artists/') || !!document.querySelector('.artists-grid');
+  isArtists = () =>
+    this.url.includes('/artists/') || !!document.querySelector('.artists-grid');
   isCommunity = () => this.url.includes('/community/');
   isMerch = () => this.url.includes('/merch/');
-  isMusic = () => this.url.includes('/music/') || !!document.querySelector('#music-grid');
+  isMusic = () =>
+    this.url.includes('/music/') || !!document.querySelector('#music-grid');
   isTrack = () => this.url.includes('/track/');
   isVideo = () => this.url.includes('/video/');
 }

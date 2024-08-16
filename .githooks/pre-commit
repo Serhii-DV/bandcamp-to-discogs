@@ -1,0 +1,10 @@
+#!/bin/sh
+# Run prettier on staged files
+
+npm run prettier:fix
+
+# Check if Prettier made changes
+if [ -n "$(git diff --name-only --cached)" ]; then
+  echo "Prettier has fixed files. Please review the changes."
+  git add .
+fi

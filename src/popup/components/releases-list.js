@@ -1,5 +1,5 @@
-import { getDataAttribute, input, setDataAttribute } from "../../modules/html";
-import { isEmptyArray } from "../../modules/utils";
+import { getDataAttribute, input, setDataAttribute } from '../../utils/html';
+import { hasClass, isEmptyArray } from '../../utils/utils';
 
 class ReleasesList extends HTMLElement {
   constructor() {
@@ -49,31 +49,31 @@ class ReleasesList extends HTMLElement {
 
     self.appendChild(template.content.cloneNode(true));
 
-    const selectAllCheckbox = self.querySelector("#"+selectAllCheckboxId);
-    selectAllCheckbox.addEventListener("change", () => {
+    const selectAllCheckbox = self.querySelector('#' + selectAllCheckboxId);
+    selectAllCheckbox.addEventListener('change', () => {
       self.selectAllCheckboxes(selectAllCheckbox.checked);
     });
 
-    const table = self.querySelector(".table");
-    table.addEventListener('change', event => {
+    const table = self.querySelector('.table');
+    table.addEventListener('change', (event) => {
       const target = event.target;
       if (target.type === 'checkbox') {
-        self
-          .selectCheckbox(target, target.checked)
-          .refreshStatus();
+        self.selectCheckbox(target, target.checked).refreshStatus();
       }
     });
 
     self.searchInput = document.getElementById(searchInputId);
-    self.searchInput.addEventListener("input", filterTable);
+    self.searchInput.addEventListener('input', filterTable);
 
     function filterTable() {
       const input = self.searchInput.value.toLowerCase();
-      const rows = table.querySelectorAll("tbody tr");
+      const rows = table.querySelectorAll('tbody tr');
 
       rows.forEach((row) => {
-        const label = row.querySelector("td label").textContent.toLowerCase();
-        row.classList[label.includes(input) ? 'remove' : 'add']('visually-hidden');
+        const label = row.querySelector('td label').textContent.toLowerCase();
+        row.classList[label.includes(input) ? 'remove' : 'add'](
+          'visually-hidden'
+        );
       });
 
       self.refreshStatus();
@@ -115,10 +115,10 @@ class ReleasesList extends HTMLElement {
           x = parseInt(x);
           y = parseInt(y);
 
-          return dir === "asc" ? x - y : y - x;
+          return dir === 'asc' ? x - y : y - x;
         }
 
-        return dir === "asc" ? x.localeCompare(y) : y.localeCompare(x);
+        return dir === 'asc' ? x.localeCompare(y) : y.localeCompare(x);
       });
 
       // Reorder the rows in the table
@@ -130,18 +130,14 @@ class ReleasesList extends HTMLElement {
     // Setup clear search button
     const clearSearchBtn = self.querySelector('#clear-search-button');
     clearSearchBtn.addEventListener('click', () => {
-      self
-        .setSearchValue('')
-        .refreshSearchStatus();
+      self.setSearchValue('').refreshSearchStatus();
       self.searchInput.focus();
     });
   }
 
   refreshStatus() {
     const self = this;
-    self
-      .updateButtonsState()
-      .refreshItemsStatus();
+    self.updateButtonsState().refreshItemsStatus();
     return self;
   }
 
@@ -150,11 +146,14 @@ class ReleasesList extends HTMLElement {
     const refreshStatusElement = (element) => {
       const total = self.querySelectorAll('tr.release-item').length;
       const selected = self.getSelectedValues().length;
-      const filtered = self.querySelectorAll('tr.release-item:not(.visually-hidden)').length;
-      const statusText = element.getAttribute("data-format")
-        .replace(new RegExp("{total}", "g"), total)
-        .replace(new RegExp("{selected}", "g"), selected)
-        .replace(new RegExp("{filtered}", "g"), filtered);
+      const filtered = self.querySelectorAll(
+        'tr.release-item:not(.visually-hidden)'
+      ).length;
+      const statusText = element
+        .getAttribute('data-format')
+        .replace(new RegExp('{total}', 'g'), total)
+        .replace(new RegExp('{selected}', 'g'), selected)
+        .replace(new RegExp('{filtered}', 'g'), filtered);
       element.textContent = statusText;
     };
     self.statusElements.forEach(refreshStatusElement);
@@ -169,7 +168,7 @@ class ReleasesList extends HTMLElement {
 
   addStatusElement(...element) {
     const self = this;
-    element.forEach(el => self.statusElements.push(el));
+    element.forEach((el) => self.statusElements.push(el));
     return self;
   }
 
@@ -178,7 +177,7 @@ class ReleasesList extends HTMLElement {
   }
 
   getPrefixed(str) {
-    return this.getPrefix() + '__' + str ?? '';
+    return this.getPrefix() + '__' + (str ?? '');
   }
 
   /**
@@ -186,14 +185,14 @@ class ReleasesList extends HTMLElement {
    * @returns {ReleasesList}
    */
   appendButton(...button) {
-    const controlButtons = this.querySelector(".control-buttons");
-    button.forEach(el => controlButtons.appendChild(el));
+    const controlButtons = this.querySelector('.control-buttons');
+    button.forEach((el) => controlButtons.appendChild(el));
     return this;
   }
 
   addStateButton(...button) {
     const self = this;
-    button.forEach(btn => self.stateButtons.push(btn));
+    button.forEach((btn) => self.stateButtons.push(btn));
     return self;
   }
 
@@ -209,7 +208,7 @@ class ReleasesList extends HTMLElement {
 
     checkbox.checked = checked;
 
-    if (checkbox.classList.contains('release-checkbox')) {
+    if (hasClass(checkbox, 'release-checkbox')) {
       const tr = checkbox.closest('tr');
       const className = 'table-active';
 
@@ -223,7 +222,7 @@ class ReleasesList extends HTMLElement {
   }
 
   connectedCallback() {
-    const dataAttr = this.getAttribute("data");
+    const dataAttr = this.getAttribute('data');
     const data = dataAttr ? JSON.parse(dataAttr) : [];
 
     if (!isEmptyArray(data)) {
@@ -237,12 +236,12 @@ class ReleasesList extends HTMLElement {
    */
   populateData(data) {
     const self = this;
-    const tableBody = self.querySelector("tbody");
-    tableBody.innerHTML = ""; // Clear existing data
+    const tableBody = self.querySelector('tbody');
+    tableBody.innerHTML = ''; // Clear existing data
 
     data.forEach((item, index) => {
-      const row = document.createElement("tr");
-      const checkboxId = self.getPrefixed('checkbox_'+index);
+      const row = document.createElement('tr');
+      const checkboxId = self.getPrefixed('checkbox_' + index);
       row.classList.add('release-item');
       setDataAttribute(row, 'sort', index);
       setDataAttribute(row, item.dataAtts);
@@ -261,52 +260,61 @@ class ReleasesList extends HTMLElement {
       tableBody.appendChild(row);
     });
 
-    self
-      .refreshStatus()
-      .refreshSearchStatus();
+    self.refreshStatus().refreshSearchStatus();
 
     return self;
   }
 
   selectAllCheckboxes(checked) {
     const self = this;
-    self.getCheckboxes().forEach(checkbox => {
+    self.getCheckboxes().forEach((checkbox) => {
       self.selectCheckbox(checkbox, checked);
     });
     return self;
   }
 
   getCheckboxes(onlyChecked = false) {
-    return this.querySelectorAll(".release-item:not(.visually-hidden) input.release-checkbox[type='checkbox']" + (onlyChecked ? ":checked" : ""));
+    return this.querySelectorAll(
+      ".release-item:not(.visually-hidden) input.release-checkbox[type='checkbox']" +
+        (onlyChecked ? ':checked' : '')
+    );
   }
 
   /**
    * @returns {Array}
    */
   getSelectedValues() {
-    return Array.from(this.getCheckboxes(true)).map(checkbox => checkbox.value);
+    return Array.from(this.getCheckboxes(true)).map(
+      (checkbox) => checkbox.value
+    );
   }
 
   getSelectedTitles() {
-    return Array.from(this.getCheckboxes(true)).map(checkbox => checkbox.nextElementSibling.textContent);
+    return Array.from(this.getCheckboxes(true)).map(
+      (checkbox) => checkbox.nextElementSibling.textContent
+    );
   }
 
   /**
    * @param {Element} button
    * @returns {ReleasesList}
-  */
- updateButtonState(button) {
-   const self = this;
-   const checkboxes = self.getCheckboxes();
-   const anyCheckboxChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-   button.disabled = !anyCheckboxChecked;
-   return self;
+   */
+  updateButtonState(button) {
+    const self = this;
+    const checkboxes = self.getCheckboxes();
+    const anyCheckboxChecked = Array.from(checkboxes).some(
+      (checkbox) => checkbox.checked
+    );
+    button.disabled = !anyCheckboxChecked;
+    return self;
   }
 
   updateButtonsState() {
     const self = this;
-    self.querySelectorAll('[data-status-update]').forEach(button => self.updateButtonState(button));
-    self.stateButtons.forEach(button => self.updateButtonState(button));
+    self
+      .querySelectorAll('[data-status-update]')
+      .forEach((button) => self.updateButtonState(button));
+    self.stateButtons.forEach((button) => self.updateButtonState(button));
     return self;
   }
 

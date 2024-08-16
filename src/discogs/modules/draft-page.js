@@ -1,28 +1,33 @@
-import { camelCaseToReadable, isArray, isObject } from "../../modules/utils.js";
+import {
+  camelCaseToReadable,
+  hasOwnProperty,
+  isArray,
+  isObject
+} from '../../utils/utils';
 
 export const getArtistNameInput = () => {
   return document.getElementById('artist-name-input');
-}
+};
 
 export const getReleaseTitleInput = () => {
   return document.getElementById('release-title-input');
-}
+};
 
 export const getQuantityInput = () => {
   return document.querySelector('input[aria-label="Quantity of format"]');
-}
+};
 
 export const getTrackTitleInputs = () => {
   return document.querySelectorAll('.track_input');
-}
+};
 
 export const getNotesTextarea = () => {
   return document.querySelector('textarea#release-notes-textarea');
-}
+};
 
 export const getSubmissionNotesTextarea = () => {
   return document.querySelector('textarea#release-submission-notes-textarea');
-}
+};
 
 export function getSection(name) {
   const artistBlock = document.querySelector(`[data-ref-overview="${name}"]`);
@@ -37,7 +42,9 @@ export function getSubmissionFormSectionNotes() {
  * @param {String} fileType
  */
 export function selectFormatFileType(fileType) {
-  const fileTypeInput = document.querySelector('input[value="' + fileType + '"]');
+  const fileTypeInput = document.querySelector(
+    'input[value="' + fileType + '"]'
+  );
 
   if (fileTypeInput) {
     checkInput(fileTypeInput);
@@ -51,7 +58,9 @@ export function selectFormatFileType(fileType) {
  * @param {String} formatDescription
  */
 export function selectFormatDescription(formatDescription) {
-  const descriptionInput = document.querySelector('.format_descriptions_type input[value="' + formatDescription + '"]');
+  const descriptionInput = document.querySelector(
+    '.format_descriptions_type input[value="' + formatDescription + '"]'
+  );
 
   if (descriptionInput) {
     checkInput(descriptionInput);
@@ -63,7 +72,9 @@ export function selectFormatDescription(formatDescription) {
 
 export function fillDurations() {
   const trackTitleInputs = getTrackTitleInputs();
-  const trackDurationInputs = document.querySelectorAll('input[aria-label="Track duration"]');
+  const trackDurationInputs = document.querySelectorAll(
+    'input[aria-label="Track duration"]'
+  );
 
   trackDurationInputs.forEach((durationInput, index) => {
     if (durationInput.value !== '') {
@@ -83,7 +94,7 @@ export function fillDurations() {
  * @returns {Array<String, String>}
  */
 function extractTitleAndTime(str) {
-  const parts = str.split(" ");
+  const parts = str.split(' ');
 
   // Check if the last part matches the time format (minutes:seconds)
   const timeFormatRegex = /^\d+:\d+$/; // Example: 7:38
@@ -94,7 +105,7 @@ function extractTitleAndTime(str) {
   }
 
   const timeValue = parts.pop();
-  const modifiedString = parts.join(" ");
+  const modifiedString = parts.join(' ');
 
   return [modifiedString, timeValue];
 }
@@ -117,11 +128,11 @@ function checkInput(inputElement) {
 }
 
 function triggerInputEvent(element) {
-  const inputEvent = new Event("input", { bubbles: true, cancelable: true });
+  const inputEvent = new Event('input', { bubbles: true, cancelable: true });
   element.dispatchEvent(inputEvent);
 }
 
-export const setSectionHint = ({section, title, text}) => {
+export const setSectionHint = ({ section, title, text }) => {
   if (!text) {
     return;
   }
@@ -129,7 +140,7 @@ export const setSectionHint = ({section, title, text}) => {
   if (isObject(text)) {
     let textArr = [];
     for (const key in text) {
-      if (text.hasOwnProperty(key)) {
+      if (hasOwnProperty(text, key)) {
         textArr.push({
           title: camelCaseToReadable(key),
           value: text[key]
@@ -140,22 +151,26 @@ export const setSectionHint = ({section, title, text}) => {
   }
 
   if (isArray(text)) {
-    text = text.map((textItem) => {
-      let value = isArray(textItem.value) ? textItem.value.join(', '): textItem.value;
-      return `${textItem.title}: <var>${value}</var>`;
-    }).join('<br />');
+    text = text
+      .map((textItem) => {
+        let value = isArray(textItem.value)
+          ? textItem.value.join(', ')
+          : textItem.value;
+        return `${textItem.title}: <var>${value}</var>`;
+      })
+      .join('<br />');
   }
 
   const sectionElement = getSection(section);
   let sectionHint = sectionElement.querySelector('.b2d-section-hint');
 
   if (!sectionHint) {
-    sectionHint = document.createElement("div");
-    sectionHint.classList.add("b2d-section-hint");
+    sectionHint = document.createElement('div');
+    sectionHint.classList.add('b2d-section-hint');
 
-    const sectionLabel = sectionElement.querySelector("label");
+    const sectionLabel = sectionElement.querySelector('label');
     sectionLabel.insertAdjacentElement('afterend', sectionHint);
   }
 
   sectionHint.innerHTML = `<h4>${title}</h4><p>${text}</p>`;
-}
+};

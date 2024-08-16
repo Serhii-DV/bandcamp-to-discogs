@@ -1,12 +1,24 @@
-import { DiscogsCsv } from "../../discogs/app/discogs-csv.js";
-import { ReleasesList } from '../components/releases-list.js';
-import { downloadCsv, objectsToCsv } from "../../modules/csv.js";
-import { createElementFromHTML, hasDataAttribute, setDataAttribute } from "../../modules/html.js";
-import { clearStorage, clearStorageByKey, findAllReleases, findReleasesByUrls } from "../../modules/storage.js";
-import { populateReleasesList, removeButtonLoadingState, setButtonInLoadingState } from "../helpers.js";
-import config from "../../config.js";
-import { loadDiscogsGenres } from "../../discogs/modules/genres.js";
-import { loadKeywordMapping } from "../../bandcamp/modules/mapping.js";
+import { DiscogsCsv } from '../../discogs/app/discogs-csv.js';
+import { downloadCsv, objectsToCsv } from '../../utils/csv.ts';
+import {
+  createElementFromHTML,
+  hasDataAttribute,
+  setDataAttribute
+} from '../../utils/html';
+import {
+  clearStorage,
+  clearStorageByKey,
+  findAllReleases,
+  findReleasesByUrls
+} from '../../utils/storage';
+import {
+  populateReleasesList,
+  removeButtonLoadingState,
+  setButtonInLoadingState
+} from '../helpers.js';
+import config from '../../config.js';
+import { loadDiscogsGenres } from '../../discogs/modules/genres.js';
+import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 
 /**
  * @param {Element} btnDownloadCsv
@@ -19,10 +31,10 @@ export function setupHistoryTab(tab, btnDownloadCsv) {
     setDataAttribute(tab, 'buttons-initialized');
   }
 
-  loadDiscogsGenres(config.genres_url).then(genres => {
-    loadKeywordMapping(config.keyword_mapping_url).then(keywordsMapping => {
+  loadDiscogsGenres(config.genres_url).then(() => {
+    loadKeywordMapping(config.keyword_mapping_url).then(() => {
       updateReleasesListData(releasesList);
-    })
+    });
   });
 }
 
@@ -63,17 +75,23 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
     const button = event.target;
     setButtonInLoadingState(button);
 
-    const bcLinks = releasesList.querySelectorAll('.release-item.table-active .link-bandcamp-url');
-    const checkedUrls = Array.from(bcLinks).map(link => link.getAttribute('href'));
+    const bcLinks = releasesList.querySelectorAll(
+      '.release-item.table-active .link-bandcamp-url'
+    );
+    const checkedUrls = Array.from(bcLinks).map((link) =>
+      link.getAttribute('href')
+    );
 
-    findReleasesByUrls(checkedUrls, releases => {
+    findReleasesByUrls(checkedUrls, (releases) => {
       const firstRelease = releases[0];
-      const csvObjects = releases.map(release => DiscogsCsv.fromRelease(release).toCsvObject());
+      const csvObjects = releases.map((release) =>
+        DiscogsCsv.fromRelease(release).toCsvObject()
+      );
       const csv = objectsToCsv(csvObjects);
       downloadCsv(csv, `discogs-selected-releases-${firstRelease.artist}`);
       removeButtonLoadingState(button);
     });
-  }
+  };
 
   btnDownloadCsv.addEventListener('click', downloadCsvFile);
   releasesList.addStateButton(btnDownloadCsv);
@@ -85,10 +103,12 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
     });
   });
 
-  tab.querySelector('#historyTabDeleteAllModal_btnYes').addEventListener('click', () => {
-    clearStorage();
-    updateReleasesListData(releasesList);
-  });
+  tab
+    .querySelector('#historyTabDeleteAllModal_btnYes')
+    .addEventListener('click', () => {
+      clearStorage();
+      updateReleasesListData(releasesList);
+    });
 
   releasesList.appendButton(btnClearSelected, btnClearAll);
   releasesList.addStatusElement(

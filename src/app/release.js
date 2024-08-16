@@ -1,4 +1,4 @@
-import { generateKeyForUrl } from '../modules/key-generator.js';
+import { generateKeyForUrl } from '../utils/key-generator';
 import TrackTime from './trackTime.js';
 
 export class ReleaseItem {
@@ -66,7 +66,17 @@ export class Release {
    * @param {string} image
    * @param {Array.<string>} keywords
    */
-  constructor(artist, title, label, datePublished, dateModified, tracks, url, image, keywords) {
+  constructor(
+    artist,
+    title,
+    label,
+    datePublished,
+    dateModified,
+    tracks,
+    url,
+    image,
+    keywords
+  ) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
     this.published = datePublished;
@@ -98,7 +108,7 @@ export class Release {
       label: this.label,
       published: this.published.toISOString(),
       modified: this.modified.toISOString(),
-      tracks: this.tracks.map(track => track.toStorageObject()),
+      tracks: this.tracks.map((track) => track.toStorageObject()),
       image: this.image,
       keywords: this.keywords
     };
@@ -114,14 +124,16 @@ export class Release {
       throw new Error('Cannot create Release object from object', obj);
     }
 
-    const tracks = obj.tracks.map(trackData => Track.fromStorageObject(trackData));
+    const tracks = obj.tracks.map((trackData) =>
+      Track.fromStorageObject(trackData)
+    );
 
     if (!obj.published && !obj.date) {
-      throw new Error("Missing published or date property");
+      throw new Error('Missing published or date property');
     }
 
     if (!obj.modified && !obj.date) {
-      throw new Error("Missing published or date property");
+      throw new Error('Missing published or date property');
     }
 
     return new Release(

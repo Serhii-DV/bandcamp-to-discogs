@@ -1,15 +1,43 @@
 {
+  "version": "0.12.0",
   "devDependencies": {
-    "webpack": "^5.91.0",
+    "@swc/html": "^0.0.28",
+    "@types/chrome": "^0.0.269",
+    "@types/isotope-layout": "^3.0.13",
+    "@types/uuid": "^10.0.0",
+    "@webcomponents/custom-elements": "^1.6.0",
+    "bootstrap": "^5.3.3",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^7.1.2",
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "eslint": "^9.9.0",
+    "eslint-webpack-plugin": "^4.2.0",
+    "html-loader": "^5.1.0",
+    "html-minimizer-webpack-plugin": "^5.0.0",
+    "html-webpack-plugin": "^5.6.0",
+    "isotope-layout": "^3.0.6",
+    "json-minimizer-webpack-plugin": "^5.0.0",
+    "mini-css-extract-plugin": "^2.9.0",
+    "prettier": "^3.3.3",
+    "source-map-loader": "^5.0.0",
+    "terser-webpack-plugin": "^5.3.10",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.4",
+    "uuid": "^10.0.0",
+    "webpack": "^5.93.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "webpack-dev-server": "^5.0.4",
+    "webpack-merge": "^6.0.1"
   },
   "scripts": {
-    "build": "webpack --mode production",
-    "dev": "webpack serve --mode development"
-  },
-  "dependencies": {
-    "bootstrap": "^5.3.2",
-    "uuid": "^9.0.1"
+    "build": "tsc && webpack --env prod",
+    "dev": "tsc && webpack serve",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier:check": "prettier . --check",
+    "prettier:fix": "prettier . --write",
+    "pc": "npm run prettier:check",
+    "pf": "npm run prettier:fix",
+    "setup-git-hooks": "git config core.hooksPath .githooks"
   }
 }

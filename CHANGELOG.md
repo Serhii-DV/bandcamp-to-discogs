@@ -1,5 +1,19 @@
 # Change log
 
+## 0.12.0 (2024-08-16)
+
+### Features
+
+- core: Start using TypoScript with JS
+- core: Converted modules to TS utils
+- core: Minimize CSS files
+- core: Minimize JSON data files
+- core: Content scripts loading refactored
+- core: Minimize popup HTML file
+- core: Removed `External Content` custom component
+- core: Start using `eslint` and `prettier` tools
+- core: Minimize JS
+
 ## 0.11.1 (2024-07-31)
 
 ### Features

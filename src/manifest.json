@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Bandcamp To Discogs",
+  "version": "0.12.0",
+  "description": "Generates a CSV file for the Bandcamp artist release. The CSV file can be imported into Discogs as a draft.",
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": ["https://*.bandcamp.com/*"],
+  "content_scripts": [
+    {
+      "js": ["bandcamp.content.js"],
+      "matches": ["https://*.bandcamp.com/*"],
+      "run_at": "document_end"
+    },
+    {
+      "js": ["discogs.content.js"],
+      "matches": ["https://www.discogs.com/release/edit/*"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/b2d_logo_16.png",
+      "32": "images/b2d_logo_32.png",
+      "48": "images/b2d_logo_48.png",
+      "128": "images/b2d_logo_128.png"
+    }
+  },
+  "icons": {
+    "16": "images/b2d_logo_16.png",
+    "32": "images/b2d_logo_32.png",
+    "48": "images/b2d_logo_48.png",
+    "128": "images/b2d_logo_128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["images/b2d_logo_16.png", "bandcamp.content.css"],
+      "matches": ["https://*.bandcamp.com/*"]
+    },
+    {
+      "resources": ["discogs.content.css"],
+      "matches": ["https://www.discogs.com/*"]
+    }
+  ]
+}

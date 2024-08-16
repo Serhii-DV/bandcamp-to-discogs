@@ -1,8 +1,13 @@
-import { getDataAttribute } from "../../modules/html.js";
-import { removeInvisibleChars, trimCharactersFromString } from "../../modules/utils.js";
+import { getDataAttribute } from '../../utils/html';
+import {
+  removeInvisibleChars,
+  trimCharactersFromString
+} from '../../utils/utils';
 
 export function getMusicAlbumSchemaData() {
-  const jsonLdScript = document.querySelector('script[type="application/ld+json"]');
+  const jsonLdScript = document.querySelector(
+    'script[type="application/ld+json"]'
+  );
   return jsonLdScript ? JSON.parse(jsonLdScript.textContent) : null;
 }
 
@@ -13,10 +18,10 @@ function extractDataFromMusicGridElement(element) {
     artist = document.querySelector('#band-name-location .title').innerText;
   }
 
-  artist = trimCharactersFromString(artist, " \-\n");
+  artist = trimCharactersFromString(artist, ' -\n');
   artist = removeInvisibleChars(artist);
 
-  const titleParts = element.querySelector('.title').innerText.split("\n");
+  const titleParts = element.querySelector('.title').innerText.split('\n');
   const title = removeInvisibleChars(titleParts[0]);
   const url = element.querySelector('a').getAttribute('href');
 
@@ -24,15 +29,17 @@ function extractDataFromMusicGridElement(element) {
     artist: artist,
     title: title,
     url: (url[0] === '/' ? window.location.origin : '') + url,
-    item_id: getDataAttribute(element, 'item-id'),
-  }
+    item_id: getDataAttribute(element, 'item-id')
+  };
 }
 
 export function getReleasesData() {
   const releases = [];
-  const releaseElements = document.querySelectorAll('#music-grid .music-grid-item');
+  const releaseElements = document.querySelectorAll(
+    '#music-grid .music-grid-item'
+  );
 
-  releaseElements.forEach(element => {
+  releaseElements.forEach((element) => {
     const releaseData = extractDataFromMusicGridElement(element);
     releases.push(releaseData);
   });

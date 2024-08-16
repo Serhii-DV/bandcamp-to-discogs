@@ -1,3 +1,5 @@
+import { hasOwnProperty } from '../../utils/utils';
+
 /**
  * @param {String} style
  * @returns {String}
@@ -10,18 +12,19 @@ let genres = {};
 
 export async function loadDiscogsGenres(url) {
   return fetch(url)
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => response.json())
+    .then((data) => {
       genres = data;
       return genres;
-    }).catch(reason => {
+    })
+    .catch(() => {
       genres = {};
     });
 }
 
 function getPropertyByElement(obj, element) {
   for (const prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
+    if (hasOwnProperty(obj, prop)) {
       const subGenres = obj[prop];
       if (subGenres.includes(element)) {
         return prop;

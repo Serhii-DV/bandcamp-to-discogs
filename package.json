@@ -37,6 +37,7 @@
     "prettier:check": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "pc": "npm run prettier:check",
-    "pf": "npm run prettier:fix"
+    "pf": "npm run prettier:fix",
+    "setup-git-hooks": "git config core.hooksPath .githooks"
   }
 }

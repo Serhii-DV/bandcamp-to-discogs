@@ -8,6 +8,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 const fs = require('fs');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isProduction = env.prod === true;
@@ -56,9 +57,11 @@ module.exports = (env, argv) => {
       ],
     },
     optimization: {
+      minimize: true,
       minimizer: [
         new CssMinimizerPlugin(),
         new JsonMinimizerPlugin(),
+        new TerserPlugin()
       ],
     },
     resolve: {

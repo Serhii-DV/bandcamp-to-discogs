@@ -15,8 +15,5 @@ export default {
     // Submission notes text
     notes:
       'This draft was created via CSV upload and Bandcamp To Discogs Google Chrome extension {extension_url}\n\nRelease url: {release_url}'
-  },
-  discogsApi: {
-    consumerKey: 'TJGtBNerXwCzYvFCQXSD'
   }
 };

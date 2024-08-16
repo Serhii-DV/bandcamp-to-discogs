@@ -3,7 +3,7 @@ name: Build Chrome Extension
 on:
   push:
     branches:
-      - main
+      - feature/add_version_to_the_zip
 
 jobs:
   build_extension:
@@ -24,8 +24,17 @@ jobs:
     - name: Run npm build
       run: npm run build
 
+    - name: Get the current tag or commit hash
+      id: get_version
+      run: |
+        TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "no-tag")
+        if [ "$TAG" = "no-tag" ]; then
+          TAG=$(git rev-parse --short HEAD)
+        fi
+        echo "TAG_VERSION=$TAG" >> $GITHUB_ENV
+
     - name: Upload dist folder as an artifact
       uses: actions/upload-artifact@v4
       with:
-        name: bandcamp-to-discogs-extension
+        name: bandcamp-to-discogs-extension-${{ env.TAG_VERSION }}
         path: dist/

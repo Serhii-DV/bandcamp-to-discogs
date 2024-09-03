@@ -13,8 +13,9 @@ export function setupConsole() {
 
 /**
  * @param {Release} release
+ * @param {Object} schema
  */
-export function setupConsoleRelease(release, keywordsMapping) {
+export function setupConsoleRelease(release, keywordsMapping, schema) {
   initConsole((consoleCommand) => {
     consoleCommand.addCommand('log.release', () => {
       log('Release:', release);
@@ -32,6 +33,10 @@ export function setupConsoleRelease(release, keywordsMapping) {
     const metadata = Metadata.fromRelease(release);
     consoleCommand.addCommand('log.metadata', () => {
       log('Release metadata:', metadata);
+    });
+
+    consoleCommand.addCommand('log.schema', () => {
+      log('Bandcamp schema:', schema);
     });
   });
 }

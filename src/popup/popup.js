@@ -119,7 +119,11 @@ function processBandcampResponse(response) {
   loadDiscogsGenres(config.genres_url).then(() => {
     loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
       if (isRelease) {
-        processBandcampReleaseData(response.data, keywordsMapping);
+        processBandcampReleaseData(
+          response.data,
+          keywordsMapping,
+          response.schema
+        );
       } else {
         processBandcampReleasesData(response);
       }
@@ -127,14 +131,14 @@ function processBandcampResponse(response) {
   });
 }
 
-function processBandcampReleaseData(data, keywordsMapping) {
+function processBandcampReleaseData(data, keywordsMapping, schema) {
   hide(btnReleasesTab);
   show(btnReleaseTab);
   click(btnReleaseTab);
 
   try {
     const release = Release.fromStorageObject(data);
-    setupConsoleRelease(release, keywordsMapping);
+    setupConsoleRelease(release, keywordsMapping, schema);
     setupReleaseTab(
       document.getElementById('release'),
       release,

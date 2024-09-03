@@ -9,7 +9,7 @@ export function setupPageAlbum() {
   const schema = getMusicAlbumSchemaData();
   const release = createReleaseFromSchema(schema);
   setupRelease(release);
-  setupSendMessageToPopup(release);
+  setupSendMessageToPopup(schema, release);
 }
 
 /**
@@ -60,14 +60,16 @@ function setupRelease(release) {
 }
 
 /**
+ * @param {Object} schema
  * @param {Release} release
  */
-function setupSendMessageToPopup(release) {
+function setupSendMessageToPopup(schema, release) {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.type === 'getBandcampData') {
       sendResponse({
         type: 'release',
-        data: release.toStorageObject()
+        data: release.toStorageObject(),
+        schema: schema
       });
     }
 

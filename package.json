@@ -1,7 +1,7 @@
 {
   "version": "0.12.0",
   "devDependencies": {
-    "@swc/html": "^0.0.28",
+    "@swc/html": "^1.7.24",
     "@types/chrome": "^0.0.269",
     "@types/isotope-layout": "^3.0.13",
     "@types/uuid": "^10.0.0",

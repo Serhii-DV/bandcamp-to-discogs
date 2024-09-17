@@ -8,7 +8,6 @@ import './components/icon';
 import './components/console-command.js';
 import './components/releases-list.js';
 
-import { Release } from '../app/release.js';
 import { getCurrentTab, getExtensionManifest } from '../utils/chrome';
 import { loadDiscogsGenres } from '../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../bandcamp/modules/mapping.js';
@@ -27,6 +26,7 @@ import { setupConsole, setupConsoleRelease } from './console.js';
 import { isValidBandcampURL } from '../bandcamp/modules/html.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { log, logInfo } from '../utils/console';
+import { createReleaseFromSchema } from '../utils/schema';
 
 const btnDashboardTab = document.getElementById('dashboard-tab');
 const btnReleaseTab = document.getElementById('release-tab');
@@ -137,7 +137,7 @@ function processBandcampReleaseData(data, keywordsMapping, schema) {
   click(btnReleaseTab);
 
   try {
-    const release = Release.fromStorageObject(data);
+    const release = createReleaseFromSchema(schema);
     setupConsoleRelease(release, keywordsMapping, schema);
     setupReleaseTab(
       document.getElementById('release'),

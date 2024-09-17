@@ -24,6 +24,7 @@ interface Schema {
   mainEntityOfPage: string;
   image: string;
   keywords: string[];
+  creditText: string;
 }
 
 export function createReleaseFromSchema(schema: Schema): Release {
@@ -45,6 +46,7 @@ export function createReleaseFromSchema(schema: Schema): Release {
   const url = schema.mainEntityOfPage;
   const image = schema.image;
   const keywords = schema.keywords;
+  const credit = schema.creditText;
 
   return new Release(
     artist,
@@ -55,6 +57,7 @@ export function createReleaseFromSchema(schema: Schema): Release {
     tracks,
     url,
     image,
-    keywords
+    keywords,
+    credit
   );
 }

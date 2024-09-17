@@ -56,6 +56,11 @@ export class Release {
   keywords;
 
   /**
+   * @type {string}
+   */
+  credit;
+
+  /**
    * @param {string} artist
    * @param {string} title
    * @param {string} label
@@ -65,6 +70,7 @@ export class Release {
    * @param {string} url
    * @param {string} image
    * @param {Array.<string>} keywords
+   * @param {string} credit
    */
   constructor(
     artist,
@@ -75,7 +81,8 @@ export class Release {
     tracks,
     url,
     image,
-    keywords
+    keywords,
+    credit
   ) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
@@ -85,6 +92,7 @@ export class Release {
     this.tracksQty = tracks.length;
     this.image = image;
     this.keywords = keywords;
+    this.credit = credit;
   }
 
   get artist() {
@@ -110,7 +118,8 @@ export class Release {
       modified: this.modified.toISOString(),
       tracks: this.tracks.map((track) => track.toStorageObject()),
       image: this.image,
-      keywords: this.keywords
+      keywords: this.keywords,
+      credit: this.credit
     };
   }
 
@@ -145,7 +154,8 @@ export class Release {
       tracks,
       obj.url,
       obj.image,
-      obj.keywords
+      obj.keywords,
+      obj.credit ?? ''
     );
   }
 }

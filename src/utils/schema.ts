@@ -1,5 +1,6 @@
 import { Release, Track } from '../app/release.js';
 import TrackTime from '../app/trackTime.js';
+import { convertNewlinesToBreaks } from './utils';
 
 interface Schema {
   byArtist: {
@@ -46,7 +47,7 @@ export function createReleaseFromSchema(schema: Schema): Release {
   const url = schema.mainEntityOfPage;
   const image = schema.image;
   const keywords = schema.keywords;
-  const credit = schema.creditText;
+  const credit = convertNewlinesToBreaks(schema.creditText);
 
   return new Release(
     artist,

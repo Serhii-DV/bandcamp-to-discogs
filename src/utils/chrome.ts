@@ -1,4 +1,5 @@
 import { Metadata } from 'src/discogs/app/metadata.js';
+import { logInfo } from './console';
 
 export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
   const queryOptions = { active: true, currentWindow: true };
@@ -51,15 +52,15 @@ export function getExtensionUrl(path: string): string {
   return chrome.runtime.getURL(path);
 }
 
-interface MetadataMessage {
+interface B2DTabMessage {
   type: string;
-  metadata: Metadata;
 }
 
 export function chromeSendMessageToCurrentTab(
-  message: MetadataMessage,
+  message: B2DTabMessage,
   responseCallback?: (response: any) => void
 ): void {
+  logInfo('Send message to current tab', message);
   getCurrentTab().then((tab: chrome.tabs.Tab | undefined) => {
     if (!tab?.id) return;
     if (responseCallback) {

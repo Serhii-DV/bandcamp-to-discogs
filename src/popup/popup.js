@@ -8,7 +8,11 @@ import './components/icon';
 import './components/console-command.js';
 import './components/releases-list.js';
 
-import { getCurrentTab, getExtensionManifest } from '../utils/chrome';
+import {
+  chromeSendMessageToCurrentTab,
+  getCurrentTab,
+  getExtensionManifest
+} from '../utils/chrome';
 import { loadDiscogsGenres } from '../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../bandcamp/modules/mapping.js';
 import config from '../config.js';
@@ -41,22 +45,18 @@ const tabReleases = document.getElementById('releases');
 
 async function proceedBandcampData() {
   logInfo('Proceed bandcamp data');
+  chromeSendMessageToCurrentTab({ type: 'B2D_BC_DATA' }, (response) => {
+    logInfo('Receive message B2D_BC_DATA', response);
+    if (
+      response === null ||
+      typeof response === 'undefined' ||
+      Object.keys(response).length === 0
+    ) {
+      showBandcampDataNotFoundWarning();
+      return;
+    }
 
-  getCurrentTab().then((tab) => {
-    logInfo('Send message B2D_BC_DATA');
-    chrome.tabs.sendMessage(tab.id, { type: 'B2D_BC_DATA' }, (response) => {
-      logInfo('Receive message B2D_BC_DATA', response);
-      if (
-        response === null ||
-        typeof response === 'undefined' ||
-        Object.keys(response).length === 0
-      ) {
-        showBandcampDataNotFoundWarning();
-        return;
-      }
-
-      processBandcampResponse(response);
-    });
+    processBandcampResponse(response);
   });
 }
 

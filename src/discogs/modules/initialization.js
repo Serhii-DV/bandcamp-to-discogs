@@ -33,7 +33,7 @@ export const initialize = () => {
   setupReadMetadataButton();
 
   chrome.runtime.onMessage.addListener((request) => {
-    if (request.type === 'metadata') {
+    if (request.type === 'B2D_METADATA') {
       applyMetadata(request.metadata);
     }
 

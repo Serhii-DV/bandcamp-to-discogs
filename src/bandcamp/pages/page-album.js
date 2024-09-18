@@ -28,7 +28,7 @@ function setupRelease(release) {
  */
 function setupMessageListener(schema) {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === 'BC_DATA') {
+    if (request.type === 'B2D_BC_DATA') {
       sendResponse({
         type: 'TYPE_PAGE_ALBUM',
         schema

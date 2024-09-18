@@ -8,7 +8,6 @@ import './components/icon';
 import './components/console-command.js';
 import './components/releases-list.js';
 
-import { Release } from '../app/release.js';
 import { getCurrentTab, getExtensionManifest } from '../utils/chrome';
 import { loadDiscogsGenres } from '../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../bandcamp/modules/mapping.js';
@@ -27,6 +26,7 @@ import { setupConsole, setupConsoleRelease } from './console.js';
 import { isValidBandcampURL } from '../bandcamp/modules/html.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { log, logInfo } from '../utils/console';
+import { createReleaseFromSchema } from '../utils/schema';
 
 const btnDashboardTab = document.getElementById('dashboard-tab');
 const btnReleaseTab = document.getElementById('release-tab');
@@ -43,12 +43,13 @@ async function proceedBandcampData() {
   logInfo('Proceed bandcamp data');
 
   getCurrentTab().then((tab) => {
-    chrome.tabs.sendMessage(tab.id, { type: 'getBandcampData' }, (response) => {
+    logInfo('Send message BC_DATA');
+    chrome.tabs.sendMessage(tab.id, { type: 'BC_DATA' }, (response) => {
+      logInfo('Receive message BC_DATA', response);
       if (
         response === null ||
         typeof response === 'undefined' ||
-        Object.keys(response).length === 0 ||
-        typeof response.data === 'undefined'
+        Object.keys(response).length === 0
       ) {
         showBandcampDataNotFoundWarning();
         return;
@@ -108,33 +109,34 @@ function showDashboard() {
 }
 
 function processBandcampResponse(response) {
-  const isRelease = response.type === 'release';
-  const isList = response.type === 'list';
+  const isPageAlbum = response.type === 'TYPE_PAGE_ALBUM';
+  const isPageMusic = response.type === 'TYPE_PAGE_MUSIC';
 
-  if (!isRelease && !isList) {
+  if (!isPageAlbum && !isPageMusic) {
     // todo: Show error?
     return;
   }
 
   loadDiscogsGenres(config.genres_url).then(() => {
     loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
-      if (isRelease) {
-        processBandcampReleaseData(response.data, keywordsMapping);
-      } else {
-        processBandcampReleasesData(response);
+      if (isPageAlbum) {
+        processBandcampPageAlbumResponse(response, keywordsMapping);
+      } else if (isPageMusic) {
+        processBandcampPageMusicResponse(response);
       }
     });
   });
 }
 
-function processBandcampReleaseData(data, keywordsMapping) {
+function processBandcampPageAlbumResponse(response, keywordsMapping) {
   hide(btnReleasesTab);
   show(btnReleaseTab);
   click(btnReleaseTab);
 
   try {
-    const release = Release.fromStorageObject(data);
-    setupConsoleRelease(release, keywordsMapping);
+    const schema = response.schema;
+    const release = createReleaseFromSchema(schema);
+    setupConsoleRelease(release, keywordsMapping, schema);
     setupReleaseTab(
       document.getElementById('release'),
       release,
@@ -147,7 +149,7 @@ function processBandcampReleaseData(data, keywordsMapping) {
   }
 }
 
-function processBandcampReleasesData(response) {
+function processBandcampPageMusicResponse(response) {
   hide(btnReleaseTab);
   show(btnReleasesTab);
   click(btnReleasesTab);

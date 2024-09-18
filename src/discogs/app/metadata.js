@@ -123,7 +123,8 @@ export class Metadata {
         autoDetectedGenres: discogsGenres,
         autoDetectedStyles: discogsStyles
       },
-      releaseUrl: release.url
+      releaseUrl: release.url,
+      credits: release.credit
     });
   }
 }

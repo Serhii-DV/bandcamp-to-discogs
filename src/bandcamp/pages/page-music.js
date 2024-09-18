@@ -29,9 +29,9 @@ function setupSendMessageToPopup() {
   window.B2D.pageReleases = getReleasesData();
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === 'getBandcampData') {
+    if (request.type === 'BC_DATA') {
       sendResponse({
-        type: 'list',
+        type: 'TYPE_PAGE_MUSIC',
         data: window.B2D.pageReleases,
         popup: {
           imageSrc: getBandPhotoSrc(),

@@ -1,5 +1,12 @@
 # Change log
 
+## 0.13.0 (2024-XX-YY)
+
+### Features
+
+- discogs: Show credits hint on the Discogs edit page
+- popup: Receive bandcamp artist schema
+
 ## 0.12.0 (2024-08-16)
 
 ### Features

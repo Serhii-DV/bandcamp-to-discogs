@@ -6,6 +6,21 @@ export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
   return tabs[0];
 }
 
+export async function getCurrentTabUrl(): Promise<string | undefined> {
+  try {
+    const currentTab = await getCurrentTab();
+    if (currentTab.url) {
+      return currentTab.url;
+    } else {
+      console.warn("The current tab doesn't have a URL.");
+      return undefined;
+    }
+  } catch (error) {
+    console.error('Failed to get the current tab URL:', error);
+    return undefined;
+  }
+}
+
 export function getExtensionManifest(): chrome.runtime.Manifest {
   return chrome.runtime.getManifest();
 }

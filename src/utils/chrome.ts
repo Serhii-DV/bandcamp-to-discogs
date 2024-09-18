@@ -1,4 +1,3 @@
-import { Metadata } from 'src/discogs/app/metadata.js';
 import { logInfo } from './console';
 
 export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
@@ -56,14 +55,41 @@ interface B2DTabMessage {
   type: string;
 }
 
+type ResponseCallback = (response: any) => void;
+
 export function chromeSendMessageToCurrentTab(
   message: B2DTabMessage,
-  responseCallback?: (response: any) => void
+  onValidResponseCallback?: ResponseCallback,
+  onInvalidResponseCallback?: ResponseCallback,
+  responseCallback?: ResponseCallback
 ): void {
-  logInfo('Send message to current tab', message);
+  logInfo('Send message to current tab', message.type, message);
   getCurrentTab().then((tab: chrome.tabs.Tab | undefined) => {
     if (!tab?.id) return;
-    if (responseCallback) {
+
+    if (onValidResponseCallback) {
+      chrome.tabs.sendMessage(tab.id, message, (response) => {
+        logInfo(
+          'Received message from the current tab',
+          message.type,
+          response
+        );
+
+        if (
+          response === null ||
+          typeof response === 'undefined' ||
+          Object.keys(response).length === 0
+        ) {
+          if (onInvalidResponseCallback) {
+            onInvalidResponseCallback(response);
+          }
+
+          return;
+        }
+
+        onValidResponseCallback(response);
+      });
+    } else if (responseCallback) {
       chrome.tabs.sendMessage(tab.id, message, responseCallback);
     } else {
       chrome.tabs.sendMessage(tab.id, message);

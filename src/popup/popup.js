@@ -44,39 +44,21 @@ const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
 const tabReleases = document.getElementById('releases');
 
 async function proceedBandcampData() {
-  logInfo('Proceed bandcamp data');
-  chromeSendMessageToCurrentTab({ type: 'B2D_BC_DATA' }, (response) => {
-    logInfo('Receive message B2D_BC_DATA', response);
-    if (
-      response === null ||
-      typeof response === 'undefined' ||
-      Object.keys(response).length === 0
-    ) {
-      showBandcampDataNotFoundWarning();
-      return;
-    }
+  logInfo('Proceed Bandcamp data');
 
-    processBandcampResponse(response);
-  });
+  chromeSendMessageToCurrentTab(
+    { type: 'B2D_BC_DATA' },
+    processBandcampResponse,
+    showBandcampDataNotFoundWarning
+  );
 }
 
 async function proceedDiscogsEditPageData() {
-  logInfo('Proceed discogs edit page data');
+  logInfo('Proceed Discogs edit page data');
 
   chromeSendMessageToCurrentTab(
     { type: 'B2D_DISCOGS_EDIT_PAGE_DATA' },
-    (response) => {
-      if (
-        response === null ||
-        typeof response === 'undefined' ||
-        Object.keys(response).length === 0 ||
-        typeof response.data === 'undefined'
-      ) {
-        return;
-      }
-
-      processDiscogsDraftPageResponse(response);
-    }
+    processDiscogsDraftPageResponse
   );
 }
 

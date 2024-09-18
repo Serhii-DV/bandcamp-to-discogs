@@ -43,9 +43,9 @@ async function proceedBandcampData() {
   logInfo('Proceed bandcamp data');
 
   getCurrentTab().then((tab) => {
-    logInfo('Send message BC_DATA');
-    chrome.tabs.sendMessage(tab.id, { type: 'BC_DATA' }, (response) => {
-      logInfo('Receive message BC_DATA', response);
+    logInfo('Send message B2D_BC_DATA');
+    chrome.tabs.sendMessage(tab.id, { type: 'B2D_BC_DATA' }, (response) => {
+      logInfo('Receive message B2D_BC_DATA', response);
       if (
         response === null ||
         typeof response === 'undefined' ||

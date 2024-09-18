@@ -29,7 +29,7 @@ import { bytesToSize } from '../utils/utils';
 import { setupConsole, setupConsoleRelease } from './console.js';
 import { isValidBandcampURL } from '../bandcamp/modules/html.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
-import { log, logInfo } from '../utils/console';
+import { logInfo } from '../utils/console';
 import { createReleaseFromSchema } from '../utils/schema';
 
 const btnDashboardTab = document.getElementById('dashboard-tab');
@@ -63,25 +63,21 @@ async function proceedBandcampData() {
 async function proceedDiscogsEditPageData() {
   logInfo('Proceed discogs edit page data');
 
-  getCurrentTab().then((tab) => {
-    log('Sending message `getDiscogsEditPageData` to current tab', tab);
-    chrome.tabs.sendMessage(
-      tab.id,
-      { type: 'getDiscogsEditPageData' },
-      (response) => {
-        if (
-          response === null ||
-          typeof response === 'undefined' ||
-          Object.keys(response).length === 0 ||
-          typeof response.data === 'undefined'
-        ) {
-          return;
-        }
-
-        processDiscogsDraftPageResponse(response);
+  chromeSendMessageToCurrentTab(
+    { type: 'B2D_DISCOGS_EDIT_PAGE_DATA' },
+    (response) => {
+      if (
+        response === null ||
+        typeof response === 'undefined' ||
+        Object.keys(response).length === 0 ||
+        typeof response.data === 'undefined'
+      ) {
+        return;
       }
-    );
-  });
+
+      processDiscogsDraftPageResponse(response);
+    }
+  );
 }
 
 function showBandcampDataNotFoundWarning() {

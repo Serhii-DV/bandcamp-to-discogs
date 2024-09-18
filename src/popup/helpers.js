@@ -97,7 +97,7 @@ function transformReleaseItemsToReleaseListData(currentTabUrl, releases) {
         onClick: () => {
           const metadata = Metadata.fromRelease(item);
           chromeSendMessageToCurrentTab({
-            type: 'metadata',
+            type: 'B2D_METADATA',
             metadata
           });
 

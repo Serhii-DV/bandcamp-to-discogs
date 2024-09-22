@@ -1,5 +1,14 @@
 # Change log
 
+## 0.13.0 (2024-09-22)
+
+### Features
+
+- discogs: Show credits hint on the Discogs edit page
+- popup: Receive bandcamp artist schema
+- popup: Show apply metadata icon only on Discogs edit page
+- core: Use a generic method for sending messages from popup to the page
+
 ## 0.12.0 (2024-08-16)
 
 ### Features

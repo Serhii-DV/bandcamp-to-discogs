@@ -1,7 +1,10 @@
 import { Release } from '../app/release.js';
 import { Metadata } from '../discogs/app/metadata.js';
 import { getSearchDiscogsReleaseUrl } from '../discogs/modules/discogs.js';
-import { chromeSendMessageToCurrentTab } from '../utils/chrome';
+import {
+  chromeSendMessageToCurrentTab,
+  getCurrentTabUrl
+} from '../utils/chrome';
 import {
   createIconLink,
   disable,
@@ -12,6 +15,7 @@ import {
 } from '../utils/html';
 import { generateKeyForReleaseItem } from '../utils/key-generator';
 import { convertToAlias, isArray, isObject, isString } from '../utils/utils';
+import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 
 /**
  * Converts a JavaScript object to an HTML element representing a table.
@@ -59,10 +63,11 @@ export function objectToHtmlElement(data) {
 }
 
 /**
+ * @param {string} currentTabUrl
  * @param {Array<ReleaseItem>|Array<Release>} releases
  * @return {Array}
  */
-function transformReleaseItemsToReleaseListData(releases) {
+function transformReleaseItemsToReleaseListData(currentTabUrl, releases) {
   const data = [];
 
   releases.forEach((item) => {
@@ -81,7 +86,10 @@ function transformReleaseItemsToReleaseListData(releases) {
     });
     const controls = [viewLink, searchLink];
 
-    if (item instanceof Release) {
+    if (
+      isValidDiscogsReleaseEditUrl(currentTabUrl) &&
+      item instanceof Release
+    ) {
       const applyMetadataLink = createIconLink({
         title: 'Load release hints into the current Discogs release draft',
         iconDefault: 'file-arrow-down',
@@ -89,7 +97,7 @@ function transformReleaseItemsToReleaseListData(releases) {
         onClick: () => {
           const metadata = Metadata.fromRelease(item);
           chromeSendMessageToCurrentTab({
-            type: 'metadata',
+            type: 'B2D_METADATA',
             metadata
           });
 
@@ -118,7 +126,13 @@ function transformReleaseItemsToReleaseListData(releases) {
  * @param {Array<ReleaseItem>|Array<Release>} releases
  */
 export function populateReleasesList(releasesList, releases) {
-  releasesList.populateData(transformReleaseItemsToReleaseListData(releases));
+  getCurrentTabUrl().then((url) => {
+    if (!url) return;
+
+    releasesList.populateData(
+      transformReleaseItemsToReleaseListData(url, releases)
+    );
+  });
 }
 
 export function setBackgroundImage(element, imageUrl) {

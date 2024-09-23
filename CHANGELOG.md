@@ -1,5 +1,15 @@
 # Change log
 
+## 0.13.1 (2024-09-23)
+
+### Features
+
+- bandcamp: Always save/update release data in the extension storage
+
+### Fixed
+
+- bandcamp: Credit text can be missing in schema
+
 ## 0.13.0 (2024-09-22)
 
 ### Features

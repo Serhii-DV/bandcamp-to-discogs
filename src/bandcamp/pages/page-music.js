@@ -112,7 +112,7 @@ function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
       : '*';
     iso.arrange({ filter: filter });
 
-    albumAmountWidget.querySelector('.b2d-visible').innerHTML =
+    albumAmountWidget.querySelector('.b2d-visible').textContent =
       iso.getFilteredItemElements().length;
 
     // try to updata images

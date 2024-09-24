@@ -1,6 +1,12 @@
 # Change log
 
-## 0.14.0 (2024-09-XX)
+## 0.14.0 (2024-09-24)
+
+### Fixed
+
+- core: Storage method `getBytesInUse` is not supported in Firefox.
+
+## 0.14.0 (2024-09-24)
 
 ### Features
 

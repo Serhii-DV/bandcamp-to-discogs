@@ -16,15 +16,96 @@ Bandcamp to Discogs (B2D) - is a Google Chrome extension designed to assist in c
 
 ### Installation
 
+#### 1. Prerequisites
+
+* **OS**: Windows, macOS, Linux
+* **Node.js**: 20.x or later
+* **npm**: 10.x or later
+* **Firefox Developer Edition**: [Download](https://www.mozilla.org/en-US/firefox/developer/)
+* **Google Chrome**: [Download](https://www.google.com/chrome/)
+
+#### 2. Setup
+
+Clone the repository:
+
 ```bash
-npm install typescript ts-loader source-map-loader
+gh repo clone Serhii-DV/bandcamp-to-discogs
+cd bandcamp-to-discogs
 ```
 
-Support chrome types:
+Install dependencies:
 
 ```bash
-npm install --save @types/chrome
+npm install
 ```
+
+### 3. Build and Run
+
+Development
+
+```bash
+npm run dev
+```
+
+Production
+
+```bash
+npm run build
+```
+
+The extension files will be created in the `dist/` folder.
+
+### 4. Lint and Format
+
+Linting:
+
+```bash
+npm run lint
+```
+
+Fix lint issues:
+
+```bash
+npm run lint:fix
+```
+
+Prettier check:
+
+```bash
+npm run prettier:check
+```
+
+Fix code formatting:
+
+```bash
+npm run prettier:fix
+```
+
+### 5. Testing in Firefox
+
+Build:
+
+```bash
+npm run build
+```
+
+Load in Firefox:
+
+Open `about:debugging#/runtime/this-firefox` in Firefox Developer Edition and click "Load Temporary Add-on", selecting the `manifest.json`.
+
+### 6. Testing in Google Chrome
+
+Build:
+
+```bash
+npm run build
+```
+
+Load in Chrome:
+
+* Open Chrome and go to `chrome://extensions/`.
+* Enable Developer mode (top right corner).
+* Click "Load unpacked" and select the build folder containing `manifest.json`.
 
 ## Author
 

@@ -1,5 +1,5 @@
 {
-  "version": "0.13.1",
+  "version": "0.14.0",
   "devDependencies": {
     "@swc/html": "^1.7.23",
     "@types/chrome": "^0.0.271",
@@ -38,6 +38,8 @@
     "prettier:fix": "prettier . --write",
     "pc": "npm run prettier:check",
     "pf": "npm run prettier:fix",
-    "setup-git-hooks": "git config core.hooksPath .githooks"
+    "setup-git-hooks": "git config core.hooksPath .githooks",
+    "dist-zip": "rm -rf bandcamp-to-discogs-${npm_package_version}.zip && cd dist/ && zip -r ../bandcamp-to-discogs-${npm_package_version}.zip ./* && cd ..",
+    "make": "npm run build && npm run dist-zip"
   }
 }

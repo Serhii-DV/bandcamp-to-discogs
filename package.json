@@ -38,6 +38,8 @@
     "prettier:fix": "prettier . --write",
     "pc": "npm run prettier:check",
     "pf": "npm run prettier:fix",
-    "setup-git-hooks": "git config core.hooksPath .githooks"
+    "setup-git-hooks": "git config core.hooksPath .githooks",
+    "dist-zip": "cd dist/ && zip -r ../bandcamp-to-discogs-${npm_package_version}.zip ./* && cd ..",
+    "make": "npm run build && npm run dist-zip"
   }
 }

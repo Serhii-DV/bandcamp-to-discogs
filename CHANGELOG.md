@@ -1,5 +1,11 @@
 # Change log
 
+## 0.14.0 (2024-09-XX)
+
+### Features
+
+- core: Make the extension compatible with Firefox add-ons.
+
 ## 0.13.1 (2024-09-23)
 
 ### Features

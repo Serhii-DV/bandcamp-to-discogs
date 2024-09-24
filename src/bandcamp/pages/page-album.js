@@ -1,6 +1,5 @@
 import { logInfo } from '../../utils/console';
-import { getCurrentUrl } from '../../utils/html';
-import { findReleaseByUrl, saveRelease } from '../../utils/storage';
+import { saveRelease } from '../../utils/storage';
 import { getMusicAlbumSchemaData } from '../modules/html.js';
 import { createReleaseFromSchema } from '../../utils/schema';
 
@@ -17,10 +16,7 @@ export function setupPageAlbum() {
  * @param {Release} release
  */
 function setupRelease(release) {
-  // Save release data to the storage if it doesn't exist
-  findReleaseByUrl(getCurrentUrl(), null, () => {
-    saveRelease(release);
-  });
+  saveRelease(release);
 }
 
 /**

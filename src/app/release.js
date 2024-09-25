@@ -107,6 +107,10 @@ export class Release {
     return this.releaseItem.title;
   }
 
+  get uuid() {
+    return this.releaseItem.uuid;
+  }
+
   toStorageObject() {
     return {
       uuid: this.releaseItem.uuid,

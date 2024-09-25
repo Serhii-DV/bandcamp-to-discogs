@@ -245,9 +245,17 @@ class ReleasesList extends HTMLElement {
       row.classList.add('release-item');
       setDataAttribute(row, 'sort', index);
       setDataAttribute(row, item.dataAtts);
+
+      const visitedDateISO = '2024-09-25T19:44:12.793Z';
+      const visitedDate = new Date(visitedDateISO);
+
       row.innerHTML = `
         <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
-        <td><label for="${checkboxId}">${item.title}</label><span class="controls"></span></td>
+        <td>
+          <label for="${checkboxId}">${item.title}</label>
+          <span class="history-date" title="Visited on ${visitedDate.toLocaleString()}">${visitedDate.toLocaleDateString()}</span>
+          <span class="controls"></span>
+        </td>
       `;
 
       const controlsEl = row.querySelector('span.controls');

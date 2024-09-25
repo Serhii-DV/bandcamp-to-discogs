@@ -249,14 +249,17 @@ class ReleasesList extends HTMLElement {
       setDataAttribute(row, 'sort', index);
       setDataAttribute(row, { title });
 
-      const visitedDateISO = '2024-09-25T19:44:12.793Z';
-      const visitedDate = new Date(visitedDateISO);
+      let historyDateHtml = '';
+      if (item.visitedDate) {
+        const visitedDate = new Date(item.visitedDate);
+        historyDateHtml = `<span class="history-date" title="Visited on ${visitedDate.toLocaleString()}">${visitedDate.toLocaleDateString()}</span>`;
+      }
 
       row.innerHTML = `
         <td><input type="checkbox" value="${releaseItem.uuid}" id="${checkboxId}" class="release-checkbox"></td>
         <td>
           <label for="${checkboxId}">${title}</label>
-          <span class="history-date" title="Visited on ${visitedDate.toLocaleString()}">${visitedDate.toLocaleDateString()}</span>
+          ${historyDateHtml}
           <span class="controls"></span>
         </td>
       `;

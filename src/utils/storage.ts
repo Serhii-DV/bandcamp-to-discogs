@@ -1,7 +1,13 @@
 import { Release } from '../app/release.js';
 import { log, logError } from './console';
 import { generateKeyForUrl, generateKeysFromUrls } from './key-generator';
-import { hasOwnProperty, isArray, isFunction, isObject } from './utils';
+import {
+  getOwnProperty,
+  hasOwnProperty,
+  isArray,
+  isFunction,
+  isObject
+} from './utils';
 
 const storage = chrome.storage.local;
 
@@ -114,27 +120,38 @@ export function saveRelease(release: Release): void {
 }
 
 export function saveReleaseInHistory(release: Release): void {
-  getReleaseHistory(release).then((releaseHistory: Array<string>) => {
-    const currentDateTimeISO = new Date().toISOString();
-    releaseHistory.push(currentDateTimeISO);
-    storage.set({ history: history }).then(() => {
-      log(`Release ${release.uuid} history added`);
+  getHistoryFromStorage().then((history) => {
+    const uuid = release.uuid;
+    const releaseHistory = getOwnProperty(history, uuid, []);
+
+    releaseHistory.push(new Date().toISOString());
+    history[uuid] = releaseHistory;
+
+    storage.set({ history }).then(() => {
+      log(`Release ${uuid} history added`);
     });
   });
 }
 
-export function getReleaseHistory(release: Release): Promise<Array<string>> {
-  const releaseUuid = release.uuid;
+export function getReleaseHistoryByUuid(uuid: string): Promise<Array<string>> {
+  return getHistoryFromStorage().then((history) => {
+    return getOwnProperty(history, uuid, []);
+  });
+}
+
+interface DatesByUuid {
+  [key: string]: string[];
+}
+
+export function getHistoryFromStorage(): Promise<DatesByUuid> {
   const historyKey = 'history';
 
   return storage.get([historyKey]).then((result) => {
     const history = hasOwnProperty(result, historyKey)
       ? result[historyKey]
       : {};
-    const releaseHistory = hasOwnProperty(history, releaseUuid)
-      ? history[releaseUuid]
-      : [];
-    return releaseHistory;
+
+    return history;
   });
 }
 

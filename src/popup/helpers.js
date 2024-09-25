@@ -13,8 +13,15 @@ import {
   hasDataAttribute,
   setDataAttribute
 } from '../utils/html';
-import { isArray, isObject, isString } from '../utils/utils';
+import {
+  getArrLastElement,
+  getOwnProperty,
+  isArray,
+  isObject,
+  isString
+} from '../utils/utils';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
+import { getHistoryFromStorage } from '../utils/storage';
 
 /**
  * Converts a JavaScript object to an HTML element representing a table.
@@ -64,9 +71,14 @@ export function objectToHtmlElement(data) {
 /**
  * @param {string} currentTabUrl
  * @param {Array<ReleaseItem>|Array<Release>} releases
+ * @param {import('../utils/utils').ObjectByStringKey} history
  * @return {Array}
  */
-function transformReleaseItemsToReleaseListData(currentTabUrl, releases) {
+function transformReleaseItemsToReleaseListData(
+  currentTabUrl,
+  releases,
+  history
+) {
   const data = [];
 
   releases.forEach((item) => {
@@ -106,8 +118,11 @@ function transformReleaseItemsToReleaseListData(currentTabUrl, releases) {
       controls.push(applyMetadataLink);
     }
 
+    const releaseHistory = getOwnProperty(history, releaseItem.uuid, []);
+
     data.push({
       releaseItem,
+      visitedDate: getArrLastElement(releaseHistory),
       controls
     });
   });
@@ -123,9 +138,11 @@ export function populateReleasesList(releasesList, releases) {
   getCurrentTabUrl().then((url) => {
     if (!url) return;
 
-    releasesList.populateData(
-      transformReleaseItemsToReleaseListData(url, releases)
-    );
+    getHistoryFromStorage().then((history) => {
+      releasesList.populateData(
+        transformReleaseItemsToReleaseListData(url, releases, history)
+      );
+    });
   });
 }
 

@@ -231,7 +231,7 @@ class ReleasesList extends HTMLElement {
   }
 
   /**
-   * @param {Array} data
+   * @param {Array<ReleaseItem>} data
    * @returns {Self}
    */
   populateData(data) {
@@ -240,19 +240,22 @@ class ReleasesList extends HTMLElement {
     tableBody.innerHTML = ''; // Clear existing data
 
     data.forEach((item, index) => {
+      const releaseItem = item.releaseItem;
+      const title = `${releaseItem.artist} - ${releaseItem.title}`;
+
       const row = document.createElement('tr');
       const checkboxId = self.getPrefixed('checkbox_' + index);
       row.classList.add('release-item');
       setDataAttribute(row, 'sort', index);
-      setDataAttribute(row, item.dataAtts);
+      setDataAttribute(row, { title });
 
       const visitedDateISO = '2024-09-25T19:44:12.793Z';
       const visitedDate = new Date(visitedDateISO);
 
       row.innerHTML = `
-        <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
+        <td><input type="checkbox" value="${releaseItem.uuid}" id="${checkboxId}" class="release-checkbox"></td>
         <td>
-          <label for="${checkboxId}">${item.title}</label>
+          <label for="${checkboxId}">${title}</label>
           <span class="history-date" title="Visited on ${visitedDate.toLocaleString()}">${visitedDate.toLocaleDateString()}</span>
           <span class="controls"></span>
         </td>

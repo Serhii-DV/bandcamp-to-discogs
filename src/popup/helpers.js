@@ -13,8 +13,7 @@ import {
   hasDataAttribute,
   setDataAttribute
 } from '../utils/html';
-import { generateKeyForReleaseItem } from '../utils/key-generator';
-import { convertToAlias, isArray, isObject, isString } from '../utils/utils';
+import { isArray, isObject, isString } from '../utils/utils';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 
 /**
@@ -71,15 +70,15 @@ function transformReleaseItemsToReleaseListData(currentTabUrl, releases) {
   const data = [];
 
   releases.forEach((item) => {
-    const release = item instanceof Release ? item.releaseItem : item;
+    const releaseItem = item instanceof Release ? item.releaseItem : item;
     const viewLink = createIconLink({
-      href: release.url,
+      href: releaseItem.url,
       iconDefault: 'box-arrow-up-right',
       className: 'link-bandcamp-url',
       title: 'View bandcamp release'
     });
     const searchLink = createIconLink({
-      href: getSearchDiscogsReleaseUrl(release.artist, release.title),
+      href: getSearchDiscogsReleaseUrl(releaseItem.artist, releaseItem.title),
       iconDefault: 'search',
       className: 'link-discogs-search',
       title: 'Search release on Discogs'
@@ -108,12 +107,7 @@ function transformReleaseItemsToReleaseListData(currentTabUrl, releases) {
     }
 
     data.push({
-      title: `${release.artist} - ${release.title}`,
-      value: generateKeyForReleaseItem(release),
-      id: convertToAlias(release.title),
-      dataAtts: {
-        title: `${release.artist} - ${release.title}`
-      },
+      releaseItem,
       controls
     });
   });

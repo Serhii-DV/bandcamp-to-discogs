@@ -1,10 +1,6 @@
 import { Release } from '../app/release.js';
 import { log, logError } from './console';
-import {
-  generateKeyForRelease,
-  generateKeyForUrl,
-  generateKeysFromUrls
-} from './key-generator';
+import { generateKeyForUrl, generateKeysFromUrls } from './key-generator';
 import { hasOwnProperty, isArray, isFunction, isObject } from './utils';
 
 const storage = chrome.storage.local;
@@ -111,9 +107,8 @@ export function findReleasesByUrls(
  * Saves a Release object to local storage.
  */
 export function saveRelease(release: Release): void {
-  const key = generateKeyForRelease(release);
-  storage.set({ [key]: release.toStorageObject() }, () => {
-    log('Release data was saved in the local storage');
+  storage.set({ [release.uuid]: release.toStorageObject() }).then(() => {
+    log(`Release ${release.uuid} was saved in the local storage`);
     saveReleaseInHistory(release);
   });
 }
@@ -129,14 +124,16 @@ export function saveReleaseInHistory(release: Release): void {
 }
 
 export function getReleaseHistory(release: Release): Promise<Array<string>> {
-  const key = generateKeyForRelease(release);
+  const releaseUuid = release.uuid;
   const historyKey = 'history';
 
   return storage.get([historyKey]).then((result) => {
     const history = hasOwnProperty(result, historyKey)
       ? result[historyKey]
       : {};
-    const releaseHistory = hasOwnProperty(history, key) ? history[key] : [];
+    const releaseHistory = hasOwnProperty(history, releaseUuid)
+      ? history[releaseUuid]
+      : [];
     return releaseHistory;
   });
 }

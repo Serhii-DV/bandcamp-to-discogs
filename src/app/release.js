@@ -113,7 +113,6 @@ export class Release {
 
   toStorageObject() {
     return {
-      uuid: this.releaseItem.uuid,
       artist: this.releaseItem.artist,
       title: this.releaseItem.title,
       url: this.releaseItem.url,

@@ -8,6 +8,7 @@ import {
   isFunction,
   isObject
 } from './utils';
+import { validate as isUUID } from 'uuid';
 
 const storage = chrome.storage.local;
 
@@ -25,28 +26,29 @@ export function logStorageData() {
 }
 
 /**
- * Finds all releases from storage and executes a callback function with the releases.
- * @param onFind - The callback function to call with the found releases.
+ * Finds all releases from storage and release history and executes a callback function with the releases.
  */
-export function findAllReleases(onFind?: ReleasesCallback): void {
-  storage.get(null, (data: StorageData) => {
+export function findAllReleases(): Promise<Release[]> {
+  return storage.get(null).then((storageData: StorageData) => {
     const releases: Release[] = [];
 
-    for (const key in data) {
-      if (!hasOwnProperty(data, key) || !isObject(data[key])) {
+    for (const key in storageData) {
+      if (
+        !hasOwnProperty(storageData, key) ||
+        !isObject(storageData[key]) ||
+        !isUUID(key)
+      ) {
         continue;
       }
 
       try {
-        releases.push(Release.fromStorageObject(data[key]));
+        releases.push(Release.fromStorageObject(storageData[key]));
       } catch (error) {
         continue;
       }
     }
 
-    if (onFind && isFunction(onFind)) {
-      onFind(releases);
-    }
+    return releases;
   });
 }
 

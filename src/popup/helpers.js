@@ -13,13 +13,7 @@ import {
   hasDataAttribute,
   setDataAttribute
 } from '../utils/html';
-import {
-  getArrLastElement,
-  getOwnProperty,
-  isArray,
-  isObject,
-  isString
-} from '../utils/utils';
+import { getOwnProperty, isArray, isObject, isString } from '../utils/utils';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { getHistoryData } from '../utils/storage';
 
@@ -141,7 +135,7 @@ function transformReleaseItemsToReleaseListData(
 
     data.push({
       releaseItem,
-      visitedDate: getArrLastElement(history),
+      history,
       controls
     });
   });

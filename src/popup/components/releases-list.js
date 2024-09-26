@@ -1,5 +1,5 @@
 import { getDataAttribute, input, setDataAttribute } from '../../utils/html';
-import { hasClass, isEmptyArray } from '../../utils/utils';
+import { getArrLastElement, hasClass, isEmptyArray } from '../../utils/utils';
 
 class ReleasesList extends HTMLElement {
   constructor() {
@@ -251,10 +251,13 @@ class ReleasesList extends HTMLElement {
       setDataAttribute(row, 'sort', index);
       setDataAttribute(row, { title });
 
+      const history = item.history;
+      const lastHistoryDate = getArrLastElement(history);
       let historyDateHtml = '';
       let visitedDate;
-      if (item.visitedDate) {
-        visitedDate = new Date(item.visitedDate);
+
+      if (lastHistoryDate) {
+        visitedDate = new Date(lastHistoryDate);
         historyDateHtml = `<span class="history-date" title="Visited on ${visitedDate.toLocaleString()}">${visitedDate.toLocaleDateString()}</span>`;
       }
 

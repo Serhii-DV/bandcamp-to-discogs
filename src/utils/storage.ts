@@ -18,9 +18,8 @@ interface StorageData {
 type ReleaseCallback = (release: Release) => void;
 type ReleasesCallback = (releases: Release[]) => void;
 
-export function logStorage() {
-  log('Storage data');
-  storage.get(null, (data) => console.log(data));
+export function logStorageData() {
+  storage.get(null).then((data) => log('Storage data', data));
 }
 
 /**

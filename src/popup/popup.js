@@ -31,6 +31,7 @@ import { isValidBandcampURL } from '../bandcamp/modules/html.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { createReleaseFromSchema } from '../utils/schema';
+import { setupDashboardTab } from './tabs/dashboard_tab.js';
 
 const btnDashboardTab = document.getElementById('dashboard-tab');
 const btnReleaseTab = document.getElementById('release-tab');
@@ -179,6 +180,8 @@ function setupNavigation() {
     show(btnDownloadStorage);
     setupHistoryTab(document.getElementById('history'), btnDownloadStorage);
   });
+
+  setupDashboardTab(document.getElementById('history'));
 }
 
 function initialize(tab) {

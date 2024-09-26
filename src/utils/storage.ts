@@ -2,6 +2,7 @@ import { Release } from '../app/release.js';
 import { log, logError } from './console';
 import { generateKeyForUrl, generateKeysFromUrls } from './key-generator';
 import {
+  getArrLastElement,
   getOwnProperty,
   hasOwnProperty,
   isArray,
@@ -89,6 +90,42 @@ export function findReleaseByUrl(
   });
 }
 
+export function getReleaseByUuid(uuid: string): Promise<Release | undefined> {
+  return storage.get([uuid]).then((storageData: StorageData) => {
+    const releaseData = storageData[uuid];
+
+    try {
+      return Release.fromStorageObject(releaseData);
+    } catch (error) {
+      log('Broken storage data for release', releaseData);
+      clearStorageByKey(uuid);
+    }
+
+    return undefined;
+  });
+}
+
+export function getReleasesByUuids(uuids: string[]): Promise<Release[]> {
+  return storage.get(uuids).then((storageData: StorageData) => {
+    return getReleasesFromStorageData(storageData);
+  });
+}
+
+const getReleasesFromStorageData = (storageData: StorageData) => {
+  const releases: Release[] = Object.values(storageData)
+    .map((obj: any) => {
+      try {
+        return Release.fromStorageObject(obj);
+      } catch (error) {
+        log('Broken storage object.', JSON.stringify(error), obj);
+        return null;
+      }
+    })
+    .filter((obj: Release | null): obj is Release => obj instanceof Release);
+
+  return releases;
+};
+
 /**
  * Finds releases by their URLs and executes a callback with the found releases.
  */
@@ -161,6 +198,37 @@ export function getHistoryData(): Promise<HistoryData> {
     }
 
     return historyData;
+  });
+}
+
+export function getLatestHistoryData(
+  limit: number
+): Promise<Record<string, string>> {
+  return getHistoryData().then((historyData) => {
+    const releaseByLatestDate: Record<string, string> = {};
+
+    for (const uuid in historyData) {
+      releaseByLatestDate[uuid] = getArrLastElement(
+        getOwnProperty(historyData, uuid, [])
+      );
+    }
+
+    const sortedEntries = Object.entries(releaseByLatestDate).sort(
+      ([, dateA], [, dateB]) => {
+        // Convert the date strings to Date objects for comparison
+        return new Date(dateB).getTime() - new Date(dateA).getTime();
+      }
+    );
+
+    const topEntries = sortedEntries.slice(0, limit);
+
+    // Create a new object maintaining the original keys and their sorted values
+    const sortedReleaseByLatestDate: Record<string, string> = {};
+    for (const [key, value] of topEntries) {
+      sortedReleaseByLatestDate[key] = value;
+    }
+
+    return sortedReleaseByLatestDate;
   });
 }
 

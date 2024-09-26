@@ -154,9 +154,8 @@ export function getHistoryData(): Promise<HistoryData> {
     const historyData: HistoryData = {};
 
     for (const key in storageData) {
-      if (!key.startsWith('history.')) continue;
-
-      const uuid = key.slice(8);
+      if (!key.startsWith(HISTORY_KEY_PREFIX)) continue;
+      const uuid = key.slice(HISTORY_KEY_PREFIX.length);
       if (!isUUID(uuid)) continue;
       historyData[uuid] = storageData[key];
     }
@@ -165,22 +164,11 @@ export function getHistoryData(): Promise<HistoryData> {
   });
 }
 
-const generateHistoryKey = (uuid: string) => 'history.' + uuid;
+const HISTORY_KEY_PREFIX = 'history.';
+const generateHistoryKey = (uuid: string) => HISTORY_KEY_PREFIX + uuid;
 
 interface DatesByUuid {
   [key: string]: string[];
-}
-
-export function getHistoryFromStorage(): Promise<DatesByUuid> {
-  const historyKey = 'history';
-
-  return storage.get([historyKey]).then((result) => {
-    const history = hasOwnProperty(result, historyKey)
-      ? result[historyKey]
-      : {};
-
-    return history;
-  });
 }
 
 /**

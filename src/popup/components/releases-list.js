@@ -30,7 +30,7 @@ class ReleasesList extends HTMLElement {
             <b2d-icon name="sort-down"></b2d-icon>
           </button>
           <ul id="${sortingId}" class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#" data-attr="data-visited" data-dir="desc" data-icon="sort-down" data-title="Sorted by visited date (latest first)"><b2d-icon name="sort-down"></b2d-icon> by visited date (latest first)</a></li>
+            <li><a class="dropdown-item" href="#" data-attr="data-visited" data-comp-type="date" data-dir="desc" data-icon="sort-down" data-title="Sorted by visited date (latest first)"><b2d-icon name="sort-down"></b2d-icon> by visited date (latest first)</a></li>
             <li><a class="dropdown-item" href="#" data-attr="data-visited" data-dir="asc" data-icon="sort-up" data-title="Sorted by visited date (oldest first)"><b2d-icon name="sort-up"></b2d-icon> by visited date (oldest first)</a></li>
             <li><a class="dropdown-item" href="#" data-attr="data-title" data-dir="asc" data-icon="sort-alpha-down" data-title="Sorted by name A..z"><b2d-icon name="sort-alpha-down"></b2d-icon> by name A..z</a></li>
             <li><a class="dropdown-item" href="#" data-attr="data-title" data-dir="desc" data-icon="sort-alpha-down-alt" data-title="Sorted by name z..A"><b2d-icon name="sort-alpha-down-alt"></b2d-icon> by name z..A</a></li>
@@ -122,6 +122,7 @@ class ReleasesList extends HTMLElement {
     const sortTable = (attr, dir = 'asc', compType = 'string') => {
       const rows = Array.from(table.rows).slice(1); // Exclude the header row
       const isComparingInt = compType === 'int';
+      const isComparingDate = compType === 'date';
 
       rows.sort((a, b) => {
         let x = a.getAttribute(attr);
@@ -130,6 +131,13 @@ class ReleasesList extends HTMLElement {
         if (isComparingInt) {
           x = parseInt(x);
           y = parseInt(y);
+
+          return dir === 'asc' ? x - y : y - x;
+        }
+
+        if (isComparingDate) {
+          x = new Date(x);
+          y = new Date(y);
 
           return dir === 'asc' ? x - y : y - x;
         }
@@ -273,17 +281,12 @@ class ReleasesList extends HTMLElement {
 
       const history = item.history;
       const lastHistoryDate = getArrLastElement(history);
-      let historyDateHtml = '';
-      let visitedDate;
+      const visitedDate = new Date(lastHistoryDate ?? 0);
+      setDataAttribute(row, 'visited', visitedDate.toLocaleString());
 
-      if (lastHistoryDate) {
-        visitedDate = new Date(lastHistoryDate);
-        historyDateHtml = `<span class="history-date" title="Visited on ${visitedDate.toLocaleString()}">${visitedDate.toLocaleDateString()}</span>`;
-      }
-
-      setDataAttribute(row, {
-        visited: visitedDate ? visitedDate.toLocaleString() : ''
-      });
+      const historyDateHtml = lastHistoryDate
+        ? `<span class="history-date" title="Visited on ${visitedDate.toLocaleString()}">${visitedDate.toLocaleDateString()}</span>`
+        : '';
 
       row.innerHTML = `
         <td><input type="checkbox" value="${releaseItem.uuid}" id="${checkboxId}" class="release-checkbox"></td>

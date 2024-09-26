@@ -1,6 +1,13 @@
 # Change log
 
-## 0.14.0 (2024-09-24)
+## 0.15.0 (2024-09-YY)
+
+### Features
+
+- core: Save release visited history
+- popup: Show releases history sorted by visited date by default
+
+## 0.14.1 (2024-09-24)
 
 ### Fixed
 

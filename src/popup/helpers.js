@@ -13,8 +13,15 @@ import {
   hasDataAttribute,
   setDataAttribute
 } from '../utils/html';
-import { getArrLastElement, isArray, isObject, isString } from '../utils/utils';
+import {
+  getArrLastElement,
+  getOwnProperty,
+  isArray,
+  isObject,
+  isString
+} from '../utils/utils';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
+import { getHistoryData } from '../utils/storage';
 
 /**
  * Converts a JavaScript object to an HTML element representing a table.
@@ -108,9 +115,14 @@ const createApplyMetadataLink = (release) =>
 /**
  * @param {string} currentTabUrl
  * @param {Array<ReleaseItem>|Array<Release>} releases
+ * @param {import('../utils/storage').HistoryData}
  * @return {Array}
  */
-function transformReleaseItemsToReleaseListData(currentTabUrl, releases) {
+function transformReleaseItemsToReleaseListData(
+  currentTabUrl,
+  releases,
+  historyData
+) {
   const data = [];
   const isDiscogsEditPage = isValidDiscogsReleaseEditUrl(currentTabUrl);
 
@@ -125,15 +137,13 @@ function transformReleaseItemsToReleaseListData(currentTabUrl, releases) {
       controls.push(createApplyMetadataLink(item));
     }
 
-    const history = [];
+    const history = getOwnProperty(historyData, releaseItem.uuid, []);
 
     data.push({
       releaseItem,
       visitedDate: getArrLastElement(history),
       controls
     });
-    // getHistoryByUuid(releaseItem.uuid).then((history) => {
-    // });
   });
 
   return data;
@@ -147,9 +157,11 @@ export function populateReleasesList(releasesList, releases) {
   getCurrentTabUrl().then((url) => {
     if (!url) return;
 
-    releasesList.populateData(
-      transformReleaseItemsToReleaseListData(url, releases)
-    );
+    getHistoryData().then((historyData) => {
+      releasesList.populateData(
+        transformReleaseItemsToReleaseListData(url, releases, historyData)
+      );
+    });
   });
 }
 

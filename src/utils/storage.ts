@@ -16,7 +16,11 @@ interface StorageData {
   [key: string]: any;
 }
 
-interface HistoryData extends Array<string> {}
+interface History extends Array<string> {}
+
+export interface HistoryData {
+  [key: string]: History;
+}
 
 type ReleaseCallback = (release: Release) => void;
 type ReleasesCallback = (releases: Release[]) => void;
@@ -132,17 +136,33 @@ export function addReleaseHistory(release: Release): void {
   });
 }
 
-export function getHistoryByUuid(uuid: string): Promise<HistoryData> {
+export function getHistoryByUuid(uuid: string): Promise<History> {
   const key = generateHistoryKey(uuid);
   return storage.get([key]).then((result) => getOwnProperty(result, key, []));
 }
 
 export function setHistoryByUuid(
   uuid: string,
-  history: HistoryData
+  history: History
 ): Promise<void> {
   const key = generateHistoryKey(uuid);
   return storage.set({ [key]: history });
+}
+
+export function getHistoryData(): Promise<HistoryData> {
+  return storage.get(null).then((storageData: StorageData) => {
+    const historyData: HistoryData = {};
+
+    for (const key in storageData) {
+      if (!key.startsWith('history.')) continue;
+
+      const uuid = key.slice(8);
+      if (!isUUID(uuid)) continue;
+      historyData[uuid] = storageData[key];
+    }
+
+    return historyData;
+  });
 }
 
 const generateHistoryKey = (uuid: string) => 'history.' + uuid;

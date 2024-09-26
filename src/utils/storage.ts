@@ -167,10 +167,6 @@ export function getHistoryData(): Promise<HistoryData> {
 const HISTORY_KEY_PREFIX = 'history.';
 const generateHistoryKey = (uuid: string) => HISTORY_KEY_PREFIX + uuid;
 
-interface DatesByUuid {
-  [key: string]: string[];
-}
-
 /**
  * Clears all data from local storage.
  */

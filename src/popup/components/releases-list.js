@@ -1,4 +1,9 @@
-import { getDataAttribute, input, setDataAttribute } from '../../utils/html';
+import {
+  click,
+  getDataAttribute,
+  input,
+  setDataAttribute
+} from '../../utils/html';
 import { getArrLastElement, hasClass, isEmptyArray } from '../../utils/utils';
 
 class ReleasesList extends HTMLElement {
@@ -81,11 +86,13 @@ class ReleasesList extends HTMLElement {
       self.refreshStatus();
     }
 
+    self.sortingDropdownMenu = self.querySelector('#' + sortingId);
+    self.sortingItems =
+      self.sortingDropdownMenu.querySelectorAll('.dropdown-item');
+
     function setupSorting() {
-      const sortingDropdownMenu = self.querySelector('#' + sortingId);
+      const sortingDropdownMenu = self.sortingDropdownMenu;
       const sortingBtn = self.querySelector('#' + sortingId + '-button');
-      const sortingItems =
-        sortingDropdownMenu.querySelectorAll('.dropdown-item');
 
       function setupSortingButton(sortingItem) {
         const attr = getDataAttribute(sortingItem, 'attr');
@@ -103,7 +110,7 @@ class ReleasesList extends HTMLElement {
         const clickedItem = event.target;
         if (!clickedItem.classList.contains('dropdown-item')) return;
 
-        sortingItems.forEach((item) => item.classList.remove('active'));
+        self.sortingItems.forEach((item) => item.classList.remove('active'));
         clickedItem.classList.add('active');
 
         setupSortingButton(clickedItem);
@@ -172,6 +179,12 @@ class ReleasesList extends HTMLElement {
   refreshSearchStatus() {
     const self = this;
     input(self.searchInput);
+    return self;
+  }
+
+  sortByLatestDateVisited() {
+    const self = this;
+    click(self.sortingItems[0]);
     return self;
   }
 
@@ -291,7 +304,7 @@ class ReleasesList extends HTMLElement {
       tableBody.appendChild(row);
     });
 
-    self.refreshStatus().refreshSearchStatus();
+    self.refreshStatus().refreshSearchStatus().sortByLatestDateVisited();
 
     return self;
   }

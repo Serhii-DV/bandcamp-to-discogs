@@ -25,7 +25,7 @@ class ReleasesList extends HTMLElement {
             <b2d-icon name="sort-down"></b2d-icon>
           </button>
           <ul id="${sortingId}" class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item default" href="#" data-attr="data-visited" data-dir="desc" data-icon="sort-down" data-title="Sorted by visited date (latest first)"><b2d-icon name="sort-down"></b2d-icon> by visited date (latest first)</a></li>
+            <li><a class="dropdown-item" href="#" data-attr="data-visited" data-dir="desc" data-icon="sort-down" data-title="Sorted by visited date (latest first)"><b2d-icon name="sort-down"></b2d-icon> by visited date (latest first)</a></li>
             <li><a class="dropdown-item" href="#" data-attr="data-visited" data-dir="asc" data-icon="sort-up" data-title="Sorted by visited date (oldest first)"><b2d-icon name="sort-up"></b2d-icon> by visited date (oldest first)</a></li>
             <li><a class="dropdown-item" href="#" data-attr="data-title" data-dir="asc" data-icon="sort-alpha-down" data-title="Sorted by name A..z"><b2d-icon name="sort-alpha-down"></b2d-icon> by name A..z</a></li>
             <li><a class="dropdown-item" href="#" data-attr="data-title" data-dir="desc" data-icon="sort-alpha-down-alt" data-title="Sorted by name z..A"><b2d-icon name="sort-alpha-down-alt"></b2d-icon> by name z..A</a></li>
@@ -82,9 +82,10 @@ class ReleasesList extends HTMLElement {
     }
 
     function setupSorting() {
-      const sortingUl = self.querySelector('#' + sortingId);
+      const sortingDropdownMenu = self.querySelector('#' + sortingId);
       const sortingBtn = self.querySelector('#' + sortingId + '-button');
-      const sortingItems = sortingUl.querySelectorAll('.dropdown-item');
+      const sortingItems =
+        sortingDropdownMenu.querySelectorAll('.dropdown-item');
 
       function setupSortingButton(sortingItem) {
         const attr = getDataAttribute(sortingItem, 'attr');
@@ -98,10 +99,16 @@ class ReleasesList extends HTMLElement {
         sortTable(attr, dir, compType);
       }
 
-      sortingItems.forEach((option) => {
-        option.addEventListener('click', (e) => {
-          setupSortingButton(e.target);
-        });
+      sortingDropdownMenu.addEventListener('click', (event) => {
+        const clickedItem = event.target;
+        if (!clickedItem.classList.contains('dropdown-item')) return;
+
+        sortingItems.forEach((item) => item.classList.remove('active'));
+        clickedItem.classList.add('active');
+
+        setupSortingButton(clickedItem);
+
+        event.preventDefault();
       });
     }
 

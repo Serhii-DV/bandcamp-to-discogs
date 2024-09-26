@@ -2,7 +2,7 @@ import { log } from '../../utils/console';
 import { getLatestHistoryData, getReleasesByUuids } from '../../utils/storage';
 import { populateReleasesList } from '../helpers';
 
-export function setupDashboardTab(tab) {
+export function setupDashboardTab() {
   log('Setup dashboard tab');
   const releasesList = getLatestVisitedReleasesList();
 

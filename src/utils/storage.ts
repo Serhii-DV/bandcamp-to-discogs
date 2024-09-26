@@ -15,6 +15,8 @@ interface StorageData {
   [key: string]: any;
 }
 
+interface HistoryData extends Array<string> {}
+
 type ReleaseCallback = (release: Release) => void;
 type ReleasesCallback = (releases: Release[]) => void;
 
@@ -113,30 +115,35 @@ export function findReleasesByUrls(
  */
 export function saveRelease(release: Release): void {
   storage.set({ [release.uuid]: release.toStorageObject() }).then(() => {
-    log(`Release ${release.uuid} was saved in the local storage`);
-    saveReleaseInHistory(release);
+    log('Release saved in the local storage', release.uuid);
+    addReleaseHistory(release);
   });
 }
 
-export function saveReleaseInHistory(release: Release): void {
-  getHistoryFromStorage().then((history) => {
-    const uuid = release.uuid;
-    const releaseHistory = getOwnProperty(history, uuid, []);
-
-    releaseHistory.push(new Date().toISOString());
-    history[uuid] = releaseHistory;
-
-    storage.set({ history }).then(() => {
-      log(`Release ${uuid} history added`);
+export function addReleaseHistory(release: Release): void {
+  const uuid = release.uuid;
+  getHistoryByUuid(uuid).then((history) => {
+    history.push(new Date().toISOString());
+    setHistoryByUuid(uuid, history).then(() => {
+      log('New history added to release', uuid);
     });
   });
 }
 
-export function getReleaseHistoryByUuid(uuid: string): Promise<Array<string>> {
-  return getHistoryFromStorage().then((history) => {
-    return getOwnProperty(history, uuid, []);
-  });
+export function getHistoryByUuid(uuid: string): Promise<HistoryData> {
+  const key = generateHistoryKey(uuid);
+  return storage.get([key]).then((result) => getOwnProperty(result, key, []));
 }
+
+export function setHistoryByUuid(
+  uuid: string,
+  history: HistoryData
+): Promise<void> {
+  const key = generateHistoryKey(uuid);
+  return storage.set({ [key]: history });
+}
+
+const generateHistoryKey = (uuid: string) => 'history.' + uuid;
 
 interface DatesByUuid {
   [key: string]: string[];

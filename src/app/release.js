@@ -111,6 +111,10 @@ export class Release {
     return this.releaseItem.uuid;
   }
 
+  get year() {
+    return this.published.getFullYear();
+  }
+
   toStorageObject() {
     return {
       artist: this.releaseItem.artist,

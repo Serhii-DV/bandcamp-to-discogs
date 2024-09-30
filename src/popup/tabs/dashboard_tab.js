@@ -77,7 +77,7 @@ const createListItemElement = (release, visitedDate) => {
     <a href="${release.url}" class="list-group-item list-group-item-action" target="_blank">
       <div class="d-flex justify-content-between">
         <div class="flex-shrink-0">
-          <img src="${release.image}" alt="${release.year} - ${release.title}" class="img-fluid" style="width: 50px; height: 50px;">
+          <img src="${release.image}" alt="${release.year} - ${release.title}" class="img-fluid" style="width: 80px; height: 80px;">
         </div>
         <div class="flex-grow-1 ms-3">
           <div class="d-flex w-100 justify-content-between">

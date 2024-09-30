@@ -107,9 +107,16 @@ export class Release {
     return this.releaseItem.title;
   }
 
+  get uuid() {
+    return this.releaseItem.uuid;
+  }
+
+  get year() {
+    return this.published.getFullYear();
+  }
+
   toStorageObject() {
     return {
-      uuid: this.releaseItem.uuid,
       artist: this.releaseItem.artist,
       title: this.releaseItem.title,
       url: this.releaseItem.url,

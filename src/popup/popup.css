@@ -131,6 +131,12 @@ releases-list .content-header {
   background-color: var(--main-bg-color);
   padding: 5px 10px;
 }
+releases-list td .history-date {
+  display: inline-block;
+  font-size: 80%;
+  color: grey;
+}
+
 releases-list td .controls {
   display: block;
   float: right;

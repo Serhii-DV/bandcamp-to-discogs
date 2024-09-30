@@ -1,12 +1,12 @@
 import { Metadata } from '../discogs/app/metadata.js';
 import { releaseToDiscogsCsv } from '../discogs/modules/discogs.js';
-import { logStorage } from '../utils/storage';
+import { logStorageData } from '../utils/storage';
 import { log, logInfo } from '../utils/console';
 
 export function setupConsole() {
   initConsole((consoleCommand) => {
     consoleCommand.addCommand('log.storage', () => {
-      logStorage();
+      logStorageData();
     });
   });
 }

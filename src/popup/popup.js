@@ -31,6 +31,7 @@ import { isValidBandcampURL } from '../bandcamp/modules/html.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { createReleaseFromSchema } from '../utils/schema';
+import { setupDashboardTab } from './tabs/dashboard_tab.js';
 
 const btnDashboardTab = document.getElementById('dashboard-tab');
 const btnReleaseTab = document.getElementById('release-tab');
@@ -49,7 +50,7 @@ async function proceedBandcampData() {
   chromeSendMessageToCurrentTab(
     { type: 'B2D_BC_DATA' },
     processBandcampResponse,
-    showBandcampDataNotFoundWarning
+    showDashboard
   );
 }
 
@@ -60,23 +61,6 @@ async function proceedDiscogsEditPageData() {
     { type: 'B2D_DISCOGS_EDIT_PAGE_DATA' },
     processDiscogsDraftPageResponse
   );
-}
-
-function showBandcampDataNotFoundWarning() {
-  showDashboard();
-
-  // Wait for dashboard content load
-  const interval = 100;
-  const intervalId = setInterval(() => {
-    const warningBandcampDataNotFound = document.getElementById(
-      'b2d-warning-bandcamp-data-not-found'
-    );
-
-    if (warningBandcampDataNotFound) {
-      show(warningBandcampDataNotFound);
-      clearInterval(intervalId);
-    }
-  }, interval);
 }
 
 function showDashboard() {
@@ -179,6 +163,8 @@ function setupNavigation() {
     show(btnDownloadStorage);
     setupHistoryTab(document.getElementById('history'), btnDownloadStorage);
   });
+
+  setupDashboardTab(btnHistoryTab);
 }
 
 function initialize(tab) {
@@ -197,7 +183,7 @@ function initialize(tab) {
   } else if (isValidDiscogsReleaseEditUrl(currentTabUrl)) {
     proceedDiscogsEditPageData();
   } else {
-    showBandcampDataNotFoundWarning();
+    showDashboard();
   }
 }
 

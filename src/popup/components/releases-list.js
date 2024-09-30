@@ -1,5 +1,10 @@
-import { getDataAttribute, input, setDataAttribute } from '../../utils/html';
-import { hasClass, isEmptyArray } from '../../utils/utils';
+import {
+  click,
+  getDataAttribute,
+  input,
+  setDataAttribute
+} from '../../utils/html';
+import { getArrLastElement, hasClass, isEmptyArray } from '../../utils/utils';
 
 class ReleasesList extends HTMLElement {
   constructor() {
@@ -25,10 +30,12 @@ class ReleasesList extends HTMLElement {
             <b2d-icon name="sort-down"></b2d-icon>
           </button>
           <ul id="${sortingId}" class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#" data-attr="data-sort" data-comp-type="int" data-dir="asc" data-icon="sort-down" data-title="Sorted by default"><b2d-icon name="sort-down"></b2d-icon> reset</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" data-attr="data-visited" data-comp-type="date" data-dir="desc" data-icon="sort-down" data-title="Sorted by visited date (latest first)"><b2d-icon name="sort-down"></b2d-icon> by visited date (latest first)</a></li>
+            <li><a class="dropdown-item" href="#" data-attr="data-visited" data-dir="asc" data-icon="sort-up" data-title="Sorted by visited date (oldest first)"><b2d-icon name="sort-up"></b2d-icon> by visited date (oldest first)</a></li>
             <li><a class="dropdown-item" href="#" data-attr="data-title" data-dir="asc" data-icon="sort-alpha-down" data-title="Sorted by name A..z"><b2d-icon name="sort-alpha-down"></b2d-icon> by name A..z</a></li>
             <li><a class="dropdown-item" href="#" data-attr="data-title" data-dir="desc" data-icon="sort-alpha-down-alt" data-title="Sorted by name z..A"><b2d-icon name="sort-alpha-down-alt"></b2d-icon> by name z..A</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" data-attr="data-sort" data-comp-type="int" data-dir="asc" data-icon="sort-down" data-title="Sorted by default"><b2d-icon name="sort-down-alt"></b2d-icon> reset</a></li>
           </ul>
         </div>
         <table class="table table-hover table-sm table-transparent table-borderless">
@@ -79,10 +86,13 @@ class ReleasesList extends HTMLElement {
       self.refreshStatus();
     }
 
+    self.sortingDropdownMenu = self.querySelector('#' + sortingId);
+    self.sortingItems =
+      self.sortingDropdownMenu.querySelectorAll('.dropdown-item');
+
     function setupSorting() {
-      const sortingUl = self.querySelector('#' + sortingId);
+      const sortingDropdownMenu = self.sortingDropdownMenu;
       const sortingBtn = self.querySelector('#' + sortingId + '-button');
-      const sortingItems = sortingUl.querySelectorAll('.dropdown-item');
 
       function setupSortingButton(sortingItem) {
         const attr = getDataAttribute(sortingItem, 'attr');
@@ -96,16 +106,23 @@ class ReleasesList extends HTMLElement {
         sortTable(attr, dir, compType);
       }
 
-      sortingItems.forEach((option) => {
-        option.addEventListener('click', (e) => {
-          setupSortingButton(e.target);
-        });
+      sortingDropdownMenu.addEventListener('click', (event) => {
+        const clickedItem = event.target;
+        if (!clickedItem.classList.contains('dropdown-item')) return;
+
+        self.sortingItems.forEach((item) => item.classList.remove('active'));
+        clickedItem.classList.add('active');
+
+        setupSortingButton(clickedItem);
+
+        event.preventDefault();
       });
     }
 
     const sortTable = (attr, dir = 'asc', compType = 'string') => {
       const rows = Array.from(table.rows).slice(1); // Exclude the header row
       const isComparingInt = compType === 'int';
+      const isComparingDate = compType === 'date';
 
       rows.sort((a, b) => {
         let x = a.getAttribute(attr);
@@ -114,6 +131,13 @@ class ReleasesList extends HTMLElement {
         if (isComparingInt) {
           x = parseInt(x);
           y = parseInt(y);
+
+          return dir === 'asc' ? x - y : y - x;
+        }
+
+        if (isComparingDate) {
+          x = new Date(x);
+          y = new Date(y);
 
           return dir === 'asc' ? x - y : y - x;
         }
@@ -163,6 +187,12 @@ class ReleasesList extends HTMLElement {
   refreshSearchStatus() {
     const self = this;
     input(self.searchInput);
+    return self;
+  }
+
+  sortByLatestDateVisited() {
+    const self = this;
+    click(self.sortingItems[0]);
     return self;
   }
 
@@ -231,7 +261,7 @@ class ReleasesList extends HTMLElement {
   }
 
   /**
-   * @param {Array} data
+   * @param {Array<ReleaseItem>} data
    * @returns {Self}
    */
   populateData(data) {
@@ -240,14 +270,31 @@ class ReleasesList extends HTMLElement {
     tableBody.innerHTML = ''; // Clear existing data
 
     data.forEach((item, index) => {
+      const releaseItem = item.releaseItem;
+      const title = `${releaseItem.artist} - ${releaseItem.title}`;
+
       const row = document.createElement('tr');
       const checkboxId = self.getPrefixed('checkbox_' + index);
       row.classList.add('release-item');
       setDataAttribute(row, 'sort', index);
-      setDataAttribute(row, item.dataAtts);
+      setDataAttribute(row, { title });
+
+      const history = item.history;
+      const lastHistoryDate = getArrLastElement(history);
+      const visitedDate = new Date(lastHistoryDate ?? 0);
+      setDataAttribute(row, 'visited', visitedDate.toLocaleString());
+
+      const historyDateHtml = lastHistoryDate
+        ? `<span class="history-date" title="Visited on ${visitedDate.toLocaleString()}">${visitedDate.toLocaleDateString()}</span>`
+        : '';
+
       row.innerHTML = `
-        <td><input type="checkbox" value="${item.value}" id="${checkboxId}" class="release-checkbox"></td>
-        <td><label for="${checkboxId}">${item.title}</label><span class="controls"></span></td>
+        <td><input type="checkbox" value="${releaseItem.uuid}" id="${checkboxId}" class="release-checkbox"></td>
+        <td>
+          <label for="${checkboxId}">${title}</label>
+          ${historyDateHtml}
+          <span class="controls"></span>
+        </td>
       `;
 
       const controlsEl = row.querySelector('span.controls');
@@ -260,7 +307,7 @@ class ReleasesList extends HTMLElement {
       tableBody.appendChild(row);
     });
 
-    self.refreshStatus().refreshSearchStatus();
+    self.refreshStatus().refreshSearchStatus().sortByLatestDateVisited();
 
     return self;
   }

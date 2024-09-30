@@ -51,7 +51,7 @@ function getReleasesList() {
 }
 
 function updateReleasesListData(releasesList) {
-  findAllReleases((releases) => {
+  findAllReleases().then((releases) => {
     populateReleasesList(releasesList, releases);
   });
 }

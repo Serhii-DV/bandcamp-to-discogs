@@ -1,5 +1,5 @@
 {
-  "version": "0.14.1",
+  "version": "0.15.0",
   "devDependencies": {
     "@swc/html": "^1.7.23",
     "@types/chrome": "^0.0.271",

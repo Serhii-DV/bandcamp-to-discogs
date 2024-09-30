@@ -8,15 +8,8 @@ export function setupPageAlbum() {
   logInfo('Setup page album');
   const schema = getMusicAlbumSchemaData();
   const release = createReleaseFromSchema(schema);
-  setupRelease(release);
-  setupMessageListener(schema);
-}
-
-/**
- * @param {Release} release
- */
-function setupRelease(release) {
   saveRelease(release);
+  setupMessageListener(schema);
 }
 
 /**

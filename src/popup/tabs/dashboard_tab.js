@@ -1,31 +1,34 @@
-import { createElementFromHTML, getDataAttribute } from '../../utils/html';
+import {
+  click,
+  createElementFromHTML,
+  getDataAttribute
+} from '../../utils/html';
 import { log } from '../../utils/console';
 import { getLatestHistoryData, getReleasesByUuids } from '../../utils/storage';
 import { getOwnProperty } from '../../utils/utils';
 
-export function setupDashboardTab() {
+export function setupDashboardTab(btnHistoryTab) {
   log('Setup dashboard tab');
 
-  initLatestVisitedReleases();
+  setupLatestVisitedWidget(btnHistoryTab);
 }
 
-function initLatestVisitedReleases() {
-  const latestVisitedReleases = document.getElementById(
-    'latestVisitedReleases'
-  );
+function setupLatestVisitedWidget(btnHistoryTab) {
+  const latestVisitedWidget = document.getElementById('latestVisitedReleases');
 
   // Init list group
-  latestVisitedReleases.classList.add('list-group');
-  const limit = getDataAttribute(latestVisitedReleases, 'limit', 10);
+  latestVisitedWidget.classList.add('list-group');
+  const limit = getDataAttribute(latestVisitedWidget, 'limit', 10);
 
   getLatestHistoryData(limit).then((visitedDates) => {
     const uuids = visitedDates.map((visitedDate) => visitedDate.uuid);
     getReleasesByUuids(uuids).then((releases) => {
       populateLatestVisitedReleases(
-        latestVisitedReleases,
+        latestVisitedWidget,
         releases,
         visitedDates
       );
+      addGoToHistoryItem(latestVisitedWidget, btnHistoryTab);
     });
   });
 }
@@ -48,6 +51,22 @@ function populateLatestVisitedReleases(
     }
   });
 }
+
+const addGoToHistoryItem = (latestVisitedReleases, btnHistoryTab) => {
+  // Add "See history" link
+  const historyItemEl = createElementFromHTML(`
+    <a href="#history" class="list-group-item list-group-item-action">
+      Go to history...
+    </a>
+  `);
+
+  historyItemEl.addEventListener('click', (event) => {
+    click(btnHistoryTab);
+    event.preventDefault();
+  });
+
+  latestVisitedReleases.appendChild(historyItemEl);
+};
 
 /**
  * @param {Release} release

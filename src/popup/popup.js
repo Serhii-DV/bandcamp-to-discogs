@@ -164,7 +164,7 @@ function setupNavigation() {
     setupHistoryTab(document.getElementById('history'), btnDownloadStorage);
   });
 
-  setupDashboardTab(document.getElementById('history'));
+  setupDashboardTab(btnHistoryTab);
 }
 
 function initialize(tab) {

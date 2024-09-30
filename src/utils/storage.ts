@@ -23,6 +23,15 @@ export interface HistoryData {
   [key: string]: History;
 }
 
+interface ReleaseMap {
+  [key: string]: Release;
+}
+
+interface VisitedDate {
+  uuid: string;
+  date: Date;
+}
+
 type ReleaseCallback = (release: Release) => void;
 type ReleasesCallback = (releases: Release[]) => void;
 
@@ -105,11 +114,21 @@ export function getReleaseByUuid(uuid: string): Promise<Release | undefined> {
   });
 }
 
-export function getReleasesByUuids(uuids: string[]): Promise<Release[]> {
+export function getReleasesByUuids(uuids: string[]): Promise<ReleaseMap> {
   return storage.get(uuids).then((storageData: StorageData) => {
-    return getReleasesFromStorageData(storageData);
+    const releases = getReleasesFromStorageData(storageData);
+    return createReleaseMapFromReleases(releases);
   });
 }
+
+const createReleaseMapFromReleases = (releases: Release[]) => {
+  const releaseMap: ReleaseMap = releases.reduce((acc, release) => {
+    acc[release.uuid] = release;
+    return acc;
+  }, {} as ReleaseMap);
+
+  return releaseMap;
+};
 
 const getReleasesFromStorageData = (storageData: StorageData) => {
   const releases: Release[] = Object.values(storageData)
@@ -203,32 +222,23 @@ export function getHistoryData(): Promise<HistoryData> {
 
 export function getLatestHistoryData(
   limit: number
-): Promise<Record<string, string>> {
+): Promise<Array<VisitedDate>> {
   return getHistoryData().then((historyData) => {
-    const releaseByLatestDate: Record<string, string> = {};
+    const visitedDates: Array<VisitedDate> = [];
 
     for (const uuid in historyData) {
-      releaseByLatestDate[uuid] = getArrLastElement(
-        getOwnProperty(historyData, uuid, [])
-      );
-    }
-
-    const sortedEntries = Object.entries(releaseByLatestDate).sort(
-      ([, dateA], [, dateB]) => {
-        // Convert the date strings to Date objects for comparison
-        return new Date(dateB).getTime() - new Date(dateA).getTime();
+      const lastDate = getArrLastElement(getOwnProperty(historyData, uuid, []));
+      if (lastDate) {
+        visitedDates.push({ uuid, date: new Date(lastDate) });
       }
-    );
-
-    const topEntries = sortedEntries.slice(0, limit);
-
-    // Create a new object maintaining the original keys and their sorted values
-    const sortedReleaseByLatestDate: Record<string, string> = {};
-    for (const [key, value] of topEntries) {
-      sortedReleaseByLatestDate[key] = value;
     }
 
-    return sortedReleaseByLatestDate;
+    const sortedByDateDesc = visitedDates.sort(
+      (a, b) => b.date.getTime() - a.date.getTime()
+    );
+    const lastTenEntries = sortedByDateDesc.slice(0, limit);
+
+    return lastTenEntries;
   });
 }
 

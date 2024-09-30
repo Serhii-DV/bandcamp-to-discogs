@@ -2,7 +2,7 @@
   "version": "0.15.0",
   "devDependencies": {
     "@swc/html": "^1.7.23",
-    "@types/chrome": "^0.0.271",
+    "@types/chrome": "^0.0.273",
     "@types/isotope-layout": "^3.0.13",
     "@types/uuid": "^10.0.0",
     "@webcomponents/custom-elements": "^1.6.0",

@@ -1,11 +1,15 @@
 import { Release } from '../app/release.js';
 import { log, logError } from './console';
+import { generateKeyForUrl, generateKeysFromUrls } from './key-generator';
 import {
-  generateKeyForRelease,
-  generateKeyForUrl,
-  generateKeysFromUrls
-} from './key-generator';
-import { hasOwnProperty, isArray, isFunction, isObject } from './utils';
+  getArrLastElement,
+  getOwnProperty,
+  hasOwnProperty,
+  isArray,
+  isFunction,
+  isObject
+} from './utils';
+import { validate as isUUID } from 'uuid';
 
 const storage = chrome.storage.local;
 
@@ -13,37 +17,52 @@ interface StorageData {
   [key: string]: any;
 }
 
+interface History extends Array<string> {}
+
+export interface HistoryData {
+  [key: string]: History;
+}
+
+interface ReleaseMap {
+  [key: string]: Release;
+}
+
+interface VisitedDate {
+  uuid: string;
+  date: Date;
+}
+
 type ReleaseCallback = (release: Release) => void;
 type ReleasesCallback = (releases: Release[]) => void;
 
-export function logStorage() {
-  log('Storage data');
-  storage.get(null, (data) => console.log(data));
+export function logStorageData() {
+  storage.get(null).then((data) => log('Storage data', data));
 }
 
 /**
- * Finds all releases from storage and executes a callback function with the releases.
- * @param onFind - The callback function to call with the found releases.
+ * Finds all releases from storage and release history and executes a callback function with the releases.
  */
-export function findAllReleases(onFind?: ReleasesCallback): void {
-  storage.get(null, (data: StorageData) => {
+export function findAllReleases(): Promise<Release[]> {
+  return storage.get(null).then((storageData: StorageData) => {
     const releases: Release[] = [];
 
-    for (const key in data) {
-      if (!hasOwnProperty(data, key) || !isObject(data[key])) {
+    for (const key in storageData) {
+      if (
+        !hasOwnProperty(storageData, key) ||
+        !isObject(storageData[key]) ||
+        !isUUID(key)
+      ) {
         continue;
       }
 
       try {
-        releases.push(Release.fromStorageObject(data[key]));
+        releases.push(Release.fromStorageObject(storageData[key]));
       } catch (error) {
         continue;
       }
     }
 
-    if (onFind && isFunction(onFind)) {
-      onFind(releases);
-    }
+    return releases;
   });
 }
 
@@ -80,6 +99,52 @@ export function findReleaseByUrl(
   });
 }
 
+export function getReleaseByUuid(uuid: string): Promise<Release | undefined> {
+  return storage.get([uuid]).then((storageData: StorageData) => {
+    const releaseData = storageData[uuid];
+
+    try {
+      return Release.fromStorageObject(releaseData);
+    } catch (error) {
+      log('Broken storage data for release', releaseData);
+      clearStorageByKey(uuid);
+    }
+
+    return undefined;
+  });
+}
+
+export function getReleasesByUuids(uuids: string[]): Promise<ReleaseMap> {
+  return storage.get(uuids).then((storageData: StorageData) => {
+    const releases = getReleasesFromStorageData(storageData);
+    return createReleaseMapFromReleases(releases);
+  });
+}
+
+const createReleaseMapFromReleases = (releases: Release[]) => {
+  const releaseMap: ReleaseMap = releases.reduce((acc, release) => {
+    acc[release.uuid] = release;
+    return acc;
+  }, {} as ReleaseMap);
+
+  return releaseMap;
+};
+
+const getReleasesFromStorageData = (storageData: StorageData) => {
+  const releases: Release[] = Object.values(storageData)
+    .map((obj: any) => {
+      try {
+        return Release.fromStorageObject(obj);
+      } catch (error) {
+        log('Broken storage object.', JSON.stringify(error), obj);
+        return null;
+      }
+    })
+    .filter((obj: Release | null): obj is Release => obj instanceof Release);
+
+  return releases;
+};
+
 /**
  * Finds releases by their URLs and executes a callback with the found releases.
  */
@@ -111,11 +176,74 @@ export function findReleasesByUrls(
  * Saves a Release object to local storage.
  */
 export function saveRelease(release: Release): void {
-  const key = generateKeyForRelease(release);
-  storage.set({ [key]: release.toStorageObject() }, () => {
-    log('Release data was saved in the local storage');
+  storage.set({ [release.uuid]: release.toStorageObject() }).then(() => {
+    log('Release saved in the local storage', release.uuid);
+    addReleaseHistory(release);
   });
 }
+
+export function addReleaseHistory(release: Release): void {
+  const uuid = release.uuid;
+  getHistoryByUuid(uuid).then((history) => {
+    history.push(new Date().toISOString());
+    setHistoryByUuid(uuid, history).then(() => {
+      log('New history added to release', uuid);
+    });
+  });
+}
+
+export function getHistoryByUuid(uuid: string): Promise<History> {
+  const key = generateHistoryKey(uuid);
+  return storage.get([key]).then((result) => getOwnProperty(result, key, []));
+}
+
+export function setHistoryByUuid(
+  uuid: string,
+  history: History
+): Promise<void> {
+  const key = generateHistoryKey(uuid);
+  return storage.set({ [key]: history });
+}
+
+export function getHistoryData(): Promise<HistoryData> {
+  return storage.get(null).then((storageData: StorageData) => {
+    const historyData: HistoryData = {};
+
+    for (const key in storageData) {
+      if (!key.startsWith(HISTORY_KEY_PREFIX)) continue;
+      const uuid = key.slice(HISTORY_KEY_PREFIX.length);
+      if (!isUUID(uuid)) continue;
+      historyData[uuid] = storageData[key];
+    }
+
+    return historyData;
+  });
+}
+
+export function getLatestHistoryData(
+  limit: number
+): Promise<Array<VisitedDate>> {
+  return getHistoryData().then((historyData) => {
+    const visitedDates: Array<VisitedDate> = [];
+
+    for (const uuid in historyData) {
+      const lastDate = getArrLastElement(getOwnProperty(historyData, uuid, []));
+      if (lastDate) {
+        visitedDates.push({ uuid, date: new Date(lastDate) });
+      }
+    }
+
+    const sortedByDateDesc = visitedDates.sort(
+      (a, b) => b.date.getTime() - a.date.getTime()
+    );
+    const lastTenEntries = sortedByDateDesc.slice(0, limit);
+
+    return lastTenEntries;
+  });
+}
+
+const HISTORY_KEY_PREFIX = 'history.';
+const generateHistoryKey = (uuid: string) => HISTORY_KEY_PREFIX + uuid;
 
 /**
  * Clears all data from local storage.

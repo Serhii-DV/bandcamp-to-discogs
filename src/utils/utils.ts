@@ -44,8 +44,20 @@ export function isEmptyObject(obj: object): boolean {
   return true;
 }
 
-export function hasOwnProperty(obj: object, key: string): boolean {
+export interface ObjectByStringKey {
+  [key: string]: any;
+}
+
+export function hasOwnProperty(obj: ObjectByStringKey, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(obj, key);
+}
+
+export function getOwnProperty(
+  obj: ObjectByStringKey,
+  key: string,
+  defaultValue: any
+): any {
+  return hasOwnProperty(obj, key) ? obj[key] : defaultValue;
 }
 
 export function isString(value: any): boolean {
@@ -74,6 +86,10 @@ export function arrayUnique(arr: string[][]): string[] {
 
 export function hasClass(element: Element, className: string) {
   return element.classList.contains(className);
+}
+
+export function getArrLastElement(array: Array<any>) {
+  return array[array.length - 1];
 }
 
 /**

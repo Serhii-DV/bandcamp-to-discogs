@@ -1,10 +1,25 @@
 #!/bin/sh
-# Run prettier on staged files
+# Run Prettier only on staged files
 
-npm run prettier:fix
+# Get a list of staged files that match JavaScript, TypeScript, or other file extensions you want to format
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|ts|tsx|css|scss|html|md)$')
+
+# If there are no staged files that need Prettier, exit early
+if [ -z "$STAGED_FILES" ]; then
+  echo "No staged files to format."
+  exit 0
+fi
+
+# Run Prettier on the staged files
+echo "Running Prettier on staged files..."
+echo "$STAGED_FILES" | xargs npx prettier --write
+
+# Re-add the formatted files to the staging area
+echo "$STAGED_FILES" | xargs git add
 
 # Check if Prettier made changes
-if [ -n "$(git diff --name-only --cached)" ]; then
+if [ -n "$(git diff --cached --name-only)" ]; then
   echo "Prettier has fixed files. Please review the changes."
-  git add .
+else
+  echo "No changes were made by Prettier."
 fi

@@ -13,9 +13,9 @@ import {
   hasDataAttribute,
   setDataAttribute
 } from '../utils/html';
-import { generateKeyForReleaseItem } from '../utils/key-generator';
-import { convertToAlias, isArray, isObject, isString } from '../utils/utils';
+import { getOwnProperty, isArray, isObject, isString } from '../utils/utils';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
+import { getHistoryData } from '../utils/storage';
 
 /**
  * Converts a JavaScript object to an HTML element representing a table.
@@ -63,57 +63,79 @@ export function objectToHtmlElement(data) {
 }
 
 /**
+ * @param {ReleaseItem} releaseItem
+ * @returns {HTMLAnchorElement}
+ */
+const createViewLink = (releaseItem) =>
+  createIconLink({
+    href: releaseItem.url,
+    iconDefault: 'box-arrow-up-right',
+    className: 'link-bandcamp-url',
+    title: 'View bandcamp release'
+  });
+
+/**
+ * @param {ReleaseItem} releaseItem
+ * @returns {HTMLAnchorElement}
+ */
+const createSearchLink = (releaseItem) =>
+  createIconLink({
+    href: getSearchDiscogsReleaseUrl(releaseItem.artist, releaseItem.title),
+    iconDefault: 'search',
+    className: 'link-discogs-search',
+    title: 'Search release on Discogs'
+  });
+
+/**
+ * @param {Release} release
+ * @returns {HTMLAnchorElement}
+ */
+const createApplyMetadataLink = (release) =>
+  createIconLink({
+    title: 'Load release hints into the current Discogs release draft',
+    iconDefault: 'file-arrow-down',
+    iconOnClick: 'file-arrow-down-fill',
+    onClick: () => {
+      const metadata = Metadata.fromRelease(release);
+      chromeSendMessageToCurrentTab({
+        type: 'B2D_METADATA',
+        metadata
+      });
+
+      return true;
+    }
+  });
+
+/**
  * @param {string} currentTabUrl
  * @param {Array<ReleaseItem>|Array<Release>} releases
+ * @param {import('../utils/storage').HistoryData}
  * @return {Array}
  */
-function transformReleaseItemsToReleaseListData(currentTabUrl, releases) {
+function transformReleaseItemsToReleaseListData(
+  currentTabUrl,
+  releases,
+  historyData
+) {
   const data = [];
+  const isDiscogsEditPage = isValidDiscogsReleaseEditUrl(currentTabUrl);
 
   releases.forEach((item) => {
-    const release = item instanceof Release ? item.releaseItem : item;
-    const viewLink = createIconLink({
-      href: release.url,
-      iconDefault: 'box-arrow-up-right',
-      className: 'link-bandcamp-url',
-      title: 'View bandcamp release'
-    });
-    const searchLink = createIconLink({
-      href: getSearchDiscogsReleaseUrl(release.artist, release.title),
-      iconDefault: 'search',
-      className: 'link-discogs-search',
-      title: 'Search release on Discogs'
-    });
-    const controls = [viewLink, searchLink];
+    const releaseItem = item instanceof Release ? item.releaseItem : item;
+    const controls = [
+      createViewLink(releaseItem),
+      createSearchLink(releaseItem)
+    ];
 
-    if (
-      isValidDiscogsReleaseEditUrl(currentTabUrl) &&
-      item instanceof Release
-    ) {
-      const applyMetadataLink = createIconLink({
-        title: 'Load release hints into the current Discogs release draft',
-        iconDefault: 'file-arrow-down',
-        iconOnClick: 'file-arrow-down-fill',
-        onClick: () => {
-          const metadata = Metadata.fromRelease(item);
-          chromeSendMessageToCurrentTab({
-            type: 'B2D_METADATA',
-            metadata
-          });
-
-          return true;
-        }
-      });
-      controls.push(applyMetadataLink);
+    if (isDiscogsEditPage && item instanceof Release) {
+      controls.push(createApplyMetadataLink(item));
     }
 
+    const history = getOwnProperty(historyData, releaseItem.uuid, []);
+
     data.push({
-      title: `${release.artist} - ${release.title}`,
-      value: generateKeyForReleaseItem(release),
-      id: convertToAlias(release.title),
-      dataAtts: {
-        title: `${release.artist} - ${release.title}`
-      },
+      releaseItem,
+      history,
       controls
     });
   });
@@ -129,9 +151,11 @@ export function populateReleasesList(releasesList, releases) {
   getCurrentTabUrl().then((url) => {
     if (!url) return;
 
-    releasesList.populateData(
-      transformReleaseItemsToReleaseListData(url, releases)
-    );
+    getHistoryData().then((historyData) => {
+      releasesList.populateData(
+        transformReleaseItemsToReleaseListData(url, releases, historyData)
+      );
+    });
   });
 }
 

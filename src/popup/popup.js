@@ -50,7 +50,7 @@ async function proceedBandcampData() {
   chromeSendMessageToCurrentTab(
     { type: 'B2D_BC_DATA' },
     processBandcampResponse,
-    showBandcampDataNotFoundWarning
+    showDashboard
   );
 }
 
@@ -61,23 +61,6 @@ async function proceedDiscogsEditPageData() {
     { type: 'B2D_DISCOGS_EDIT_PAGE_DATA' },
     processDiscogsDraftPageResponse
   );
-}
-
-function showBandcampDataNotFoundWarning() {
-  showDashboard();
-
-  // Wait for dashboard content load
-  const interval = 100;
-  const intervalId = setInterval(() => {
-    const warningBandcampDataNotFound = document.getElementById(
-      'b2d-warning-bandcamp-data-not-found'
-    );
-
-    if (warningBandcampDataNotFound) {
-      show(warningBandcampDataNotFound);
-      clearInterval(intervalId);
-    }
-  }, interval);
 }
 
 function showDashboard() {
@@ -200,7 +183,7 @@ function initialize(tab) {
   } else if (isValidDiscogsReleaseEditUrl(currentTabUrl)) {
     proceedDiscogsEditPageData();
   } else {
-    showBandcampDataNotFoundWarning();
+    showDashboard();
   }
 }
 

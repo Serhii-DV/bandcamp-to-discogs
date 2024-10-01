@@ -1,3 +1,4 @@
+import { getUrlHostname } from '../utils/url';
 import { generateKeyForUrl } from '../utils/key-generator';
 import TrackTime from './trackTime.js';
 
@@ -113,6 +114,10 @@ export class Release {
 
   get year() {
     return this.published.getFullYear();
+  }
+
+  get hostname() {
+    return getUrlHostname(this.releaseItem.url);
   }
 
   toStorageObject() {

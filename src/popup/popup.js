@@ -2,11 +2,14 @@ import 'bootstrap';
 
 // Popup styles
 import './popup.css';
+import './css/releases-group-list.css';
 
 // Custom components
 import './components/icon';
 import './components/console-command.js';
 import './components/releases-list.js';
+import './components/releases-group-list-element.ts';
+import '@github/relative-time-element';
 
 import {
   chromeSendMessageToCurrentTab,
@@ -31,9 +34,9 @@ import { isValidBandcampURL } from '../bandcamp/modules/html.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { createReleaseFromSchema } from '../utils/schema';
-import { setupDashboardTab } from './tabs/dashboard_tab.js';
+import { setupBandcampTab } from './tabs/bandcamp_tab.js';
 
-const btnDashboardTab = document.getElementById('dashboard-tab');
+const btnBandcampTab = document.getElementById('bandcamp-tab');
 const btnReleaseTab = document.getElementById('release-tab');
 const btnReleasesTab = document.getElementById('releases-tab');
 const btnCsvDataTab = document.getElementById('csvData-tab');
@@ -50,7 +53,7 @@ async function proceedBandcampData() {
   chromeSendMessageToCurrentTab(
     { type: 'B2D_BC_DATA' },
     processBandcampResponse,
-    showDashboard
+    showBandcampTab
   );
 }
 
@@ -63,11 +66,11 @@ async function proceedDiscogsEditPageData() {
   );
 }
 
-function showDashboard() {
+function showBandcampTab() {
   disable(btnReleaseTab, btnCsvDataTab);
   hide(btnReleasesTab);
   show(btnDownloadReleases);
-  click(btnDashboardTab);
+  click(btnBandcampTab);
 }
 
 function processBandcampResponse(response) {
@@ -164,7 +167,7 @@ function setupNavigation() {
     setupHistoryTab(document.getElementById('history'), btnDownloadStorage);
   });
 
-  setupDashboardTab(btnHistoryTab);
+  setupBandcampTab(btnHistoryTab);
 }
 
 function initialize(tab) {
@@ -183,7 +186,7 @@ function initialize(tab) {
   } else if (isValidDiscogsReleaseEditUrl(currentTabUrl)) {
     proceedDiscogsEditPageData();
   } else {
-    showDashboard();
+    showBandcampTab();
   }
 }
 

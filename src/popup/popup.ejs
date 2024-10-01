@@ -6,8 +6,8 @@
 <body>
   <header>
     <nav id="mainNav" class="btn-group d-flex" role="tablist">
-      <button class="btn btn-dark rounded-0" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" role="tab" aria-controls="dashboard" aria-selected="true" type="button" title="Dashboard">
-        <b2d-icon name="dashboard"></b2d-icon>
+      <button class="btn btn-dark rounded-0" id="bandcamp-tab" data-bs-toggle="tab" data-bs-target="#bandcamp" role="tab" aria-controls="bandcamp" aria-selected="true" type="button" title="Bandcamp">
+        <b2d-icon name="bandcamp-png"></b2d-icon>
       </button>
       <button class="btn btn-dark rounded-0" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
         <b2d-icon name="card-text"></b2d-icon>
@@ -44,9 +44,9 @@
   <div id="mainContainer" class="container-fluid p-0 overflow-auto bg-image">
 
     <div class="tab-content">
-      <!-- Dashboard -->
-      <div class="tab-pane fade content-text" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab" tabindex="0">
-        <%= tabContentDashboard %>
+      <!-- Bandcamp -->
+      <div class="tab-pane fade content-text" id="bandcamp" role="tabpanel" aria-labelledby="bandcamp-tab" tabindex="0">
+        <%= tabContentBandcamp %>
       </div>
       <!-- Release -->
       <div class="tab-pane fade" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">

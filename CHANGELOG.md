@@ -6,6 +6,7 @@
 
 - popup: Show visited date as related time value
 - popup: Improved visited releases widget
+- popup: Renamed Dashboard tab to Bandcamp tab
 
 ## 0.15.0 (2024-09-30)
 

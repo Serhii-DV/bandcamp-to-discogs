@@ -285,7 +285,7 @@ class ReleasesList extends HTMLElement {
       setDataAttribute(row, 'visited', visitedDate.toLocaleString());
 
       const historyDateHtml = lastHistoryDate
-        ? `<span class="history-date" title="Visited on ${visitedDate.toLocaleString()}">${visitedDate.toLocaleDateString()}</span>`
+        ? `<relative-time class="history-date text-body-secondary" datetime="${visitedDate.toISOString()}">${visitedDate.toLocaleString()}</relative-time>`
         : '';
 
       row.innerHTML = `

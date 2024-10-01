@@ -27,7 +27,7 @@ interface ReleaseMap {
   [key: string]: Release;
 }
 
-interface VisitedDate {
+export interface VisitedDate {
   uuid: string;
   date: Date;
 }

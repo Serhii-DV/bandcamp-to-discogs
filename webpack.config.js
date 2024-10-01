@@ -80,7 +80,7 @@ module.exports = (env, argv) => {
         template: "./src/popup/popup.ejs",
         filename: "popup.html",
         templateParameters: {
-          tabContentDashboard: fs.readFileSync('./src/popup/content/dashboard.html', 'utf-8'),
+          tabContentBandcamp: fs.readFileSync('./src/popup/content/bandcamp.html', 'utf-8'),
           tabContentRelease: fs.readFileSync('./src/popup/content/release_tab.html', 'utf-8'),
           tabContentReleases: fs.readFileSync('./src/popup/content/releases_tab.html', 'utf-8'),
           tabContentHistory: fs.readFileSync('./src/popup/content/history_tab.html', 'utf-8'),

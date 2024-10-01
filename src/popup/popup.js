@@ -2,11 +2,14 @@ import 'bootstrap';
 
 // Popup styles
 import './popup.css';
+import './css/releases-group-list.css';
 
 // Custom components
 import './components/icon';
 import './components/console-command.js';
 import './components/releases-list.js';
+import './components/releases-group-list-element.ts';
+import '@github/relative-time-element';
 
 import {
   chromeSendMessageToCurrentTab,

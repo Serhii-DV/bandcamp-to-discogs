@@ -51,17 +51,18 @@ export class ReleasesGroupListElement extends HTMLElement {
 
   addRelease(release: Release, visitedDate: VisitedDate) {
     const self = this;
+    const releaseTitle = `${release.title} (${release.year})`;
     const releaseContentElement = createElementFromHTML(`
 <div class="d-flex justify-content-between">
   <div class="flex-shrink-0">
-    <img src="${release.image}" alt="${release.year} - ${release.title}" class="img-fluid" style="width: 80px; height: 80px;">
+    <img src="${release.image}" alt="${releaseTitle}" class="img-fluid" style="width: 80px; height: 80px;">
   </div>
   <div class="flex-grow-1 ms-3">
     <div class="d-flex w-100 justify-content-between">
       <h6 class="release-artist mb-1">${release.artist}</h6>
       <relative-time class="release-visited-date text-body-secondary" datetime="${visitedDate.date.toISOString()}">${visitedDate.date.toLocaleString()}</relative-time>
     </div>
-    <p class="release-title mb-0">${release.year} - ${release.title}</p>
+    <p class="release-title mb-0">${releaseTitle}</p>
     <small class="release-url text-body-secondary text-break">${release.hostname}</small>
   </div>
 </div>`);

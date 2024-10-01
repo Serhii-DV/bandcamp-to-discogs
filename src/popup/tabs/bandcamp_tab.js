@@ -26,6 +26,7 @@ function setupLatestVisitedWidget(btnHistoryTab) {
       const item = visitedReleasesWidget.addItem(
         '#history',
         'Go to history...',
+        'Go to history...',
         false
       );
       item.addEventListener('click', (event) => {

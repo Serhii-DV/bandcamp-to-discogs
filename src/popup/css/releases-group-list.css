@@ -1,0 +1,7 @@
+.list-group-item {
+  padding: 5px;
+}
+
+.list-group-item .release-visited-date {
+  font-size: 0.7em;
+}

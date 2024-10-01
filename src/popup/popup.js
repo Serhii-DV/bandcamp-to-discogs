@@ -8,6 +8,7 @@ import './css/releases-group-list.css';
 import './components/icon';
 import './components/console-command.js';
 import './components/releases-list.js';
+import './components/releases-group-list-element.ts';
 import '@github/relative-time-element';
 
 import {

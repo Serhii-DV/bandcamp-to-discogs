@@ -27,11 +27,12 @@ export class ReleasesGroupListElement extends HTMLElement {
   addItem(
     url: string,
     content: string | Element,
+    title: string = '',
     targetBlank: boolean = true
   ): Element | null {
     const self = this;
     const item = createElementFromHTML(
-      `<a href="${url}" class="list-group-item list-group-item-action"${targetBlank ? ' target="_blank"' : ''}></a>`
+      `<a href="${url}" class="list-group-item list-group-item-action" title="${title}"${targetBlank ? ' target="_blank"' : ''}></a>`
     );
 
     if (self.#groupElement === null || item === null) {
@@ -61,11 +62,11 @@ export class ReleasesGroupListElement extends HTMLElement {
       <relative-time class="release-visited-date text-body-secondary" datetime="${visitedDate.date.toISOString()}">${visitedDate.date.toLocaleString()}</relative-time>
     </div>
     <p class="release-title mb-0">${release.year} - ${release.title}</p>
-    <small class="release-url text-body-secondary text-break">${release.url}</small>
+    <small class="release-url text-body-secondary text-break">${release.hostname}</small>
   </div>
 </div>`);
     if (releaseContentElement) {
-      self.addItem(release.url, releaseContentElement);
+      self.addItem(release.url, releaseContentElement, release.url);
     }
 
     return self;

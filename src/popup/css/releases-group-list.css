@@ -3,5 +3,7 @@
 }
 
 .list-group-item .release-visited-date {
+  width: 30%;
   font-size: 0.7em;
+  text-align: right;
 }

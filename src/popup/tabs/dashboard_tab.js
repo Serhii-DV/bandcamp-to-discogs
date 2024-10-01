@@ -82,7 +82,7 @@ const createListItemElement = (release, visitedDate) => {
         <div class="flex-grow-1 ms-3">
           <div class="d-flex w-100 justify-content-between">
             <h6 class="release-artist mb-1">${release.artist}</h6>
-            <small class="release-visited-date" title="Visited on ${visitedDate.date.toLocaleString()}" class="text-body-secondary">${visitedDate.date.toLocaleDateString()}</small>
+            <relative-time class="release-visited-date text-body-secondary" datetime="${visitedDate.date.toISOString()}">${visitedDate.date.toLocaleString()}</relative-time>
           </div>
           <p class="release-title mb-0">${release.year} - ${release.title}</p>
           <small class="release-url text-body-secondary text-break">${release.url}</small>

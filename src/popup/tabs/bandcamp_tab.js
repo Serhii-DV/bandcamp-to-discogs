@@ -3,8 +3,8 @@ import { log } from '../../utils/console';
 import { getLatestHistoryData, getReleasesByUuids } from '../../utils/storage';
 import { getOwnProperty } from '../../utils/utils';
 
-export function setupDashboardTab(btnHistoryTab) {
-  log('Setup dashboard tab');
+export function setupBandcampTab(btnHistoryTab) {
+  log('Setup bandcamp tab');
 
   setupLatestVisitedWidget(btnHistoryTab);
 }
@@ -25,6 +25,7 @@ function setupLatestVisitedWidget(btnHistoryTab) {
 
       const item = visitedReleasesWidget.addItem(
         '#history',
+        'Go to history...',
         'Go to history...',
         false
       );

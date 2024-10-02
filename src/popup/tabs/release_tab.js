@@ -6,6 +6,7 @@ import {
 } from '../../utils/utils';
 import { setBackgroundImage } from '../helpers.js';
 import { setupBtnToDownloadReleasesAsCsv } from './download_tab.js';
+import { createElementFromHTML } from '../../utils/html';
 
 /**
  * @param {Element} tab
@@ -43,15 +44,14 @@ function hideWarning() {
  * @param {Release} release
  */
 function outputRelease(tab, release) {
-  const releaseArtist = tab.querySelector('#release-artist');
-  const releaseTitle = tab.querySelector('#release-title');
-  const releaseDate = tab.querySelector('#release-year');
-  const releaseTracks = tab.querySelector('#release-tracks');
+  const mainElement = addReleaseCardToElement(
+    release,
+    tab.querySelector('main')
+  );
+  const releaseArtist = mainElement.querySelector('#release-artist');
+  const releaseTitle = mainElement.querySelector('#release-title');
 
   setBackgroundImage(document.querySelector('.bg-image'), release.image);
-  releaseArtist.textContent = release.releaseItem.artist;
-  releaseTitle.textContent = release.releaseItem.title;
-  releaseDate.textContent = release.published.getFullYear();
 
   let countArtistLines = countLinesInHtmlElement(releaseArtist);
   let countTitleLines = countLinesInHtmlElement(releaseTitle);
@@ -60,8 +60,23 @@ function outputRelease(tab, release) {
     'display-6',
     countArtistLines >= 3 && countArtistLines <= 5
   );
-  tab.classList.add('lines-a' + countArtistLines + '-t' + countTitleLines);
+  mainElement.classList.add(
+    'lines-a' + countArtistLines + '-t' + countTitleLines
+  );
+}
 
+function countLinesInHtmlElement(el) {
+  let divHeight = el.offsetHeight;
+  let lineHeight = parseInt(getComputedStyle(el).lineHeight);
+  return Math.round(divHeight / lineHeight);
+}
+
+/**
+ * @param {Release} release
+ * @param {Element} element
+ * @returns {Element}
+ */
+function addReleaseCardToElement(release, element) {
   const tracks = release.tracks
     .map(
       (track) =>
@@ -69,11 +84,20 @@ function outputRelease(tab, release) {
     )
     .join('<br>');
 
-  releaseTracks.innerHTML = tracks;
-}
+  const releaseHeadline = createElementFromHTML(`
+<div class="release-headline">
+  <h1 id="release-artist" class="display-3">${release.artist}</h1>
+  <h2 id="release-title" class="display-6">${release.title}</h2>
+  <h3 id="release-year" class="display-6">${release.year}</h3>
+</div>`);
 
-function countLinesInHtmlElement(el) {
-  let divHeight = el.offsetHeight;
-  let lineHeight = parseInt(getComputedStyle(el).lineHeight);
-  return Math.round(divHeight / lineHeight);
+  const releaseContent = createElementFromHTML(`
+<div class="release-content small overflow-auto">
+  <div id="release-tracks">${tracks}</div>
+</div>`);
+
+  element.innerHTML = '';
+  element.appendChild(releaseHeadline).appendChild(releaseContent);
+
+  return element;
 }

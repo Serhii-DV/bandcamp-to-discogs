@@ -35,7 +35,7 @@ export function setupReleaseTab(
 
 function hideWarning() {
   const warningEl = document.getElementById('b2d-warning-no-data');
-  warningEl.classList.toggle('visually-hidden');
+  warningEl.classList.add('visually-hidden');
 }
 
 /**

@@ -67,7 +67,7 @@ async function proceedDiscogsEditPageData() {
 }
 
 function showBandcampTab() {
-  disable(btnReleaseTab, btnCsvDataTab);
+  disable(btnCsvDataTab);
   hide(btnReleasesTab);
   show(btnDownloadReleases);
   click(btnBandcampTab);
@@ -129,7 +129,7 @@ function processBandcampPageMusicResponse(response) {
 }
 
 function processDiscogsDraftPageResponse(response) {
-  disable(btnReleaseTab, btnCsvDataTab);
+  disable(btnCsvDataTab);
   hide(btnReleasesTab);
   click(btnHistoryTab);
   setHistoryTabSearchValue(response.data.artistName);

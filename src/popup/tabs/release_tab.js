@@ -1,3 +1,4 @@
+import { log } from '../../utils/console';
 import { getSearchDiscogsReleaseUrl } from '../../discogs/modules/discogs.js';
 import {
   capitalizeEachWord,
@@ -18,12 +19,23 @@ export function setupReleaseTab(
   btnDownloadRelease,
   btnDiscogsSearch
 ) {
+  log('Setup release tab data', release);
+
+  if (release) {
+    hideWarning();
+  }
+
   outputRelease(tab, release);
   btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(
     release.releaseItem.artist,
     release.releaseItem.title
   );
   setupBtnToDownloadReleasesAsCsv(btnDownloadRelease, [release]);
+}
+
+function hideWarning() {
+  const warningEl = document.getElementById('b2d-warning-no-data');
+  warningEl.classList.toggle('visually-hidden');
 }
 
 /**

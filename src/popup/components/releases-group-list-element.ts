@@ -1,6 +1,7 @@
 import { Release } from 'src/app/release';
 import { createElementFromHTML } from '../../utils/html';
 import { VisitedDate } from '../../utils/storage';
+import { showReleaseTab } from '../modules/main';
 
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
@@ -29,7 +30,7 @@ export class ReleasesGroupListElement extends HTMLElement {
     content: string | Element,
     title: string = '',
     targetBlank: boolean = true,
-    onClick: ((event?: Event) => void) | null = null
+    onClick: ((event: Event) => void) | null = null
   ): Element | null {
     const self = this;
     const item = createElementFromHTML(
@@ -73,7 +74,16 @@ export class ReleasesGroupListElement extends HTMLElement {
   </div>
 </div>`);
     if (releaseContentElement) {
-      self.addItem(release.url, releaseContentElement, release.url);
+      self.addItem(
+        release.url,
+        releaseContentElement,
+        release.url,
+        false,
+        (event: Event) => {
+          showReleaseTab(release);
+          event.preventDefault();
+        }
+      );
     }
 
     return self;

@@ -57,13 +57,22 @@ function renderReleaseCard(release, element) {
   <h1 id="release-artist" class="display-3">${release.artist}</h1>
   <h2 id="release-title" class="display-6">${release.title}</h2>
   <h3 id="release-year" class="display-6">${release.year}</h3>
-  <div>
-    <a href="${release.url}" title="Open Bandcamp release page\n${release.url}" target="_blank">Bandcamp</a>
-    <a href="${discogsSearchUrl}" title="Search release on Discogs" target="_blank">Search on Discogs</a>
-  </div>
 </div>
 <div class="release-content small overflow-auto">
-  <div id="release-tracks">${tracks}</div>
+  <ul class="nav nav-pills" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="rc-tracks-tab" data-bs-toggle="pill" data-bs-target="#release-tracks" type="button" role="tab" aria-controls="release-tracks" aria-selected="true">Tracklist</button>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="${release.url}" title="Open Bandcamp release page\n${release.url}" target="_blank">Bandcamp</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="${discogsSearchUrl}" title="Search release on Discogs" target="_blank">Search on Discogs</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="release-tracks" role="tabpanel" aria-labelledby="rc-tracks-tab" tabindex="0">${tracks}</div>
+  </div>
 </div>`;
 
   element.innerHTML = template;

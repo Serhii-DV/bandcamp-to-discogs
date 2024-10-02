@@ -73,5 +73,8 @@
       <span class="badge bg-dark" id="viewedStatusInfo" data-format="Viewed: {filtered}/{total}"></span>
     </div>
   </footer>
+<% templates.forEach(function(template) { %>
+<%= template %>
+<% }); %>
 </body>
 </html>

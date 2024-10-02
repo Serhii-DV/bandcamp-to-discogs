@@ -89,6 +89,7 @@ function addReleaseCardToElement(release, element) {
   <h1 id="release-artist" class="display-3">${release.artist}</h1>
   <h2 id="release-title" class="display-6">${release.title}</h2>
   <h3 id="release-year" class="display-6">${release.year}</h3>
+  <div><a href="${release.url}" title="Open Bandcamp release page\n${release.url}" target="_blank">Bandcamp</a></div>
 </div>`);
 
   const releaseContent = createElementFromHTML(`

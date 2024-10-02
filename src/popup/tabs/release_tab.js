@@ -12,14 +12,8 @@ import { createElementFromHTML } from '../../utils/html';
  * @param {Element} tab
  * @param {Release} release
  * @param {Element} btnDownloadRelease
- * @param {Element} btnDiscogsSearch
  */
-export function setupReleaseTab(
-  tab,
-  release,
-  btnDownloadRelease,
-  btnDiscogsSearch
-) {
+export function setupReleaseTab(tab, release, btnDownloadRelease) {
   log('Setup release tab data', release);
 
   if (release) {
@@ -27,10 +21,6 @@ export function setupReleaseTab(
   }
 
   outputRelease(tab, release);
-  btnDiscogsSearch.href = getSearchDiscogsReleaseUrl(
-    release.releaseItem.artist,
-    release.releaseItem.title
-  );
   setupBtnToDownloadReleasesAsCsv(btnDownloadRelease, [release]);
 }
 
@@ -77,6 +67,10 @@ function countLinesInHtmlElement(el) {
  * @returns {Element}
  */
 function addReleaseCardToElement(release, element) {
+  const discogsSearchUrl = getSearchDiscogsReleaseUrl(
+    release.artist,
+    release.title
+  );
   const tracks = release.tracks
     .map(
       (track) =>
@@ -89,7 +83,10 @@ function addReleaseCardToElement(release, element) {
   <h1 id="release-artist" class="display-3">${release.artist}</h1>
   <h2 id="release-title" class="display-6">${release.title}</h2>
   <h3 id="release-year" class="display-6">${release.year}</h3>
-  <div><a href="${release.url}" title="Open Bandcamp release page\n${release.url}" target="_blank">Bandcamp</a></div>
+  <div>
+    <a href="${release.url}" title="Open Bandcamp release page\n${release.url}" target="_blank">Bandcamp</a>
+    <a href="${discogsSearchUrl}" title="Search release on Discogs" target="_blank">Search on Discogs</a>
+  </div>
 </div>`);
 
   const releaseContent = createElementFromHTML(`

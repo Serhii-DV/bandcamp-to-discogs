@@ -7,7 +7,6 @@ export function showReleaseTab(release: Release) {
   const btnReleasesTab = getReleasesTabElement();
   const releaseElement = document.getElementById('release');
   const btnDownloadRelease = document.getElementById('downloadRelease');
-  const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
 
   if (!btnReleaseTab) {
     return;
@@ -17,16 +16,11 @@ export function showReleaseTab(release: Release) {
   show(btnReleaseTab);
   click(btnReleaseTab);
 
-  if (!releaseElement || !btnDownloadRelease || !btnDiscogsSearchArtist) {
+  if (!releaseElement || !btnDownloadRelease) {
     return;
   }
 
-  setupReleaseTab(
-    releaseElement,
-    release,
-    btnDownloadRelease,
-    btnDiscogsSearchArtist
-  );
+  setupReleaseTab(releaseElement, release, btnDownloadRelease);
 }
 
 function getReleaseTabElement(): HTMLElement | null {

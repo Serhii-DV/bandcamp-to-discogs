@@ -6,7 +6,6 @@ export function showReleaseTab(release: Release) {
   const btnReleaseTab = getReleaseTabElement();
   const btnReleasesTab = getReleasesTabElement();
   const releaseElement = document.getElementById('release');
-  const btnDownloadRelease = document.getElementById('downloadRelease');
 
   if (!btnReleaseTab) {
     return;
@@ -16,11 +15,11 @@ export function showReleaseTab(release: Release) {
   show(btnReleaseTab);
   click(btnReleaseTab);
 
-  if (!releaseElement || !btnDownloadRelease) {
+  if (!releaseElement) {
     return;
   }
 
-  setupReleaseTab(releaseElement, release, btnDownloadRelease);
+  setupReleaseTab(releaseElement, release);
 }
 
 function getReleaseTabElement(): HTMLElement | null {

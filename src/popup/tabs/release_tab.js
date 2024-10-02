@@ -11,9 +11,8 @@ import { render } from '../../utils/render';
 /**
  * @param {Element} tab
  * @param {Release} release
- * @param {Element} btnDownloadRelease
  */
-export function setupReleaseTab(tab, release, btnDownloadRelease) {
+export function setupReleaseTab(tab, release) {
   log('Setup release tab data', release);
 
   if (release) {
@@ -21,7 +20,6 @@ export function setupReleaseTab(tab, release, btnDownloadRelease) {
   }
 
   renderReleaseCard(release, tab.querySelector('main'));
-  setupBtnToDownloadReleasesAsCsv(btnDownloadRelease, [release]);
 }
 
 function hideWarning() {
@@ -56,6 +54,11 @@ function renderReleaseCard(release, element) {
     discogsSearchUrl,
     tracks
   });
+
+  setupBtnToDownloadReleasesAsCsv(
+    element.querySelector('#downloadReleaseCsv'),
+    [release]
+  );
 
   const releaseArtist = element.querySelector('#release-artist');
   const releaseTitle = element.querySelector('#release-title');

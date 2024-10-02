@@ -42,7 +42,6 @@ const btnReleaseTab = document.getElementById('release-tab');
 const btnReleasesTab = document.getElementById('releases-tab');
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
-const btnDownloadRelease = document.getElementById('downloadRelease');
 const btnDownloadReleases = document.getElementById('downloadReleases');
 const btnDownloadStorage = document.getElementById('downloadHistory');
 const tabReleases = document.getElementById('releases');
@@ -141,11 +140,10 @@ function setupNavigation() {
 
   btnReleaseTab.addEventListener('click', () => {
     hide(btnDownloadReleases, btnDownloadStorage);
-    show(btnDownloadRelease);
     enable(btnCsvDataTab);
   });
   btnReleasesTab.addEventListener('click', () => {
-    hide(btnDownloadRelease, btnDownloadStorage);
+    hide(btnDownloadStorage);
     show(btnDownloadReleases);
     disable(btnCsvDataTab);
 
@@ -153,7 +151,7 @@ function setupNavigation() {
     releasesList.refreshStatus();
   });
   btnHistoryTab.addEventListener('click', () => {
-    hide(btnDownloadRelease, btnDownloadReleases);
+    hide(btnDownloadReleases);
     show(btnDownloadStorage);
     setupHistoryTab(document.getElementById('history'), btnDownloadStorage);
   });

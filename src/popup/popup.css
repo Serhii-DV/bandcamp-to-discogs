@@ -1,8 +1,8 @@
 :root {
   --main-bg-color: #212121;
   --main-text-color: #ccc;
-  --popup-height: 400px;
-  --popup-width: 400px;
+  --popup-height: 500px;
+  --popup-width: 500px;
 }
 
 body {

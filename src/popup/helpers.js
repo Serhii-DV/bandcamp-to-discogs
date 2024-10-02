@@ -66,7 +66,7 @@ export function objectToHtmlElement(data) {
  * @param {ReleaseItem} releaseItem
  * @returns {HTMLAnchorElement}
  */
-const createViewLink = (releaseItem) =>
+const createOpenLink = (releaseItem) =>
   createIconLink({
     href: releaseItem.url,
     iconDefault: 'box-arrow-up-right',
@@ -84,6 +84,18 @@ const createSearchLink = (releaseItem) =>
     iconDefault: 'search',
     className: 'link-discogs-search',
     title: 'Search release on Discogs'
+  });
+
+/**
+ * @param {ReleaseItem} releaseItem
+ * @returns {HTMLAnchorElement}
+ */
+const createViewLink = () =>
+  createIconLink({
+    href: '#view',
+    iconDefault: 'card-text',
+    className: 'link-view',
+    title: 'View release detailed info'
   });
 
 /**
@@ -124,6 +136,7 @@ function transformReleaseItemsToReleaseListData(
     const releaseItem = item instanceof Release ? item.releaseItem : item;
     const controls = [
       createViewLink(releaseItem),
+      createOpenLink(releaseItem),
       createSearchLink(releaseItem)
     ];
 

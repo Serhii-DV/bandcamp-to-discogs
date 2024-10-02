@@ -23,16 +23,16 @@ function setupLatestVisitedWidget(btnHistoryTab) {
         }
       });
 
-      const item = visitedReleasesWidget.addItem(
+      visitedReleasesWidget.addItem(
         '#history',
         'Go to history...',
         'Go to history...',
-        false
+        false,
+        (event) => {
+          click(btnHistoryTab);
+          event.preventDefault();
+        }
       );
-      item.addEventListener('click', (event) => {
-        click(btnHistoryTab);
-        event.preventDefault();
-      });
     });
   });
 }

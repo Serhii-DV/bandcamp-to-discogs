@@ -28,7 +28,8 @@ export class ReleasesGroupListElement extends HTMLElement {
     url: string,
     content: string | Element,
     title: string = '',
-    targetBlank: boolean = true
+    targetBlank: boolean = true,
+    onClick: ((event?: Event) => void) | null = null
   ): Element | null {
     const self = this;
     const item = createElementFromHTML(
@@ -44,6 +45,11 @@ export class ReleasesGroupListElement extends HTMLElement {
     } else {
       item.textContent = content;
     }
+
+    if (onClick !== null) {
+      item.addEventListener('click', onClick);
+    }
+
     self.#groupElement.appendChild(item);
 
     return item;

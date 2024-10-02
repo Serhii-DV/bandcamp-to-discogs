@@ -50,9 +50,7 @@ function outputRelease(tab, release) {
     'display-6',
     countArtistLines >= 3 && countArtistLines <= 5
   );
-  mainElement.classList.add(
-    'lines-a' + countArtistLines + '-t' + countTitleLines
-  );
+  mainElement.classList = 'lines-a' + countArtistLines + '-t' + countTitleLines;
 }
 
 function countLinesInHtmlElement(el) {
@@ -95,7 +93,8 @@ function addReleaseCardToElement(release, element) {
 </div>`);
 
   element.innerHTML = '';
-  element.appendChild(releaseHeadline).appendChild(releaseContent);
+  element.appendChild(releaseHeadline);
+  element.appendChild(releaseContent);
 
   return element;
 }

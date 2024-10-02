@@ -1,0 +1,68 @@
+#release {
+  height: var(--popup-height);
+}
+
+#release .release-headline {
+  padding: 0 10px;
+}
+#release .release-content {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+#release .release-content .nav,
+#release .release-content .tab-pane {
+  padding: 0 10px;
+}
+
+.lines-a1-t1 .release-content {
+  height: var(--release-card-content-height);
+}
+.lines-a1-t2 .release-content {
+  height: calc(var(--release-card-content-height) - 30px);
+}
+.lines-a1-t3 .release-content {
+  height: calc(var(--release-card-content-height) - 30px);
+}
+
+.lines-a2-t1 .release-content {
+  height: calc(var(--release-card-content-height) - 40px);
+}
+.lines-a2-t2 .release-content {
+  height: calc(var(--release-card-content-height) - 90px);
+}
+.lines-a2-t3 .release-content {
+  height: calc(var(--release-card-content-height) - 120px);
+}
+
+.lines-a3-t1 .release-content {
+  height: calc(var(--release-card-content-height) - 20px);
+}
+.lines-a3-t2 .release-content {
+  height: calc(var(--release-card-content-height) - 50px);
+}
+.lines-a3-t3 .release-content {
+  height: calc(var(--release-card-content-height) - 50px);
+}
+
+.lines-a4-t1 .release-content {
+  height: calc(var(--release-card-content-height) - 50px);
+}
+.lines-a4-t2 .release-content {
+  height: calc(var(--release-card-content-height) - 50px);
+}
+.lines-a4-t3 .release-content {
+  height: calc(var(--release-card-content-height) - 50px);
+}
+
+.lines-a5-t1 .release-content {
+  height: calc(var(--release-card-content-height) - 50px);
+}
+.lines-a5-t2 .release-content {
+  height: calc(var(--release-card-content-height) - 50px);
+}
+.lines-a5-t3 .release-content {
+  height: calc(var(--release-card-content-height) - 50px);
+}

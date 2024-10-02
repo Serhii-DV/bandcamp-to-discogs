@@ -2,6 +2,7 @@ import 'bootstrap';
 
 // Popup styles
 import './popup.css';
+import './css/release-card.css';
 import './css/releases-group-list.css';
 
 // Custom components

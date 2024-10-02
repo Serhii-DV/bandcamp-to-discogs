@@ -50,7 +50,11 @@ body {
   left: 0;
   bottom: 0;
   right: 0;
-  padding: 0 10px 10px;
+}
+
+#release .release-content .nav,
+#release .release-content .tab-pane {
+  padding: 0 10px;
 }
 
 .lines-a1-t1 .release-content {

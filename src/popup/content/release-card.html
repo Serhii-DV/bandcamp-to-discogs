@@ -4,10 +4,15 @@
     <h2 id="release-title" class="display-6">{{ release.title }}</h2>
     <h3 id="release-year" class="display-6">{{ release.year }}</h3>
   </div>
-  <div class="release-content small overflow-auto">
+  <div class="release-content small">
     <ul class="nav nav-pills" role="tablist">
+      <!-- Tracklist -->
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="rc-tracks-tab" data-bs-toggle="pill" data-bs-target="#release-tracks" type="button" role="tab" aria-controls="release-tracks" aria-selected="true">Tracklist</button>
+        <button class="nav-link active" id="release-card-tracks-tab" data-bs-toggle="pill" data-bs-target="#release-card-tracks" type="button" role="tab" aria-controls="release-card-tracks" aria-selected="true">Tracklist</button>
+      </li>
+      <!-- Credits -->
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="release-card-credits-tab" data-bs-toggle="pill" data-bs-target="#release-card-credits" type="button" role="tab" aria-controls="release-card-tracks" aria-selected="true">Credits</button>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{{ release.url }}" title="Open Bandcamp release page\n{{ release.url }}" target="_blank">Bandcamp</a>
@@ -16,11 +21,16 @@
         <a class="nav-link" href="{{ discogsSearchUrl }}" title="Search release on Discogs" target="_blank">Search on Discogs</a>
       </li>
     </ul>
-    <div class="tab-content">
-      <div class="tab-pane fade show active" id="release-tracks" role="tabpanel" aria-labelledby="rc-tracks-tab" tabindex="0">
+    <div class="tab-content pt-3 overflow-auto">
+      <!-- Tracklist -->
+      <div class="tab-pane fade show active" id="release-card-tracks" role="tabpanel" aria-labelledby="release-card-tracks-tab" tabindex="0">
         {{#tracks}}
           {{.}}<br>
         {{/tracks}}
+      </div>
+      <!-- Credits -->
+      <div class="tab-pane fade" id="release-card-credits" role="tabpanel" aria-labelledby="release-card-credits-tab" tabindex="0">
+        {{{ release.credit }}}
       </div>
     </div>
   </div>

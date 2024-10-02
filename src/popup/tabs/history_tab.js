@@ -20,14 +20,11 @@ import config from '../../config.js';
 import { loadDiscogsGenres } from '../../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 
-/**
- * @param {Element} btnDownloadCsv
- */
-export function setupHistoryTab(tab, btnDownloadCsv) {
+export function setupHistoryTab(tab) {
   const releasesList = getReleasesList();
 
   if (!hasDataAttribute(tab, 'buttons-initialized')) {
-    setupReleasesList(tab, releasesList, btnDownloadCsv);
+    setupReleasesList(tab, releasesList);
     setDataAttribute(tab, 'buttons-initialized');
   }
 
@@ -59,9 +56,12 @@ function updateReleasesListData(releasesList) {
 /**
  * @param {Element} tab
  * @param {ReleasesList} releasesList
- * @param {Element} btnDownloadCsv
  */
-function setupReleasesList(tab, releasesList, btnDownloadCsv) {
+function setupReleasesList(tab, releasesList) {
+  const btnDownloadCsv = createElementFromHTML(`
+<button id="downloadHistory" class="btn btn-primary rounded-0" type="button" title="Download selected releases from the history as Discogs CSV file" disabled>
+  <b2d-icon name="download"></b2d-icon>
+</button>`);
   const btnClearSelected = createElementFromHTML(`
 <button id="historyDataClearSelected" type="button" class="btn btn-danger" data-status-update title="Clear selected history">
   <b2d-icon name="database-dash"></b2d-icon>
@@ -110,7 +110,7 @@ function setupReleasesList(tab, releasesList, btnDownloadCsv) {
       updateReleasesListData(releasesList);
     });
 
-  releasesList.appendButton(btnClearSelected, btnClearAll);
+  releasesList.appendButton(btnDownloadCsv, btnClearSelected, btnClearAll);
   releasesList.addStatusElement(
     document.getElementById('selectedStatusInfo'),
     document.getElementById('viewedStatusInfo')

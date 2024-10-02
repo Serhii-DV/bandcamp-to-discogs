@@ -43,7 +43,6 @@ const btnReleasesTab = document.getElementById('releases-tab');
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
 const btnDownloadReleases = document.getElementById('downloadReleases');
-const btnDownloadStorage = document.getElementById('downloadHistory');
 const tabReleases = document.getElementById('releases');
 
 async function proceedBandcampData() {
@@ -139,11 +138,10 @@ function setupNavigation() {
   logInfo('Setup navigation');
 
   btnReleaseTab.addEventListener('click', () => {
-    hide(btnDownloadReleases, btnDownloadStorage);
+    hide(btnDownloadReleases);
     enable(btnCsvDataTab);
   });
   btnReleasesTab.addEventListener('click', () => {
-    hide(btnDownloadStorage);
     show(btnDownloadReleases);
     disable(btnCsvDataTab);
 
@@ -152,8 +150,7 @@ function setupNavigation() {
   });
   btnHistoryTab.addEventListener('click', () => {
     hide(btnDownloadReleases);
-    show(btnDownloadStorage);
-    setupHistoryTab(document.getElementById('history'), btnDownloadStorage);
+    setupHistoryTab(document.getElementById('history'));
   });
 
   setupBandcampTab(btnHistoryTab);

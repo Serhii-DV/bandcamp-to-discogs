@@ -121,6 +121,10 @@ export function setInputValue(inputElement, value) {
 }
 
 function checkInput(inputElement) {
+  if (inputElement.checked) {
+    return;
+  }
+
   inputElement.focus();
   inputElement.click();
   triggerInputEvent(inputElement);

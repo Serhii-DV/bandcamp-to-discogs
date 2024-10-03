@@ -4,6 +4,12 @@
 
 ### Features
 
+- core: Refactor rendering Release Card
+- core: A small refactor of getting data from the local storage
+- popup: Make popup wider
+- popup: Moved download CSV button and search buttons to the Release Card
+- popup: Load release data into the release card from the history tab and latest visited releases widget
+
 ### Fixed
 
 ## 0.15.1 (2024-10-01)

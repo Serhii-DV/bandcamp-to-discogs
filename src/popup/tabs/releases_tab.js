@@ -1,7 +1,7 @@
 import { ReleaseItem } from '../../app/release.js';
 import { getCurrentTab, openTabs } from '../../utils/chrome';
 import { createElementFromHTML, input } from '../../utils/html';
-import { findReleasesByUrls } from '../../utils/storage';
+import { getReleasesByUuids } from '../../utils/storage';
 import {
   populateReleasesList,
   removeButtonLoadingState,
@@ -17,6 +17,7 @@ export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue) {
     const button = event.target;
     setButtonInLoadingState(button);
 
+    const selectedUuids = releasesList.getSelectedValues();
     const bcLinks = releasesList.querySelectorAll(
       '.release-item.table-active .link-bandcamp-url'
     );
@@ -24,6 +25,7 @@ export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue) {
       link.getAttribute('href')
     );
 
+    // Open selected releases (add to the storage)
     openTabs(checkedUrls, (tab) => {
       chrome.scripting
         .executeScript({
@@ -34,7 +36,7 @@ export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue) {
     }).then(() => {
       setTimeout(() => {
         // Read data from the storage
-        findReleasesByUrls(checkedUrls, (releases) => {
+        getReleasesByUuids(selectedUuids).then((releases) => {
           downloadReleasesCsv(releases);
           removeButtonLoadingState(button);
         });

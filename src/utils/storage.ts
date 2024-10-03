@@ -1,6 +1,5 @@
 import { Release } from '../app/release.js';
 import { log, logError } from './console';
-import { generateKeyForUrl, generateKeysFromUrls } from './key-generator';
 import {
   getArrLastElement,
   getOwnProperty,
@@ -32,70 +31,13 @@ export interface VisitedDate {
   date: Date;
 }
 
-type ReleaseCallback = (release: Release) => void;
-type ReleasesCallback = (releases: Release[]) => void;
-
 export function logStorageData() {
   storage.get(null).then((data) => log('Storage data', data));
 }
 
-/**
- * Finds all releases from storage and release history and executes a callback function with the releases.
- */
-export function findAllReleases(): Promise<Release[]> {
+export function getAllReleases(): Promise<Release[]> {
   return storage.get(null).then((storageData: StorageData) => {
-    const releases: Release[] = [];
-
-    for (const key in storageData) {
-      if (
-        !hasOwnProperty(storageData, key) ||
-        !isObject(storageData[key]) ||
-        !isUUID(key)
-      ) {
-        continue;
-      }
-
-      try {
-        releases.push(Release.fromStorageObject(storageData[key]));
-      } catch (error) {
-        continue;
-      }
-    }
-
-    return releases;
-  });
-}
-
-/**
- * Finds a release by URL and executes the appropriate callback.
- * @param url - The URL to find the release for.
- * @param onFind - The callback function to call if the release is found.
- * @param onMissing - The callback function to call if the release is not found.
- */
-export function findReleaseByUrl(
-  url: string,
-  onFind?: ReleaseCallback,
-  onMissing?: (key: string) => void
-): void {
-  const key = generateKeyForUrl(url);
-
-  storage.get([key], (result: StorageData) => {
-    if (isObject(result[key])) {
-      try {
-        const release = Release.fromStorageObject(result[key]);
-        if (onFind && isFunction(onFind)) {
-          onFind(release);
-        }
-      } catch (error) {
-        log('Broken storage data for release', result[key]);
-        clearStorageByKey(key);
-      }
-    } else {
-      log('Release data is missing', key);
-      if (onMissing && isFunction(onMissing)) {
-        onMissing(key);
-      }
-    }
+    return storageDataToReleases(storageData);
   });
 }
 
@@ -114,62 +56,49 @@ export function getReleaseByUuid(uuid: string): Promise<Release | undefined> {
   });
 }
 
-export function getReleasesByUuids(uuids: string[]): Promise<ReleaseMap> {
+export function getReleaseMapByUuids(uuids: string[]): Promise<ReleaseMap> {
   return storage.get(uuids).then((storageData: StorageData) => {
-    const releases = getReleasesFromStorageData(storageData);
-    return createReleaseMapFromReleases(releases);
+    return storageDataToReleaseMap(storageData);
   });
 }
 
-const createReleaseMapFromReleases = (releases: Release[]) => {
-  const releaseMap: ReleaseMap = releases.reduce((acc, release) => {
-    acc[release.uuid] = release;
-    return acc;
-  }, {} as ReleaseMap);
-
-  return releaseMap;
-};
-
-const getReleasesFromStorageData = (storageData: StorageData) => {
-  const releases: Release[] = Object.values(storageData)
-    .map((obj: any) => {
-      try {
-        return Release.fromStorageObject(obj);
-      } catch (error) {
-        log('Broken storage object.', JSON.stringify(error), obj);
-        return null;
-      }
-    })
-    .filter((obj: Release | null): obj is Release => obj instanceof Release);
-
-  return releases;
-};
-
-/**
- * Finds releases by their URLs and executes a callback with the found releases.
- */
-export function findReleasesByUrls(
-  urls: string[],
-  onFind?: ReleasesCallback
-): void {
-  const keys = generateKeysFromUrls(urls);
-
-  storage.get(keys, (result: StorageData) => {
-    const releases: Release[] = Object.values(result)
-      .map((obj: any) => {
-        try {
-          return Release.fromStorageObject(obj);
-        } catch (error) {
-          log('Broken storage object.', JSON.stringify(error), obj);
-          return null;
-        }
-      })
-      .filter((obj: Release | null): obj is Release => obj instanceof Release);
-
-    if (onFind && isFunction(onFind)) {
-      onFind(releases);
-    }
+export function getReleasesByUuids(uuids: string[]): Promise<Release[]> {
+  return storage.get(uuids).then((storageData: StorageData) => {
+    return storageDataToReleases(storageData);
   });
+}
+
+function releaseMapToReleases(releaseMap: ReleaseMap): Release[] {
+  return Object.values(releaseMap);
+}
+
+function storageDataToReleases(storageData: StorageData): Release[] {
+  return releaseMapToReleases(storageDataToReleaseMap(storageData));
+}
+
+function storageDataToReleaseMap(storageData: StorageData): ReleaseMap {
+  const releasesMap: ReleaseMap = {};
+
+  for (const key in storageData) {
+    if (
+      !hasOwnProperty(storageData, key) ||
+      !isObject(storageData[key]) ||
+      !isUUID(key)
+    ) {
+      continue;
+    }
+
+    const obj = storageData[key];
+
+    try {
+      releasesMap[key] = Release.fromStorageObject(obj);
+    } catch (error) {
+      log('Broken release storage object.', JSON.stringify(error), obj);
+      continue;
+    }
+  }
+
+  return releasesMap;
 }
 
 /**

@@ -1,5 +1,3 @@
-import { DiscogsCsv } from '../../discogs/app/discogs-csv.js';
-import { downloadCsv, objectsToCsv } from '../../utils/csv.ts';
 import {
   createElementFromHTML,
   hasDataAttribute,
@@ -8,8 +6,8 @@ import {
 import {
   clearStorage,
   clearStorageByKey,
-  findAllReleases,
-  findReleasesByUrls
+  getAllReleases,
+  getReleasesByUuids
 } from '../../utils/storage';
 import {
   populateReleasesList,
@@ -19,6 +17,7 @@ import {
 import config from '../../config.js';
 import { loadDiscogsGenres } from '../../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
+import { downloadReleasesCsv } from './download_tab.js';
 
 export function setupHistoryTab(tab) {
   const releasesList = getReleasesList();
@@ -48,7 +47,7 @@ function getReleasesList() {
 }
 
 function updateReleasesListData(releasesList) {
-  findAllReleases().then((releases) => {
+  getAllReleases().then((releases) => {
     populateReleasesList(releasesList, releases);
   });
 }
@@ -73,22 +72,11 @@ function setupReleasesList(tab, releasesList) {
 
   const downloadCsvFile = (event) => {
     const button = event.target;
+    const selectedUuids = releasesList.getSelectedValues();
+
     setButtonInLoadingState(button);
-
-    const bcLinks = releasesList.querySelectorAll(
-      '.release-item.table-active .link-bandcamp-url'
-    );
-    const checkedUrls = Array.from(bcLinks).map((link) =>
-      link.getAttribute('href')
-    );
-
-    findReleasesByUrls(checkedUrls, (releases) => {
-      const firstRelease = releases[0];
-      const csvObjects = releases.map((release) =>
-        DiscogsCsv.fromRelease(release).toCsvObject()
-      );
-      const csv = objectsToCsv(csvObjects);
-      downloadCsv(csv, `discogs-selected-releases-${firstRelease.artist}`);
+    getReleasesByUuids(selectedUuids).then((releases) => {
+      downloadReleasesCsv(releases);
       removeButtonLoadingState(button);
     });
   };

@@ -1,6 +1,6 @@
 import { ReleaseItem } from '../../app/release.js';
 import { getCurrentTab, openTabs } from '../../utils/chrome';
-import { input } from '../../utils/html';
+import { createElementFromHTML, input } from '../../utils/html';
 import { findReleasesByUrls } from '../../utils/storage';
 import {
   populateReleasesList,
@@ -10,13 +10,7 @@ import {
 } from '../helpers.js';
 import { downloadReleasesCsv } from './download_tab.js';
 
-export function setupReleasesTab(
-  tab,
-  releasesData,
-  bgImageSrc,
-  searchValue,
-  btnNavDownload
-) {
+export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue) {
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
   const releasesList = tab.querySelector('#releasesTabLIst');
   const downloadCsvFile = async (event) => {
@@ -48,8 +42,14 @@ export function setupReleasesTab(
     });
   };
 
+  const btnNavDownload = createElementFromHTML(`
+<button class="btn btn-primary rounded-0" type="button" title="Download selected releases as Discogs CSV file" disabled>
+    <b2d-icon name="download"></b2d-icon>
+</button>`);
   btnNavDownload.addEventListener('click', downloadCsvFile);
+
   releasesList
+    .appendButton(btnNavDownload)
     .addStateButton(btnNavDownload)
     .addStatusElement(
       document.getElementById('selectedStatusInfo'),

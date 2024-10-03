@@ -42,7 +42,6 @@ const btnReleaseTab = document.getElementById('release-tab');
 const btnReleasesTab = document.getElementById('releases-tab');
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
-const btnDownloadReleases = document.getElementById('downloadReleases');
 const tabReleases = document.getElementById('releases');
 
 async function proceedBandcampData() {
@@ -67,7 +66,6 @@ async function proceedDiscogsEditPageData() {
 function showBandcampTab() {
   disable(btnCsvDataTab);
   hide(btnReleasesTab);
-  show(btnDownloadReleases);
   click(btnBandcampTab);
 }
 
@@ -112,8 +110,7 @@ function processBandcampPageMusicResponse(response) {
     tabReleases,
     response.data,
     response.popup.imageSrc,
-    response.popup.search,
-    btnDownloadReleases
+    response.popup.search
   );
 }
 
@@ -138,18 +135,15 @@ function setupNavigation() {
   logInfo('Setup navigation');
 
   btnReleaseTab.addEventListener('click', () => {
-    hide(btnDownloadReleases);
     enable(btnCsvDataTab);
   });
   btnReleasesTab.addEventListener('click', () => {
-    show(btnDownloadReleases);
     disable(btnCsvDataTab);
 
     const releasesList = tabReleases.querySelector('releases-list');
     releasesList.refreshStatus();
   });
   btnHistoryTab.addEventListener('click', () => {
-    hide(btnDownloadReleases);
     setupHistoryTab(document.getElementById('history'));
   });
 

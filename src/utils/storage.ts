@@ -12,6 +12,8 @@ import { validate as isUUID } from 'uuid';
 
 const storage = chrome.storage.local;
 
+export type uuid = string;
+
 interface StorageData {
   [key: string]: any;
 }
@@ -19,15 +21,15 @@ interface StorageData {
 interface History extends Array<string> {}
 
 export interface HistoryData {
-  [key: string]: History;
+  [key: uuid]: History;
 }
 
 interface ReleaseMap {
-  [key: string]: Release;
+  [key: uuid]: Release;
 }
 
 export interface VisitedDate {
-  uuid: string;
+  uuid: uuid;
   date: Date;
 }
 

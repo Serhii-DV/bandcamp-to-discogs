@@ -6,9 +6,9 @@
   </div>
   <div class="release-content small">
     <ul class="nav nav-pills" role="tablist">
-      <!-- Tab: Tracklist -->
+      <!-- Tab: Info -->
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="release-card-tracks-tab" data-bs-toggle="pill" data-bs-target="#release-card-tracks" type="button" role="tab" aria-controls="release-card-tracks" aria-selected="true">Tracklist</button>
+        <button class="nav-link active" id="release-card-info-tab" data-bs-toggle="pill" data-bs-target="#release-card-info" type="button" role="tab" aria-controls="release-card-info" aria-selected="true">Info</button>
       </li>
       <!-- Tab: Visits -->
       <li class="nav-item" role="presentation">
@@ -39,8 +39,8 @@
       </li>
     </ul>
     <div class="tab-content pt-3 overflow-auto">
-      <!-- Tracklist -->
-      <div class="tab-pane fade show active" id="release-card-tracks" role="tabpanel" aria-labelledby="release-card-tracks-tab" tabindex="0">
+      <!-- Info -->
+      <div class="tab-pane fade show active" id="release-card-info" role="tabpanel" aria-labelledby="release-card-info-tab" tabindex="0">
         <div>
         {{#tracks}}
           {{.}}<br>

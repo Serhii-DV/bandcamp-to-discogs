@@ -1,6 +1,5 @@
 import { Release } from '../app/release.js';
 import { Metadata } from '../discogs/app/metadata.js';
-import { getSearchDiscogsReleaseUrl } from '../discogs/modules/discogs.js';
 import {
   chromeSendMessageToCurrentTab,
   getCurrentTabUrl
@@ -67,30 +66,6 @@ export function objectToHtmlElement(data) {
  * @param {ReleaseItem} releaseItem
  * @returns {HTMLAnchorElement}
  */
-const createOpenLink = (releaseItem) =>
-  createIconLink({
-    href: releaseItem.url,
-    iconDefault: 'box-arrow-up-right',
-    className: 'link-bandcamp-url',
-    title: 'View bandcamp release'
-  });
-
-/**
- * @param {ReleaseItem} releaseItem
- * @returns {HTMLAnchorElement}
- */
-const createSearchLink = (releaseItem) =>
-  createIconLink({
-    href: getSearchDiscogsReleaseUrl(releaseItem.artist, releaseItem.title),
-    iconDefault: 'search',
-    className: 'link-discogs-search',
-    title: 'Search release on Discogs'
-  });
-
-/**
- * @param {ReleaseItem} releaseItem
- * @returns {HTMLAnchorElement}
- */
 const createViewLink = (releaseItem) =>
   createIconLink({
     href: '#view',
@@ -141,11 +116,7 @@ function transformReleaseItemsToReleaseListData(
 
   releases.forEach((item) => {
     const releaseItem = item instanceof Release ? item.releaseItem : item;
-    const controls = [
-      createViewLink(releaseItem),
-      createOpenLink(releaseItem),
-      createSearchLink(releaseItem)
-    ];
+    const controls = [createViewLink(releaseItem)];
 
     if (isDiscogsEditPage && item instanceof Release) {
       controls.push(createApplyMetadataLink(item));

@@ -2,11 +2,13 @@ import { log } from '../../utils/console';
 import { getSearchDiscogsReleaseUrl } from '../../discogs/modules/discogs.js';
 import {
   capitalizeEachWord,
+  getOwnProperty,
   removeLeadingZeroOrColon
 } from '../../utils/utils';
 import { setBackgroundImage } from '../helpers.js';
 import { setupBtnToDownloadReleasesAsCsv } from './download_tab.js';
 import { render } from '../../utils/render';
+import { getHistoryByUuid } from '../../utils/storage';
 
 /**
  * @param {Element} tab
@@ -19,7 +21,9 @@ export function setupReleaseTab(tab, release) {
     hideWarning();
   }
 
-  renderReleaseCard(release, tab.querySelector('main'));
+  getHistoryByUuid(release.uuid).then((historyData) => {
+    renderReleaseCard(release, historyData, tab.querySelector('main'));
+  });
 }
 
 function hideWarning() {
@@ -35,9 +39,10 @@ function countLinesInHtmlElement(el) {
 
 /**
  * @param {Release} release
+ * @param {import('src/utils/storage.js').HistoryData} historyData
  * @param {Element} element
  */
-function renderReleaseCard(release, element) {
+function renderReleaseCard(release, historyData, element) {
   setBackgroundImage(document.querySelector('.bg-image'), release.image);
 
   const discogsSearchUrl = getSearchDiscogsReleaseUrl(
@@ -48,11 +53,19 @@ function renderReleaseCard(release, element) {
     (track) =>
       `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.time.value)})`
   );
+  const history = getOwnProperty(historyData, release.uuid, []);
+  const releaseHistory = history
+    .map((date) => ({
+      localeString: date.toLocaleString(),
+      isoString: date.toISOString()
+    }))
+    .reverse();
 
   render(document.getElementById('releaseCardTemplate'), element, {
     release,
-    discogsSearchUrl,
-    tracks
+    tracks,
+    history: releaseHistory,
+    discogsSearchUrl
   });
 
   setupBtnToDownloadReleasesAsCsv(

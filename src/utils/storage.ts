@@ -18,7 +18,7 @@ interface StorageData {
   [key: string]: any;
 }
 
-interface History extends Array<string> {}
+interface History extends Array<Date> {}
 
 export interface HistoryData {
   [key: uuid]: History;
@@ -115,17 +115,32 @@ export function saveRelease(release: Release): void {
 
 export function addReleaseHistory(release: Release): void {
   const uuid = release.uuid;
-  getHistoryByUuid(uuid).then((history) => {
-    history.push(new Date().toISOString());
+  getHistoryByUuid(uuid).then((historyData) => {
+    const history = getOwnProperty(historyData, uuid, []);
+    history.push(new Date());
     setHistoryByUuid(uuid, history).then(() => {
       log('New history added to release', uuid);
     });
   });
 }
 
-export function getHistoryByUuid(uuid: string): Promise<History> {
-  const key = generateHistoryKey(uuid);
-  return storage.get([key]).then((result) => getOwnProperty(result, key, []));
+export function getHistoryByUuid(uuid: string): Promise<HistoryData> {
+  const historyKey = generateHistoryKey(uuid);
+  return storage.get([historyKey]).then((result) => {
+    const historyData: HistoryData = {};
+    historyData[uuid] = dateStringsToDateObjects(
+      getOwnProperty(result, historyKey, [])
+    );
+    return historyData;
+  });
+}
+
+function dateStringsToDateObjects(dates: string[]): Date[] {
+  return dates.map((dateString) => new Date(dateString));
+}
+
+function dateObjectsToDateStrings(dates: Date[]): string[] {
+  return dates.map((date) => date.toISOString());
 }
 
 export function setHistoryByUuid(
@@ -133,7 +148,7 @@ export function setHistoryByUuid(
   history: History
 ): Promise<void> {
   const key = generateHistoryKey(uuid);
-  return storage.set({ [key]: history });
+  return storage.set({ [key]: dateObjectsToDateStrings(history) });
 }
 
 export function getHistoryData(): Promise<HistoryData> {
@@ -144,7 +159,7 @@ export function getHistoryData(): Promise<HistoryData> {
       if (!key.startsWith(HISTORY_KEY_PREFIX)) continue;
       const uuid = key.slice(HISTORY_KEY_PREFIX.length);
       if (!isUUID(uuid)) continue;
-      historyData[uuid] = storageData[key];
+      historyData[uuid] = dateStringsToDateObjects(storageData[key]);
     }
 
     return historyData;

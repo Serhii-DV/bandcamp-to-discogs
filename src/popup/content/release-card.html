@@ -10,9 +10,9 @@
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="release-card-tracks-tab" data-bs-toggle="pill" data-bs-target="#release-card-tracks" type="button" role="tab" aria-controls="release-card-tracks" aria-selected="true">Tracklist</button>
       </li>
-      <!-- Tab: Credits -->
+      <!-- Tab: Visits -->
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="release-card-credits-tab" data-bs-toggle="pill" data-bs-target="#release-card-credits" type="button" role="tab" aria-controls="release-card-tracks" aria-selected="true">Credits</button>
+        <button class="nav-link" id="release-history-tab" data-bs-toggle="pill" data-bs-target="#release-history" type="button" role="tab" aria-controls="release-history" aria-selected="true">History</button>
       </li>
       <!-- Link: Discogs CSV -->
       <li class="nav-item ms-3">
@@ -41,13 +41,22 @@
     <div class="tab-content pt-3 overflow-auto">
       <!-- Tracklist -->
       <div class="tab-pane fade show active" id="release-card-tracks" role="tabpanel" aria-labelledby="release-card-tracks-tab" tabindex="0">
+        <div>
         {{#tracks}}
           {{.}}<br>
         {{/tracks}}
+        </div>
+        {{#release.credit}}
+        <div class="mt-3">{{{ release.credit }}}</div>
+        {{/release.credit}}
       </div>
-      <!-- Credits -->
-      <div class="tab-pane fade" id="release-card-credits" role="tabpanel" aria-labelledby="release-card-credits-tab" tabindex="0">
-        {{{ release.credit }}}
+      <!-- History -->
+      <div class="tab-pane fade" id="release-history" role="tabpanel" aria-labelledby="release-history-tab" tabindex="0">
+        <ol>
+        {{#history}}
+          <li>{{localeString}} (<relative-time class="release-visited-date text-body-secondary" datetime="{{isoString}}">{{localeString}}</relative-time>)</li>
+        {{/history}}
+        </ol>
       </div>
     </div>
   </div>

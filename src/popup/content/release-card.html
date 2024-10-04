@@ -46,6 +46,14 @@
           {{.}}<br>
         {{/tracks}}
         </div>
+        <div class="mt-3">
+        {{#published}}
+        Published <relative-time class="release-visited-date text-body-secondary" datetime="{{isoString}}">{{localeString}}</relative-time><br>
+        {{/published}}
+        {{#modified}}
+        Modified <relative-time class="release-visited-date text-body-secondary" datetime="{{isoString}}">{{localeString}}</relative-time><br>
+        {{/modified}}
+        </div>
         {{#release.credit}}
         <div class="mt-3">{{{ release.credit }}}</div>
         {{/release.credit}}

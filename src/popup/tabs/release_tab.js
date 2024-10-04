@@ -54,17 +54,16 @@ function renderReleaseCard(release, historyData, element) {
       `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.time.value)})`
   );
   const history = getOwnProperty(historyData, release.uuid, []);
-  const releaseHistory = history
-    .map((date) => ({
-      localeString: date.toLocaleString(),
-      isoString: date.toISOString()
-    }))
-    .reverse();
+  const releaseHistory = history.map((date) => dateToTemplate(date)).reverse();
+  const published = dateToTemplate(release.published);
+  const modified = dateToTemplate(release.modified);
 
   render(document.getElementById('releaseCardTemplate'), element, {
     release,
     tracks,
     history: releaseHistory,
+    modified,
+    published,
     discogsSearchUrl
   });
 
@@ -83,4 +82,11 @@ function renderReleaseCard(release, historyData, element) {
     countArtistLines >= 3 && countArtistLines <= 5
   );
   element.classList = 'lines-a' + countArtistLines + '-t' + countTitleLines;
+}
+
+function dateToTemplate(date) {
+  return {
+    localeString: date.toLocaleString(),
+    isoString: date.toISOString()
+  };
 }

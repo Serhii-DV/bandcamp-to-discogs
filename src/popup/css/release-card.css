@@ -1,3 +1,7 @@
+:root {
+  --release-card-content-height: 310px;
+}
+
 #release {
   height: var(--popup-height);
 }
@@ -65,4 +69,8 @@
 }
 .lines-a5-t3 .release-content {
   height: calc(var(--release-card-content-height) - 50px);
+}
+
+#release .release-content .tab-content {
+  height: calc(var(--release-card-content-height) - 40px);
 }

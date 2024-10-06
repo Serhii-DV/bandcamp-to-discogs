@@ -2,6 +2,14 @@
   --release-card-content-height: 310px;
 }
 
+.nav-underline {
+  --bs-nav-underline-link-active-color: #ccc;
+}
+
+.nav-underline .nav-link.active {
+  font-weight: normal;
+}
+
 #release-card {
   height: var(--popup-height);
 }

@@ -5,17 +5,11 @@
       <b2d-icon name="download"></b2d-icon> CSV
     </button>
     <!-- Discogs Draft page -->
-    <a class="btn btn-secondary rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
+    <a class="btn btn-success rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
       <b2d-icon name="discogs-png"></b2d-icon> CSV to Draft
     </a>
-    <!-- Link: Bandcamp -->
-    <a class="btn btn-link rounded-0" href="{{ release.url }}" title="Open Bandcamp release page
-    {{ release.url }}" target="_blank">
-      <b2d-icon name="bandcamp-png"></b2d-icon>
-    </a>
-    <!-- Link: Discogs search -->
-    <a class="btn btn-link" href="{{ discogsSearchUrl }}" title="Search release on Discogs" target="_blank">
-      <b2d-icon name="search"></b2d-icon>
+    <a class="btn btn-dark rounded-0" href="{{ discogsSearchUrl }}" title="Search release on Discogs" target="_blank">
+      <b2d-icon name="discogs-png"></b2d-icon> Search
     </a>
   </nav>
   <div class="release-headline">
@@ -24,20 +18,30 @@
     <h3 id="release-year" class="display-6">{{ release.year }}</h3>
   </div>
   <div class="release-content small">
-    <ul class="nav nav-pills" role="tablist">
+    <ul class="nav nav-underline" role="tablist">
       <!-- Tab: Info -->
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="release-card-info-tab" data-bs-toggle="pill" data-bs-target="#release-card-info" type="button" role="tab" aria-controls="release-card-info" aria-selected="true">Info</button>
+        <button class="nav-link active" id="release-card-info-tab" data-bs-toggle="pill" data-bs-target="#release-card-info" type="button" role="tab" aria-controls="release-card-info" aria-selected="true">
+          Release Info
+        </button>
       </li>
       <!-- Tab: Visits -->
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="release-history-tab" data-bs-toggle="pill" data-bs-target="#release-history" type="button" role="tab" aria-controls="release-history" aria-selected="true">History</button>
+        <button class="nav-link" id="release-history-tab" data-bs-toggle="pill" data-bs-target="#release-history" type="button" role="tab" aria-controls="release-history" aria-selected="true">
+          View History
+        </button>
       </li>
     </ul>
     <div class="tab-content pt-3 overflow-auto">
       <!-- Info -->
       <div class="tab-pane fade show active" id="release-card-info" role="tabpanel" aria-labelledby="release-card-info-tab" tabindex="0">
         <div>
+          <a class="btn btn-dark btn-sm" href="{{ release.url }}" title="Open Bandcamp release page
+        {{ release.url }}" target="_blank">
+          <b2d-icon name="bandcamp-png"></b2d-icon> {{ release.url }}
+        </a>
+        </div>
+        <div class="mt-3">
         {{#tracks}}
           {{.}}<br>
         {{/tracks}}

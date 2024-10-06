@@ -60,7 +60,7 @@
       </div>
       <!-- History -->
       <div class="tab-pane fade" id="release-history" role="tabpanel" aria-labelledby="release-history-tab" tabindex="0">
-        <ol>
+        <ol reversed>
         {{#history}}
           <li>{{localeString}} (<relative-time class="release-visited-date text-body-secondary" datetime="{{isoString}}">{{localeString}}</relative-time>)</li>
         {{/history}}

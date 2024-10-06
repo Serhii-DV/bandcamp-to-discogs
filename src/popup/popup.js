@@ -35,10 +35,10 @@ import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { createReleaseFromSchema } from '../utils/schema';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
-import { showReleaseTab } from './modules/main';
+import { showReleaseCardTab } from './modules/main';
 
 const btnBandcampTab = document.getElementById('bandcamp-tab');
-const btnReleaseTab = document.getElementById('release-tab');
+const btnReleaseCardTab = document.getElementById('release-card-tab');
 const btnReleasesTab = document.getElementById('releases-tab');
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
@@ -94,7 +94,7 @@ function processBandcampPageAlbumResponse(response, keywordsMapping) {
     const schema = response.schema;
     const release = createReleaseFromSchema(schema);
     setupConsoleRelease(release, keywordsMapping, schema);
-    showReleaseTab(release);
+    showReleaseCardTab(release);
     setupCsvDataTab(release, btnCsvDataTab);
   } catch (error) {
     console.error(error);
@@ -102,7 +102,7 @@ function processBandcampPageAlbumResponse(response, keywordsMapping) {
 }
 
 function processBandcampPageMusicResponse(response) {
-  hide(btnReleaseTab);
+  hide(btnReleaseCardTab);
   show(btnReleasesTab);
   click(btnReleasesTab);
 
@@ -134,7 +134,7 @@ function replaceVersion(document) {
 function setupNavigation() {
   logInfo('Setup navigation');
 
-  btnReleaseTab.addEventListener('click', () => {
+  btnReleaseCardTab.addEventListener('click', () => {
     enable(btnCsvDataTab);
   });
   btnReleasesTab.addEventListener('click', () => {

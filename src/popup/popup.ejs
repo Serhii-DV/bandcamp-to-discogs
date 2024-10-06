@@ -9,7 +9,7 @@
       <button class="btn btn-dark rounded-0" id="bandcamp-tab" data-bs-toggle="tab" data-bs-target="#bandcamp" role="tab" aria-controls="bandcamp" aria-selected="true" type="button" title="Bandcamp">
         <b2d-icon name="bandcamp-png"></b2d-icon>
       </button>
-      <button class="btn btn-dark rounded-0" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
+      <button class="btn btn-dark rounded-0" id="release-card-tab" data-bs-toggle="tab" data-bs-target="#release-card" role="tab" aria-controls="release-card" aria-selected="true" type="button" title="Release card preview">
         <b2d-icon name="card-text"></b2d-icon>
       </button>
       <button class="btn btn-dark rounded-0" id="releases-tab" data-bs-toggle="tab" data-bs-target="#releases" role="tab" aria-controls="releases" aria-selected="true" type="button" title="Releases list">
@@ -33,9 +33,9 @@
       <div class="tab-pane fade content-text" id="bandcamp" role="tabpanel" aria-labelledby="bandcamp-tab" tabindex="0">
         <%= tabContentBandcamp %>
       </div>
-      <!-- Release -->
-      <div class="tab-pane fade" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">
-        <%= tabContentRelease %>
+      <!-- Release card -->
+      <div class="tab-pane fade" id="release-card" role="tabpanel" aria-labelledby="release-card-tab" tabindex="0">
+        <%= tabContentReleaseCard %>
       </div>
       <!-- Releases -->
       <div class="tab-pane fade" id="releases" role="tabpanel" aria-labelledby="releases-tab" tabindex="0">

@@ -1,7 +1,7 @@
 import { Release } from 'src/app/release';
 import { createElementFromHTML } from '../../utils/html';
 import { VisitedDate } from '../../utils/storage';
-import { showReleaseTab } from '../modules/main';
+import { showReleaseCardTab } from '../modules/main';
 
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
@@ -80,7 +80,7 @@ export class ReleasesGroupListElement extends HTMLElement {
         release.url,
         false,
         (event: Event) => {
-          showReleaseTab(release);
+          showReleaseCardTab(release);
           event.preventDefault();
         }
       );

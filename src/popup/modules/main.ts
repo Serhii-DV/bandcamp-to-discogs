@@ -1,29 +1,34 @@
 import { Release } from '../../app/release';
 import { click, hide, show } from '../../utils/html';
-import { setupReleaseTab } from '../tabs/release_tab';
+import { setupReleaseCardTab } from '../tabs/release-card_tab';
 
-export function showReleaseTab(release: Release) {
-  const btnReleaseTab = getReleaseTabElement();
+export function showReleaseCardTab(release: Release) {
+  const btnReleaseCardTab = getReleaseCardTabElement();
   const btnReleasesTab = getReleasesTabElement();
-  const releaseElement = document.getElementById('release');
 
-  if (!btnReleaseTab) {
+  if (!btnReleaseCardTab) {
     return;
   }
 
   hide(btnReleasesTab);
-  show(btnReleaseTab);
-  click(btnReleaseTab);
+  show(btnReleaseCardTab);
+  click(btnReleaseCardTab);
 
-  if (!releaseElement) {
+  const releaseCardElement = getReleaseCardElement();
+
+  if (!releaseCardElement) {
     return;
   }
 
-  setupReleaseTab(releaseElement, release);
+  setupReleaseCardTab(releaseCardElement, release);
 }
 
-function getReleaseTabElement(): HTMLElement | null {
-  return document.getElementById('release-tab');
+function getReleaseCardTabElement(): HTMLElement | null {
+  return document.getElementById('release-card-tab');
+}
+
+function getReleaseCardElement(): HTMLElement | null {
+  return document.getElementById('release-card');
 }
 
 function getReleasesTabElement(): HTMLElement | null {

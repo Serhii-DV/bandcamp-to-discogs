@@ -2,22 +2,22 @@
   --release-card-content-height: 310px;
 }
 
-#release {
+#release-card {
   height: var(--popup-height);
 }
 
-#release .release-headline {
+#release-card .release-headline {
   padding: 0 10px;
 }
-#release .release-content {
+#release-card .release-content {
   position: absolute;
   left: 0;
   bottom: 0;
   right: 0;
 }
 
-#release .release-content .nav,
-#release .release-content .tab-pane {
+#release-card .release-content .nav,
+#release-card .release-content .tab-pane {
   padding: 0 10px;
 }
 
@@ -71,6 +71,6 @@
   height: calc(var(--release-card-content-height) - 50px);
 }
 
-#release .release-content .tab-content {
+#release-card .release-content .tab-content {
   height: calc(var(--release-card-content-height) - 40px);
 }

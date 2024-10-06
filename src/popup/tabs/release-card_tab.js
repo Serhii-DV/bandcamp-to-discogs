@@ -14,8 +14,8 @@ import { getHistoryByUuid } from '../../utils/storage';
  * @param {Element} tab
  * @param {Release} release
  */
-export function setupReleaseTab(tab, release) {
-  log('Setup release tab data', release);
+export function setupReleaseCardTab(tab, release) {
+  log('Setup release card tab', release);
 
   if (release) {
     hideWarning();

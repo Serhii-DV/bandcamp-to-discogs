@@ -15,7 +15,7 @@ import {
 import { getOwnProperty, isArray, isObject, isString } from '../utils/utils';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { getHistoryData, getReleaseByUuid } from '../utils/storage';
-import { showReleaseTab } from './modules/main';
+import { showReleaseCardTab } from './modules/main';
 
 /**
  * Converts a JavaScript object to an HTML element representing a table.
@@ -74,7 +74,7 @@ const createViewLink = (releaseItem) =>
     title: 'View release detailed info',
     onClick: () => {
       getReleaseByUuid(releaseItem.uuid).then((release) => {
-        showReleaseTab(release);
+        showReleaseCardTab(release);
       });
       return true;
     }

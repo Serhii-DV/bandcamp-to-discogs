@@ -81,7 +81,7 @@ module.exports = (env, argv) => {
         filename: "popup.html",
         templateParameters: {
           tabContentBandcamp: fs.readFileSync('./src/popup/content/bandcamp.html', 'utf-8'),
-          tabContentRelease: fs.readFileSync('./src/popup/content/release_tab.html', 'utf-8'),
+          tabContentReleaseCard: fs.readFileSync('./src/popup/content/release-card_tab.html', 'utf-8'),
           tabContentReleases: fs.readFileSync('./src/popup/content/releases_tab.html', 'utf-8'),
           tabContentHistory: fs.readFileSync('./src/popup/content/history_tab.html', 'utf-8'),
           tabContentAbout: fs.readFileSync('./src/popup/content/about.html', 'utf-8'),

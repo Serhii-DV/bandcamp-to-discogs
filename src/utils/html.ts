@@ -65,11 +65,18 @@ export function hide(
 
 export function disable(
   ...elements: (
+    | HTMLElement
     | HTMLInputElement
     | HTMLButtonElement
     | HTMLSelectElement
     | null
-    | (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null)[]
+    | (
+        | HTMLElement
+        | HTMLInputElement
+        | HTMLButtonElement
+        | HTMLSelectElement
+        | null
+      )[]
   )[]
 ): void {
   elements.forEach((el) => {

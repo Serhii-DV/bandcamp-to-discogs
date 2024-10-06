@@ -24,7 +24,7 @@ import {
   setHistoryTabSearchValue,
   setupHistoryTab
 } from './tabs/history_tab.js';
-import { disable, enable, hide, show, click } from '../utils/html';
+import { disable, enable, click } from '../utils/html';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupCsvDataTab } from './tabs/csv_data_tab.js';
 import { getStorageSize } from '../utils/storage';
@@ -35,11 +35,15 @@ import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { createReleaseFromSchema } from '../utils/schema';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
-import { showReleaseCardTab } from './modules/main';
+import {
+  getReleaseCardTabElement,
+  getReleasesTabElement,
+  showReleaseCardTab
+} from './modules/main';
 
 const btnBandcampTab = document.getElementById('bandcamp-tab');
-const btnReleaseCardTab = document.getElementById('release-card-tab');
-const btnReleasesTab = document.getElementById('releases-tab');
+const btnReleaseCardTab = getReleaseCardTabElement();
+const btnReleasesTab = getReleasesTabElement();
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
 const tabReleases = document.getElementById('releases');
@@ -65,7 +69,6 @@ async function proceedDiscogsEditPageData() {
 
 function showBandcampTab() {
   disable(btnCsvDataTab);
-  hide(btnReleasesTab);
   click(btnBandcampTab);
 }
 
@@ -102,8 +105,6 @@ function processBandcampPageAlbumResponse(response, keywordsMapping) {
 }
 
 function processBandcampPageMusicResponse(response) {
-  hide(btnReleaseCardTab);
-  show(btnReleasesTab);
   click(btnReleasesTab);
 
   setupReleasesTab(
@@ -116,7 +117,6 @@ function processBandcampPageMusicResponse(response) {
 
 function processDiscogsDraftPageResponse(response) {
   disable(btnCsvDataTab);
-  hide(btnReleasesTab);
   click(btnHistoryTab);
   setHistoryTabSearchValue(response.data.artistName);
 }

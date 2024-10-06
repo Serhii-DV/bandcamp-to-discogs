@@ -70,7 +70,7 @@ export class ReleasesGroupListElement extends HTMLElement {
       <relative-time class="release-visited-date text-body-secondary" datetime="${visitedDate.date.toISOString()}">${visitedDate.date.toLocaleString()}</relative-time>
     </div>
     <p class="release-title mb-0">${releaseTitle}</p>
-    <small class="release-url text-body-secondary text-break">${release.hostname}</small>
+    <small class="release-url text-body-secondary text-break">${release.artistHostname}</small>
   </div>
 </div>`);
     if (releaseContentElement) {

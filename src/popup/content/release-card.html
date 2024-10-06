@@ -1,4 +1,23 @@
 <script id="releaseCardTemplate" type="text/template">
+  <nav class="btn-group d-flex">
+    <!-- Discogs CSV -->
+    <button id="downloadReleaseCsv" class="btn btn-primary rounded-0" type="button" title="Download Discogs CSV file">
+      <b2d-icon name="download"></b2d-icon> CSV
+    </button>
+    <!-- Discogs Draft page -->
+    <a class="btn btn-secondary rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
+      <b2d-icon name="discogs-png"></b2d-icon> CSV to Draft
+    </a>
+    <!-- Link: Bandcamp -->
+    <a class="btn btn-link rounded-0" href="{{ release.url }}" title="Open Bandcamp release page
+    {{ release.url }}" target="_blank">
+      <b2d-icon name="bandcamp-png"></b2d-icon>
+    </a>
+    <!-- Link: Discogs search -->
+    <a class="btn btn-link" href="{{ discogsSearchUrl }}" title="Search release on Discogs" target="_blank">
+      <b2d-icon name="search"></b2d-icon>
+    </a>
+  </nav>
   <div class="release-headline">
     <h1 id="release-artist" class="display-3">{{ release.artist }}</h1>
     <h2 id="release-title" class="display-6">{{ release.title }}</h2>
@@ -13,29 +32,6 @@
       <!-- Tab: Visits -->
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="release-history-tab" data-bs-toggle="pill" data-bs-target="#release-history" type="button" role="tab" aria-controls="release-history" aria-selected="true">History</button>
-      </li>
-      <!-- Link: Discogs CSV -->
-      <li class="nav-item ms-3">
-        <button id="downloadReleaseCsv" class="btn btn-primary rounded-0" type="button" title="Download Discogs CSV file">
-          <b2d-icon name="download"></b2d-icon>
-        </button>
-      </li>
-      <!-- Link: Discogs Draft page -->
-      <li class="nav-item">
-        <a class="btn btn-secondary rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
-          <b2d-icon name="discogs-png"></b2d-icon>
-        </a>
-      </li>
-      <!-- Link: Bandcamp -->
-      <li class="nav-item">
-        <a class="btn btn-link rounded-0" href="{{ release.url }}" title="Open Bandcamp release page
-        {{ release.url }}" target="_blank">
-          <b2d-icon name="bandcamp-png"></b2d-icon>
-        </a>
-      </li>
-      <!-- Link: Discogs search -->
-      <li class="nav-item">
-        <a class="nav-link" href="{{ discogsSearchUrl }}" title="Search release on Discogs" target="_blank">Search on Discogs</a>
       </li>
     </ul>
     <div class="tab-content pt-3 overflow-auto">

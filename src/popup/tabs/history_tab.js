@@ -48,7 +48,7 @@ function getReleasesList() {
 
 function updateReleasesListData(releasesList) {
   getAllReleases().then((releases) => {
-    populateReleasesList(releasesList, releases);
+    populateReleasesList(releasesList, releases, true);
   });
 }
 

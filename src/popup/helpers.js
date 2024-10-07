@@ -149,8 +149,13 @@ function transformReleaseItemsToReleaseListData(
 /**
  * @param {ReleasesList} releasesList
  * @param {Array<ReleaseItem>|Array<Release>} releases
+ * @param {boolean} sortByLatestDateVisited
  */
-export function populateReleasesList(releasesList, releases) {
+export function populateReleasesList(
+  releasesList,
+  releases,
+  sortByLatestDateVisited
+) {
   getCurrentTabUrl().then((url) => {
     if (!url) return;
 
@@ -158,6 +163,10 @@ export function populateReleasesList(releasesList, releases) {
       releasesList.populateData(
         transformReleaseItemsToReleaseListData(url, releases, historyData)
       );
+
+      if (sortByLatestDateVisited) {
+        releasesList.sortByLatestDateVisited();
+      }
     });
   });
 }

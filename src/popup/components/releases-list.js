@@ -307,7 +307,7 @@ export class ReleasesList extends HTMLElement {
       tableBody.appendChild(row);
     });
 
-    self.refreshStatus().refreshSearchStatus().sortByLatestDateVisited();
+    self.refreshStatus().refreshSearchStatus();
 
     return self;
   }

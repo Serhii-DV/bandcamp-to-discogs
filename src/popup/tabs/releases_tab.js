@@ -1,6 +1,6 @@
 import { isEmptyArray } from '../../utils/utils';
 import { ReleaseItem } from '../../app/release.js';
-import { getCurrentTab, openTabs } from '../../utils/chrome';
+import { getCurrentTab, openTabsAndClose } from '../../utils/chrome';
 import { createElementFromHTML, input, toggleElements } from '../../utils/html';
 import { getReleasesByUuids } from '../../utils/storage';
 import {
@@ -42,14 +42,7 @@ export function setupReleasesTab(releasesData, bgImageSrc, searchValue) {
     );
 
     // Open selected releases (add to the storage)
-    openTabs(checkedUrls, (tab) => {
-      chrome.scripting
-        .executeScript({
-          target: { tabId: tab.id },
-          func: waitForBandcampData
-        })
-        .then(() => {});
-    }).then(() => {
+    openTabsAndClose(checkedUrls).then(() => {
       setTimeout(() => {
         // Read data from the storage
         getReleasesByUuids(selectedUuids).then((releases) => {
@@ -100,10 +93,6 @@ export function setupReleasesTab(releasesData, bgImageSrc, searchValue) {
       search: search
     });
   }
-}
-
-function waitForBandcampData() {
-  setTimeout(() => window.close(), 1000);
 }
 
 function getWarningElement(tab) {

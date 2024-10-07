@@ -2,7 +2,8 @@ import { Release } from '../app/release.js';
 import { Metadata } from '../discogs/app/metadata.js';
 import {
   chromeSendMessageToCurrentTab,
-  getCurrentTabUrl
+  getCurrentTabUrl,
+  openTabsAndClose
 } from '../utils/chrome';
 import {
   createIconLink,
@@ -74,7 +75,18 @@ const createViewLink = (releaseItem) =>
     title: 'View release detailed info',
     onClick: () => {
       getReleaseByUuid(releaseItem.uuid).then((release) => {
-        showReleaseCardTab(release);
+        if (release instanceof Release) {
+          showReleaseCardTab(release);
+        } else {
+          openTabsAndClose([releaseItem.url]).then(() => {
+            setTimeout(() => {
+              getReleaseByUuid(releaseItem.uuid).then((release) => {
+                // Show release card
+                showReleaseCardTab(release);
+              });
+            }, 3000);
+          });
+        }
       });
       return true;
     }
@@ -115,14 +127,14 @@ function transformReleaseItemsToReleaseListData(
   const isDiscogsEditPage = isValidDiscogsReleaseEditUrl(currentTabUrl);
 
   releases.forEach((item) => {
-    const releaseItem = item instanceof Release ? item.releaseItem : item;
+    const isRelease = item instanceof Release;
+    const releaseItem = isRelease ? item.releaseItem : item;
+    const history = getOwnProperty(historyData, releaseItem.uuid, []);
     const controls = [createViewLink(releaseItem)];
 
-    if (isDiscogsEditPage && item instanceof Release) {
+    if (isDiscogsEditPage && isRelease) {
       controls.push(createApplyMetadataLink(item));
     }
-
-    const history = getOwnProperty(historyData, releaseItem.uuid, []);
 
     data.push({
       releaseItem,

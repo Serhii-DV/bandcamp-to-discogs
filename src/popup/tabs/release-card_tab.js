@@ -9,6 +9,7 @@ import { setBackgroundImage } from '../helpers.js';
 import { setupBtnToDownloadReleasesAsCsv } from './download_tab.js';
 import { render } from '../../utils/render';
 import { getHistoryByUuid } from '../../utils/storage';
+import { toggleElements } from '../../utils/html';
 
 /**
  * @param {Element} tab
@@ -17,18 +18,15 @@ import { getHistoryByUuid } from '../../utils/storage';
 export function setupReleaseCardTab(tab, release) {
   log('Setup release card tab', release);
 
-  if (release) {
-    hideWarning();
-  }
+  toggleElements(!release, getWarningElement(tab));
 
   getHistoryByUuid(release.uuid).then((historyData) => {
     renderReleaseCard(release, historyData, tab.querySelector('main'));
   });
 }
 
-function hideWarning() {
-  const warningEl = document.getElementById('b2d-warning-no-data');
-  warningEl.classList.add('visually-hidden');
+function getWarningElement(tab) {
+  return tab.querySelector('.b2d-warning');
 }
 
 function countLinesInHtmlElement(el) {

@@ -10,19 +10,29 @@ import { setupBtnToDownloadReleasesAsCsv } from './download_tab.js';
 import { render } from '../../utils/render';
 import { getHistoryByUuid } from '../../utils/storage';
 import { toggleElements } from '../../utils/html';
+import { Release } from '../../app/release.js';
+import { getReleaseCardContentElement } from '../modules/main';
 
 /**
- * @param {Element} tab
  * @param {Release} release
  */
-export function setupReleaseCardTab(tab, release) {
+export function setupReleaseCardTab(release) {
   log('Setup release card tab', release);
 
-  toggleElements(!release, getWarningElement(tab));
+  const contentElement = getReleaseCardContentElement();
+  const isRelease = release instanceof Release;
 
-  getHistoryByUuid(release.uuid).then((historyData) => {
-    renderReleaseCard(release, historyData, tab.querySelector('main'));
-  });
+  toggleElements(!isRelease, getWarningElement(contentElement));
+
+  if (isRelease) {
+    getHistoryByUuid(release.uuid).then((historyData) => {
+      renderReleaseCard(
+        release,
+        historyData,
+        contentElement.querySelector('main')
+      );
+    });
+  }
 }
 
 function getWarningElement(tab) {

@@ -1,6 +1,7 @@
+import { isEmptyArray } from '../../utils/utils';
 import { ReleaseItem } from '../../app/release.js';
 import { getCurrentTab, openTabs } from '../../utils/chrome';
-import { createElementFromHTML, input } from '../../utils/html';
+import { createElementFromHTML, input, toggleElements } from '../../utils/html';
 import { getReleasesByUuids } from '../../utils/storage';
 import {
   populateReleasesList,
@@ -9,10 +10,25 @@ import {
   setButtonInLoadingState
 } from '../helpers.js';
 import { downloadReleasesCsv } from './download_tab.js';
+import { log } from '../../utils/console';
+import { getReleasesContentElement } from '../modules/main';
 
-export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue) {
+export function setupReleasesTab(releasesData, bgImageSrc, searchValue) {
+  log('Setup releases card tab', releasesData, bgImageSrc, searchValue);
+
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
-  const releasesList = tab.querySelector('#releasesTabLIst');
+
+  const contentElement = getReleasesContentElement();
+  const releasesList = contentElement.querySelector('#releasesTabLIst');
+  const isEmptyReleasesData = isEmptyArray(releasesData);
+
+  toggleElements(isEmptyReleasesData, getWarningElement(contentElement));
+  toggleElements(!isEmptyReleasesData, releasesList);
+
+  if (isEmptyReleasesData) {
+    return;
+  }
+
   const downloadCsvFile = async (event) => {
     const button = event.target;
     setButtonInLoadingState(button);
@@ -88,4 +104,8 @@ export function setupReleasesTab(tab, releasesData, bgImageSrc, searchValue) {
 
 function waitForBandcampData() {
   setTimeout(() => window.close(), 1000);
+}
+
+function getWarningElement(tab) {
+  return tab.querySelector('.b2d-warning');
 }

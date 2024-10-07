@@ -6,7 +6,7 @@ import {
 } from '../../utils/html';
 import { getArrLastElement, hasClass, isEmptyArray } from '../../utils/utils';
 
-class ReleasesList extends HTMLElement {
+export class ReleasesList extends HTMLElement {
   constructor() {
     super();
 

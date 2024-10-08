@@ -1,6 +1,9 @@
 import { click, getDataAttribute } from '../../utils/html';
 import { log } from '../../utils/console';
-import { getLatestHistoryData, getReleasesByUuids } from '../../utils/storage';
+import {
+  getLatestHistoryData,
+  getReleaseMapByUuids
+} from '../../utils/storage';
 import { getOwnProperty } from '../../utils/utils';
 
 export function setupBandcampTab(btnHistoryTab) {
@@ -15,7 +18,7 @@ function setupLatestVisitedWidget(btnHistoryTab) {
 
   getLatestHistoryData(limit).then((visitedDates) => {
     const uuids = visitedDates.map((visitedDate) => visitedDate.uuid);
-    getReleasesByUuids(uuids).then((releaseMap) => {
+    getReleaseMapByUuids(uuids).then((releaseMap) => {
       visitedDates.forEach((visitedDate) => {
         const release = getOwnProperty(releaseMap, visitedDate.uuid);
         if (release) {
@@ -23,16 +26,16 @@ function setupLatestVisitedWidget(btnHistoryTab) {
         }
       });
 
-      const item = visitedReleasesWidget.addItem(
+      visitedReleasesWidget.addItem(
         '#history',
         'Go to history...',
         'Go to history...',
-        false
+        false,
+        (event) => {
+          click(btnHistoryTab);
+          event.preventDefault();
+        }
       );
-      item.addEventListener('click', (event) => {
-        click(btnHistoryTab);
-        event.preventDefault();
-      });
     });
   });
 }

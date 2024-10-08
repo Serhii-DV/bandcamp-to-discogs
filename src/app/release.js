@@ -1,4 +1,8 @@
-import { getUrlHostname } from '../utils/url';
+import {
+  getUrlHostname,
+  getUrlHostnameUrl,
+  removeProtocol
+} from '../utils/url';
 import { generateKeyForUrl } from '../utils/key-generator';
 import TrackTime from './trackTime.js';
 
@@ -104,6 +108,10 @@ export class Release {
     return this.releaseItem.url;
   }
 
+  get releaseHostname() {
+    return removeProtocol(this.releaseItem.url);
+  }
+
   get title() {
     return this.releaseItem.title;
   }
@@ -116,8 +124,12 @@ export class Release {
     return this.published.getFullYear();
   }
 
-  get hostname() {
+  get artistHostname() {
     return getUrlHostname(this.releaseItem.url);
+  }
+
+  get artistUrl() {
+    return getUrlHostnameUrl(this.releaseItem.url);
   }
 
   toStorageObject() {

@@ -1,7 +1,8 @@
+import { isEmptyArray } from '../../utils/utils';
 import { ReleaseItem } from '../../app/release.js';
-import { getCurrentTab, openTabs } from '../../utils/chrome';
-import { input } from '../../utils/html';
-import { findReleasesByUrls } from '../../utils/storage';
+import { getCurrentTab, openTabsAndClose } from '../../utils/chrome';
+import { createElementFromHTML, input, toggleElements } from '../../utils/html';
+import { getReleasesByUuids } from '../../utils/storage';
 import {
   populateReleasesList,
   removeButtonLoadingState,
@@ -9,20 +10,30 @@ import {
   setButtonInLoadingState
 } from '../helpers.js';
 import { downloadReleasesCsv } from './download_tab.js';
+import { log } from '../../utils/console';
+import { getReleasesContentElement } from '../modules/main';
 
-export function setupReleasesTab(
-  tab,
-  releasesData,
-  bgImageSrc,
-  searchValue,
-  btnNavDownload
-) {
+export function setupReleasesTab(releasesData, bgImageSrc, searchValue) {
+  log('Setup releases card tab', releasesData, bgImageSrc, searchValue);
+
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
-  const releasesList = tab.querySelector('#releasesTabLIst');
+
+  const contentElement = getReleasesContentElement();
+  const releasesList = contentElement.querySelector('#releasesTabLIst');
+  const isEmptyReleasesData = isEmptyArray(releasesData);
+
+  toggleElements(isEmptyReleasesData, getWarningElement(contentElement));
+  toggleElements(!isEmptyReleasesData, releasesList);
+
+  if (isEmptyReleasesData) {
+    return;
+  }
+
   const downloadCsvFile = async (event) => {
     const button = event.target;
     setButtonInLoadingState(button);
 
+    const selectedUuids = releasesList.getSelectedValues();
     const bcLinks = releasesList.querySelectorAll(
       '.release-item.table-active .link-bandcamp-url'
     );
@@ -30,17 +41,11 @@ export function setupReleasesTab(
       link.getAttribute('href')
     );
 
-    openTabs(checkedUrls, (tab) => {
-      chrome.scripting
-        .executeScript({
-          target: { tabId: tab.id },
-          func: waitForBandcampData
-        })
-        .then(() => {});
-    }).then(() => {
+    // Open selected releases (add to the storage)
+    openTabsAndClose(checkedUrls).then(() => {
       setTimeout(() => {
         // Read data from the storage
-        findReleasesByUrls(checkedUrls, (releases) => {
+        getReleasesByUuids(selectedUuids).then((releases) => {
           downloadReleasesCsv(releases);
           removeButtonLoadingState(button);
         });
@@ -48,8 +53,14 @@ export function setupReleasesTab(
     });
   };
 
+  const btnNavDownload = createElementFromHTML(`
+<button class="btn btn-primary rounded-0" type="button" title="Download selected releases as Discogs CSV file" disabled>
+    <b2d-icon name="download"></b2d-icon>
+</button>`);
   btnNavDownload.addEventListener('click', downloadCsvFile);
+
   releasesList
+    .appendButton(btnNavDownload)
     .addStateButton(btnNavDownload)
     .addStatusElement(
       document.getElementById('selectedStatusInfo'),
@@ -84,6 +95,6 @@ export function setupReleasesTab(
   }
 }
 
-function waitForBandcampData() {
-  setTimeout(() => window.close(), 1000);
+function getWarningElement(tab) {
+  return tab.querySelector('.b2d-warning');
 }

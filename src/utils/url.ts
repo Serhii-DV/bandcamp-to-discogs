@@ -8,6 +8,16 @@ export function getUrlHostname(url: string): string {
   }
 }
 
+export function getUrlHostnameUrl(url: string): string {
+  try {
+    const parsedUrl = new URL(url);
+    return `${parsedUrl.protocol}//${parsedUrl.hostname}`;
+  } catch (error) {
+    console.error('Invalid URL', url);
+    return '';
+  }
+}
+
 export function getUrlSubdomain(url: string): string | null {
   const hostname = getUrlHostname(url);
 
@@ -22,4 +32,14 @@ export function getUrlSubdomain(url: string): string | null {
   }
 
   return '';
+}
+
+export function removeProtocol(url: string): string {
+  try {
+    const parsedUrl = new URL(url);
+    return `${parsedUrl.hostname}${parsedUrl.pathname}${parsedUrl.search}${parsedUrl.hash}`;
+  } catch (error) {
+    console.error('Invalid URL', url);
+    return '';
+  }
 }

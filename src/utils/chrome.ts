@@ -47,6 +47,21 @@ export async function openTabs(
   return Promise.all(tabPromises);
 }
 
+export async function openTabsAndClose(url: string[]): Promise<unknown[]> {
+  return openTabs(url, (tab) => {
+    if (tab.id) {
+      chrome.scripting
+        .executeScript({
+          target: { tabId: tab.id },
+          func: () => {
+            setTimeout(() => window.close(), 1000);
+          }
+        })
+        .then(() => {});
+    }
+  });
+}
+
 export function getExtensionUrl(path: string): string {
   return chrome.runtime.getURL(path);
 }

@@ -1,6 +1,7 @@
 import { Release } from 'src/app/release';
 import { createElementFromHTML } from '../../utils/html';
 import { VisitedDate } from '../../utils/storage';
+import { showReleaseCardTab } from '../modules/main';
 
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
@@ -28,7 +29,8 @@ export class ReleasesGroupListElement extends HTMLElement {
     url: string,
     content: string | Element,
     title: string = '',
-    targetBlank: boolean = true
+    targetBlank: boolean = true,
+    onClick: ((event: Event) => void) | null = null
   ): Element | null {
     const self = this;
     const item = createElementFromHTML(
@@ -44,6 +46,11 @@ export class ReleasesGroupListElement extends HTMLElement {
     } else {
       item.textContent = content;
     }
+
+    if (onClick !== null) {
+      item.addEventListener('click', onClick);
+    }
+
     self.#groupElement.appendChild(item);
 
     return item;
@@ -63,11 +70,20 @@ export class ReleasesGroupListElement extends HTMLElement {
       <relative-time class="release-visited-date text-body-secondary" datetime="${visitedDate.date.toISOString()}">${visitedDate.date.toLocaleString()}</relative-time>
     </div>
     <p class="release-title mb-0">${releaseTitle}</p>
-    <small class="release-url text-body-secondary text-break">${release.hostname}</small>
+    <small class="release-url text-body-secondary text-break">${release.artistHostname}</small>
   </div>
 </div>`);
     if (releaseContentElement) {
-      self.addItem(release.url, releaseContentElement, release.url);
+      self.addItem(
+        release.url,
+        releaseContentElement,
+        release.url,
+        false,
+        (event: Event) => {
+          showReleaseCardTab(release);
+          event.preventDefault();
+        }
+      );
     }
 
     return self;

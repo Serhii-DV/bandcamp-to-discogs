@@ -63,13 +63,33 @@ export function hide(
   });
 }
 
+export function toggleElements(
+  condition: boolean | (() => boolean),
+  ...elements: (HTMLElement | null | (HTMLElement | null)[])[]
+): void {
+  const shouldShow = typeof condition === 'function' ? condition() : condition;
+
+  if (shouldShow) {
+    show(...elements);
+  } else {
+    hide(...elements);
+  }
+}
+
 export function disable(
   ...elements: (
+    | HTMLElement
     | HTMLInputElement
     | HTMLButtonElement
     | HTMLSelectElement
     | null
-    | (HTMLInputElement | HTMLButtonElement | HTMLSelectElement | null)[]
+    | (
+        | HTMLElement
+        | HTMLInputElement
+        | HTMLButtonElement
+        | HTMLSelectElement
+        | null
+      )[]
   )[]
 ): void {
   elements.forEach((el) => {

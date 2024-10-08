@@ -1,9 +1,9 @@
 import { Release } from '../app/release.js';
 import { Metadata } from '../discogs/app/metadata.js';
-import { getSearchDiscogsReleaseUrl } from '../discogs/modules/discogs.js';
 import {
   chromeSendMessageToCurrentTab,
-  getCurrentTabUrl
+  getCurrentTabUrl,
+  openTabsAndClose
 } from '../utils/chrome';
 import {
   createIconLink,
@@ -15,7 +15,8 @@ import {
 } from '../utils/html';
 import { getOwnProperty, isArray, isObject, isString } from '../utils/utils';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
-import { getHistoryData } from '../utils/storage';
+import { getHistoryData, getReleaseByUuid } from '../utils/storage';
+import { showReleaseCardTab } from './modules/main';
 
 /**
  * Converts a JavaScript object to an HTML element representing a table.
@@ -68,22 +69,27 @@ export function objectToHtmlElement(data) {
  */
 const createViewLink = (releaseItem) =>
   createIconLink({
-    href: releaseItem.url,
-    iconDefault: 'box-arrow-up-right',
-    className: 'link-bandcamp-url',
-    title: 'View bandcamp release'
-  });
-
-/**
- * @param {ReleaseItem} releaseItem
- * @returns {HTMLAnchorElement}
- */
-const createSearchLink = (releaseItem) =>
-  createIconLink({
-    href: getSearchDiscogsReleaseUrl(releaseItem.artist, releaseItem.title),
-    iconDefault: 'search',
-    className: 'link-discogs-search',
-    title: 'Search release on Discogs'
+    href: '#view',
+    iconDefault: 'card-text',
+    className: 'link-view',
+    title: 'View release detailed info',
+    onClick: () => {
+      getReleaseByUuid(releaseItem.uuid).then((release) => {
+        if (release instanceof Release) {
+          showReleaseCardTab(release);
+        } else {
+          openTabsAndClose([releaseItem.url]).then(() => {
+            setTimeout(() => {
+              getReleaseByUuid(releaseItem.uuid).then((release) => {
+                // Show release card
+                showReleaseCardTab(release);
+              });
+            }, 3000);
+          });
+        }
+      });
+      return true;
+    }
   });
 
 /**
@@ -121,17 +127,14 @@ function transformReleaseItemsToReleaseListData(
   const isDiscogsEditPage = isValidDiscogsReleaseEditUrl(currentTabUrl);
 
   releases.forEach((item) => {
-    const releaseItem = item instanceof Release ? item.releaseItem : item;
-    const controls = [
-      createViewLink(releaseItem),
-      createSearchLink(releaseItem)
-    ];
+    const isRelease = item instanceof Release;
+    const releaseItem = isRelease ? item.releaseItem : item;
+    const history = getOwnProperty(historyData, releaseItem.uuid, []);
+    const controls = [createViewLink(releaseItem)];
 
-    if (isDiscogsEditPage && item instanceof Release) {
+    if (isDiscogsEditPage && isRelease) {
       controls.push(createApplyMetadataLink(item));
     }
-
-    const history = getOwnProperty(historyData, releaseItem.uuid, []);
 
     data.push({
       releaseItem,
@@ -146,8 +149,13 @@ function transformReleaseItemsToReleaseListData(
 /**
  * @param {ReleasesList} releasesList
  * @param {Array<ReleaseItem>|Array<Release>} releases
+ * @param {boolean} sortByLatestDateVisited
  */
-export function populateReleasesList(releasesList, releases) {
+export function populateReleasesList(
+  releasesList,
+  releases,
+  sortByLatestDateVisited
+) {
   getCurrentTabUrl().then((url) => {
     if (!url) return;
 
@@ -155,6 +163,10 @@ export function populateReleasesList(releasesList, releases) {
       releasesList.populateData(
         transformReleaseItemsToReleaseListData(url, releases, historyData)
       );
+
+      if (sortByLatestDateVisited) {
+        releasesList.sortByLatestDateVisited();
+      }
     });
   });
 }

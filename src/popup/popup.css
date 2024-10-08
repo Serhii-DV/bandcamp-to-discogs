@@ -1,8 +1,8 @@
 :root {
   --main-bg-color: #212121;
   --main-text-color: #ccc;
-  --popup-height: 400px;
-  --popup-width: 400px;
+  --popup-height: 500px;
+  --popup-width: 500px;
 }
 
 body {
@@ -21,7 +21,7 @@ body {
   background-repeat: no-repeat;
 }
 
-.tab-content {
+#mainContainer > .tab-content {
   position: relative;
   background-color: rgba(0, 0, 0, 0.75);
   overflow: auto;
@@ -32,74 +32,9 @@ body {
   padding: 10px;
 }
 
-.tab-pane {
+#mainContainer > .tab-pane {
   position: absolute;
   width: 100%;
-}
-
-#release {
-  height: var(--popup-height);
-}
-
-#release .release-headline {
-  padding: 0 10px;
-}
-#release .release-content {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  padding: 0 10px 10px;
-}
-
-.lines-a1-t1 .release-content {
-  height: 240px;
-}
-.lines-a1-t2 .release-content {
-  height: 210px;
-}
-.lines-a1-t3 .release-content {
-  height: 210px;
-}
-
-.lines-a2-t1 .release-content {
-  height: 200px;
-}
-.lines-a2-t2 .release-content {
-  height: 200px;
-}
-.lines-a2-t3 .release-content {
-  height: 200px;
-}
-
-.lines-a3-t1 .release-content {
-  height: 220px;
-}
-.lines-a3-t2 .release-content {
-  height: 190px;
-}
-.lines-a3-t3 .release-content {
-  height: 190px;
-}
-
-.lines-a4-t1 .release-content {
-  height: 190px;
-}
-.lines-a4-t2 .release-content {
-  height: 190px;
-}
-.lines-a4-t3 .release-content {
-  height: 190px;
-}
-
-.lines-a5-t1 .release-content {
-  height: 190px;
-}
-.lines-a5-t2 .release-content {
-  height: 190px;
-}
-.lines-a5-t3 .release-content {
-  height: 190px;
 }
 
 /* Style for the tree view */

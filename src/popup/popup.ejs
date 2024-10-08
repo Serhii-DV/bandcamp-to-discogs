@@ -6,37 +6,22 @@
 <body>
   <header>
     <nav id="mainNav" class="btn-group d-flex" role="tablist">
-      <button class="btn btn-dark rounded-0" id="bandcamp-tab" data-bs-toggle="tab" data-bs-target="#bandcamp" role="tab" aria-controls="bandcamp" aria-selected="true" type="button" title="Bandcamp">
-        <b2d-icon name="bandcamp-png"></b2d-icon>
+      <button class="btn btn-dark rounded-0" id="bandcamp-tab" data-bs-toggle="tab" data-bs-target="#bandcamp" role="tab" aria-controls="bandcamp" aria-selected="false" type="button" title="Bandcamp">
+        <b2d-icon name="view-list"></b2d-icon>
       </button>
-      <button class="btn btn-dark rounded-0" id="release-tab" data-bs-toggle="tab" data-bs-target="#release" role="tab" aria-controls="release" aria-selected="true" type="button" title="Release preview">
+      <button class="btn btn-dark rounded-0" id="release-card-tab" data-bs-toggle="tab" data-bs-target="#release-card" role="tab" aria-controls="release-card" aria-selected="false" type="button" title="Release card preview">
         <b2d-icon name="card-text"></b2d-icon>
       </button>
-      <button class="btn btn-dark rounded-0" id="releases-tab" data-bs-toggle="tab" data-bs-target="#releases" role="tab" aria-controls="releases" aria-selected="true" type="button" title="Releases list">
-        <b2d-icon name="card-text"></b2d-icon>
+      <button class="btn btn-dark rounded-0" id="releases-tab" data-bs-toggle="tab" data-bs-target="#releases" role="tab" aria-controls="releases" aria-selected="false" type="button" title="Releases list">
+        <b2d-icon name="card-list"></b2d-icon>
       </button>
-      <button class="btn btn-dark rounded-0 visually-hidden" id="csvData-tab" data-bs-toggle="tab" data-bs-target="#csvData" role="tab" aria-controls="csvData" aria-selected="true" type="button" title="Preview Discogs CSV data">
+      <button class="btn btn-dark rounded-0 visually-hidden" id="csvData-tab" data-bs-toggle="tab" data-bs-target="#csvData" role="tab" aria-controls="csvData" aria-selected="false" type="button" title="Preview Discogs CSV data">
         <b2d-icon name="table"></b2d-icon>
       </button>
-      <button class="btn btn-dark rounded-0" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="tab" aria-controls="history" aria-selected="true" type="button" title="History">
+      <button class="btn btn-dark rounded-0" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="tab" aria-controls="history" aria-selected="false" type="button" title="History">
         <b2d-icon name="clock-history"></b2d-icon>
       </button>
-      <button id="downloadRelease" class="btn btn-primary rounded-0 visually-hidden" type="button" title="Download Discogs CSV file" disabled>
-        <b2d-icon name="download"></b2d-icon>
-      </button>
-      <button id="downloadReleases" class="btn btn-primary rounded-0 visually-hidden" type="button" title="Download selected releases as Discogs CSV file" disabled>
-        <b2d-icon name="download"></b2d-icon>
-      </button>
-      <button id="downloadHistory" class="btn btn-primary rounded-0 visually-hidden" type="button" title="Download selected releases from the history as Discogs CSV file" disabled>
-        <b2d-icon name="download"></b2d-icon>
-      </button>
-      <a id="discogsCsvToDraft" class="btn btn-secondary rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
-        <b2d-icon name="discogs-png"></b2d-icon>
-      </a>
-      <a id="discogsSearchArtist" class="btn btn-dark rounded-0" href="https://www.discogs.com/search" target="_blank" role="button" title="Search for Discogs artist release" disabled>
-        <b2d-icon name="search"></b2d-icon>
-      </a>
-      <button class="btn btn-dark rounded-0" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" role="tab" aria-controls="about" aria-selected="true" type="button" title="About the extension">
+      <button class="btn btn-dark rounded-0" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" role="tab" aria-controls="about" aria-selected="false" type="button" title="About the extension">
         <b2d-icon name="question-square"></b2d-icon>
       </button>
     </nav>
@@ -48,9 +33,9 @@
       <div class="tab-pane fade content-text" id="bandcamp" role="tabpanel" aria-labelledby="bandcamp-tab" tabindex="0">
         <%= tabContentBandcamp %>
       </div>
-      <!-- Release -->
-      <div class="tab-pane fade" id="release" role="tabpanel" aria-labelledby="release-tab" tabindex="0">
-        <%= tabContentRelease %>
+      <!-- Release card -->
+      <div class="tab-pane fade overflow-hidden" id="release-card" role="tabpanel" aria-labelledby="release-card-tab" tabindex="0">
+        <%= tabContentReleaseCard %>
       </div>
       <!-- Releases -->
       <div class="tab-pane fade" id="releases" role="tabpanel" aria-labelledby="releases-tab" tabindex="0">
@@ -76,5 +61,8 @@
       <span class="badge bg-dark" id="viewedStatusInfo" data-format="Viewed: {filtered}/{total}"></span>
     </div>
   </footer>
+<% templates.forEach(function(template) { %>
+<%= template %>
+<% }); %>
 </body>
 </html>

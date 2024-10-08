@@ -14,7 +14,10 @@ import {
   getNotesTextarea,
   getSubmissionNotesTextarea
 } from './draft-page.js';
-import { showNotificationError, showNotificationInfo } from './notification.js';
+import {
+  showNotificationInfo,
+  showNotificationWarning
+} from './notification.js';
 
 let artistNameInput;
 let qtyInput;
@@ -51,7 +54,7 @@ function setupReadMetadataButton() {
       applyMetadata(metadata);
     } catch (error) {
       console.error(error);
-      showNotificationError(error.message);
+      showNotificationWarning(error.message);
     }
   });
 

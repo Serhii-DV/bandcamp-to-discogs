@@ -2,6 +2,7 @@ import 'bootstrap';
 
 // Popup styles
 import './popup.css';
+import './css/release-card.css';
 import './css/releases-group-list.css';
 
 // Custom components
@@ -23,9 +24,7 @@ import {
   setHistoryTabSearchValue,
   setupHistoryTab
 } from './tabs/history_tab.js';
-import { disable, enable, hide, show, click } from '../utils/html';
-import { setupReleasesTab } from './tabs/releases_tab.js';
-import { setupReleaseTab } from './tabs/release_tab.js';
+import { disable, enable, click } from '../utils/html';
 import { setupCsvDataTab } from './tabs/csv_data_tab.js';
 import { getStorageSize } from '../utils/storage';
 import { bytesToSize } from '../utils/utils';
@@ -35,17 +34,19 @@ import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { createReleaseFromSchema } from '../utils/schema';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
+import {
+  getReleaseCardTabElement,
+  showReleasesTabContent,
+  showReleaseCardTab,
+  setupReleasesTabElement
+} from './modules/main';
+import { setupReleasesTab } from './tabs/releases_tab.js';
+import { setupReleaseCardTab } from './tabs/release-card_tab.js';
 
 const btnBandcampTab = document.getElementById('bandcamp-tab');
-const btnReleaseTab = document.getElementById('release-tab');
-const btnReleasesTab = document.getElementById('releases-tab');
+const btnReleaseCardTab = getReleaseCardTabElement();
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
-const btnDownloadRelease = document.getElementById('downloadRelease');
-const btnDownloadReleases = document.getElementById('downloadReleases');
-const btnDownloadStorage = document.getElementById('downloadHistory');
-const btnDiscogsSearchArtist = document.getElementById('discogsSearchArtist');
-const tabReleases = document.getElementById('releases');
 
 async function proceedBandcampData() {
   logInfo('Proceed Bandcamp data');
@@ -67,9 +68,7 @@ async function proceedDiscogsEditPageData() {
 }
 
 function showBandcampTab() {
-  disable(btnReleaseTab, btnCsvDataTab);
-  hide(btnReleasesTab);
-  show(btnDownloadReleases);
+  disable(btnCsvDataTab);
   click(btnBandcampTab);
 }
 
@@ -82,55 +81,35 @@ function processBandcampResponse(response) {
     return;
   }
 
-  loadDiscogsGenres(config.genres_url).then(() => {
-    loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
-      if (isPageAlbum) {
+  if (isPageAlbum) {
+    loadDiscogsGenres(config.genres_url).then(() => {
+      loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
         processBandcampPageAlbumResponse(response, keywordsMapping);
-      } else if (isPageMusic) {
-        processBandcampPageMusicResponse(response);
-      }
+      });
     });
-  });
+  } else if (isPageMusic) {
+    showReleasesTabContent(
+      response.data,
+      response.popup.imageSrc,
+      response.popup.search
+    );
+  }
 }
 
 function processBandcampPageAlbumResponse(response, keywordsMapping) {
-  hide(btnReleasesTab);
-  show(btnReleaseTab);
-  click(btnReleaseTab);
-
   try {
     const schema = response.schema;
     const release = createReleaseFromSchema(schema);
     setupConsoleRelease(release, keywordsMapping, schema);
-    setupReleaseTab(
-      document.getElementById('release'),
-      release,
-      btnDownloadRelease,
-      btnDiscogsSearchArtist
-    );
+    showReleaseCardTab(release);
     setupCsvDataTab(release, btnCsvDataTab);
   } catch (error) {
     console.error(error);
   }
 }
 
-function processBandcampPageMusicResponse(response) {
-  hide(btnReleaseTab);
-  show(btnReleasesTab);
-  click(btnReleasesTab);
-
-  setupReleasesTab(
-    tabReleases,
-    response.data,
-    response.popup.imageSrc,
-    response.popup.search,
-    btnDownloadReleases
-  );
-}
-
 function processDiscogsDraftPageResponse(response) {
-  disable(btnReleaseTab, btnCsvDataTab);
-  hide(btnReleasesTab);
+  disable(btnCsvDataTab);
   click(btnHistoryTab);
   setHistoryTabSearchValue(response.data.artistName);
 }
@@ -148,26 +127,16 @@ function replaceVersion(document) {
 function setupNavigation() {
   logInfo('Setup navigation');
 
-  btnReleaseTab.addEventListener('click', () => {
-    hide(btnDownloadReleases, btnDownloadStorage);
-    show(btnDownloadRelease);
+  btnReleaseCardTab.addEventListener('click', () => {
     enable(btnCsvDataTab);
   });
-  btnReleasesTab.addEventListener('click', () => {
-    hide(btnDownloadRelease, btnDownloadStorage);
-    show(btnDownloadReleases);
-    disable(btnCsvDataTab);
 
-    const releasesList = tabReleases.querySelector('releases-list');
-    releasesList.refreshStatus();
-  });
   btnHistoryTab.addEventListener('click', () => {
-    hide(btnDownloadRelease, btnDownloadReleases);
-    show(btnDownloadStorage);
-    setupHistoryTab(document.getElementById('history'), btnDownloadStorage);
+    setupHistoryTab(document.getElementById('history'));
   });
 
   setupBandcampTab(btnHistoryTab);
+  setupReleasesTabElement();
 }
 
 function initialize(tab) {
@@ -180,6 +149,9 @@ function initialize(tab) {
   setupNavigation();
   replaceVersion(document);
   checkStorageSize();
+
+  setupReleaseCardTab();
+  setupReleasesTab([]);
 
   if (isValidBandcampURL(currentTabUrl)) {
     proceedBandcampData();

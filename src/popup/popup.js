@@ -42,6 +42,7 @@ import {
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
+import { PageTypeEnum } from '../bandcamp/app/page-type.js';
 
 const btnBandcampTab = document.getElementById('bandcamp-tab');
 const btnReleaseCardTab = getReleaseCardTabElement();
@@ -73,8 +74,8 @@ function showBandcampTab() {
 }
 
 function processBandcampResponse(response) {
-  const isPageAlbum = response.type === 'TYPE_PAGE_ALBUM';
-  const isPageMusic = response.type === 'TYPE_PAGE_MUSIC';
+  const isPageAlbum = response.pageType === PageTypeEnum.ALBUM;
+  const isPageMusic = response.pageType === PageTypeEnum.MUSIC;
 
   if (!isPageAlbum && !isPageMusic) {
     // todo: Show error?

@@ -13,9 +13,9 @@ function main() {
   const pageType = new PageTypeDetector().detect();
 
   if (pageType.isMusic()) {
-    setupPageMusic();
+    setupPageMusic(pageType);
   } else if (pageType.isAlbum()) {
-    setupPageAlbum();
+    setupPageAlbum(pageType);
   }
 }
 

@@ -19,16 +19,16 @@ import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
 
 // Setup logic for BC music page
-export function setupPageMusic() {
-  setupSendMessageToPopup();
+export function setupPageMusic(pageType) {
+  setupSendMessageToPopup(pageType);
   setupIsotope();
 }
 
-function setupSendMessageToPopup() {
+function setupSendMessageToPopup(pageType) {
   chromeListenToMessage((message, sender, sendResponse) => {
     if (message.type === 'B2D_BC_DATA') {
       sendResponse({
-        type: 'TYPE_PAGE_MUSIC',
+        pageType: pageType.value,
         data: getReleases(),
         popup: {
           imageSrc: getBandPhotoSrc(),

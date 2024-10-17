@@ -43,6 +43,7 @@ import {
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
 import { PageTypeEnum } from '../bandcamp/app/page-type.js';
+import { ReleaseItem } from '../app/release.js';
 
 const btnBandcampTab = document.getElementById('bandcamp-tab');
 const btnReleaseCardTab = getReleaseCardTabElement();
@@ -89,8 +90,13 @@ function processBandcampResponse(response) {
       });
     });
   } else if (isPageMusic) {
+    const releaseItems = [];
+    response.data.forEach((obj) =>
+      releaseItems.push(ReleaseItem.fromObject(obj))
+    );
+
     showReleasesTabContent(
-      response.data,
+      releaseItems,
       response.popup.imageSrc,
       response.popup.search
     );

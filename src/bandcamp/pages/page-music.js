@@ -14,7 +14,10 @@ import {
   countOccurrences,
   removeBrackets
 } from '../../utils/utils';
-import { getBandPhotoSrc, getReleasesData } from '../modules/html.js';
+import {
+  getBandPhotoSrc,
+  getReleaseItems as getReleaseItemsFromPage
+} from '../modules/html.js';
 import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
 
@@ -29,7 +32,7 @@ function setupSendMessageToPopup(pageType) {
     if (message.type === 'B2D_BC_DATA') {
       sendResponse({
         pageType: pageType.value,
-        data: getReleases(),
+        data: getReleaseItems(),
         popup: {
           imageSrc: getBandPhotoSrc(),
           search: getArtistFilterValue()
@@ -53,24 +56,24 @@ function setupIsotope() {
     layoutMode: 'fitRows'
   });
 
-  const releases = getReleases();
+  const releaseItems = getReleaseItems();
 
-  releases.forEach((release) => {
+  releaseItems.forEach((releaseItem) => {
     const gridElement = grid.querySelector(
-      '[data-item-id="' + release.item_id + '"]'
+      '[data-item-id="' + releaseItem.itemId + '"]'
     );
     setDataAttribute(
       gridElement,
       'filter-artist',
-      (release.artist + ' - ' + release.title).toLowerCase()
+      (releaseItem.artist + ' - ' + releaseItem.title).toLowerCase()
     );
   });
 
-  const artistFilterWidget = createArtistFilterWidget(releases);
+  const artistFilterWidget = createArtistFilterWidget(releaseItems);
   const filterBlock = createElementFromHTML(
     `<div class="b2d-widget-container"></div>`
   );
-  const albumAmountWidget = createAlbumAmountWidget(releases);
+  const albumAmountWidget = createAlbumAmountWidget(releaseItems);
 
   filterBlock.append(artistFilterWidget);
   filterBlock.append(albumAmountWidget);
@@ -83,17 +86,17 @@ function setupIsotope() {
   log('Isotope setup was correct');
 }
 
-function getReleases() {
+function getReleaseItems() {
   // Cache main data
   const B2D = window.B2D || {};
 
-  if (!isEmptyArray(B2D.pageReleases)) {
-    return B2D.pageReleases;
+  if (!isEmptyArray(B2D.releaseItems)) {
+    return B2D.releaseItems;
   }
 
-  B2D.pageReleases = getReleasesData();
+  B2D.releaseItems = getReleaseItemsFromPage();
 
-  return B2D.pageReleases;
+  return B2D.releaseItems;
 }
 
 function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
@@ -157,17 +160,17 @@ function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
   }
 }
 
-function getArtistListData(releases) {
+function getArtistListData(releaseItems) {
   let filterData = [];
   let artistsData = [];
   let releasesData = [];
 
   // add artists
-  releases.forEach((release) => {
-    if (containsOneOf(release.artist, ['V/A'])) {
-      artistsData.push(release.artist);
+  releaseItems.forEach((releaseItem) => {
+    if (containsOneOf(releaseItem.artist, ['V/A'])) {
+      artistsData.push(releaseItem.artist);
     } else {
-      const artists = splitString(release.artist, /[,/+•|]| Vs | & +/);
+      const artists = splitString(releaseItem.artist, /[,/+•|]| Vs | & +/);
       artistsData.push(...artists);
     }
   });
@@ -175,7 +178,7 @@ function getArtistListData(releases) {
   filterData.push(...countOccurrences(artistsData));
 
   // add artists with release titles
-  releases.forEach((release) =>
+  releaseItems.forEach((release) =>
     releasesData.push(release.artist + ' - ' + release.title)
   );
   releasesData.sort();
@@ -184,14 +187,14 @@ function getArtistListData(releases) {
   return [...new Set(filterData)];
 }
 
-function createArtistFilterWidget(releases) {
+function createArtistFilterWidget(releaseItems) {
   let artistFilterElement = createElementFromHTML(
     `<div class="b2d-widget">
   <label for="b2dArtistFilter">Artist / Album:</label>
   <input list="artist-filter-data" id="b2dArtistFilter" name="artist-filter" />
 </div>`
   );
-  const artistFilterData = getArtistListData(releases);
+  const artistFilterData = getArtistListData(releaseItems);
   const artistFilterDatalist = createDatalistFromArray(
     artistFilterData,
     'artist-filter-data'
@@ -202,10 +205,10 @@ function createArtistFilterWidget(releases) {
   return artistFilterElement;
 }
 
-function createAlbumAmountWidget(releases) {
+function createAlbumAmountWidget(releaseItems) {
   return createElementFromHTML(
     `<div class="b2d-albumAmount b2d-widget" title="The amount of releases on the page">
-Releases: <span class="b2d-visible">${releases.length}</span> / <span class="b2d-total">${releases.length}</span>
+Releases: <span class="b2d-visible">${releaseItems.length}</span> / <span class="b2d-total">${releaseItems.length}</span>
 </div>`
   );
 }

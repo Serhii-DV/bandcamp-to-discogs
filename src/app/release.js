@@ -7,15 +7,16 @@ import { generateKeyForUrl } from '../utils/key-generator';
 import TrackTime from './trackTime.js';
 
 export class ReleaseItem {
-  constructor(url, artist, title) {
+  constructor(url, artist, title, itemId = '') {
     this.url = url;
     this.artist = artist;
     this.title = title;
+    this.itemId = itemId;
     this.uuid = generateKeyForUrl(url);
   }
 
   static fromObject(obj) {
-    return new ReleaseItem(obj.url, obj.artist, obj.title);
+    return new ReleaseItem(obj.url, obj.artist, obj.title, obj.itemId);
   }
 }
 

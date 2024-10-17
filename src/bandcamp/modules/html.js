@@ -1,4 +1,5 @@
 import { getDataAttribute } from '../../utils/html';
+import { ReleaseItem } from '../../app/release';
 import {
   removeInvisibleChars,
   trimCharactersFromString
@@ -11,7 +12,7 @@ export function getMusicAlbumSchemaData() {
   return jsonLdScript ? JSON.parse(jsonLdScript.textContent) : null;
 }
 
-function extractDataFromMusicGridElement(element) {
+function createReleaseItemFromMusicGridElement(element) {
   let artist = element.querySelector('.artist-override')?.innerText;
 
   if (!artist) {
@@ -24,27 +25,28 @@ function extractDataFromMusicGridElement(element) {
   const titleParts = element.querySelector('.title').innerText.split('\n');
   const title = removeInvisibleChars(titleParts[0]);
   const url = element.querySelector('a').getAttribute('href');
+  const itemId = getDataAttribute(element, 'item-id');
 
-  return {
-    artist: artist,
-    title: title,
-    url: (url[0] === '/' ? window.location.origin : '') + url,
-    item_id: getDataAttribute(element, 'item-id')
-  };
+  return new ReleaseItem(
+    (url[0] === '/' ? window.location.origin : '') + url,
+    artist,
+    title,
+    itemId
+  );
 }
 
-export function getReleasesData() {
-  const releases = [];
+export function getReleaseItems() {
+  const releaseItems = [];
   const releaseElements = document.querySelectorAll(
     '#music-grid .music-grid-item'
   );
 
   releaseElements.forEach((element) => {
-    const releaseData = extractDataFromMusicGridElement(element);
-    releases.push(releaseData);
+    const releaseItem = createReleaseItemFromMusicGridElement(element);
+    releaseItems.push(releaseItem);
   });
 
-  return releases;
+  return releaseItems;
 }
 
 export function getBandPhotoSrc() {

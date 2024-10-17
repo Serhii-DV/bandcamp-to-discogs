@@ -1,5 +1,4 @@
 import { isEmptyArray } from '../../utils/utils';
-import { ReleaseItem } from '../../app/release.js';
 import { getCurrentTab, openTabsAndClose } from '../../utils/chrome';
 import { createElementFromHTML, input, toggleElements } from '../../utils/html';
 import { getReleasesByUuids } from '../../utils/storage';
@@ -13,19 +12,19 @@ import { downloadReleasesCsv } from './download_tab.js';
 import { log } from '../../utils/console';
 import { getReleasesContentElement } from '../modules/main';
 
-export function setupReleasesTab(releasesData, bgImageSrc, searchValue) {
-  log('Setup releases card tab', releasesData, bgImageSrc, searchValue);
+export function setupReleasesTab(releaseItems, bgImageSrc, searchValue) {
+  log('Setup releases card tab', releaseItems, bgImageSrc, searchValue);
 
   setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
 
   const contentElement = getReleasesContentElement();
   const releasesList = contentElement.querySelector('#releasesTabLIst');
-  const isEmptyReleasesData = isEmptyArray(releasesData);
+  const isEmptyReleaseItems = isEmptyArray(releaseItems);
 
-  toggleElements(isEmptyReleasesData, getWarningElement(contentElement));
-  toggleElements(!isEmptyReleasesData, releasesList);
+  toggleElements(isEmptyReleaseItems, getWarningElement(contentElement));
+  toggleElements(!isEmptyReleaseItems, releasesList);
 
-  if (isEmptyReleasesData) {
+  if (isEmptyReleaseItems) {
     return;
   }
 
@@ -67,8 +66,6 @@ export function setupReleasesTab(releasesData, bgImageSrc, searchValue) {
       document.getElementById('viewedStatusInfo')
     );
 
-  const releaseItems = [];
-  releasesData.forEach((obj) => releaseItems.push(ReleaseItem.fromObject(obj)));
   populateReleasesList(releasesList, releaseItems);
 
   let activeTab;

@@ -16,6 +16,7 @@ import {
 } from '../../utils/utils';
 import { getBandPhotoSrc, getReleasesData } from '../modules/html.js';
 import { log } from '../../utils/console';
+import { chromeListenToMessage } from '../../utils/chrome';
 
 // Setup logic for BC music page
 export function setupPageMusic() {
@@ -24,15 +25,11 @@ export function setupPageMusic() {
 }
 
 function setupSendMessageToPopup() {
-  // Cache main data
-  window.B2D = window.B2D || {};
-  window.B2D.pageReleases = getReleasesData();
-
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === 'B2D_BC_DATA') {
+  chromeListenToMessage((message, sender, sendResponse) => {
+    if (message.type === 'B2D_BC_DATA') {
       sendResponse({
         type: 'TYPE_PAGE_MUSIC',
-        data: window.B2D.pageReleases,
+        data: getReleases(),
         popup: {
           imageSrc: getBandPhotoSrc(),
           search: getArtistFilterValue()

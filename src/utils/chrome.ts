@@ -111,3 +111,13 @@ export function chromeSendMessageToCurrentTab(
     }
   });
 }
+
+export function chromeListenToMessage(
+  callback: (
+    message: any,
+    sender: chrome.runtime.MessageSender,
+    sendResponse: (response?: any) => void
+  ) => void
+): void {
+  chrome.runtime.onMessage.addListener(callback);
+}

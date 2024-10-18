@@ -34,7 +34,11 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["images/b2d_logo_16.png", "bandcamp.content.css"],
+      "resources": [
+        "images/b2d_logo_16.png",
+        "bandcamp.content.css",
+        "bandcamp.inject.js"
+      ],
       "matches": ["https://*.bandcamp.com/*"]
     },
     {

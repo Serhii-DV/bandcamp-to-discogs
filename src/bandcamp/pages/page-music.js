@@ -4,6 +4,7 @@ import {
   createDatalistFromArray,
   createElementFromHTML,
   input,
+  listenForMessage,
   selectElementWithContent,
   setDataAttribute
 } from '../../utils/html';
@@ -20,11 +21,30 @@ import {
 } from '../modules/html.js';
 import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
+import { Band } from '../../app/band';
+import { saveBand } from '../../utils/storage';
 
 // Setup logic for BC music page
 export function setupPageMusic(pageType) {
+  listenForMessage('BANDCAMP_DATA', processBandcampData);
   setupSendMessageToPopup(pageType);
   setupIsotope();
+}
+
+function processBandcampData(messageData) {
+  const band = createBand(messageData.bandData);
+  saveBand(band);
+}
+
+function createBand(bandData) {
+  const band = new Band(
+    bandData.id,
+    bandData.name,
+    bandData.url,
+    getReleaseItems()
+  );
+
+  return band;
 }
 
 function setupSendMessageToPopup(pageType) {

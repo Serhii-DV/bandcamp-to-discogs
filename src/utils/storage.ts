@@ -1,3 +1,4 @@
+import { Band } from 'src/app/band.js';
 import { Release } from '../app/release.js';
 import { log, logError } from './console';
 import {
@@ -101,6 +102,17 @@ function storageDataToReleaseMap(storageData: StorageData): ReleaseMap {
   }
 
   return releasesMap;
+}
+
+const BAND_KEY_PREFIX = 'band.';
+const generateBandKey = (bandId: number) => BAND_KEY_PREFIX + bandId;
+
+export function saveBand(band: Band): void {
+  const key = generateBandKey(band.id);
+  const data = { [key]: band };
+  storage.set(data).then(() => {
+    log('Band data saved in the local storage', data);
+  });
 }
 
 /**

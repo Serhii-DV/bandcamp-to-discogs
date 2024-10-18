@@ -295,6 +295,26 @@ export function injectJSFile(
   (document.head || document.documentElement).appendChild(scriptElement);
 }
 
+type MessageEventData = {
+  type: string;
+  [key: string]: any;
+};
+
+export function listenForMessage(
+  dataType: string,
+  onMessage: (data: any) => void
+): void {
+  window.addEventListener('message', (event: MessageEvent) => {
+    if (event.source !== window) return;
+
+    const eventData = event.data as MessageEventData;
+
+    if (eventData.type && eventData.type === dataType) {
+      onMessage(eventData);
+    }
+  });
+}
+
 interface CreateIconLinkParams {
   className?: string;
   href?: string;

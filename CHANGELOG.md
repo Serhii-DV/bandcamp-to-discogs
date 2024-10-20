@@ -4,6 +4,7 @@
 
 ### Features
 
+- core: Use Chrome History API for history data instead of saving it to storage
 - popup: Show Bandcamp artist/label page in the history
 
 ## 0.16.0 (2024-10-08)

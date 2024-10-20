@@ -19,7 +19,7 @@ interface StorageData {
   [key: string]: any;
 }
 
-interface History extends Array<Date> {}
+export interface History extends Array<Date> {}
 
 export interface HistoryData {
   [key: uuid]: History;

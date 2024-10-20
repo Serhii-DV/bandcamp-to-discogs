@@ -2,16 +2,15 @@ import { log } from '../../utils/console';
 import { getSearchDiscogsReleaseUrl } from '../../discogs/modules/discogs.js';
 import {
   capitalizeEachWord,
-  getOwnProperty,
   removeLeadingZeroOrColon
 } from '../../utils/utils';
 import { setBackgroundImage } from '../helpers.js';
 import { setupBtnToDownloadReleasesAsCsv } from './download_tab.js';
 import { render } from '../../utils/render';
-import { getHistoryByUuid } from '../../utils/storage';
 import { toggleElements } from '../../utils/html';
 import { Release } from '../../app/release.js';
 import { getReleaseCardContentElement } from '../modules/main';
+import { getUrlHistory } from '../../utils/history';
 
 /**
  * @param {Release} release
@@ -25,12 +24,8 @@ export function setupReleaseCardTab(release) {
   toggleElements(!isRelease, getWarningElement(contentElement));
 
   if (isRelease) {
-    getHistoryByUuid(release.uuid).then((historyData) => {
-      renderReleaseCard(
-        release,
-        historyData,
-        contentElement.querySelector('main')
-      );
+    getUrlHistory(release.url, (history) => {
+      renderReleaseCard(release, history, contentElement.querySelector('main'));
     });
   }
 }
@@ -47,10 +42,10 @@ function countLinesInHtmlElement(el) {
 
 /**
  * @param {Release} release
- * @param {import('src/utils/storage.js').HistoryData} historyData
+ * @param {import('src/utils/storage.js').History} history
  * @param {Element} element
  */
-function renderReleaseCard(release, historyData, element) {
+function renderReleaseCard(release, history, element) {
   setBackgroundImage(document.querySelector('.bg-image'), release.image);
 
   const discogsSearchUrl = getSearchDiscogsReleaseUrl(
@@ -61,7 +56,6 @@ function renderReleaseCard(release, historyData, element) {
     (track) =>
       `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.time.value)})`
   );
-  const history = getOwnProperty(historyData, release.uuid, []);
   const releaseHistory = history.map((date) => dateToTemplate(date)).reverse();
   const published = dateToTemplate(release.published);
   const modified = dateToTemplate(release.modified);

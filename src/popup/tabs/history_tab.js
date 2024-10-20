@@ -20,43 +20,43 @@ import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 import { downloadReleasesCsv } from './download_tab.js';
 
 export function setupHistoryTab(tab) {
-  const releasesListComponent = getReleasesList();
+  const releasesListElement = getReleasesListElement();
 
   if (!hasDataAttribute(tab, 'buttons-initialized')) {
-    setupReleasesListComponent(tab, releasesListComponent);
+    setupReleasesListComponent(tab, releasesListElement);
     setDataAttribute(tab, 'buttons-initialized');
   }
 
   loadDiscogsGenres(config.genres_url).then(() => {
     loadKeywordMapping(config.keyword_mapping_url).then(() => {
-      updateReleasesListData(releasesListComponent);
+      updateReleasesListData(releasesListElement);
     });
   });
 }
 
 export function setHistoryTabSearchValue(searchValue) {
-  const releasesList = getReleasesList();
-  releasesList.setSearchValue(searchValue);
+  const releasesListElement = getReleasesListElement();
+  releasesListElement.setSearchValue(searchValue);
 }
 
 /**
  * @returns {ReleasesList}
  */
-function getReleasesList() {
+function getReleasesListElement() {
   return document.getElementById('historyReleasesList');
 }
 
-function updateReleasesListData(releasesList) {
+function updateReleasesListData(releasesListElement) {
   getAllReleases().then((releases) => {
-    populateReleasesList(releasesList, releases, true);
+    populateReleasesList(releasesListElement, releases, true);
   });
 }
 
 /**
  * @param {Element} tab
- * @param {ReleasesList} releasesListComponent
+ * @param {ReleasesList} releasesListElement
  */
-function setupReleasesListComponent(tab, releasesListComponent) {
+function setupReleasesListComponent(tab, releasesListElement) {
   const btnDownloadCsv = createElementFromHTML(`
 <button id="downloadHistory" class="btn btn-primary rounded-0" type="button" title="Download selected releases from the history as Discogs CSV file" disabled>
   <b2d-icon name="download"></b2d-icon>
@@ -72,7 +72,7 @@ function setupReleasesListComponent(tab, releasesListComponent) {
 
   const downloadCsvFile = (event) => {
     const button = event.target;
-    const selectedUuids = releasesListComponent.getSelectedValues();
+    const selectedUuids = releasesListElement.getSelectedValues();
 
     setButtonInLoadingState(button);
     getReleasesByUuids(selectedUuids).then((releases) => {
@@ -82,12 +82,12 @@ function setupReleasesListComponent(tab, releasesListComponent) {
   };
 
   btnDownloadCsv.addEventListener('click', downloadCsvFile);
-  releasesListComponent.addStateButton(btnDownloadCsv);
+  releasesListElement.addStateButton(btnDownloadCsv);
 
   btnClearSelected.addEventListener('click', () => {
-    const selectedValues = releasesListComponent.getSelectedValues();
+    const selectedValues = releasesListElement.getSelectedValues();
     clearStorageByKey(selectedValues, () => {
-      updateReleasesListData(releasesListComponent);
+      updateReleasesListData(releasesListElement);
     });
   });
 
@@ -95,15 +95,15 @@ function setupReleasesListComponent(tab, releasesListComponent) {
     .querySelector('#historyTabDeleteAllModal_btnYes')
     .addEventListener('click', () => {
       clearStorage();
-      updateReleasesListData(releasesListComponent);
+      updateReleasesListData(releasesListElement);
     });
 
-  releasesListComponent.appendButton(
+  releasesListElement.appendButton(
     btnDownloadCsv,
     btnClearSelected,
     btnClearAll
   );
-  releasesListComponent.addStatusElement(
+  releasesListElement.addStatusElement(
     document.getElementById('selectedStatusInfo'),
     document.getElementById('viewedStatusInfo')
   );

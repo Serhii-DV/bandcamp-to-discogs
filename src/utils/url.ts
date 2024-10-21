@@ -43,3 +43,13 @@ export function removeProtocol(url: string): string {
     return '';
   }
 }
+
+export function getUrlPath(url: string): string {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.pathname;
+  } catch (e) {
+    console.error('Invalid URL:', e);
+    return '';
+  }
+}

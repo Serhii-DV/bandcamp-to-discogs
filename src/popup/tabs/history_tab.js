@@ -6,11 +6,9 @@ import {
 import {
   clearStorage,
   clearStorageByKey,
-  getAllReleases,
   getReleasesByUuids
 } from '../../utils/storage';
 import {
-  populateReleasesList,
   removeButtonLoadingState,
   setButtonInLoadingState
 } from '../helpers.js';
@@ -18,6 +16,19 @@ import config from '../../config.js';
 import { loadDiscogsGenres } from '../../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 import { downloadReleasesCsv } from './download_tab.js';
+import { log } from '../../utils/console';
+import {
+  historyItemsToLastVisitDateMap,
+  historyItemToArtistItem,
+  historyItemToReleaseItem,
+  historySearch
+} from '../../utils/history';
+import { filterBandcampUrls } from '../../bandcamp/modules/history';
+import {
+  isBandcampAlbumUrl,
+  isBandcampArtistUrl
+} from '../../bandcamp/modules/url';
+import { populateReleasesList } from '../modules/releasesList';
 
 export function setupHistoryTab(tab) {
   const releasesListElement = getReleasesListElement();
@@ -47,8 +58,24 @@ function getReleasesListElement() {
 }
 
 function updateReleasesListData(releasesListElement) {
-  getAllReleases().then((releases) => {
-    populateReleasesList(releasesListElement, releases, true);
+  historySearch('bandcamp.com', (results, query) => {
+    log('Search', query, results);
+    const bandcampHistoryItems = filterBandcampUrls(results);
+    const bandcampVisitDateMap =
+      historyItemsToLastVisitDateMap(bandcampHistoryItems);
+
+    const releaseItems = [];
+    bandcampHistoryItems.forEach((historyItem) => {
+      if (isBandcampAlbumUrl(historyItem.url)) {
+        releaseItems.push(historyItemToReleaseItem(historyItem));
+      } else if (isBandcampArtistUrl(historyItem.url)) {
+        releaseItems.push(historyItemToArtistItem(historyItem));
+      }
+    });
+
+    log(bandcampHistoryItems, releaseItems, bandcampVisitDateMap);
+
+    populateReleasesList(releasesListElement, releaseItems, true);
   });
 }
 

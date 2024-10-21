@@ -1,3 +1,4 @@
+import { Metadata } from '../discogs/app/metadata';
 import { logInfo } from './console';
 
 export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
@@ -68,6 +69,7 @@ export function getExtensionUrl(path: string): string {
 
 interface B2DTabMessage {
   type: string;
+  metadata?: Metadata;
 }
 
 type ResponseCallback = (response: any) => void;

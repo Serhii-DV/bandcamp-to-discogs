@@ -53,8 +53,3 @@ export function getBandPhotoSrc() {
   const imgBandPhoto = document.querySelector('.band-photo');
   return imgBandPhoto.src;
 }
-
-export function isValidBandcampURL(url) {
-  const bandcampUrl = 'bandcamp.com';
-  return url.includes(bandcampUrl);
-}

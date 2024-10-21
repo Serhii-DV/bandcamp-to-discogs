@@ -29,7 +29,6 @@ import { setupCsvDataTab } from './tabs/csv_data_tab.js';
 import { getStorageSize } from '../utils/storage';
 import { bytesToSize } from '../utils/utils';
 import { setupConsole, setupConsoleRelease } from './console.js';
-import { isValidBandcampURL } from '../bandcamp/modules/html.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { createReleaseFromSchema } from '../utils/schema';
@@ -44,6 +43,7 @@ import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
 import { PageTypeEnum } from '../bandcamp/app/page-type.js';
 import { ReleaseItem } from '../app/release.js';
+import { isValidBandcampURL } from '../bandcamp/modules/url';
 
 const btnBandcampTab = document.getElementById('bandcamp-tab');
 const btnReleaseCardTab = getReleaseCardTabElement();

@@ -44,6 +44,12 @@ export function removeProtocol(url: string): string {
   }
 }
 
+export function removeQueryParams(url: string): string {
+  const urlObj = new URL(url);
+  urlObj.search = '';
+  return urlObj.toString();
+}
+
 export function getUrlPath(url: string): string {
   try {
     const urlObj = new URL(url);

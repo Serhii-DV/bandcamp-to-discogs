@@ -19,3 +19,15 @@ export function isBandcampArtistUrl(url: string): boolean {
 
   return path === '/' || path === bandcampPathMusic;
 }
+
+export function removeBandcampMusicPath(url: string): string {
+  const urlObj = new URL(url);
+  const segments = urlObj.pathname.split('/').filter(Boolean);
+
+  if (segments[segments.length - 1] === 'music') {
+    segments.pop();
+    urlObj.pathname = '/' + segments.join('/');
+  }
+
+  return urlObj.toString();
+}

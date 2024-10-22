@@ -1,20 +1,21 @@
 import {
   getUrlHostname,
   getUrlHostnameUrl,
-  removeProtocol
+  removeProtocol,
+  removeQueryParams
 } from '../utils/url';
 import { generateKeyForUrl } from '../utils/key-generator';
 import TrackTime from './trackTime.js';
 
 export class ReleaseItem {
   constructor(url, artist, title, itemId = '', label = '', visit) {
-    this.url = url;
+    this.url = removeQueryParams(url);
+    this.uuid = generateKeyForUrl(this.url);
     this.artist = artist;
     this.title = title;
     this.label = label;
     this.visit = visit;
     this.itemId = itemId;
-    this.uuid = generateKeyForUrl(url);
   }
 
   static fromObject(obj) {

@@ -1,4 +1,6 @@
+import { removeQueryParams } from '../utils/url';
 import { generateKeyForUrl } from '../utils/key-generator';
+import { removeBandcampMusicPath } from '../bandcamp/modules/url';
 
 export class ArtistItem {
   public url: string;
@@ -8,8 +10,9 @@ export class ArtistItem {
   public id?: number;
 
   constructor(url: string, name: string, visit?: Date, id?: number) {
-    this.url = url;
-    this.uuid = generateKeyForUrl(url);
+    this.url = removeQueryParams(url);
+    this.url = removeBandcampMusicPath(this.url);
+    this.uuid = generateKeyForUrl(this.url);
     this.name = name;
     this.visit = visit;
     this.id = id;

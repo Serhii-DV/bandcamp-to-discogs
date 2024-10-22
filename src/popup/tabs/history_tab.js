@@ -17,16 +17,8 @@ import { loadDiscogsGenres } from '../../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 import { downloadReleasesCsv } from './download_tab.js';
 import { log } from '../../utils/console';
-import {
-  historyItemToArtistItem,
-  historyItemToReleaseItem,
-  historySearch
-} from '../../utils/history';
-import { filterBandcampUrls } from '../../bandcamp/modules/history';
-import {
-  isBandcampAlbumUrl,
-  isBandcampArtistUrl
-} from '../../bandcamp/modules/url';
+import { historySearch } from '../../utils/history';
+import { historyItemsToArtistOrReleaseItems } from '../../bandcamp/modules/history';
 import { populateReleasesList } from '../modules/releasesList';
 
 export function setupHistoryTab(tab) {
@@ -59,18 +51,8 @@ function getReleasesListElement() {
 function updateReleasesListData(releasesListElement) {
   historySearch('bandcamp.com', (results, query) => {
     log('Search', query, results);
-    const bandcampHistoryItems = filterBandcampUrls(results);
-    const releaseItems = [];
-    bandcampHistoryItems.forEach((historyItem) => {
-      if (isBandcampAlbumUrl(historyItem.url)) {
-        releaseItems.push(historyItemToReleaseItem(historyItem));
-      } else if (isBandcampArtistUrl(historyItem.url)) {
-        releaseItems.push(historyItemToArtistItem(historyItem));
-      }
-    });
-
-    log(bandcampHistoryItems, releaseItems);
-
+    const releaseItems = historyItemsToArtistOrReleaseItems(results);
+    log(releaseItems);
     populateReleasesList(releasesListElement, releaseItems, true);
   });
 }

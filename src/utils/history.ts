@@ -1,6 +1,5 @@
 import { ArtistItem } from '../app/artistItem';
 import { ReleaseItem } from '../app/release';
-import { generateKeyForUrl } from './key-generator';
 import { History, uuid } from './storage';
 
 type GetUrlHistoryCallback = (history: History) => void;

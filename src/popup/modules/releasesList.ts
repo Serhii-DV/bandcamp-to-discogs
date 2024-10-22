@@ -13,11 +13,10 @@ import { showReleaseCardTab } from './main';
 import { Metadata } from '../../discogs/app/metadata';
 
 export type ArtistOrReleaseItem = ArtistItem | ReleaseItem;
-export type ArtistOrReleaseItemArray = ArtistOrReleaseItem[];
 
 export function populateReleasesList(
   releasesList: ReleasesList,
-  items: ArtistOrReleaseItemArray,
+  items: ArtistOrReleaseItem[],
   sortByLatestDateVisited: boolean
 ): void {
   getCurrentTabUrl().then((url) => {
@@ -42,7 +41,7 @@ export interface ReleasesListItem {
 
 function ArtistOrReleaseItemArrayToReleaseListItems(
   currentTabUrl: string,
-  items: ArtistOrReleaseItemArray
+  items: ArtistOrReleaseItem[]
 ): ReleasesListItem[] {
   const releasesListItems: ReleasesListItem[] = [];
   const isDiscogsEditPage = isValidDiscogsReleaseEditUrl(currentTabUrl);

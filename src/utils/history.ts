@@ -76,22 +76,6 @@ export function historySearch(
   });
 }
 
-export function historyItemsToLastVisitDateMap(
-  historyItems: HistoryItem[]
-): VisitDateMap {
-  const visitDateMap: VisitDateMap = {};
-
-  historyItems.forEach((item) => {
-    if (!item.url || !item.lastVisitTime) return;
-
-    const uuid = generateKeyForUrl(item.url);
-    const visitDate = new Date(item.lastVisitTime);
-    visitDateMap[uuid] = visitDate;
-  });
-
-  return visitDateMap;
-}
-
 export function historyItemToReleaseItem(
   historyItem: HistoryItem
 ): ReleaseItem | null {

@@ -18,7 +18,6 @@ import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 import { downloadReleasesCsv } from './download_tab.js';
 import { log } from '../../utils/console';
 import {
-  historyItemsToLastVisitDateMap,
   historyItemToArtistItem,
   historyItemToReleaseItem,
   historySearch
@@ -61,9 +60,6 @@ function updateReleasesListData(releasesListElement) {
   historySearch('bandcamp.com', (results, query) => {
     log('Search', query, results);
     const bandcampHistoryItems = filterBandcampUrls(results);
-    const bandcampVisitDateMap =
-      historyItemsToLastVisitDateMap(bandcampHistoryItems);
-
     const releaseItems = [];
     bandcampHistoryItems.forEach((historyItem) => {
       if (isBandcampAlbumUrl(historyItem.url)) {
@@ -73,7 +69,7 @@ function updateReleasesListData(releasesListElement) {
       }
     });
 
-    log(bandcampHistoryItems, releaseItems, bandcampVisitDateMap);
+    log(bandcampHistoryItems, releaseItems);
 
     populateReleasesList(releasesListElement, releaseItems, true);
   });

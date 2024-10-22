@@ -49,12 +49,16 @@ function getReleasesListElement() {
 }
 
 function updateReleasesListData(releasesListElement) {
-  historySearch('bandcamp.com', (results, query) => {
-    log('Search', query, results);
-    const releaseItems = historyItemsToArtistOrReleaseItems(results);
-    log(releaseItems);
-    populateReleasesList(releasesListElement, releaseItems, true);
-  });
+  historySearch(
+    'bandcamp.com',
+    (results, query) => {
+      log('Search', query, results);
+      const releaseItems = historyItemsToArtistOrReleaseItems(results);
+      log(releaseItems);
+      populateReleasesList(releasesListElement, releaseItems, true);
+    },
+    500
+  );
 }
 
 /**

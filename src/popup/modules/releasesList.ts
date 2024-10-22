@@ -61,8 +61,8 @@ function ArtistOrReleaseItemArrayToReleaseListItems(
 
     const id = item.uuid;
     const title = isReleaseItem
-      ? `${item.artist} - ${item.title}`
-      : `${item.name}`;
+      ? `<span class="badge text-bg-success" title="Release">R</span> ${item.artist} - ${item.title}`
+      : `<span class="badge text-bg-secondary" title="Artist or Label">A</span> ${item.name}`;
     const visit = item.visit;
 
     releasesListItems.push({

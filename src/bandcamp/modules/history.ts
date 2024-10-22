@@ -1,9 +1,14 @@
+import { uuid } from '../../utils/storage';
 import {
   HistoryItem,
   historyItemToArtistItem,
   historyItemToReleaseItem
 } from '../../utils/history';
-import { isBandcampAlbumUrl, isBandcampArtistUrl } from './url';
+import {
+  isBandcampAlbumUrl,
+  isBandcampArtistUrl,
+  isBandcampSiteUrl
+} from './url';
 import { ArtistOrReleaseItem } from 'src/popup/modules/releasesList';
 
 export function filterBandcampUrls(historyItems: HistoryItem[]): HistoryItem[] {
@@ -19,9 +24,10 @@ export function historyItemsToArtistOrReleaseItems(
 ): ArtistOrReleaseItem[] {
   const items: ArtistOrReleaseItem[] = [];
   const bandcampHistoryItems = filterBandcampUrls(historyItems);
+  const uuids: uuid[] = [];
 
   bandcampHistoryItems.forEach((historyItem) => {
-    if (!historyItem.url) return;
+    if (!historyItem.url || isBandcampSiteUrl(historyItem.url)) return;
 
     let item = undefined;
 
@@ -31,8 +37,9 @@ export function historyItemsToArtistOrReleaseItems(
       item = historyItemToArtistItem(historyItem);
     }
 
-    if (item) {
+    if (item && !uuids.includes(item.uuid)) {
       items.push(item);
+      uuids.push(item.uuid);
     }
   });
 

@@ -1,12 +1,17 @@
 import { getUrlPath } from '../../utils/url';
 
 const bandcampHost = 'bandcamp.com';
+const bandcampDomain = 'https://' + bandcampHost;
 const bandcampPathMusic = '/music';
 const bandcampPathAlbum = '/album';
 const bandcampAlbumPart = bandcampHost + bandcampPathAlbum + '/';
 
 export function isValidBandcampURL(url: string): boolean {
   return url.includes(bandcampHost);
+}
+
+export function isBandcampSiteUrl(url: string): boolean {
+  return url.includes(bandcampDomain);
 }
 
 export function isBandcampAlbumUrl(url: string): boolean {

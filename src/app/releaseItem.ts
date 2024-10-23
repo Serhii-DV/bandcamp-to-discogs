@@ -23,6 +23,7 @@ export class ReleaseItem extends BandcampItem {
     url: string;
     artist: string;
     title: string;
+    id?: number;
     itemId?: number;
     label?: string;
     visit?: Date;
@@ -31,7 +32,7 @@ export class ReleaseItem extends BandcampItem {
       obj.url,
       obj.artist,
       obj.title,
-      obj.itemId,
+      obj.id || obj.itemId,
       obj.label || '',
       obj.visit
     );

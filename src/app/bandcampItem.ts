@@ -1,6 +1,10 @@
 import { removeBandcampMusicPath } from '../bandcamp/modules/url';
 import { generateKeyForUrl } from '../utils/key-generator';
-import { removeQueryParams } from '../utils/url';
+import {
+  getUrlHostname,
+  getUrlHostnameUrl,
+  removeQueryParams
+} from '../utils/url';
 
 export abstract class BandcampItem {
   public url: string;
@@ -15,4 +19,18 @@ export abstract class BandcampItem {
     this.visit = visit;
     this.id = id;
   }
+
+  get artistHostname() {
+    return getUrlHostname(this.url);
+  }
+
+  get artistUrl() {
+    return getUrlHostnameUrl(this.url);
+  }
+}
+
+export function createBandcampItemMap(
+  items: BandcampItem[]
+): Map<string, BandcampItem> {
+  return new Map<string, BandcampItem>(items.map((item) => [item.uuid, item]));
 }

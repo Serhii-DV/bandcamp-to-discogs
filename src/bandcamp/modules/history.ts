@@ -10,12 +10,21 @@ import {
   isBandcampSiteUrl
 } from './url';
 import { ArtistOrReleaseItem } from 'src/popup/modules/releasesList';
+import { log } from '../../utils/console';
 
 export function filterBandcampUrls(historyItems: HistoryItem[]): HistoryItem[] {
   return historyItems.filter(
     (item) =>
       item.url &&
       (isBandcampArtistUrl(item.url) || isBandcampAlbumUrl(item.url))
+  );
+}
+
+export function filterBandcampAlbumUrl(
+  historyItems: HistoryItem[]
+): HistoryItem[] {
+  return historyItems.filter(
+    (item) => item.url && isBandcampAlbumUrl(item.url)
   );
 }
 
@@ -42,6 +51,8 @@ export function historyItemsToArtistOrReleaseItems(
       uuids.push(item.uuid);
     }
   });
+
+  log('historyItemsToArtistOrReleaseItems', items);
 
   return items;
 }

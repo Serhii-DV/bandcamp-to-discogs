@@ -1,8 +1,9 @@
 import { Release } from 'src/app/release';
 import { createElementFromHTML } from '../../utils/html';
-import { VisitedDate } from '../../utils/storage';
 import { showReleaseCardTab } from '../modules/main';
-import { ReleaseItem } from 'src/app/releaseItem';
+import { ReleaseItem } from '../../app/releaseItem';
+import { ArtistItem } from '../../app/artistItem';
+import { BandcampItem } from '../../app/bandcampItem';
 
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
@@ -57,15 +58,32 @@ export class ReleasesGroupListElement extends HTMLElement {
     return item;
   }
 
-  addReleaseItem(item: ReleaseItem) {
+  addBandcampItem(item: BandcampItem) {
     const self = this;
 
-    const artist = item.artist;
-    const title = `${item.title}`;
+    if (item instanceof ArtistItem) {
+      return self.addArtistItem(item);
+    } else if (item instanceof ReleaseItem) {
+      return self.addReleaseItem(item);
+    }
+
+    return self;
+  }
+
+  addBandcampItems(items: BandcampItem[]) {
+    const self = this;
+    items.forEach((item) => self.addBandcampItem(item));
+    return self;
+  }
+
+  addArtistItem(item: ArtistItem) {
+    const self = this;
+    const artist = item.name;
+    const title = item.name;
     const url = item.url;
     const image = '';
     const visit = item.visit ?? new Date(0);
-    const artistHostname = '';
+    const artistHostname = item.artistHostname;
 
     const contentElement = createElementFromHTML(`
       <div class="d-flex justify-content-between">
@@ -92,36 +110,78 @@ export class ReleasesGroupListElement extends HTMLElement {
     return self;
   }
 
-  addRelease(release: Release, visitedDate: VisitedDate) {
+  addReleaseItem(item: ReleaseItem) {
     const self = this;
-    const releaseTitle = `${release.title} (${release.year})`;
-    const releaseContentElement = createElementFromHTML(`
+
+    const artist = item.artist;
+    const title = `${item.title}`;
+    const url = item.url;
+    const image = '';
+    const visit = item.visit ?? new Date(0);
+    const artistHostname = item.artistHostname;
+
+    const contentElement = createElementFromHTML(`
+      <div class="d-flex justify-content-between">
+        <div class="flex-shrink-0">
+          <img src="${image}" alt="${title}" class="img-fluid" style="width: 80px; height: 80px;">
+        </div>
+        <div class="flex-grow-1 ms-3">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="release-artist mb-1">${artist}</h6>
+            <relative-time class="release-visited-date text-body-secondary" datetime="${visit.toISOString()}">${visit.toLocaleString()}</relative-time>
+          </div>
+          <p class="release-title mb-0">${title}</p>
+          <small class="release-url text-body-secondary text-break">${artistHostname}</small>
+        </div>
+      </div>`);
+
+    if (contentElement) {
+      self.addItem(url, contentElement, url, false, (event: Event) => {
+        // showReleaseCardTab(release);
+        event.preventDefault();
+      });
+    }
+
+    return self;
+  }
+
+  addRelease(release: Release) {
+    const self = this;
+
+    const artist = release.artist;
+    const title = `${release.title} (${release.year})`;
+    const url = release.url;
+    const image = release.image;
+    const visit = release.releaseItem.visit ?? new Date(0);
+    const artistHostname = release.artistHostname;
+
+    const contentElement = createElementFromHTML(`
 <div class="d-flex justify-content-between">
   <div class="flex-shrink-0">
-    <img src="${release.image}" alt="${releaseTitle}" class="img-fluid" style="width: 80px; height: 80px;">
+    <img src="${image}" alt="${title}" class="img-fluid" style="width: 80px; height: 80px;">
   </div>
   <div class="flex-grow-1 ms-3">
     <div class="d-flex w-100 justify-content-between">
-      <h6 class="release-artist mb-1">${release.artist}</h6>
-      <relative-time class="release-visited-date text-body-secondary" datetime="${visitedDate.date.toISOString()}">${visitedDate.date.toLocaleString()}</relative-time>
+      <h6 class="release-artist mb-1">${artist}</h6>
+      <relative-time class="release-visited-date text-body-secondary" datetime="${visit.toISOString()}">${visit.toLocaleString()}</relative-time>
     </div>
-    <p class="release-title mb-0">${releaseTitle}</p>
-    <small class="release-url text-body-secondary text-break">${release.artistHostname}</small>
+    <p class="release-title mb-0">${title}</p>
+    <small class="release-url text-body-secondary text-break">${artistHostname}</small>
   </div>
 </div>`);
-    if (releaseContentElement) {
-      self.addItem(
-        release.url,
-        releaseContentElement,
-        release.url,
-        false,
-        (event: Event) => {
-          showReleaseCardTab(release);
-          event.preventDefault();
-        }
-      );
+    if (contentElement) {
+      self.addItem(url, contentElement, url, false, (event: Event) => {
+        showReleaseCardTab(release);
+        event.preventDefault();
+      });
     }
 
+    return self;
+  }
+
+  addReleases(releases: Release[]) {
+    const self = this;
+    releases.forEach((release) => self.addRelease(release));
     return self;
   }
 }

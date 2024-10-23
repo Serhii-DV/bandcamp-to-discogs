@@ -80,7 +80,7 @@ function setupIsotope() {
 
   releaseItems.forEach((releaseItem) => {
     const gridElement = grid.querySelector(
-      '[data-item-id="' + releaseItem.itemId + '"]'
+      '[data-item-id="' + releaseItem.id + '"]'
     );
     setDataAttribute(
       gridElement,

@@ -1,11 +1,12 @@
 import { click, getDataAttribute } from '../../utils/html';
 import { log } from '../../utils/console';
-import {
-  getLatestHistoryData,
-  getReleaseMapByUuids
-} from '../../utils/storage';
-import { getOwnProperty } from '../../utils/utils';
 import { historySearch } from '../../utils/history';
+import {
+  filterBandcampAlbumUrl,
+  historyItemsToArtistOrReleaseItems
+} from '../../bandcamp/modules/history';
+import { getReleaseMapByUuids } from '../../utils/storage';
+import { Release } from '../../app/release';
 
 export function setupBandcampTab(btnHistoryTab) {
   log('Setup bandcamp tab');
@@ -15,39 +16,42 @@ export function setupBandcampTab(btnHistoryTab) {
 
 function setupLatestVisitedWidget(btnHistoryTab) {
   const visitedReleasesWidget = document.getElementById('visitedReleases');
-  const limit = getDataAttribute(visitedReleasesWidget, 'limit', 10);
+  const limit = getDataAttribute(visitedReleasesWidget, 'limit', 50);
 
   historySearch(
     'bandcamp.com',
     (results, query) => {
       log('Search', query, results);
-      // const releaseItems = historyItemsToArtistOrReleaseItems(results);
-      // log(releaseItems);
-      // populateReleasesList(releasesListElement, releaseItems, true);
-    },
-    30
-  );
-
-  getLatestHistoryData(limit).then((visitedDates) => {
-    const uuids = visitedDates.map((visitedDate) => visitedDate.uuid);
-    getReleaseMapByUuids(uuids).then((releaseMap) => {
-      visitedDates.forEach((visitedDate) => {
-        const release = getOwnProperty(releaseMap, visitedDate.uuid);
-        if (release) {
-          visitedReleasesWidget.addRelease(release, visitedDate);
-        }
-      });
-
-      visitedReleasesWidget.addItem(
-        '#history',
-        'Go to history...',
-        'Go to history...',
-        false,
-        (event) => {
-          click(btnHistoryTab);
-          event.preventDefault();
-        }
+      // Only releases (albums)
+      const bandcampItems = historyItemsToArtistOrReleaseItems(
+        filterBandcampAlbumUrl(results)
       );
-    });
-  });
+      const uuids = bandcampItems.map((item) => item.uuid);
+
+      getReleaseMapByUuids(uuids).then((releasesMap) => {
+        const releases = bandcampItems
+          .map((item) => {
+            const release = releasesMap[item.uuid];
+            if (!(release instanceof Release)) return null;
+            release.releaseItem = item;
+            return release;
+          })
+          .filter(Boolean);
+
+        visitedReleasesWidget
+          .addReleases(releases)
+          .addItem(
+            '#history',
+            'Go to history...',
+            'Go to history...',
+            false,
+            (event) => {
+              click(btnHistoryTab);
+              event.preventDefault();
+            }
+          );
+      });
+    },
+    limit
+  );
 }

@@ -2,6 +2,7 @@ import { Release } from 'src/app/release';
 import { createElementFromHTML } from '../../utils/html';
 import { VisitedDate } from '../../utils/storage';
 import { showReleaseCardTab } from '../modules/main';
+import { ReleaseItem } from 'src/app/releaseItem';
 
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
@@ -54,6 +55,41 @@ export class ReleasesGroupListElement extends HTMLElement {
     self.#groupElement.appendChild(item);
 
     return item;
+  }
+
+  addReleaseItem(item: ReleaseItem) {
+    const self = this;
+
+    const artist = item.artist;
+    const title = `${item.title}`;
+    const url = item.url;
+    const image = '';
+    const visit = item.visit ?? new Date(0);
+    const artistHostname = '';
+
+    const contentElement = createElementFromHTML(`
+      <div class="d-flex justify-content-between">
+        <div class="flex-shrink-0">
+          <img src="${image}" alt="${title}" class="img-fluid" style="width: 80px; height: 80px;">
+        </div>
+        <div class="flex-grow-1 ms-3">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="release-artist mb-1">${artist}</h6>
+            <relative-time class="release-visited-date text-body-secondary" datetime="${visit.toISOString()}">${visit.toLocaleString()}</relative-time>
+          </div>
+          <p class="release-title mb-0">${title}</p>
+          <small class="release-url text-body-secondary text-break">${artistHostname}</small>
+        </div>
+      </div>`);
+
+    if (contentElement) {
+      self.addItem(url, contentElement, url, false, (event: Event) => {
+        // showReleaseCardTab(release);
+        event.preventDefault();
+      });
+    }
+
+    return self;
   }
 
   addRelease(release: Release, visitedDate: VisitedDate) {

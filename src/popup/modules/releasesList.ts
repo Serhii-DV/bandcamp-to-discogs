@@ -1,6 +1,6 @@
 import { ArtistItem } from '../../app/artistItem';
 import { ReleasesList } from '../components/releases-list';
-import { Release, ReleaseItem } from '../../app/release';
+import { Release } from '../../app/release';
 import {
   chromeSendMessageToCurrentTab,
   getCurrentTabUrl,
@@ -11,6 +11,7 @@ import { createIconLink } from '../../utils/html';
 import { getReleaseByUuid } from '../../utils/storage';
 import { showReleaseCardTab } from './main';
 import { Metadata } from '../../discogs/app/metadata';
+import { ReleaseItem } from '../../app/releaseItem';
 
 export type ArtistOrReleaseItem = ArtistItem | ReleaseItem;
 

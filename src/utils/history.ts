@@ -1,5 +1,5 @@
+import { ReleaseItem } from '../app/releaseItem';
 import { ArtistItem } from '../app/artistItem';
-import { ReleaseItem } from '../app/release';
 import { History, uuid } from './storage';
 
 type GetUrlHistoryCallback = (history: History) => void;
@@ -81,7 +81,7 @@ export function historyItemToReleaseItem(
   if (!historyItem.url || !historyItem.title) return null;
 
   const releaseDetails = extractReleaseDetailsFromPageTitle(historyItem.title);
-  const itemId = '';
+  const itemId = 0;
   const visit = historyItem.lastVisitTime
     ? new Date(historyItem.lastVisitTime)
     : undefined;

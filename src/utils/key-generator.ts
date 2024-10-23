@@ -1,5 +1,5 @@
-import { ReleaseItem } from 'src/app/release';
 import { Release } from 'src/app/release';
+import { ReleaseItem } from 'src/app/releaseItem';
 import { v5 as uuid5 } from 'uuid';
 
 export function generateKeyForUrl(url: string): string {

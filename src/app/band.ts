@@ -1,4 +1,4 @@
-import { ReleaseItem } from './release';
+import { ReleaseItem } from './releaseItem';
 
 export class Band {
   public id: number;

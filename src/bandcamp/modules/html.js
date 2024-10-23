@@ -1,5 +1,5 @@
+import { ReleaseItem } from '../../app/releaseItem';
 import { getDataAttribute } from '../../utils/html';
-import { ReleaseItem } from '../../app/release';
 import {
   removeInvisibleChars,
   trimCharactersFromString

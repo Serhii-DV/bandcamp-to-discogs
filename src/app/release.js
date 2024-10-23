@@ -1,34 +1,10 @@
 import {
   getUrlHostname,
   getUrlHostnameUrl,
-  removeProtocol,
-  removeQueryParams
+  removeProtocol
 } from '../utils/url';
-import { generateKeyForUrl } from '../utils/key-generator';
+import { ReleaseItem } from './releaseItem';
 import TrackTime from './trackTime.js';
-
-export class ReleaseItem {
-  constructor(url, artist, title, itemId = '', label = '', visit) {
-    this.url = removeQueryParams(url);
-    this.uuid = generateKeyForUrl(this.url);
-    this.artist = artist;
-    this.title = title;
-    this.label = label;
-    this.visit = visit;
-    this.itemId = itemId;
-  }
-
-  static fromObject(obj) {
-    return new ReleaseItem(
-      obj.url,
-      obj.artist,
-      obj.title,
-      obj.itemId,
-      obj.label,
-      obj.visit
-    );
-  }
-}
 
 export class Release {
   /**

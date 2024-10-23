@@ -42,8 +42,8 @@ import {
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
 import { PageTypeEnum } from '../bandcamp/app/page-type.js';
-import { ReleaseItem } from '../app/release.js';
 import { isValidBandcampURL } from '../bandcamp/modules/url';
+import { ReleaseItem } from '../app/releaseItem';
 
 const btnBandcampTab = document.getElementById('bandcamp-tab');
 const btnReleaseCardTab = getReleaseCardTabElement();

@@ -1,4 +1,5 @@
-import { Release, ReleaseItem } from '../../app/release';
+import { ReleaseItem } from '../../app/releaseItem';
+import { Release } from '../../app/release';
 import { click } from '../../utils/html';
 import { ReleasesList } from '../components/releases-list';
 import { setupReleaseCardTab } from '../tabs/release-card_tab';

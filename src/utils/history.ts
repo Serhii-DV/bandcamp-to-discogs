@@ -6,10 +6,7 @@ import { log } from './console';
 type GetUrlHistoryCallback = (history: History) => void;
 type GetLatestVisitDateCallback = (latestVisit: Date | null) => void;
 export type HistoryItem = chrome.history.HistoryItem;
-type GetLatestVisitsCallback = (
-  results: HistoryItem[],
-  query: chrome.history.HistoryQuery
-) => void;
+export type GetLatestVisitsCallback = (results: HistoryItem[]) => void;
 export interface VisitDateMap {
   [key: uuid]: Date;
 }
@@ -72,7 +69,7 @@ export function historySearch(
     }
 
     log('History search', query, results);
-    callable(results, query);
+    callable(results);
   });
 }
 

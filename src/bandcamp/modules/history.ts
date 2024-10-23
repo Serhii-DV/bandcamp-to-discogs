@@ -1,8 +1,10 @@
 import { uuid } from '../../utils/storage';
 import {
+  GetLatestVisitsCallback,
   HistoryItem,
   historyItemToArtistItem,
-  historyItemToReleaseItem
+  historyItemToReleaseItem,
+  historySearch
 } from '../../utils/history';
 import {
   isBandcampAlbumUrl,
@@ -11,6 +13,13 @@ import {
 } from './url';
 import { ArtistOrReleaseItem } from 'src/popup/modules/releasesList';
 import { log } from '../../utils/console';
+
+export function bandcampReleasesAndArtistsHistorySearch(
+  callable: GetLatestVisitsCallback,
+  maxResults: number = 200
+): void {
+  historySearch('bandcamp.com', callable, maxResults);
+}
 
 export function filterBandcampUrls(historyItems: HistoryItem[]): HistoryItem[] {
   return historyItems.filter(

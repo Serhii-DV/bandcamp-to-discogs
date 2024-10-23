@@ -16,8 +16,10 @@ import config from '../../config.js';
 import { loadDiscogsGenres } from '../../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 import { downloadReleasesCsv } from './download_tab.js';
-import { historySearch } from '../../utils/history';
-import { historyItemsToArtistOrReleaseItems } from '../../bandcamp/modules/history';
+import {
+  bandcampReleasesAndArtistsHistorySearch,
+  historyItemsToArtistOrReleaseItems
+} from '../../bandcamp/modules/history';
 import { populateReleasesList } from '../modules/releasesList';
 
 export function setupHistoryTab(tab) {
@@ -48,14 +50,10 @@ function getReleasesListElement() {
 }
 
 function updateReleasesListData(releasesListElement) {
-  historySearch(
-    'bandcamp.com',
-    (results) => {
-      const releaseItems = historyItemsToArtistOrReleaseItems(results);
-      populateReleasesList(releasesListElement, releaseItems, true);
-    },
-    500
-  );
+  bandcampReleasesAndArtistsHistorySearch((results) => {
+    const releaseItems = historyItemsToArtistOrReleaseItems(results);
+    populateReleasesList(releasesListElement, releaseItems, true);
+  }, 500);
 }
 
 /**

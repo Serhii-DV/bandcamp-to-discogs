@@ -20,8 +20,7 @@ function setupLatestVisitedWidget(btnHistoryTab) {
 
   historySearch(
     'bandcamp.com',
-    (results, query) => {
-      log('Search', query, results);
+    (results) => {
       // Only releases (albums)
       const bandcampItems = historyItemsToArtistOrReleaseItems(
         filterBandcampAlbumUrl(results)

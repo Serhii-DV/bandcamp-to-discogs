@@ -16,7 +16,6 @@ import config from '../../config.js';
 import { loadDiscogsGenres } from '../../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 import { downloadReleasesCsv } from './download_tab.js';
-import { log } from '../../utils/console';
 import { historySearch } from '../../utils/history';
 import { historyItemsToArtistOrReleaseItems } from '../../bandcamp/modules/history';
 import { populateReleasesList } from '../modules/releasesList';
@@ -51,10 +50,8 @@ function getReleasesListElement() {
 function updateReleasesListData(releasesListElement) {
   historySearch(
     'bandcamp.com',
-    (results, query) => {
-      log('Search', query, results);
+    (results) => {
       const releaseItems = historyItemsToArtistOrReleaseItems(results);
-      log(releaseItems);
       populateReleasesList(releasesListElement, releaseItems, true);
     },
     500

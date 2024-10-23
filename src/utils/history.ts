@@ -1,6 +1,7 @@
 import { ReleaseItem } from '../app/releaseItem';
 import { ArtistItem } from '../app/artistItem';
 import { History, uuid } from './storage';
+import { log } from './console';
 
 type GetUrlHistoryCallback = (history: History) => void;
 type GetLatestVisitDateCallback = (latestVisit: Date | null) => void;
@@ -67,10 +68,10 @@ export function historySearch(
         `Error retrieving history for ${searchText}:`,
         chrome.runtime.lastError
       );
-      callable([], query);
-      return;
+      results = [];
     }
 
+    log('History search', query, results);
     callable(results, query);
   });
 }

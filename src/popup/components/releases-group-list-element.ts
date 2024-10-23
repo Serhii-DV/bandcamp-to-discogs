@@ -88,7 +88,12 @@ export class ReleasesGroupListElement extends HTMLElement {
     const contentElement = createElementFromHTML(`
       <div class="d-flex justify-content-between">
         <div class="flex-shrink-0">
-          <img src="${image}" alt="${title}" class="img-fluid" style="width: 80px; height: 80px;">
+          <svg class="bd-placeholder-img img-fluid" width="80" height="80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <title>Placeholder</title>
+            <rect width="100%" height="100%" fill="#868e96"></rect>
+            <text x="25%" y="50%" fill="#dee2e6" dy=".3em">Artist</text>
+          </svg>
+          <!--img src="${image}" alt="${title}" class="img-fluid" style="width: 80px; height: 80px;"-->
         </div>
         <div class="flex-grow-1 ms-3">
           <div class="d-flex w-100 justify-content-between">

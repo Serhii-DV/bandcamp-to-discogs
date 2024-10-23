@@ -37,6 +37,14 @@ export function filterBandcampAlbumUrl(
   );
 }
 
+export function filterBandcampArtistUrl(
+  historyItems: HistoryItem[]
+): HistoryItem[] {
+  return historyItems.filter(
+    (item) => item.url && isBandcampArtistUrl(item.url)
+  );
+}
+
 export function historyItemsToArtistOrReleaseItems(
   historyItems: HistoryItem[]
 ): ArtistOrReleaseItem[] {

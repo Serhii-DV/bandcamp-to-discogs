@@ -3,6 +3,7 @@ import { log } from '../../utils/console';
 import {
   bandcampReleasesAndArtistsHistorySearch,
   filterBandcampAlbumUrl,
+  filterBandcampArtistUrl,
   historyItemsToArtistOrReleaseItems
 } from '../../bandcamp/modules/history';
 import { getReleaseMapByUuids } from '../../utils/storage';
@@ -16,17 +17,20 @@ export function setupBandcampTab(btnHistoryTab) {
 
 function setupLatestVisitedWidget(btnHistoryTab) {
   const visitedReleasesWidget = document.getElementById('visitedReleases');
+  const visitedArtistsWidget = document.getElementById('visitedArtists');
   const limit = getDataAttribute(visitedReleasesWidget, 'limit', 50);
 
   bandcampReleasesAndArtistsHistorySearch((results) => {
-    // Only releases (albums)
-    const bandcampItems = historyItemsToArtistOrReleaseItems(
+    const releaseItems = historyItemsToArtistOrReleaseItems(
       filterBandcampAlbumUrl(results)
     );
-    const uuids = bandcampItems.map((item) => item.uuid);
+    const artistItems = historyItemsToArtistOrReleaseItems(
+      filterBandcampArtistUrl(results)
+    );
+    const uuids = releaseItems.map((item) => item.uuid);
 
     getReleaseMapByUuids(uuids).then((releasesMap) => {
-      const releases = bandcampItems
+      const releases = releaseItems
         .map((item) => {
           const release = releasesMap[item.uuid];
           if (!(release instanceof Release)) return null;
@@ -48,5 +52,7 @@ function setupLatestVisitedWidget(btnHistoryTab) {
           }
         );
     });
+
+    visitedArtistsWidget.addBandcampItems(artistItems);
   }, limit);
 }

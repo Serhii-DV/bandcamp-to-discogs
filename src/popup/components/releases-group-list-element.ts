@@ -90,34 +90,15 @@ export class ReleasesGroupListElement extends HTMLElement {
 
   addArtistItem(item: ArtistItem) {
     const self = this;
-    const artist = item.name;
-    const title = item.name;
-    const url = item.url;
-    const image = '';
-    const visit = item.visit ?? new Date(0);
-    const artistHostname = item.artistHostname;
-
-    const contentElement = createElementFromHTML(`
-      <div class="d-flex justify-content-between">
-        <div class="flex-shrink-0">
-          <svg class="bd-placeholder-img img-fluid" width="80" height="80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <title>Placeholder</title>
-            <rect width="100%" height="100%" fill="#868e96"></rect>
-            <text x="25%" y="50%" fill="#dee2e6" dy=".3em">Artist</text>
-          </svg>
-          <!--img src="${image}" alt="${title}" class="img-fluid" style="width: 80px; height: 80px;"-->
-        </div>
-        <div class="flex-grow-1 ms-3">
-          <div class="d-flex w-100 justify-content-between">
-            <h6 class="release-artist mb-1">${artist}</h6>
-            <relative-time class="release-visited-date text-body-secondary" datetime="${visit.toISOString()}">${visit.toLocaleString()}</relative-time>
-          </div>
-          <p class="release-title mb-0">${title}</p>
-          <small class="release-url text-body-secondary text-break">${artistHostname}</small>
-        </div>
-      </div>`);
+    const contentElement = self.createReleaseItemContentElement(
+      item.name,
+      item.artistHostname,
+      undefined,
+      item.visit
+    );
 
     if (contentElement) {
+      const url = item.url;
       self.addItem(url, contentElement, url, false, (event: Event) => {
         // showReleaseCardTab(release);
         event.preventDefault();
@@ -129,30 +110,15 @@ export class ReleasesGroupListElement extends HTMLElement {
 
   addReleaseItem(item: ReleaseItem) {
     const self = this;
-
-    const artist = item.artist;
-    const title = `${item.title}`;
-    const url = item.url;
-    const image = '';
-    const visit = item.visit ?? new Date(0);
-    const artistHostname = item.artistHostname;
-
-    const contentElement = createElementFromHTML(`
-      <div class="d-flex justify-content-between">
-        <div class="flex-shrink-0">
-          <img src="${image}" alt="${title}" class="img-fluid" style="width: 80px; height: 80px;">
-        </div>
-        <div class="flex-grow-1 ms-3">
-          <div class="d-flex w-100 justify-content-between">
-            <h6 class="release-artist mb-1">${artist}</h6>
-            <relative-time class="release-visited-date text-body-secondary" datetime="${visit.toISOString()}">${visit.toLocaleString()}</relative-time>
-          </div>
-          <p class="release-title mb-0">${title}</p>
-          <small class="release-url text-body-secondary text-break">${artistHostname}</small>
-        </div>
-      </div>`);
+    const contentElement = self.createReleaseItemContentElement(
+      item.artist,
+      item.artistHostname,
+      item.title,
+      item.visit
+    );
 
     if (contentElement) {
+      const url = item.url;
       self.addItem(url, contentElement, url, false, (event: Event) => {
         // showReleaseCardTab(release);
         event.preventDefault();
@@ -164,29 +130,16 @@ export class ReleasesGroupListElement extends HTMLElement {
 
   addRelease(release: Release) {
     const self = this;
+    const contentElement = self.createReleaseItemContentElement(
+      release.releaseItem.artist,
+      release.releaseItem.artistHostname,
+      release.releaseItem.title,
+      release.releaseItem.visit,
+      release.image
+    );
 
-    const artist = release.artist;
-    const title = `${release.title} (${release.year})`;
-    const url = release.url;
-    const image = release.image;
-    const visit = release.releaseItem.visit ?? new Date(0);
-    const artistHostname = release.artistHostname;
-
-    const contentElement = createElementFromHTML(`
-<div class="d-flex justify-content-between">
-  <div class="flex-shrink-0">
-    <img src="${image}" alt="${title}" class="img-fluid" style="width: 80px; height: 80px;">
-  </div>
-  <div class="flex-grow-1 ms-3">
-    <div class="d-flex w-100 justify-content-between">
-      <h6 class="release-artist mb-1">${artist}</h6>
-      <relative-time class="release-visited-date text-body-secondary" datetime="${visit.toISOString()}">${visit.toLocaleString()}</relative-time>
-    </div>
-    <p class="release-title mb-0">${title}</p>
-    <small class="release-url text-body-secondary text-break">${artistHostname}</small>
-  </div>
-</div>`);
     if (contentElement) {
+      const url = release.url;
       self.addItem(url, contentElement, url, false, (event: Event) => {
         showReleaseCardTab(release);
         event.preventDefault();
@@ -200,6 +153,47 @@ export class ReleasesGroupListElement extends HTMLElement {
     const self = this;
     releases.forEach((release) => self.addRelease(release));
     return self;
+  }
+
+  private getImagePlaceholder(text?: string): string {
+    const title = 'Image placeholder';
+    return `<svg class="bd-placeholder-img img-fluid" width="80" height="80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${title}" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <title>${title}</title>
+            <rect width="100%" height="100%" fill="#868e96"></rect>
+            <text x="25%" y="50%" fill="#dee2e6" dy=".3em">${text ?? title}</text>
+          </svg>`;
+  }
+
+  private getImage(url?: string, title?: string, placeholder?: string): string {
+    return url
+      ? `<img src="${url}" alt="${title}" class="img-fluid" style="width: 80px; height: 80px;">`
+      : this.getImagePlaceholder(placeholder);
+  }
+
+  private createReleaseItemContentElement(
+    artist: string,
+    artistHostname: string,
+    title?: string,
+    visit?: Date,
+    image?: string
+  ): Element | null {
+    const self = this;
+    const visitDate = visit ?? new Date(0);
+
+    return createElementFromHTML(`
+      <div class="d-flex justify-content-between">
+        <div class="flex-shrink-0">
+          ${self.getImage(image, title, artist)}
+        </div>
+        <div class="flex-grow-1 ms-3">
+          <div class="d-flex w-100 justify-content-between">
+            <h6 class="release-artist mb-1">${artist}</h6>
+            <relative-time class="release-visited-date text-body-secondary" datetime="${visitDate.toISOString()}">${visitDate.toLocaleString()}</relative-time>
+          </div>
+          <p class="release-title mb-0">${title ?? ''}</p>
+          <small class="release-url text-body-secondary text-break">${artistHostname}</small>
+        </div>
+      </div>`);
   }
 }
 

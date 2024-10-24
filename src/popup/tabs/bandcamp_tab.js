@@ -1,4 +1,4 @@
-import { click, getDataAttribute } from '../../utils/html';
+import { click, getDataAttribute, onClick } from '../../utils/html';
 import { log } from '../../utils/console';
 import {
   bandcampReleasesAndArtistsHistorySearch,
@@ -45,4 +45,22 @@ function setupLatestVisitedWidget(btnHistoryTab) {
       );
     });
   }, limit);
+
+  const tabs = document.querySelectorAll('#latestViewed .nav-link');
+
+  if (tabs) {
+    onClick(tabs, (event) => {
+      const tab = event.target;
+      const type = getDataAttribute(tab, 'type', 'all');
+
+      visitedReleasesWidget.showType(type);
+
+      tabs.forEach((tab) => {
+        tab.classList.remove('active');
+      });
+      tab.classList.add('active');
+
+      event.preventDefault();
+    });
+  }
 }

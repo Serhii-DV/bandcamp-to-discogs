@@ -1,5 +1,10 @@
 import { Release } from '../../app/release';
-import { createElementFromHTML } from '../../utils/html';
+import {
+  createElementFromHTML,
+  getDataAttribute,
+  hide,
+  show
+} from '../../utils/html';
 import { showReleaseCardTab } from '../modules/main';
 import { ReleaseItem } from '../../app/releaseItem';
 import { ArtistItem } from '../../app/artistItem';
@@ -28,6 +33,7 @@ export class ReleasesGroupListElement extends HTMLElement {
   }
 
   addItem(
+    type: string,
     url: string,
     content: string | Element,
     title: string = '',
@@ -36,7 +42,12 @@ export class ReleasesGroupListElement extends HTMLElement {
   ): Element | null {
     const self = this;
     const item = createElementFromHTML(
-      `<a href="${url}" class="list-group-item list-group-item-action" title="${title}"${targetBlank ? ' target="_blank"' : ''}></a>`
+      `<a href="${url}"
+        class="list-group-item list-group-item-action"
+        title="${title}"
+        data-type="${type}"
+        ${targetBlank ? ' target="_blank"' : ''}
+      ></a>`
     );
 
     if (self.#groupElement === null || item === null) {
@@ -99,10 +110,17 @@ export class ReleasesGroupListElement extends HTMLElement {
 
     if (contentElement) {
       const url = item.url;
-      self.addItem(url, contentElement, url, false, (event: Event) => {
-        // showReleaseCardTab(release);
-        event.preventDefault();
-      });
+      self.addItem(
+        'artist',
+        url,
+        contentElement,
+        url,
+        false,
+        (event: Event) => {
+          // showReleaseCardTab(release);
+          event.preventDefault();
+        }
+      );
     }
 
     return self;
@@ -119,10 +137,17 @@ export class ReleasesGroupListElement extends HTMLElement {
 
     if (contentElement) {
       const url = item.url;
-      self.addItem(url, contentElement, url, false, (event: Event) => {
-        // showReleaseCardTab(release);
-        event.preventDefault();
-      });
+      self.addItem(
+        'release',
+        url,
+        contentElement,
+        url,
+        false,
+        (event: Event) => {
+          // showReleaseCardTab(release);
+          event.preventDefault();
+        }
+      );
     }
 
     return self;
@@ -140,10 +165,17 @@ export class ReleasesGroupListElement extends HTMLElement {
 
     if (contentElement) {
       const url = release.url;
-      self.addItem(url, contentElement, url, false, (event: Event) => {
-        showReleaseCardTab(release);
-        event.preventDefault();
-      });
+      self.addItem(
+        'release',
+        url,
+        contentElement,
+        url,
+        false,
+        (event: Event) => {
+          showReleaseCardTab(release);
+          event.preventDefault();
+        }
+      );
     }
 
     return self;
@@ -152,6 +184,31 @@ export class ReleasesGroupListElement extends HTMLElement {
   addReleases(releases: Release[]) {
     const self = this;
     releases.forEach((release) => self.addRelease(release));
+    return self;
+  }
+
+  showAll() {
+    const self = this;
+    const items = self.#groupElement?.querySelectorAll(`.list-group-item`);
+
+    if (items) {
+      show(...items);
+    }
+
+    return items;
+  }
+
+  showType(type: string) {
+    const self = this;
+    const items = self.#groupElement?.querySelectorAll(`.list-group-item`);
+    if (!items) return self;
+
+    hide(...items);
+    const filtered = [...items].filter(
+      (item) => getDataAttribute(item, 'type', 'all') === type
+    );
+    show(...filtered);
+
     return self;
   }
 

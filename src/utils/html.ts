@@ -136,6 +136,21 @@ export function click(element: HTMLElement): HTMLElement {
   return element;
 }
 
+export function onClick(
+  elements: HTMLElement | NodeListOf<HTMLElement> | null,
+  callback: (event: MouseEvent) => void
+): void {
+  if (!elements) return;
+
+  if (elements instanceof HTMLElement) {
+    elements.addEventListener('click', (event) =>
+      callback(event as MouseEvent)
+    );
+  } else {
+    elements.forEach((element) => onClick(element, callback));
+  }
+}
+
 /**
  * Sets the value of an HTML input element and triggers an 'input' event if the value has changed.
  */

@@ -3,14 +3,14 @@ import { log } from './console';
 import { isFunction, isString } from './utils';
 
 export function hasDataAttribute(
-  element: HTMLElement,
+  element: Element,
   attributeName: string
 ): boolean {
   return element.hasAttribute(`data-${attributeName}`);
 }
 
 export function setDataAttribute(
-  element: HTMLElement,
+  element: Element,
   attributeName: string | Record<string, string>,
   attributeValue: string = ''
 ): void {
@@ -28,7 +28,7 @@ export function setDataAttribute(
 }
 
 export function getDataAttribute(
-  element: HTMLElement,
+  element: Element,
   attributeName: string,
   defaultValue: string = ''
 ): string {
@@ -40,7 +40,7 @@ export function getDataAttribute(
 }
 
 export function show(
-  ...elements: (HTMLElement | null | (HTMLElement | null)[])[]
+  ...elements: (Element | null | (Element | null)[])[]
 ): void {
   elements.forEach((el) => {
     if (Array.isArray(el)) {
@@ -52,7 +52,7 @@ export function show(
 }
 
 export function hide(
-  ...elements: (HTMLElement | null | (HTMLElement | null)[])[]
+  ...elements: (Element | null | (Element | null)[])[]
 ): void {
   elements.forEach((el) => {
     if (Array.isArray(el)) {
@@ -65,7 +65,7 @@ export function hide(
 
 export function toggleElements(
   condition: boolean | (() => boolean),
-  ...elements: (HTMLElement | null | (HTMLElement | null)[])[]
+  ...elements: (Element | null | (Element | null)[])[]
 ): void {
   const shouldShow = typeof condition === 'function' ? condition() : condition;
 

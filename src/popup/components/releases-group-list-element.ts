@@ -1,4 +1,4 @@
-import { Release } from 'src/app/release';
+import { Release } from '../../app/release';
 import { createElementFromHTML } from '../../utils/html';
 import { showReleaseCardTab } from '../modules/main';
 import { ReleaseItem } from '../../app/releaseItem';
@@ -56,6 +56,18 @@ export class ReleasesGroupListElement extends HTMLElement {
     self.#groupElement.appendChild(item);
 
     return item;
+  }
+
+  add(item: BandcampItem | Release) {
+    const self = this;
+
+    if (item instanceof BandcampItem) {
+      return self.addBandcampItem(item);
+    } else if (item instanceof Release) {
+      return self.addRelease(item);
+    }
+
+    return self;
   }
 
   addBandcampItem(item: BandcampItem) {

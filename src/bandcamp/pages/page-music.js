@@ -21,8 +21,9 @@ import {
 } from '../modules/html.js';
 import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
-import { Band } from '../../app/band';
-import { saveBand } from '../../utils/storage';
+import { storageSaveMusic } from '../../utils/storage';
+import { Music } from '../../app/music';
+import { ArtistItem } from '../../app/artistItem';
 
 // Setup logic for BC music page
 export function setupPageMusic(pageType) {
@@ -32,19 +33,19 @@ export function setupPageMusic(pageType) {
 }
 
 function processBandcampData(messageData) {
-  const band = createBand(messageData.bandData);
-  saveBand(band);
+  const music = createMusic(messageData.bandData);
+  storageSaveMusic(music);
 }
 
-function createBand(bandData) {
-  const band = new Band(
-    bandData.id,
-    bandData.name,
+function createMusic(bandData) {
+  const artist = new ArtistItem(
     bandData.url,
-    getReleaseItems()
+    bandData.name,
+    new Date(),
+    bandData.id
   );
 
-  return band;
+  return new Music(artist, getReleaseItems());
 }
 
 function setupSendMessageToPopup(pageType) {

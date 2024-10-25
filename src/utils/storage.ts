@@ -1,4 +1,3 @@
-import { Band } from 'src/app/band.js';
 import { Release } from '../app/release.js';
 import { log, logError } from './console';
 import {
@@ -10,6 +9,7 @@ import {
   isObject
 } from './utils';
 import { validate as isUUID } from 'uuid';
+import { Music } from 'src/app/music.js';
 
 const storage = chrome.storage.local;
 
@@ -104,14 +104,12 @@ function storageDataToReleaseMap(storageData: StorageData): ReleaseMap {
   return releasesMap;
 }
 
-const BAND_KEY_PREFIX = 'band.';
-const generateBandKey = (bandId: number) => BAND_KEY_PREFIX + bandId;
+export function storageSaveMusic(music: Music): Promise<void> {
+  const key = music.artist.uuid;
+  const data = { [key]: music };
 
-export function saveBand(band: Band): void {
-  const key = generateBandKey(band.id);
-  const data = { [key]: band };
-  storage.set(data).then(() => {
-    log('Band data saved in the local storage', data);
+  return storage.set(data).then(() => {
+    log('Local storage. Music data saved.', data);
   });
 }
 

@@ -104,7 +104,7 @@ export function historyItemToArtistItem(
     ? new Date(historyItem.lastVisitTime)
     : undefined;
 
-  return new ArtistItem(historyItem.url, artist, visit);
+  return new ArtistItem(historyItem.url, artist, undefined, visit);
 }
 
 interface ReleaseDetails {

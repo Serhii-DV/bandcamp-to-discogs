@@ -41,6 +41,7 @@ function createMusic(bandData) {
   const artist = new ArtistItem(
     bandData.url,
     bandData.name,
+    getBandPhotoSrc(),
     new Date(),
     bandData.id
   );

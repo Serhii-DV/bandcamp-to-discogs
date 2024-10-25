@@ -13,7 +13,7 @@ export class ReleaseItem extends BandcampItem {
     label: string = '',
     visit?: Date
   ) {
-    super(url, visit, id);
+    super(url, undefined, visit, id);
     this.artist = artist;
     this.title = title;
     this.label = label;

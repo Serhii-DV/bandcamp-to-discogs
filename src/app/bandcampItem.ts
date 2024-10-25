@@ -9,13 +9,15 @@ import {
 export abstract class BandcampItem {
   public url: string;
   public uuid: string;
+  public image?: string;
   public visit?: Date;
   public id?: number;
 
-  constructor(url: string, visit?: Date, id?: number) {
+  constructor(url: string, image?: string, visit?: Date, id?: number) {
     this.url = removeQueryParams(url);
     this.url = removeBandcampMusicPath(this.url);
     this.uuid = generateKeyForUrl(this.url);
+    this.image = image;
     this.visit = visit;
     this.id = id;
   }

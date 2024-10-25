@@ -53,7 +53,7 @@ function setupLatestVisitedWidget(btnHistoryTab) {
       const tab = event.target;
       const type = getDataAttribute(tab, 'type', 'all');
 
-      visitedReleasesWidget.showType(type);
+      visitedReleasesWidget.show(type);
 
       tabs.forEach((tab) => {
         tab.classList.remove('active');

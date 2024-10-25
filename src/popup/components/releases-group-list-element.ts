@@ -13,6 +13,16 @@ import { BandcampItem } from '../../app/bandcampItem';
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
 
+enum ItemType {
+  All = 'all',
+  Release = 'release',
+  Artist = 'artist'
+}
+
+function isValidItemType(type: string): type is ItemType {
+  return Object.values(ItemType).includes(type as ItemType);
+}
+
 export class ReleasesGroupListElement extends HTMLElement {
   static define(tag = 'releases-group-list', registry = customElements) {
     registry.define(tag, this);
@@ -187,25 +197,19 @@ export class ReleasesGroupListElement extends HTMLElement {
     return self;
   }
 
-  showAll() {
-    const self = this;
-    const items = self.#groupElement?.querySelectorAll(`.list-group-item`);
-
-    if (items) {
-      show(...items);
-    }
-
-    return items;
-  }
-
-  showType(type: string) {
+  show(type: string = ItemType.All) {
     const self = this;
     const items = self.#groupElement?.querySelectorAll(`.list-group-item`);
     if (!items) return self;
+    if (!isValidItemType(type)) {
+      type = ItemType.All;
+    }
 
     hide(...items);
     const filtered = [...items].filter(
-      (item) => getDataAttribute(item, 'type', 'all') === type
+      (item) =>
+        getDataAttribute(item, 'type', ItemType.All) === type ||
+        type === ItemType.All
     );
     show(...filtered);
 

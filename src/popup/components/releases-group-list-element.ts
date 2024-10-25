@@ -9,6 +9,7 @@ import { showReleaseCardTab } from '../modules/main';
 import { ReleaseItem } from '../../app/releaseItem';
 import { ArtistItem } from '../../app/artistItem';
 import { BandcampItem } from '../../app/bandcampItem';
+import { getTextInitials } from '../../utils/string';
 
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
@@ -218,10 +219,17 @@ export class ReleasesGroupListElement extends HTMLElement {
 
   private getImagePlaceholder(text?: string): string {
     const title = 'Image placeholder';
-    return `<svg class="bd-placeholder-img img-fluid" width="80" height="80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${title}" preserveAspectRatio="xMidYMid slice" focusable="false">
+    return `<svg class="bd-placeholder-img img-thumbnail"
+              width="80"
+              height="80"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-label="${title}"
+              preserveAspectRatio="xMidYMid slice"
+              focusable="false">
             <title>${title}</title>
-            <rect width="100%" height="100%" fill="#868e96"></rect>
-            <text x="25%" y="50%" fill="#dee2e6" dy=".3em">${text ?? title}</text>
+            <rect width="100%" height="100%" fill="#111"></rect>
+            <text x="50%" y="50%" fill="#999" dy=".3em">${text ? getTextInitials(text) : '-'}</text>
           </svg>`;
   }
 

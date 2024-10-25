@@ -325,6 +325,7 @@ export function listenForMessage(
     const eventData = event.data as MessageEventData;
 
     if (eventData.type && eventData.type === dataType) {
+      log('Message listener got message', eventData);
       onMessage(eventData);
     }
   });

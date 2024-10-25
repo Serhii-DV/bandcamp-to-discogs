@@ -15,6 +15,7 @@ const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
 
 enum ItemType {
+  Link = 'link',
   All = 'all',
   Release = 'release',
   Artist = 'artist'
@@ -207,11 +208,12 @@ export class ReleasesGroupListElement extends HTMLElement {
     }
 
     hide(...items);
-    const filtered = [...items].filter(
-      (item) =>
-        getDataAttribute(item, 'type', ItemType.All) === type ||
-        type === ItemType.All
-    );
+    const filtered = [...items].filter((item) => {
+      const itemType = getDataAttribute(item, 'type', ItemType.All);
+      return (
+        itemType === type || type === ItemType.All || itemType === ItemType.Link
+      );
+    });
     show(...filtered);
 
     return self;

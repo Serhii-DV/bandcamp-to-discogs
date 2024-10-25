@@ -34,6 +34,7 @@ function setupLatestVisitedWidget(btnHistoryTab) {
       });
 
       visitedReleasesWidget.addItem(
+        'link',
         '#history',
         'Go to history...',
         'Go to history...',

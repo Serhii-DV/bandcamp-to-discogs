@@ -10,6 +10,7 @@ import { ReleaseItem } from '../../app/releaseItem';
 import { ArtistItem } from '../../app/artistItem';
 import { BandcampItem } from '../../app/bandcampItem';
 import { getTextInitials } from '../../utils/string';
+import { Music } from '../../app/music';
 
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
@@ -81,13 +82,15 @@ export class ReleasesGroupListElement extends HTMLElement {
     return item;
   }
 
-  add(item: BandcampItem | Release) {
+  add(item: BandcampItem | Release | Music) {
     const self = this;
 
     if (item instanceof BandcampItem) {
       return self.addBandcampItem(item);
     } else if (item instanceof Release) {
       return self.addRelease(item);
+    } else if (item instanceof Music) {
+      return self.addArtistItem(item.artist);
     }
 
     return self;

@@ -4,8 +4,8 @@ import {
   bandcampReleasesAndArtistsHistorySearch,
   historyItemsToArtistOrReleaseItems
 } from '../../bandcamp/modules/history';
-import { getReleaseMapByUuids } from '../../utils/storage';
 import { Release } from '../../app/release';
+import { Storage } from '../../app/core/storage';
 
 export function setupBandcampTab(btnHistoryTab) {
   log('Setup bandcamp tab');
@@ -14,6 +14,7 @@ export function setupBandcampTab(btnHistoryTab) {
 }
 
 function setupLatestVisitedWidget(btnHistoryTab) {
+  const storage = new Storage();
   const visitedReleasesWidget = document.getElementById('visitedReleases');
   const limit = getDataAttribute(visitedReleasesWidget, 'limit', 50);
 
@@ -21,16 +22,15 @@ function setupLatestVisitedWidget(btnHistoryTab) {
     const items = historyItemsToArtistOrReleaseItems(results);
     const uuids = items.map((item) => item.uuid);
 
-    getReleaseMapByUuids(uuids).then((releasesMap) => {
+    storage.getByUuids(uuids).then((uuidMap) => {
       items.forEach((item) => {
-        const release = releasesMap[item.uuid];
-        if (release instanceof Release) {
-          release.releaseItem = item;
-          visitedReleasesWidget.add(release);
-          return;
+        const uuidItem = uuidMap[item.uuid];
+
+        if (uuidItem instanceof Release) {
+          uuidItem.releaseItem = item;
         }
 
-        visitedReleasesWidget.add(item);
+        visitedReleasesWidget.add(uuidItem ?? item);
       });
 
       visitedReleasesWidget.addItem(

@@ -120,7 +120,8 @@ export class ReleasesGroupListElement extends HTMLElement {
       item.name,
       item.artistHostname,
       undefined,
-      item.visit
+      item.visit,
+      item.image
     );
 
     if (contentElement) {

@@ -104,9 +104,9 @@ function storageDataToReleaseMap(storageData: StorageData): ReleaseMap {
   return releasesMap;
 }
 
-export function storageSaveMusic(music: Music): Promise<void> {
+export async function storageSaveMusic(music: Music): Promise<void> {
   const key = music.artist.uuid;
-  const data = { [key]: music };
+  const data = { [key]: music.toStorageData() };
 
   return storage.set(data).then(() => {
     log('Local storage. Music data saved.', data);

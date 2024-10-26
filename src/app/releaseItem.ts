@@ -1,3 +1,4 @@
+import { IReleaseItem, StorageData } from 'src/types';
 import { BandcampItem } from './bandcampItem';
 
 export class ReleaseItem extends BandcampItem {
@@ -19,22 +20,28 @@ export class ReleaseItem extends BandcampItem {
     this.label = label;
   }
 
-  static fromObject(obj: {
-    url: string;
-    artist: string;
-    title: string;
-    id?: number;
-    itemId?: number;
-    label?: string;
-    visit?: Date;
-  }): ReleaseItem {
+  toStorageData(): StorageData {
+    const self = this;
+    return {
+      url: self.url,
+      uuid: self.uuid,
+      artist: self.artist,
+      title: self.title,
+      label: self.label,
+      image: self.image,
+      visit: self.visit?.toISOString(),
+      id: self.id
+    };
+  }
+
+  static fromObject(obj: IReleaseItem): ReleaseItem {
     return new ReleaseItem(
       obj.url,
       obj.artist,
       obj.title,
-      obj.id || obj.itemId,
+      obj.id,
       obj.label || '',
-      obj.visit
+      obj.visit ? new Date(obj.visit) : undefined
     );
   }
 }

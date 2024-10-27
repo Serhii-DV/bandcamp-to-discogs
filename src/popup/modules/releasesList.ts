@@ -8,10 +8,11 @@ import {
 } from '../../utils/chrome';
 import { isValidDiscogsReleaseEditUrl } from '../../discogs/app/utils';
 import { createIconLink } from '../../utils/html';
-import { getReleaseByUuid } from '../../utils/storage';
-import { showReleaseCardTab } from './main';
+import { showReleaseCardTab, showReleasesTabContent } from './main';
 import { Metadata } from '../../discogs/app/metadata';
 import { ReleaseItem } from '../../app/releaseItem';
+import { BandcampItem } from '../../app/bandcampItem';
+import { Music } from '../../app/music';
 
 export type ArtistOrReleaseItem = ArtistItem | ReleaseItem;
 
@@ -49,11 +50,12 @@ function ArtistOrReleaseItemArrayToReleaseListItems(
 
   items.forEach((item) => {
     const isReleaseItem = item instanceof ReleaseItem;
+    const isBandcampItem = item instanceof BandcampItem;
     const isRelease = false;
     const controls = [];
 
-    if (isReleaseItem) {
-      controls.push(createReleaseViewLink(item));
+    if (isBandcampItem) {
+      controls.push(createItemViewLink(item));
     }
 
     if (isDiscogsEditPage && isRelease) {
@@ -77,29 +79,33 @@ function ArtistOrReleaseItemArrayToReleaseListItems(
   return releasesListItems;
 }
 
-const createReleaseViewLink = (releaseItem: ReleaseItem) =>
+const createItemViewLink = (item: BandcampItem) =>
   createIconLink({
     href: '#view',
     iconDefault: 'card-text',
     className: 'link-view',
-    title: 'View release detailed info',
+    title: 'View information',
     onClick: () => {
-      getReleaseByUuid(releaseItem.uuid).then((release) => {
-        if (release instanceof Release) {
-          showReleaseCardTab(release);
+      storage.getByUuid(item.uuid).then((storageItem) => {
+        if (storageItem instanceof Release) {
+          showReleaseCardTab(storageItem);
+        } else if (storageItem instanceof Music) {
+          showReleasesTabContent(storageItem, undefined);
         } else {
-          openTabsAndClose([releaseItem.url]).then(() => {
+          openTabsAndClose([item.url]).then(() => {
             setTimeout(() => {
-              getReleaseByUuid(releaseItem.uuid).then((release) => {
-                if (release instanceof Release) {
-                  // Show release card
-                  showReleaseCardTab(release);
+              storage.getByUuid(item.uuid).then((storageItem) => {
+                if (storageItem instanceof Release) {
+                  showReleaseCardTab(storageItem);
+                } else if (storageItem instanceof Music) {
+                  showReleasesTabContent(storageItem, undefined);
                 }
               });
             }, 3000);
           });
         }
       });
+
       return true;
     }
   });

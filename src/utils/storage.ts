@@ -30,33 +30,6 @@ export function logStorageData() {
   storage.get(null).then((data) => log('Storage data', data));
 }
 
-export function getAllReleases(): Promise<Release[]> {
-  return storage.get(null).then((storageData: StorageData) => {
-    return storageDataToReleases(storageData);
-  });
-}
-
-export function getReleaseByUuid(uuid: string): Promise<Release | undefined> {
-  return storage.get([uuid]).then((storageData: StorageData) => {
-    const releaseData = storageData[uuid];
-
-    try {
-      return Release.fromStorageObject(releaseData);
-    } catch (error) {
-      log('Broken storage data for release', releaseData);
-      clearStorageByKey(uuid);
-    }
-
-    return undefined;
-  });
-}
-
-export function getReleaseMapByUuids(uuids: string[]): Promise<ReleaseMap> {
-  return storage.get(uuids).then((storageData: StorageData) => {
-    return storageDataToReleaseMap(storageData);
-  });
-}
-
 export function getReleasesByUuids(uuids: string[]): Promise<Release[]> {
   return storage.get(uuids).then((storageData: StorageData) => {
     return storageDataToReleases(storageData);

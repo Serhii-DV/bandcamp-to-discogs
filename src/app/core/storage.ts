@@ -19,6 +19,7 @@ export class Storage {
           return reject(chrome.runtime.lastError);
         }
 
+        log('[Storage] Get by keys', keys);
         resolve(items);
       });
     });
@@ -42,6 +43,12 @@ export class Storage {
 
     return self.get(uuids).then((storageDataMap) => {
       return self.storageDataMapToUuidMap(storageDataMap);
+    });
+  }
+
+  async getByUuid(uuid: Uuid): Promise<Music | Release> {
+    return this.getByUuids([uuid]).then((uuidMap) => {
+      return uuidMap[uuid];
     });
   }
 
@@ -69,11 +76,11 @@ export class Storage {
         try {
           uuidMap[key] = Music.fromObject(obj);
         } catch (error) {
-          log('Broken storage object.', JSON.stringify(error), obj);
+          log('[Storage] Broken storage object.', JSON.stringify(error), obj);
         }
       }
     }
-    log('UUID Map', uuidMap);
+    log('[Storage] UUID Map', uuidMap);
 
     return uuidMap;
   }

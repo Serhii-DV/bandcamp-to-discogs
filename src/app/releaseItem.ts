@@ -24,7 +24,6 @@ export class ReleaseItem extends BandcampItem {
     const self = this;
     return {
       url: self.url,
-      uuid: self.uuid,
       artist: self.artist,
       title: self.title,
       label: self.label,

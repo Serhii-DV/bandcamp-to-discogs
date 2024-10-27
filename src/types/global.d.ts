@@ -1,3 +1,9 @@
+import { Storage } from '../app/core/storage';
+
+declare global {
+  var storage: Storage;
+}
+
 export type Uuid = string;
 export interface UuidMap {
   [key: Uuid]: any;
@@ -25,3 +31,5 @@ interface IMusic {
   artist: IArtistItem;
   albums: IReleaseItem[];
 }
+
+export {};

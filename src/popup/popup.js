@@ -45,7 +45,8 @@ import { PageTypeEnum } from '../bandcamp/app/page-type.js';
 import { isValidBandcampURL } from '../bandcamp/modules/url';
 import { Storage } from '../app/core/storage';
 
-const storage = new Storage();
+globalThis.storage = new Storage();
+const storage = globalThis.storage;
 const btnBandcampTab = document.getElementById('bandcamp-tab');
 const btnReleaseCardTab = getReleaseCardTabElement();
 const btnCsvDataTab = document.getElementById('csvData-tab');

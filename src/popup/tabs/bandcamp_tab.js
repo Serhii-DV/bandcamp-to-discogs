@@ -5,7 +5,6 @@ import {
   historyItemsToArtistOrReleaseItems
 } from '../../bandcamp/modules/history';
 import { Release } from '../../app/release';
-import { Storage } from '../../app/core/storage';
 
 export function setupBandcampTab(btnHistoryTab) {
   log('Setup bandcamp tab');
@@ -14,7 +13,7 @@ export function setupBandcampTab(btnHistoryTab) {
 }
 
 function setupLatestVisitedWidget(btnHistoryTab) {
-  const storage = new Storage();
+  const storage = globalThis.storage;
   const visitedReleasesWidget = document.getElementById('visitedReleases');
   const limit = getDataAttribute(visitedReleasesWidget, 'limit', 50);
 

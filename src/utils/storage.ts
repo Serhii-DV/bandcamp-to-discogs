@@ -9,7 +9,6 @@ import {
   isObject
 } from './utils';
 import { validate as isUUID } from 'uuid';
-import { Music } from 'src/app/music.js';
 
 const storage = chrome.storage.local;
 
@@ -102,15 +101,6 @@ function storageDataToReleaseMap(storageData: StorageData): ReleaseMap {
   }
 
   return releasesMap;
-}
-
-export async function storageSaveMusic(music: Music): Promise<void> {
-  const key = music.artist.uuid;
-  const data = { [key]: music.toStorageData() };
-
-  return storage.set(data).then(() => {
-    log('Local storage. Music data saved.', data);
-  });
 }
 
 /**

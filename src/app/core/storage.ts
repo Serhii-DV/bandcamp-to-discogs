@@ -5,6 +5,8 @@ import { Music } from '../music';
 import { hasOwnProperty, isObject } from '../../utils/utils';
 import { validate as isUUID } from 'uuid';
 
+type StorageObject = Music | Release;
+
 export class Storage {
   private storage: chrome.storage.StorageArea;
 
@@ -46,14 +48,24 @@ export class Storage {
     });
   }
 
-  async getByUuid(uuid: Uuid): Promise<Music | Release> {
+  async getByUuid(uuid: Uuid): Promise<StorageObject | undefined> {
     return this.getByUuids([uuid]).then((uuidMap) => {
       return uuidMap[uuid];
     });
   }
 
-  async setByUuid(uuid: string, data: StorageData): Promise<void> {
+  async setByUuid(uuid: Uuid, data: StorageData): Promise<void> {
     return this.set(uuid, data);
+  }
+
+  async save(obj: StorageObject): Promise<void> {
+    const self = this;
+
+    if (obj instanceof Music) {
+      return self.setByUuid(obj.artist.uuid, obj.toStorageData());
+    }
+
+    return self.setByUuid(obj.uuid, obj.toStorageObject());
   }
 
   private storageDataMapToUuidMap(storageDataMap: StorageDataMap): UuidMap {

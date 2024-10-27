@@ -21,15 +21,17 @@ import {
 } from '../modules/html.js';
 import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
-import { storageSaveMusic } from '../../utils/storage';
 import { Music } from '../../app/music';
 import { ArtistItem } from '../../app/artistItem';
+import { Storage } from '../../app/core/storage';
+
+const storage = new Storage();
 
 // Setup logic for BC music page
 export function setupPageMusic(pageType) {
   listenForMessage('BANDCAMP_DATA', (messageData) => {
     const music = createMusic(messageData.bandData);
-    storageSaveMusic(music);
+    storage.save(music);
     setupSendMessageToPopup(pageType, music);
   });
   setupIsotope();

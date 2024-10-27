@@ -103,16 +103,6 @@ function storageDataToReleaseMap(storageData: StorageData): ReleaseMap {
   return releasesMap;
 }
 
-/**
- * Saves a Release object to local storage.
- */
-export function saveRelease(release: Release): void {
-  storage.set({ [release.uuid]: release.toStorageObject() }).then(() => {
-    log('Release saved in the local storage', release.uuid);
-    addReleaseHistory(release);
-  });
-}
-
 export function addReleaseHistory(release: Release): void {
   const uuid = release.uuid;
   getHistoryByUuid(uuid).then((historyData) => {

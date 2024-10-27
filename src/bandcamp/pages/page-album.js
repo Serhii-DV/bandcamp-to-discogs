@@ -1,15 +1,17 @@
 import { logInfo } from '../../utils/console';
-import { saveRelease } from '../../utils/storage';
 import { getMusicAlbumSchemaData } from '../modules/html.js';
 import { createReleaseFromSchema } from '../../utils/schema';
 import { chromeListenToMessage } from '../../utils/chrome';
+import { Storage } from '../../app/core/storage';
+
+const storage = new Storage();
 
 // Setup logic for BC albums page
 export function setupPageAlbum(pageType) {
   logInfo('Setup page album');
   const schema = getMusicAlbumSchemaData();
   const release = createReleaseFromSchema(schema);
-  saveRelease(release);
+  storage.save(release);
   setupMessageListener(schema, pageType);
 }
 

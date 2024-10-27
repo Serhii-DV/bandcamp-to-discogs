@@ -9,7 +9,7 @@ export interface UuidMap {
   [key: Uuid]: any;
 }
 
-interface IArtistItem {
+export interface IArtistItem {
   name: string;
   url: string;
   uuid: string;
@@ -18,7 +18,7 @@ interface IArtistItem {
   id?: number;
 }
 
-interface IReleaseItem {
+export interface IReleaseItem {
   url: string;
   artist: string;
   title: string;
@@ -27,7 +27,7 @@ interface IReleaseItem {
   id?: number;
 }
 
-interface IMusic {
+export interface IMusic {
   artist: IArtistItem;
   albums: IReleaseItem[];
 }

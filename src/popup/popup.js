@@ -43,8 +43,9 @@ import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
 import { PageTypeEnum } from '../bandcamp/app/page-type.js';
 import { isValidBandcampURL } from '../bandcamp/modules/url';
-import { ReleaseItem } from '../app/releaseItem';
+import { Storage } from '../app/core/storage';
 
+const storage = new Storage();
 const btnBandcampTab = document.getElementById('bandcamp-tab');
 const btnReleaseCardTab = getReleaseCardTabElement();
 const btnCsvDataTab = document.getElementById('csvData-tab');
@@ -90,16 +91,9 @@ function processBandcampResponse(response) {
       });
     });
   } else if (isPageMusic) {
-    const releaseItems = [];
-    response.data.forEach((obj) =>
-      releaseItems.push(ReleaseItem.fromObject(obj))
-    );
-
-    showReleasesTabContent(
-      releaseItems,
-      response.popup.imageSrc,
-      response.popup.search
-    );
+    storage.getByUuid(response.uuid).then((music) => {
+      showReleasesTabContent(music, response.popup.search);
+    });
   }
 }
 
@@ -158,7 +152,7 @@ function initialize(tab) {
   checkStorageSize();
 
   setupReleaseCardTab();
-  setupReleasesTab([]);
+  setupReleasesTab();
 
   if (isValidBandcampURL(currentTabUrl)) {
     proceedBandcampData();

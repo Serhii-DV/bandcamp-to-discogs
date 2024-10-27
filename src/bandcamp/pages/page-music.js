@@ -27,14 +27,12 @@ import { ArtistItem } from '../../app/artistItem';
 
 // Setup logic for BC music page
 export function setupPageMusic(pageType) {
-  listenForMessage('BANDCAMP_DATA', processBandcampData);
-  setupSendMessageToPopup(pageType);
+  listenForMessage('BANDCAMP_DATA', (messageData) => {
+    const music = createMusic(messageData.bandData);
+    storageSaveMusic(music);
+    setupSendMessageToPopup(pageType, music);
+  });
   setupIsotope();
-}
-
-function processBandcampData(messageData) {
-  const music = createMusic(messageData.bandData);
-  storageSaveMusic(music);
 }
 
 function createMusic(bandData) {
@@ -49,14 +47,13 @@ function createMusic(bandData) {
   return new Music(artist, getReleaseItems());
 }
 
-function setupSendMessageToPopup(pageType) {
+function setupSendMessageToPopup(pageType, music) {
   chromeListenToMessage((message, sender, sendResponse) => {
     if (message.type === 'B2D_BC_DATA') {
       sendResponse({
         pageType: pageType.value,
-        data: getReleaseItems(),
+        uuid: music.artist.uuid,
         popup: {
-          imageSrc: getBandPhotoSrc(),
           search: getArtistFilterValue()
         }
       });

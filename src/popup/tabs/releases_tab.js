@@ -11,12 +11,17 @@ import {
 import { downloadReleasesCsv } from './download_tab.js';
 import { log } from '../../utils/console';
 import { getReleasesContentElement } from '../modules/main';
+import { Music } from '../../app/music';
 
-export function setupReleasesTab(releaseItems, bgImageSrc, searchValue) {
-  log('Setup releases card tab', releaseItems, bgImageSrc, searchValue);
+export function setupReleasesTab(music, searchValue) {
+  log('Setup releases card tab', music, searchValue);
 
-  setBackgroundImage(document.querySelector('.bg-image'), bgImageSrc);
+  const isMusic = music instanceof Music;
+  if (isMusic) {
+    setBackgroundImage(document.querySelector('.bg-image'), music.artist.image);
+  }
 
+  const releaseItems = isMusic ? music.albums : [];
   const contentElement = getReleasesContentElement();
   const releasesList = contentElement.querySelector('#releasesTabLIst');
   const isEmptyReleaseItems = isEmptyArray(releaseItems);
@@ -28,43 +33,12 @@ export function setupReleasesTab(releaseItems, bgImageSrc, searchValue) {
     return;
   }
 
-  const downloadCsvFile = async (event) => {
-    const button = event.target;
-    setButtonInLoadingState(button);
+  initDownloadButton(releasesList);
 
-    const selectedUuids = releasesList.getSelectedValues();
-    const bcLinks = releasesList.querySelectorAll(
-      '.release-item.table-active .link-bandcamp-url'
-    );
-    const checkedUrls = Array.from(bcLinks).map((link) =>
-      link.getAttribute('href')
-    );
-
-    // Open selected releases (add to the storage)
-    openTabsAndClose(checkedUrls).then(() => {
-      setTimeout(() => {
-        // Read data from the storage
-        getReleasesByUuids(selectedUuids).then((releases) => {
-          downloadReleasesCsv(releases);
-          removeButtonLoadingState(button);
-        });
-      }, 3000);
-    });
-  };
-
-  const btnNavDownload = createElementFromHTML(`
-<button class="btn btn-primary rounded-0" type="button" title="Download selected releases as Discogs CSV file" disabled>
-    <b2d-icon name="download"></b2d-icon>
-</button>`);
-  btnNavDownload.addEventListener('click', downloadCsvFile);
-
-  releasesList
-    .appendButton(btnNavDownload)
-    .addStateButton(btnNavDownload)
-    .addStatusElement(
-      document.getElementById('selectedStatusInfo'),
-      document.getElementById('viewedStatusInfo')
-    );
+  releasesList.addStatusElement(
+    document.getElementById('selectedStatusInfo'),
+    document.getElementById('viewedStatusInfo')
+  );
 
   populateReleasesList(releasesList, releaseItems);
 
@@ -90,6 +64,49 @@ export function setupReleasesTab(releaseItems, bgImageSrc, searchValue) {
       search: search
     });
   }
+}
+
+function initDownloadButton(releasesListElement) {
+  let btnNavDownload = releasesListElement.querySelector(
+    '#releasesTabLIst__downloadBtn'
+  );
+  console.log('btnNavDownload', btnNavDownload);
+  if (btnNavDownload) return;
+
+  btnNavDownload = createElementFromHTML(`
+    <button id="releasesTabLIst__downloadBtn" class="btn btn-primary rounded-0" type="button" title="Download selected releases as Discogs CSV file" disabled>
+        <b2d-icon name="download"></b2d-icon>
+    </button>`);
+
+  const downloadCsvFile = async (event) => {
+    const button = event.target;
+    setButtonInLoadingState(button);
+
+    const selectedUuids = releasesListElement.getSelectedValues();
+    const bcLinks = releasesListElement.querySelectorAll(
+      '.release-item.table-active .link-bandcamp-url'
+    );
+    const checkedUrls = Array.from(bcLinks).map((link) =>
+      link.getAttribute('href')
+    );
+
+    // Open selected releases (add to the storage)
+    openTabsAndClose(checkedUrls).then(() => {
+      setTimeout(() => {
+        // Read data from the storage
+        getReleasesByUuids(selectedUuids).then((releases) => {
+          downloadReleasesCsv(releases);
+          removeButtonLoadingState(button);
+        });
+      }, 3000);
+    });
+  };
+
+  btnNavDownload.addEventListener('click', downloadCsvFile);
+
+  releasesListElement
+    .appendButton(btnNavDownload)
+    .addStateButton(btnNavDownload);
 }
 
 function getWarningElement(tab) {

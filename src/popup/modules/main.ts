@@ -1,9 +1,9 @@
-import { ReleaseItem } from '../../app/releaseItem';
 import { Release } from '../../app/release';
 import { click } from '../../utils/html';
 import { ReleasesList } from '../components/releases-list';
 import { setupReleaseCardTab } from '../tabs/release-card_tab';
 import { setupReleasesTab } from '../tabs/releases_tab';
+import { Music } from 'src/app/music';
 
 export function showReleaseCardTab(release: Release) {
   const btnReleaseCardTab = getReleaseCardTabElement();
@@ -32,15 +32,14 @@ export function setupReleasesTabElement(): void {
 }
 
 export function showReleasesTabContent(
-  releaseItems: ReleaseItem[],
-  bgImageSrc: string | undefined,
+  music: Music,
   searchValue: string | undefined
 ): void {
   const btnReleasesTab = getReleasesTabElement();
   if (!btnReleasesTab) return;
 
   click(btnReleasesTab);
-  setupReleasesTab(releaseItems, bgImageSrc, searchValue);
+  setupReleasesTab(music, searchValue);
 }
 
 export function getReleaseCardTabElement(): HTMLElement | null {

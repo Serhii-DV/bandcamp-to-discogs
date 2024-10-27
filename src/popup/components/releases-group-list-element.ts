@@ -142,7 +142,7 @@ export class ReleasesGroupListElement extends HTMLElement {
         `Show artist/label information`,
         false,
         (event: Event) => {
-          showReleasesTabContent(item.albums, artist.image, undefined);
+          showReleasesTabContent(item, undefined);
           event.preventDefault();
         }
       );

@@ -51,15 +51,14 @@ function ArtistOrReleaseItemArrayToReleaseListItems(
   items.forEach((item) => {
     const isReleaseItem = item instanceof ReleaseItem;
     const isBandcampItem = item instanceof BandcampItem;
-    const isRelease = false;
     const controls = [];
+
+    if (isDiscogsEditPage && isReleaseItem) {
+      controls.push(createApplyMetadataLink(item));
+    }
 
     if (isBandcampItem) {
       controls.push(createItemViewLink(item));
-    }
-
-    if (isDiscogsEditPage && isRelease) {
-      // controls.push(createApplyMetadataLink(item));
     }
 
     const id = item.uuid;
@@ -110,16 +109,20 @@ const createItemViewLink = (item: BandcampItem) =>
     }
   });
 
-export const createApplyMetadataLink = (release: Release) =>
+export const createApplyMetadataLink = (item: ReleaseItem) =>
   createIconLink({
     title: 'Load release hints into the current Discogs release draft',
     iconDefault: 'file-arrow-down',
     iconOnClick: 'file-arrow-down-fill',
     onClick: () => {
-      const metadata = Metadata.fromRelease(release);
-      chromeSendMessageToCurrentTab({
-        type: 'B2D_METADATA',
-        metadata
+      storage.getByUuid(item.uuid).then((storageItem) => {
+        if (storageItem instanceof Release) {
+          const metadata = Metadata.fromRelease(storageItem);
+          chromeSendMessageToCurrentTab({
+            type: 'B2D_METADATA',
+            metadata
+          });
+        }
       });
 
       return true;

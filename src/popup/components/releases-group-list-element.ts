@@ -5,7 +5,7 @@ import {
   hide,
   show
 } from '../../utils/html';
-import { showReleaseCardTab } from '../modules/main';
+import { showReleaseCardTab, showReleasesTabContent } from '../modules/main';
 import { ReleaseItem } from '../../app/releaseItem';
 import { ArtistItem } from '../../app/artistItem';
 import { BandcampItem } from '../../app/bandcampItem';
@@ -85,32 +85,16 @@ export class ReleasesGroupListElement extends HTMLElement {
   add(item: BandcampItem | Release | Music) {
     const self = this;
 
-    if (item instanceof BandcampItem) {
-      return self.addBandcampItem(item);
-    } else if (item instanceof Release) {
-      return self.addRelease(item);
-    } else if (item instanceof Music) {
-      return self.addArtistItem(item.artist);
-    }
-
-    return self;
-  }
-
-  addBandcampItem(item: BandcampItem) {
-    const self = this;
-
     if (item instanceof ArtistItem) {
       return self.addArtistItem(item);
     } else if (item instanceof ReleaseItem) {
       return self.addReleaseItem(item);
+    } else if (item instanceof Release) {
+      return self.addRelease(item);
+    } else if (item instanceof Music) {
+      return self.addMusic(item);
     }
 
-    return self;
-  }
-
-  addBandcampItems(items: BandcampItem[]) {
-    const self = this;
-    items.forEach((item) => self.addBandcampItem(item));
     return self;
   }
 
@@ -132,6 +116,35 @@ export class ReleasesGroupListElement extends HTMLElement {
         contentElement,
         `Visit artist/label page ${url}`,
         true
+      );
+    }
+
+    return self;
+  }
+
+  addMusic(item: Music) {
+    const self = this;
+    const artist = item.artist;
+    const contentElement = self.createReleaseItemContentElement(
+      artist.name,
+      artist.artistHostname,
+      undefined,
+      artist.visit,
+      artist.image
+    );
+
+    if (contentElement) {
+      const url = artist.url;
+      self.addItem(
+        'artist',
+        url,
+        contentElement,
+        `Show artist/label information`,
+        false,
+        (event: Event) => {
+          showReleasesTabContent(item.albums, artist.image, undefined);
+          event.preventDefault();
+        }
       );
     }
 

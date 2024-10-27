@@ -3,7 +3,6 @@ import { getCurrentTab, openTabsAndClose } from '../../utils/chrome';
 import { createElementFromHTML, input, toggleElements } from '../../utils/html';
 import { getReleasesByUuids } from '../../utils/storage';
 import {
-  populateReleasesList,
   removeButtonLoadingState,
   setBackgroundImage,
   setButtonInLoadingState
@@ -12,6 +11,11 @@ import { downloadReleasesCsv } from './download_tab.js';
 import { log } from '../../utils/console';
 import { getReleasesContentElement } from '../modules/main';
 import { Music } from '../../app/music';
+import { populateReleasesList } from '../modules/releasesList';
+import {
+  bandcampReleasesAndArtistsHistorySearch,
+  historyItemsToArtistOrReleaseItems
+} from '../../bandcamp/modules/history';
 
 export function setupReleasesTab(music, searchValue) {
   log('Setup releases card tab', music, searchValue);
@@ -45,7 +49,10 @@ export function setupReleasesTab(music, searchValue) {
     document.getElementById('viewedStatusInfo')
   );
 
-  populateReleasesList(releasesList, releaseItems);
+  bandcampReleasesAndArtistsHistorySearch((results) => {
+    const releaseItems = historyItemsToArtistOrReleaseItems(results);
+    populateReleasesList(releasesList, releaseItems, false);
+  }, 500);
 
   let activeTab;
   releasesList.searchInput.addEventListener('input', () => {

@@ -1,13 +1,6 @@
 import { Release } from '../app/release.js';
 import { log, logError } from './console';
-import {
-  getArrLastElement,
-  getOwnProperty,
-  hasOwnProperty,
-  isArray,
-  isFunction,
-  isObject
-} from './utils';
+import { hasOwnProperty, isArray, isFunction, isObject } from './utils';
 import { validate as isUUID } from 'uuid';
 
 const storage = chrome.storage.local;
@@ -102,84 +95,6 @@ function storageDataToReleaseMap(storageData: StorageData): ReleaseMap {
 
   return releasesMap;
 }
-
-export function addReleaseHistory(release: Release): void {
-  const uuid = release.uuid;
-  getHistoryByUuid(uuid).then((historyData) => {
-    const history = getOwnProperty(historyData, uuid, []);
-    history.push(new Date());
-    setHistoryByUuid(uuid, history).then(() => {
-      log('New history added to release', uuid);
-    });
-  });
-}
-
-export function getHistoryByUuid(uuid: string): Promise<HistoryData> {
-  const historyKey = generateHistoryKey(uuid);
-  return storage.get([historyKey]).then((result) => {
-    const historyData: HistoryData = {};
-    historyData[uuid] = dateStringsToDateObjects(
-      getOwnProperty(result, historyKey, [])
-    );
-    return historyData;
-  });
-}
-
-function dateStringsToDateObjects(dates: string[]): Date[] {
-  return dates.map((dateString) => new Date(dateString));
-}
-
-function dateObjectsToDateStrings(dates: Date[]): string[] {
-  return dates.map((date) => date.toISOString());
-}
-
-export function setHistoryByUuid(
-  uuid: string,
-  history: History
-): Promise<void> {
-  const key = generateHistoryKey(uuid);
-  return storage.set({ [key]: dateObjectsToDateStrings(history) });
-}
-
-export function getHistoryData(): Promise<HistoryData> {
-  return storage.get(null).then((storageData: StorageData) => {
-    const historyData: HistoryData = {};
-
-    for (const key in storageData) {
-      if (!key.startsWith(HISTORY_KEY_PREFIX)) continue;
-      const uuid = key.slice(HISTORY_KEY_PREFIX.length);
-      if (!isUUID(uuid)) continue;
-      historyData[uuid] = dateStringsToDateObjects(storageData[key]);
-    }
-
-    return historyData;
-  });
-}
-
-export function getLatestHistoryData(
-  limit: number
-): Promise<Array<VisitedDate>> {
-  return getHistoryData().then((historyData) => {
-    const visitedDates: Array<VisitedDate> = [];
-
-    for (const uuid in historyData) {
-      const lastDate = getArrLastElement(getOwnProperty(historyData, uuid, []));
-      if (lastDate) {
-        visitedDates.push({ uuid, date: new Date(lastDate) });
-      }
-    }
-
-    const sortedByDateDesc = visitedDates.sort(
-      (a, b) => b.date.getTime() - a.date.getTime()
-    );
-    const lastTenEntries = sortedByDateDesc.slice(0, limit);
-
-    return lastTenEntries;
-  });
-}
-
-const HISTORY_KEY_PREFIX = 'history.';
-const generateHistoryKey = (uuid: string) => HISTORY_KEY_PREFIX + uuid;
 
 /**
  * Clears all data from local storage.

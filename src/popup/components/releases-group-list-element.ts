@@ -130,12 +130,8 @@ export class ReleasesGroupListElement extends HTMLElement {
         'artist',
         url,
         contentElement,
-        url,
-        false,
-        (event: Event) => {
-          // showReleaseCardTab(release);
-          event.preventDefault();
-        }
+        `Visit artist/label page ${url}`,
+        true
       );
     }
 
@@ -157,12 +153,8 @@ export class ReleasesGroupListElement extends HTMLElement {
         'release',
         url,
         contentElement,
-        url,
-        false,
-        (event: Event) => {
-          // showReleaseCardTab(release);
-          event.preventDefault();
-        }
+        `Visit release page ${url}`,
+        true
       );
     }
 
@@ -185,7 +177,7 @@ export class ReleasesGroupListElement extends HTMLElement {
         'release',
         url,
         contentElement,
-        url,
+        `Open release card`,
         false,
         (event: Event) => {
           showReleaseCardTab(release);

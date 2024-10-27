@@ -25,6 +25,11 @@ export function setupReleasesTab(music, searchValue) {
   const contentElement = getReleasesContentElement();
   const releasesList = contentElement.querySelector('#releasesTabLIst');
   const isEmptyReleaseItems = isEmptyArray(releaseItems);
+  const musicHeadline = contentElement.querySelector('#releasesTabHeadline');
+
+  if (isMusic) {
+    musicHeadline.textContent = music.artist.name;
+  }
 
   toggleElements(isEmptyReleaseItems, getWarningElement(contentElement));
   toggleElements(!isEmptyReleaseItems, releasesList);

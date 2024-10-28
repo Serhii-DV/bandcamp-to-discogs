@@ -1,7 +1,6 @@
 import { isEmptyArray } from '../../utils/utils';
 import { getCurrentTab, openTabsAndClose } from '../../utils/chrome';
 import { createElementFromHTML, input, toggleElements } from '../../utils/html';
-import { getReleasesByUuids } from '../../utils/storage';
 import {
   removeButtonLoadingState,
   setBackgroundImage,
@@ -102,11 +101,13 @@ function initDownloadButton(releasesListElement) {
       link.getAttribute('href')
     );
 
+    const storage = globalThis.storage;
+
     // Open selected releases (add to the storage)
     openTabsAndClose(checkedUrls).then(() => {
       setTimeout(() => {
         // Read data from the storage
-        getReleasesByUuids(selectedUuids).then((releases) => {
+        storage.getByUuids(selectedUuids).then((releases) => {
           downloadReleasesCsv(releases);
           removeButtonLoadingState(button);
         });

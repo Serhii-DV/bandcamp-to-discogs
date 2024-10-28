@@ -21,7 +21,7 @@ function setupLatestVisitedWidget(btnHistoryTab) {
     const items = historyItemsToArtistOrReleaseItems(results);
     const uuids = items.map((item) => item.uuid);
 
-    storage.getByUuids(uuids).then((uuidMap) => {
+    storage.getUuidMap(uuids).then((uuidMap) => {
       items.forEach((item) => {
         const uuidItem = uuidMap[item.uuid];
 

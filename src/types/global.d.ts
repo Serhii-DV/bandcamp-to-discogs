@@ -5,8 +5,9 @@ declare global {
 }
 
 export type Uuid = string;
+export type StorageObject = Music | Release;
 export interface UuidMap {
-  [key: Uuid]: any;
+  [key: Uuid]: StorageObject | undefined;
 }
 
 export interface IArtistItem {

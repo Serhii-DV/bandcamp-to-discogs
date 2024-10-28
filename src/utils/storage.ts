@@ -1,24 +1,14 @@
-import { Release } from '../app/release.js';
 import { log, logError } from './console';
-import { hasOwnProperty, isArray, isFunction, isObject } from './utils';
-import { validate as isUUID } from 'uuid';
+import { isArray, isFunction } from './utils';
 
 const storage = chrome.storage.local;
 
 export type uuid = string;
 
-interface StorageData {
-  [key: string]: any;
-}
-
 export interface History extends Array<Date> {}
 
 export interface HistoryData {
   [key: uuid]: History;
-}
-
-interface ReleaseMap {
-  [key: uuid]: Release;
 }
 
 export interface VisitedDate {
@@ -28,45 +18,6 @@ export interface VisitedDate {
 
 export function logStorageData() {
   storage.get(null).then((data) => log('Storage data', data));
-}
-
-export function getReleasesByUuids(uuids: string[]): Promise<Release[]> {
-  return storage.get(uuids).then((storageData: StorageData) => {
-    return storageDataToReleases(storageData);
-  });
-}
-
-function releaseMapToReleases(releaseMap: ReleaseMap): Release[] {
-  return Object.values(releaseMap);
-}
-
-function storageDataToReleases(storageData: StorageData): Release[] {
-  return releaseMapToReleases(storageDataToReleaseMap(storageData));
-}
-
-function storageDataToReleaseMap(storageData: StorageData): ReleaseMap {
-  const releasesMap: ReleaseMap = {};
-
-  for (const key in storageData) {
-    if (
-      !hasOwnProperty(storageData, key) ||
-      !isObject(storageData[key]) ||
-      !isUUID(key)
-    ) {
-      continue;
-    }
-
-    const obj = storageData[key];
-
-    try {
-      releasesMap[key] = Release.fromStorageObject(obj);
-    } catch (error) {
-      log('Broken release storage object.', JSON.stringify(error), obj);
-      continue;
-    }
-  }
-
-  return releasesMap;
 }
 
 /**

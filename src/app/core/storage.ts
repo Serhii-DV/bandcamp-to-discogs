@@ -1,11 +1,15 @@
-import { StorageData, StorageDataMap, Uuid, UuidMap } from 'src/types';
+import {
+  StorageData,
+  StorageDataMap,
+  StorageObject,
+  Uuid,
+  UuidMap
+} from 'src/types';
 import { log } from '../../utils/console';
 import { Release } from '../release';
 import { Music } from '../music';
 import { hasOwnProperty, isObject } from '../../utils/utils';
 import { validate as isUUID } from 'uuid';
-
-type StorageObject = Music | Release;
 
 export class Storage {
   private storage: chrome.storage.StorageArea;
@@ -40,7 +44,7 @@ export class Storage {
     });
   }
 
-  async getByUuids(uuids: Uuid[]): Promise<UuidMap> {
+  async getUuidMap(uuids: Uuid[]): Promise<UuidMap> {
     const self = this;
 
     return self.get(uuids).then((storageDataMap) => {
@@ -48,8 +52,14 @@ export class Storage {
     });
   }
 
+  async getByUuids(uuids: Uuid[]): Promise<StorageObject[]> {
+    return this.getUuidMap(uuids).then((uuidMap) => {
+      return uuids.map((uuid) => uuidMap[uuid]).filter(Boolean);
+    });
+  }
+
   async getByUuid(uuid: Uuid): Promise<StorageObject | undefined> {
-    return this.getByUuids([uuid]).then((uuidMap) => {
+    return this.getUuidMap([uuid]).then((uuidMap) => {
       return uuidMap[uuid];
     });
   }

@@ -3,11 +3,7 @@ import {
   hasDataAttribute,
   setDataAttribute
 } from '../../utils/html';
-import {
-  clearStorage,
-  clearStorageByKey,
-  getReleasesByUuids
-} from '../../utils/storage';
+import { clearStorage, clearStorageByKey } from '../../utils/storage';
 import {
   removeButtonLoadingState,
   setButtonInLoadingState
@@ -77,9 +73,10 @@ function setupReleasesListComponent(tab, releasesListElement) {
   const downloadCsvFile = (event) => {
     const button = event.target;
     const selectedUuids = releasesListElement.getSelectedValues();
+    const storage = globalThis.storage;
 
     setButtonInLoadingState(button);
-    getReleasesByUuids(selectedUuids).then((releases) => {
+    storage.getByUuids(selectedUuids).then((releases) => {
       downloadReleasesCsv(releases);
       removeButtonLoadingState(button);
     });

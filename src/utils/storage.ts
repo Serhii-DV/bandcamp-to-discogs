@@ -1,38 +1,4 @@
-import { logError } from './console';
-import { isArray, isFunction } from './utils';
-
 const storage = chrome.storage.local;
-
-/**
- * Clears all data from local storage.
- */
-export function clearStorage(): void {
-  storage.clear();
-}
-
-/**
- * Clears storage items by their keys and executes a callback when done.
- */
-export function clearStorageByKey(
-  key: string | string[],
-  onDone?: () => void
-): void {
-  if (isArray(key)) {
-    (key as string[]).forEach((k) => clearStorageByKey(k, onDone));
-    return;
-  }
-
-  storage.remove(key, () => {
-    if (chrome.runtime.lastError) {
-      logError(
-        `Error clearing local storage item with key "${key}": ${chrome.runtime.lastError.message}`
-      );
-    }
-    if (onDone && isFunction(onDone)) {
-      onDone();
-    }
-  });
-}
 
 /**
  * Retrieves the total number of bytes in use by the storage and invokes the callback with this value.

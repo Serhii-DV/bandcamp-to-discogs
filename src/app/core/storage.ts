@@ -44,6 +44,23 @@ export class Storage {
     });
   }
 
+  async clear(): Promise<void> {
+    return this.storage.clear();
+  }
+
+  async remove(key: string | string[]): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.storage.remove(key, () => {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
+
+        log('[Storage] Remove key(s)', key);
+        resolve();
+      });
+    });
+  }
+
   log() {
     this.storage.get(null).then((data) => log('[Storage] Data', data));
   }

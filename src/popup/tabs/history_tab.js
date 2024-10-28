@@ -3,7 +3,6 @@ import {
   hasDataAttribute,
   setDataAttribute
 } from '../../utils/html';
-import { clearStorage, clearStorageByKey } from '../../utils/storage';
 import {
   removeButtonLoadingState,
   setButtonInLoadingState
@@ -69,11 +68,11 @@ function setupReleasesListComponent(tab, releasesListElement) {
 <button id="historyDataClear" type="button" class="btn btn-dark" title="Remove all items from the history" data-bs-toggle="modal" data-bs-target="#historyTabDeleteAllModal">
   <b2d-icon name="database-x"></b2d-icon>
 </button>`);
+  const storage = globalThis.storage;
 
   const downloadCsvFile = (event) => {
     const button = event.target;
     const selectedUuids = releasesListElement.getSelectedValues();
-    const storage = globalThis.storage;
 
     setButtonInLoadingState(button);
     storage.getByUuids(selectedUuids).then((releases) => {
@@ -86,8 +85,8 @@ function setupReleasesListComponent(tab, releasesListElement) {
   releasesListElement.addStateButton(btnDownloadCsv);
 
   btnClearSelected.addEventListener('click', () => {
-    const selectedValues = releasesListElement.getSelectedValues();
-    clearStorageByKey(selectedValues, () => {
+    const selectedUuids = releasesListElement.getSelectedValues();
+    storage.remove(selectedUuids).then(() => {
       updateReleasesListData(releasesListElement);
     });
   });
@@ -95,8 +94,9 @@ function setupReleasesListComponent(tab, releasesListElement) {
   tab
     .querySelector('#historyTabDeleteAllModal_btnYes')
     .addEventListener('click', () => {
-      clearStorage();
-      updateReleasesListData(releasesListElement);
+      storage.clear().then(() => {
+        updateReleasesListData(releasesListElement);
+      });
     });
 
   releasesListElement.appendButton(

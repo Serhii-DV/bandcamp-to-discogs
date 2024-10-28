@@ -16,6 +16,24 @@ import { Music } from '../../app/music';
 
 export type ArtistOrReleaseItem = ArtistItem | ReleaseItem;
 
+export function createUuidMap(
+  items: ArtistOrReleaseItem[]
+): Map<string, ArtistOrReleaseItem> {
+  return new Map(items.map((item) => [item.uuid, item]));
+}
+
+export function updateVisitProperty(
+  releaseItems: ReleaseItem[],
+  uuidMap: Map<string, ArtistOrReleaseItem>
+) {
+  releaseItems.forEach((releaseItem) => {
+    const item = uuidMap.get(releaseItem.uuid);
+    if (item && 'visit' in item) {
+      releaseItem.visit = item.visit;
+    }
+  });
+}
+
 export function populateReleasesList(
   releasesList: ReleasesList,
   items: ArtistOrReleaseItem[],

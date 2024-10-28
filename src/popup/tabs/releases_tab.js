@@ -10,7 +10,11 @@ import { downloadReleasesCsv } from './download_tab.js';
 import { log } from '../../utils/console';
 import { getReleasesContentElement } from '../modules/main';
 import { Music } from '../../app/music';
-import { populateReleasesList } from '../modules/releasesList';
+import {
+  createUuidMap,
+  populateReleasesList,
+  updateVisitProperty
+} from '../modules/releasesList';
 import {
   bandcampReleasesAndArtistsHistorySearch,
   historyItemsToArtistOrReleaseItems
@@ -49,7 +53,8 @@ export function setupReleasesTab(music, searchValue) {
   );
 
   bandcampReleasesAndArtistsHistorySearch((results) => {
-    const releaseItems = historyItemsToArtistOrReleaseItems(results);
+    const historyReleaseItems = historyItemsToArtistOrReleaseItems(results);
+    updateVisitProperty(releaseItems, createUuidMap(historyReleaseItems));
     populateReleasesList(releasesList, releaseItems, false);
   }, 500);
 

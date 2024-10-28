@@ -1,7 +1,4 @@
-import { uuid } from '../../utils/storage';
 import {
-  GetLatestVisitsCallback,
-  HistoryItem,
   historyItemToArtistItem,
   historyItemToReleaseItem,
   historySearch
@@ -13,6 +10,7 @@ import {
 } from './url';
 import { ArtistOrReleaseItem } from 'src/popup/modules/releasesList';
 import { log } from '../../utils/console';
+import { GetLatestVisitsCallback, HistoryItem, Uuid } from '../../types';
 
 export function bandcampReleasesAndArtistsHistorySearch(
   callable: GetLatestVisitsCallback,
@@ -50,7 +48,7 @@ export function historyItemsToArtistOrReleaseItems(
 ): ArtistOrReleaseItem[] {
   const items: ArtistOrReleaseItem[] = [];
   const bandcampHistoryItems = filterBandcampUrls(historyItems);
-  const uuids: uuid[] = [];
+  const uuids: Uuid[] = [];
 
   bandcampHistoryItems.forEach((historyItem) => {
     if (!historyItem.url || isBandcampSiteUrl(historyItem.url)) return;

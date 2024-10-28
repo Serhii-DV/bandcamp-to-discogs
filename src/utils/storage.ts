@@ -3,19 +3,6 @@ import { isArray, isFunction } from './utils';
 
 const storage = chrome.storage.local;
 
-export type uuid = string;
-
-export interface History extends Array<Date> {}
-
-export interface HistoryData {
-  [key: uuid]: History;
-}
-
-export interface VisitedDate {
-  uuid: uuid;
-  date: Date;
-}
-
 export function logStorageData() {
   storage.get(null).then((data) => log('Storage data', data));
 }

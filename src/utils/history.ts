@@ -1,15 +1,13 @@
 import { ReleaseItem } from '../app/releaseItem';
 import { ArtistItem } from '../app/artistItem';
-import { History, uuid } from './storage';
 import { log } from './console';
-
-type GetUrlHistoryCallback = (history: History) => void;
-type GetLatestVisitDateCallback = (latestVisit: Date | null) => void;
-export type HistoryItem = chrome.history.HistoryItem;
-export type GetLatestVisitsCallback = (results: HistoryItem[]) => void;
-export interface VisitDateMap {
-  [key: uuid]: Date;
-}
+import {
+  GetLatestVisitDateCallback,
+  GetLatestVisitsCallback,
+  GetUrlHistoryCallback,
+  History,
+  HistoryItem
+} from '../types';
 
 export function getUrlHistory(
   url: string,

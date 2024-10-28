@@ -1,11 +1,7 @@
-import { log, logError } from './console';
+import { logError } from './console';
 import { isArray, isFunction } from './utils';
 
 const storage = chrome.storage.local;
-
-export function logStorageData() {
-  storage.get(null).then((data) => log('Storage data', data));
-}
 
 /**
  * Clears all data from local storage.

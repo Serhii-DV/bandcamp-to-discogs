@@ -44,6 +44,10 @@ export class Storage {
     });
   }
 
+  log() {
+    this.storage.get(null).then((data) => log('[Storage] Data', data));
+  }
+
   async getUuidMap(uuids: Uuid[]): Promise<UuidMap> {
     const self = this;
 

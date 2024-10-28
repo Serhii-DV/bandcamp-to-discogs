@@ -26,7 +26,6 @@ import {
 } from './tabs/history_tab.js';
 import { disable, enable, click } from '../utils/html';
 import { setupCsvDataTab } from './tabs/csv_data_tab.js';
-import { getStorageSize } from '../utils/storage';
 import { bytesToSize } from '../utils/utils';
 import { setupConsole, setupConsoleRelease } from './console.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
@@ -174,9 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function checkStorageSize() {
-  logInfo('Check storage size');
-
-  getStorageSize((size) => {
+  storage.getSize().then((size) => {
     document.querySelectorAll('.storage-size').forEach((el) => {
       el.textContent = bytesToSize(size);
       el.setAttribute('title', `Storage size (${size} bytes)`);

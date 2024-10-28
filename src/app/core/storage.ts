@@ -61,6 +61,39 @@ export class Storage {
     });
   }
 
+  async getSize(): Promise<number> {
+    const storage = this.storage;
+
+    return new Promise((resolve, reject) => {
+      if (typeof storage.getBytesInUse === 'function') {
+        // Chrome supports getBytesInUse
+        storage.getBytesInUse(null, (bytesInUse) => {
+          if (chrome.runtime.lastError) {
+            return reject(chrome.runtime.lastError);
+          }
+
+          log('[Storage] Size', bytesInUse);
+          resolve(bytesInUse);
+        });
+      } else {
+        // Fallback for Firefox
+        storage.get(null, (items) => {
+          const bytesInUse = Object.values(items).reduce((total, item) => {
+            return (
+              total +
+              (typeof item === 'string'
+                ? item.length
+                : JSON.stringify(item).length)
+            );
+          }, 0);
+
+          log('[Storage] Size', bytesInUse);
+          resolve(bytesInUse);
+        });
+      }
+    });
+  }
+
   log() {
     this.storage.get(null).then((data) => log('[Storage] Data', data));
   }

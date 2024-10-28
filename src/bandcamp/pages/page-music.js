@@ -23,9 +23,8 @@ import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Music } from '../../app/music';
 import { ArtistItem } from '../../app/artistItem';
-import { Storage } from '../../app/core/storage';
 
-const storage = new Storage();
+const storage = globalThis.storage;
 
 // Setup logic for BC music page
 export function setupPageMusic(pageType) {

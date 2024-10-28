@@ -2,9 +2,8 @@ import { logInfo } from '../../utils/console';
 import { getMusicAlbumSchemaData } from '../modules/html.js';
 import { createReleaseFromSchema } from '../../utils/schema';
 import { chromeListenToMessage } from '../../utils/chrome';
-import { Storage } from '../../app/core/storage';
 
-const storage = new Storage();
+const storage = globalThis.storage;
 
 // Setup logic for BC albums page
 export function setupPageAlbum(pageType) {

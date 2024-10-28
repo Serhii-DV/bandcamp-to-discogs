@@ -31,7 +31,6 @@ import { bytesToSize } from '../utils/utils';
 import { setupConsole, setupConsoleRelease } from './console.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
-import { createReleaseFromSchema } from '../utils/schema';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
 import {
   getReleaseCardTabElement,
@@ -88,7 +87,14 @@ function processBandcampResponse(response) {
   if (isPageAlbum) {
     loadDiscogsGenres(config.genres_url).then(() => {
       loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
-        processBandcampPageAlbumResponse(response, keywordsMapping);
+        storage.getByUuid(response.uuid).then((release) => {
+          setupConsoleRelease(release, keywordsMapping, response.schema);
+          processBandcampPageAlbumResponse(
+            release,
+            response.schema,
+            keywordsMapping
+          );
+        });
       });
     });
   } else if (isPageMusic) {
@@ -98,11 +104,8 @@ function processBandcampResponse(response) {
   }
 }
 
-function processBandcampPageAlbumResponse(response, keywordsMapping) {
+function processBandcampPageAlbumResponse(release) {
   try {
-    const schema = response.schema;
-    const release = createReleaseFromSchema(schema);
-    setupConsoleRelease(release, keywordsMapping, schema);
     showReleaseCardTab(release);
     setupCsvDataTab(release, btnCsvDataTab);
   } catch (error) {

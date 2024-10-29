@@ -86,7 +86,7 @@ function initDownloadButton(releasesListElement) {
   let btnNavDownload = releasesListElement.querySelector(
     '#releasesTabLIst__downloadBtn'
   );
-  console.log('btnNavDownload', btnNavDownload);
+
   if (btnNavDownload) return;
 
   btnNavDownload = createElementFromHTML(`

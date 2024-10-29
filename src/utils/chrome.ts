@@ -74,13 +74,31 @@ interface B2DTabMessage {
 
 type ResponseCallback = (response: any) => void;
 
+export function chromeSendMessageToTab(
+  message: B2DTabMessage,
+  tab: chrome.tabs.Tab | undefined
+): Promise<void> {
+  logInfo('Send message to tab', { message, tab });
+  return new Promise((resolve, reject) => {
+    if (!tab?.id) {
+      reject('Tab is missing');
+      return;
+    }
+
+    chrome.tabs.sendMessage(tab.id, message, (response) => {
+      logInfo('Received message from the tab', { message, response });
+      resolve();
+    });
+  });
+}
+
 export function chromeSendMessageToCurrentTab(
   message: B2DTabMessage,
   onValidResponseCallback?: ResponseCallback,
   onInvalidResponseCallback?: ResponseCallback,
   responseCallback?: ResponseCallback
 ): void {
-  logInfo('Send message to current tab', message.type, message);
+  logInfo('Send message to current tab', message);
   getCurrentTab().then((tab: chrome.tabs.Tab | undefined) => {
     if (!tab?.id) return;
 

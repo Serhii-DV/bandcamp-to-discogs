@@ -1,5 +1,9 @@
 import { isEmptyArray } from '../../utils/utils';
-import { getCurrentTab, openTabsAndClose } from '../../utils/chrome';
+import {
+  chromeSendMessageToTab,
+  getCurrentTab,
+  openTabsAndClose
+} from '../../utils/chrome';
 import { createElementFromHTML, input, toggleElements } from '../../utils/html';
 import {
   removeButtonLoadingState,
@@ -19,6 +23,7 @@ import {
   bandcampReleasesAndArtistsHistorySearch,
   historyItemsToArtistOrReleaseItems
 } from '../../bandcamp/modules/history';
+import { isBandcampArtistUrl } from '../../bandcamp/modules/url';
 
 export function setupReleasesTab(music, searchValue) {
   log('Setup releases card tab', music, searchValue);
@@ -58,28 +63,25 @@ export function setupReleasesTab(music, searchValue) {
     populateReleasesList(releasesList, releaseItems, false);
   }, 500);
 
-  let activeTab;
-  releasesList.searchInput.addEventListener('input', () => {
-    const selectedValue = releasesList.searchInput.value;
+  setupSearchInput(releasesList.searchInput, searchValue);
+}
 
-    if (!activeTab) {
-      getCurrentTab().then((tab) => {
-        activeTab = tab;
-        sendSearchMessageToTab(activeTab, selectedValue);
-      });
-    } else {
-      sendSearchMessageToTab(activeTab, selectedValue);
-    }
+function setupSearchInput(searchInput, searchValue) {
+  getCurrentTab().then((tab) => {
+    if (!tab || !isBandcampArtistUrl(tab.url)) return;
+
+    searchInput.addEventListener('input', () => {
+      chromeSendMessageToTab(
+        {
+          type: 'releases-list-search',
+          search: searchInput.value
+        },
+        tab
+      );
+    });
   });
 
-  input(releasesList.searchInput, searchValue);
-
-  function sendSearchMessageToTab(tab, search) {
-    chrome.tabs.sendMessage(tab.id, {
-      type: 'releases-list-search',
-      search: search
-    });
-  }
+  input(searchInput, searchValue);
 }
 
 function initDownloadButton(releasesListElement) {

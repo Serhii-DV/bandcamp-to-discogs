@@ -1,22 +1,11 @@
-import { Release } from '../app/release.js';
-import { Metadata } from '../discogs/app/metadata.js';
 import {
-  chromeSendMessageToCurrentTab,
-  getCurrentTabUrl,
-  openTabsAndClose
-} from '../utils/chrome';
-import {
-  createIconLink,
   disable,
   enable,
   getDataAttribute,
   hasDataAttribute,
   setDataAttribute
 } from '../utils/html';
-import { getOwnProperty, isArray, isObject, isString } from '../utils/utils';
-import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
-import { getHistoryData, getReleaseByUuid } from '../utils/storage';
-import { showReleaseCardTab } from './modules/main';
+import { isArray, isObject, isString } from '../utils/utils';
 
 /**
  * Converts a JavaScript object to an HTML element representing a table.
@@ -61,114 +50,6 @@ export function objectToHtmlElement(data) {
   }
 
   return table;
-}
-
-/**
- * @param {ReleaseItem} releaseItem
- * @returns {HTMLAnchorElement}
- */
-const createViewLink = (releaseItem) =>
-  createIconLink({
-    href: '#view',
-    iconDefault: 'card-text',
-    className: 'link-view',
-    title: 'View release detailed info',
-    onClick: () => {
-      getReleaseByUuid(releaseItem.uuid).then((release) => {
-        if (release instanceof Release) {
-          showReleaseCardTab(release);
-        } else {
-          openTabsAndClose([releaseItem.url]).then(() => {
-            setTimeout(() => {
-              getReleaseByUuid(releaseItem.uuid).then((release) => {
-                // Show release card
-                showReleaseCardTab(release);
-              });
-            }, 3000);
-          });
-        }
-      });
-      return true;
-    }
-  });
-
-/**
- * @param {Release} release
- * @returns {HTMLAnchorElement}
- */
-const createApplyMetadataLink = (release) =>
-  createIconLink({
-    title: 'Load release hints into the current Discogs release draft',
-    iconDefault: 'file-arrow-down',
-    iconOnClick: 'file-arrow-down-fill',
-    onClick: () => {
-      const metadata = Metadata.fromRelease(release);
-      chromeSendMessageToCurrentTab({
-        type: 'B2D_METADATA',
-        metadata
-      });
-
-      return true;
-    }
-  });
-
-/**
- * @param {string} currentTabUrl
- * @param {Array<ReleaseItem>|Array<Release>} releases
- * @param {import('../utils/storage').HistoryData}
- * @return {Array}
- */
-function transformReleaseItemsToReleaseListData(
-  currentTabUrl,
-  releases,
-  historyData
-) {
-  const data = [];
-  const isDiscogsEditPage = isValidDiscogsReleaseEditUrl(currentTabUrl);
-
-  releases.forEach((item) => {
-    const isRelease = item instanceof Release;
-    const releaseItem = isRelease ? item.releaseItem : item;
-    const history = getOwnProperty(historyData, releaseItem.uuid, []);
-    const controls = [createViewLink(releaseItem)];
-
-    if (isDiscogsEditPage && isRelease) {
-      controls.push(createApplyMetadataLink(item));
-    }
-
-    data.push({
-      releaseItem,
-      history,
-      controls
-    });
-  });
-
-  return data;
-}
-
-/**
- * @param {ReleasesList} releasesList
- * @param {Array<ReleaseItem>|Array<Release>} releases
- * @param {boolean} sortByLatestDateVisited
- */
-export function populateReleasesList(
-  releasesList,
-  releases,
-  sortByLatestDateVisited
-) {
-  getCurrentTabUrl().then((url) => {
-    if (!url) return;
-
-    getHistoryData().then((historyData) => {
-      releasesList.populateData(
-        transformReleaseItemsToReleaseListData(url, releases, historyData)
-      );
-
-      if (sortByLatestDateVisited) {
-        releasesList.sortByLatestDateVisited();
-      }
-    });
-  });
 }
 
 export function setBackgroundImage(element, imageUrl) {

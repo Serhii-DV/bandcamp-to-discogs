@@ -13,5 +13,38 @@
     </div>
   </form>
 </div>
-<h6>Latest viewed releases</h6>
-<releases-group-list id="visitedReleases" limit="10"></releases-group-list>
+<ul id="latestViewed" class="nav nav-underline m-2" role="tablist">
+  <!-- Tab: All -->
+  <li class="nav-item">
+    <a
+      class="nav-link active"
+      id="bandcamp-viewed-all-tab"
+      aria-current="page"
+      href="#"
+      data-type="all"
+      >All</a
+    >
+  </li>
+  <!-- Tab: Artists/Labels -->
+  <li class="nav-item">
+    <a
+      class="nav-link"
+      id="bandcamp-viewed-artists-tab"
+      href="#"
+      data-type="artist"
+      >Artists/Labels</a
+    >
+  </li>
+  <!-- Tab: Releases -->
+  <li class="nav-item">
+    <a
+      class="nav-link"
+      id="bandcamp-viewed-releases-tab"
+      href="#"
+      data-type="release"
+      >Releases</a
+    >
+  </li>
+</ul>
+
+<releases-group-list id="visitedReleases" limit="50"></releases-group-list>

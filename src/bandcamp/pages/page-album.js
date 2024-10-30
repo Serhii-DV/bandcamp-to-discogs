@@ -1,25 +1,23 @@
 import { logInfo } from '../../utils/console';
-import { saveRelease } from '../../utils/storage';
 import { getMusicAlbumSchemaData } from '../modules/html.js';
 import { createReleaseFromSchema } from '../../utils/schema';
+import { chromeListenToMessage } from '../../utils/chrome';
+import { Storage } from '../../app/core/storage';
+
+const storage = new Storage();
 
 // Setup logic for BC albums page
-export function setupPageAlbum() {
+export function setupPageAlbum(pageType) {
   logInfo('Setup page album');
   const schema = getMusicAlbumSchemaData();
   const release = createReleaseFromSchema(schema);
-  saveRelease(release);
-  setupMessageListener(schema);
-}
+  storage.save(release);
 
-/**
- * @param {Object} schema
- */
-function setupMessageListener(schema) {
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === 'B2D_BC_DATA') {
+  chromeListenToMessage((message, sender, sendResponse) => {
+    if (message.type === 'B2D_BC_DATA') {
       sendResponse({
-        type: 'TYPE_PAGE_ALBUM',
+        pageType: pageType.value,
+        uuid: release.uuid,
         schema
       });
     }

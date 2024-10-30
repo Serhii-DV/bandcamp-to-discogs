@@ -260,8 +260,54 @@ export class ReleasesList extends HTMLElement {
     }
   }
 
+  populate(items) {
+    const self = this;
+    const tableBody = self.querySelector('tbody');
+    tableBody.innerHTML = ''; // Clear existing data
+
+    items.forEach((item, index) => {
+      const id = item.id;
+      const title = item.title;
+      const visit = item.visit ?? new Date(0);
+
+      const row = document.createElement('tr');
+      const checkboxId = self.getPrefixed('checkbox_' + index);
+      row.classList.add('release-item');
+
+      setDataAttribute(row, 'sort', index);
+      setDataAttribute(row, { title });
+      setDataAttribute(row, 'visited', visit.toLocaleString());
+
+      const historyDateHtml = item.visit
+        ? `<relative-time class="history-date text-body-secondary" datetime="${visit.toISOString()}">${visit.toLocaleString()}</relative-time>`
+        : '';
+
+      row.innerHTML = `
+        <td><input type="checkbox" value="${id}" id="${checkboxId}" class="release-checkbox"></td>
+        <td>
+          <label for="${checkboxId}">${title}</label>
+          ${historyDateHtml}
+          <span class="controls"></span>
+        </td>
+      `;
+
+      const controlsEl = row.querySelector('span.controls');
+      item.controls.forEach((control) => {
+        if (control instanceof HTMLElement) {
+          controlsEl.appendChild(control);
+        }
+      });
+
+      tableBody.appendChild(row);
+    });
+
+    self.refreshStatus().refreshSearchStatus();
+
+    return self;
+  }
+
   /**
-   * @param {Array<ReleaseItem>} data
+   * @param {Array<ReleaseItem|ArtistItem>} data
    * @returns {Self}
    */
   populateData(data) {

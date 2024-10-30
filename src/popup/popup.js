@@ -26,13 +26,10 @@ import {
 } from './tabs/history_tab.js';
 import { disable, enable, click } from '../utils/html';
 import { setupCsvDataTab } from './tabs/csv_data_tab.js';
-import { getStorageSize } from '../utils/storage';
 import { bytesToSize } from '../utils/utils';
 import { setupConsole, setupConsoleRelease } from './console.js';
-import { isValidBandcampURL } from '../bandcamp/modules/html.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
-import { createReleaseFromSchema } from '../utils/schema';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
 import {
   getReleaseCardTabElement,
@@ -42,7 +39,13 @@ import {
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
+import { PageTypeEnum } from '../bandcamp/app/page-type.js';
+import { isValidBandcampURL } from '../bandcamp/modules/url';
+import { Storage } from '../app/core/storage';
+import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 
+globalThis.storage = new Storage();
+const storage = globalThis.storage;
 const btnBandcampTab = document.getElementById('bandcamp-tab');
 const btnReleaseCardTab = getReleaseCardTabElement();
 const btnCsvDataTab = document.getElementById('csvData-tab');
@@ -73,8 +76,8 @@ function showBandcampTab() {
 }
 
 function processBandcampResponse(response) {
-  const isPageAlbum = response.type === 'TYPE_PAGE_ALBUM';
-  const isPageMusic = response.type === 'TYPE_PAGE_MUSIC';
+  const isPageAlbum = response.pageType === PageTypeEnum.ALBUM;
+  const isPageMusic = response.pageType === PageTypeEnum.MUSIC;
 
   if (!isPageAlbum && !isPageMusic) {
     // todo: Show error?
@@ -84,23 +87,25 @@ function processBandcampResponse(response) {
   if (isPageAlbum) {
     loadDiscogsGenres(config.genres_url).then(() => {
       loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
-        processBandcampPageAlbumResponse(response, keywordsMapping);
+        storage.getByUuid(response.uuid).then((release) => {
+          setupConsoleRelease(release, keywordsMapping, response.schema);
+          processBandcampPageAlbumResponse(
+            release,
+            response.schema,
+            keywordsMapping
+          );
+        });
       });
     });
   } else if (isPageMusic) {
-    showReleasesTabContent(
-      response.data,
-      response.popup.imageSrc,
-      response.popup.search
-    );
+    storage.getByUuid(response.uuid).then((music) => {
+      showReleasesTabContent(music, response.popup.search);
+    });
   }
 }
 
-function processBandcampPageAlbumResponse(response, keywordsMapping) {
+function processBandcampPageAlbumResponse(release) {
   try {
-    const schema = response.schema;
-    const release = createReleaseFromSchema(schema);
-    setupConsoleRelease(release, keywordsMapping, schema);
     showReleaseCardTab(release);
     setupCsvDataTab(release, btnCsvDataTab);
   } catch (error) {
@@ -151,7 +156,7 @@ function initialize(tab) {
   checkStorageSize();
 
   setupReleaseCardTab();
-  setupReleasesTab([]);
+  setupReleasesTab();
 
   if (isValidBandcampURL(currentTabUrl)) {
     proceedBandcampData();
@@ -160,6 +165,9 @@ function initialize(tab) {
   } else {
     showBandcampTab();
   }
+
+  // TODO: Remove this logic in the release 0.19.0
+  removeNonUuidRecordsFromStorage();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -169,9 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function checkStorageSize() {
-  logInfo('Check storage size');
-
-  getStorageSize((size) => {
+  storage.getSize().then((size) => {
     document.querySelectorAll('.storage-size').forEach((el) => {
       el.textContent = bytesToSize(size);
       el.setAttribute('title', `Storage size (${size} bytes)`);

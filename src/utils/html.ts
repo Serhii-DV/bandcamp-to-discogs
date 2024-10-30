@@ -3,14 +3,14 @@ import { log } from './console';
 import { isFunction, isString } from './utils';
 
 export function hasDataAttribute(
-  element: HTMLElement,
+  element: Element,
   attributeName: string
 ): boolean {
   return element.hasAttribute(`data-${attributeName}`);
 }
 
 export function setDataAttribute(
-  element: HTMLElement,
+  element: Element,
   attributeName: string | Record<string, string>,
   attributeValue: string = ''
 ): void {
@@ -28,7 +28,7 @@ export function setDataAttribute(
 }
 
 export function getDataAttribute(
-  element: HTMLElement,
+  element: Element,
   attributeName: string,
   defaultValue: string = ''
 ): string {
@@ -40,7 +40,7 @@ export function getDataAttribute(
 }
 
 export function show(
-  ...elements: (HTMLElement | null | (HTMLElement | null)[])[]
+  ...elements: (Element | null | (Element | null)[])[]
 ): void {
   elements.forEach((el) => {
     if (Array.isArray(el)) {
@@ -52,7 +52,7 @@ export function show(
 }
 
 export function hide(
-  ...elements: (HTMLElement | null | (HTMLElement | null)[])[]
+  ...elements: (Element | null | (Element | null)[])[]
 ): void {
   elements.forEach((el) => {
     if (Array.isArray(el)) {
@@ -65,7 +65,7 @@ export function hide(
 
 export function toggleElements(
   condition: boolean | (() => boolean),
-  ...elements: (HTMLElement | null | (HTMLElement | null)[])[]
+  ...elements: (Element | null | (Element | null)[])[]
 ): void {
   const shouldShow = typeof condition === 'function' ? condition() : condition;
 
@@ -134,6 +134,21 @@ export function click(element: HTMLElement): HTMLElement {
   });
   element.dispatchEvent(event);
   return element;
+}
+
+export function onClick(
+  elements: HTMLElement | NodeListOf<HTMLElement> | null,
+  callback: (event: MouseEvent) => void
+): void {
+  if (!elements) return;
+
+  if (elements instanceof HTMLElement) {
+    elements.addEventListener('click', (event) =>
+      callback(event as MouseEvent)
+    );
+  } else {
+    elements.forEach((element) => onClick(element, callback));
+  }
 }
 
 /**
@@ -293,6 +308,27 @@ export function injectJSFile(
   scriptElement.src = url;
   scriptElement.onload = callback;
   (document.head || document.documentElement).appendChild(scriptElement);
+}
+
+type MessageEventData = {
+  type: string;
+  [key: string]: any;
+};
+
+export function listenForMessage(
+  dataType: string,
+  onMessage: (data: any) => void
+): void {
+  window.addEventListener('message', (event: MessageEvent) => {
+    if (event.source !== window) return;
+
+    const eventData = event.data as MessageEventData;
+
+    if (eventData.type && eventData.type === dataType) {
+      log('Message listener got message', eventData);
+      onMessage(eventData);
+    }
+  });
 }
 
 interface CreateIconLinkParams {

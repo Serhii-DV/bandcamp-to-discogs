@@ -1,4 +1,4 @@
-const PageTypeEnum = {
+export const PageTypeEnum = Object.freeze({
   ALBUM: 'album',
   ARTISTS: 'artists',
   COMMUNITY: 'community',
@@ -7,7 +7,7 @@ const PageTypeEnum = {
   TRACK: 'track',
   VIDEO: 'video',
   UNKNOWN: 'unknown'
-};
+});
 
 export class PageType {
   constructor(value) {

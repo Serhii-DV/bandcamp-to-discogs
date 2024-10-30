@@ -4,13 +4,6 @@ import {
   setDataAttribute
 } from '../../utils/html';
 import {
-  clearStorage,
-  clearStorageByKey,
-  getAllReleases,
-  getReleasesByUuids
-} from '../../utils/storage';
-import {
-  populateReleasesList,
   removeButtonLoadingState,
   setButtonInLoadingState
 } from '../helpers.js';
@@ -18,45 +11,51 @@ import config from '../../config.js';
 import { loadDiscogsGenres } from '../../discogs/modules/genres.js';
 import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 import { downloadReleasesCsv } from './download_tab.js';
+import {
+  bandcampReleasesAndArtistsHistorySearch,
+  historyItemsToArtistOrReleaseItems
+} from '../../bandcamp/modules/history';
+import { populateReleasesList } from '../modules/releasesList';
 
 export function setupHistoryTab(tab) {
-  const releasesListComponent = getReleasesList();
+  const releasesListElement = getReleasesListElement();
 
   if (!hasDataAttribute(tab, 'buttons-initialized')) {
-    setupReleasesListComponent(tab, releasesListComponent);
+    setupReleasesListComponent(tab, releasesListElement);
     setDataAttribute(tab, 'buttons-initialized');
   }
 
   loadDiscogsGenres(config.genres_url).then(() => {
     loadKeywordMapping(config.keyword_mapping_url).then(() => {
-      updateReleasesListData(releasesListComponent);
+      updateReleasesListData(releasesListElement);
     });
   });
 }
 
 export function setHistoryTabSearchValue(searchValue) {
-  const releasesList = getReleasesList();
-  releasesList.setSearchValue(searchValue);
+  const releasesListElement = getReleasesListElement();
+  releasesListElement.setSearchValue(searchValue);
 }
 
 /**
  * @returns {ReleasesList}
  */
-function getReleasesList() {
+function getReleasesListElement() {
   return document.getElementById('historyReleasesList');
 }
 
-function updateReleasesListData(releasesList) {
-  getAllReleases().then((releases) => {
-    populateReleasesList(releasesList, releases, true);
-  });
+function updateReleasesListData(releasesListElement) {
+  bandcampReleasesAndArtistsHistorySearch((results) => {
+    const releaseItems = historyItemsToArtistOrReleaseItems(results);
+    populateReleasesList(releasesListElement, releaseItems, true);
+  }, 500);
 }
 
 /**
  * @param {Element} tab
- * @param {ReleasesList} releasesListComponent
+ * @param {ReleasesList} releasesListElement
  */
-function setupReleasesListComponent(tab, releasesListComponent) {
+function setupReleasesListComponent(tab, releasesListElement) {
   const btnDownloadCsv = createElementFromHTML(`
 <button id="downloadHistory" class="btn btn-primary rounded-0" type="button" title="Download selected releases from the history as Discogs CSV file" disabled>
   <b2d-icon name="download"></b2d-icon>
@@ -69,41 +68,43 @@ function setupReleasesListComponent(tab, releasesListComponent) {
 <button id="historyDataClear" type="button" class="btn btn-dark" title="Remove all items from the history" data-bs-toggle="modal" data-bs-target="#historyTabDeleteAllModal">
   <b2d-icon name="database-x"></b2d-icon>
 </button>`);
+  const storage = globalThis.storage;
 
   const downloadCsvFile = (event) => {
     const button = event.target;
-    const selectedUuids = releasesListComponent.getSelectedValues();
+    const selectedUuids = releasesListElement.getSelectedValues();
 
     setButtonInLoadingState(button);
-    getReleasesByUuids(selectedUuids).then((releases) => {
+    storage.getByUuids(selectedUuids).then((releases) => {
       downloadReleasesCsv(releases);
       removeButtonLoadingState(button);
     });
   };
 
   btnDownloadCsv.addEventListener('click', downloadCsvFile);
-  releasesListComponent.addStateButton(btnDownloadCsv);
+  releasesListElement.addStateButton(btnDownloadCsv);
 
   btnClearSelected.addEventListener('click', () => {
-    const selectedValues = releasesListComponent.getSelectedValues();
-    clearStorageByKey(selectedValues, () => {
-      updateReleasesListData(releasesListComponent);
+    const selectedUuids = releasesListElement.getSelectedValues();
+    storage.remove(selectedUuids).then(() => {
+      updateReleasesListData(releasesListElement);
     });
   });
 
   tab
     .querySelector('#historyTabDeleteAllModal_btnYes')
     .addEventListener('click', () => {
-      clearStorage();
-      updateReleasesListData(releasesListComponent);
+      storage.clear().then(() => {
+        updateReleasesListData(releasesListElement);
+      });
     });
 
-  releasesListComponent.appendButton(
+  releasesListElement.appendButton(
     btnDownloadCsv,
     btnClearSelected,
     btnClearAll
   );
-  releasesListComponent.addStatusElement(
+  releasesListElement.addStatusElement(
     document.getElementById('selectedStatusInfo'),
     document.getElementById('viewedStatusInfo')
   );

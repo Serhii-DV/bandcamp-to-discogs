@@ -1,3 +1,4 @@
+import { Metadata } from '../discogs/app/metadata';
 import { logInfo } from './console';
 
 export async function getCurrentTab(): Promise<chrome.tabs.Tab> {
@@ -68,9 +69,28 @@ export function getExtensionUrl(path: string): string {
 
 interface B2DTabMessage {
   type: string;
+  metadata?: Metadata;
 }
 
 type ResponseCallback = (response: any) => void;
+
+export function chromeSendMessageToTab(
+  message: B2DTabMessage,
+  tab: chrome.tabs.Tab | undefined
+): Promise<void> {
+  logInfo('Send message to tab', { message, tab });
+  return new Promise((resolve, reject) => {
+    if (!tab?.id) {
+      reject('Tab is missing');
+      return;
+    }
+
+    chrome.tabs.sendMessage(tab.id, message, (response) => {
+      logInfo('Received message from the tab', { message, response });
+      resolve();
+    });
+  });
+}
 
 export function chromeSendMessageToCurrentTab(
   message: B2DTabMessage,
@@ -78,7 +98,7 @@ export function chromeSendMessageToCurrentTab(
   onInvalidResponseCallback?: ResponseCallback,
   responseCallback?: ResponseCallback
 ): void {
-  logInfo('Send message to current tab', message.type, message);
+  logInfo('Send message to current tab', message);
   getCurrentTab().then((tab: chrome.tabs.Tab | undefined) => {
     if (!tab?.id) return;
 
@@ -110,4 +130,14 @@ export function chromeSendMessageToCurrentTab(
       chrome.tabs.sendMessage(tab.id, message);
     }
   });
+}
+
+export function chromeListenToMessage(
+  callback: (
+    message: any,
+    sender: chrome.runtime.MessageSender,
+    sendResponse: (response?: any) => void
+  ) => void
+): void {
+  chrome.runtime.onMessage.addListener(callback);
 }

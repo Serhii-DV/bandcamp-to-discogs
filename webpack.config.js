@@ -19,6 +19,7 @@ module.exports = (env, argv) => {
     entry: {
       popup: './src/popup/popup.js',
       "bandcamp.content": './src/bandcamp/content.js',
+      "bandcamp.inject": './src/bandcamp/inject.js',
       "discogs.content": './src/discogs/content.js',
     },
     module: {

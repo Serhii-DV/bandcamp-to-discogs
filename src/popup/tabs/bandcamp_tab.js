@@ -1,10 +1,10 @@
-import { click, getDataAttribute } from '../../utils/html';
+import { click, getDataAttribute, onClick } from '../../utils/html';
 import { log } from '../../utils/console';
 import {
-  getLatestHistoryData,
-  getReleaseMapByUuids
-} from '../../utils/storage';
-import { getOwnProperty } from '../../utils/utils';
+  bandcampReleasesAndArtistsHistorySearch,
+  historyItemsToArtistOrReleaseItems
+} from '../../bandcamp/modules/history';
+import { Release } from '../../app/release';
 
 export function setupBandcampTab(btnHistoryTab) {
   log('Setup bandcamp tab');
@@ -13,23 +13,30 @@ export function setupBandcampTab(btnHistoryTab) {
 }
 
 function setupLatestVisitedWidget(btnHistoryTab) {
+  const storage = globalThis.storage;
   const visitedReleasesWidget = document.getElementById('visitedReleases');
-  const limit = getDataAttribute(visitedReleasesWidget, 'limit', 10);
+  const limit = getDataAttribute(visitedReleasesWidget, 'limit', 50);
 
-  getLatestHistoryData(limit).then((visitedDates) => {
-    const uuids = visitedDates.map((visitedDate) => visitedDate.uuid);
-    getReleaseMapByUuids(uuids).then((releaseMap) => {
-      visitedDates.forEach((visitedDate) => {
-        const release = getOwnProperty(releaseMap, visitedDate.uuid);
-        if (release) {
-          visitedReleasesWidget.addRelease(release, visitedDate);
+  bandcampReleasesAndArtistsHistorySearch((results) => {
+    const items = historyItemsToArtistOrReleaseItems(results);
+    const uuids = items.map((item) => item.uuid);
+
+    storage.getUuidMap(uuids).then((uuidMap) => {
+      items.forEach((item) => {
+        const uuidItem = uuidMap[item.uuid];
+
+        if (uuidItem instanceof Release) {
+          uuidItem.releaseItem = item;
         }
+
+        visitedReleasesWidget.add(uuidItem ?? item);
       });
 
       visitedReleasesWidget.addItem(
+        'link',
         '#history',
-        'Go to history...',
-        'Go to history...',
+        'More...',
+        'More...',
         false,
         (event) => {
           click(btnHistoryTab);
@@ -37,5 +44,23 @@ function setupLatestVisitedWidget(btnHistoryTab) {
         }
       );
     });
-  });
+  }, limit);
+
+  const tabs = document.querySelectorAll('#latestViewed .nav-link');
+
+  if (tabs) {
+    onClick(tabs, (event) => {
+      const tab = event.target;
+      const type = getDataAttribute(tab, 'type', 'all');
+
+      visitedReleasesWidget.show(type);
+
+      tabs.forEach((tab) => {
+        tab.classList.remove('active');
+      });
+      tab.classList.add('active');
+
+      event.preventDefault();
+    });
+  }
 }

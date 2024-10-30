@@ -3,21 +3,8 @@ import {
   getUrlHostnameUrl,
   removeProtocol
 } from '../utils/url';
-import { generateKeyForUrl } from '../utils/key-generator';
+import { ReleaseItem } from './releaseItem';
 import TrackTime from './trackTime.js';
-
-export class ReleaseItem {
-  constructor(url, artist, title) {
-    this.url = url;
-    this.artist = artist;
-    this.title = title;
-    this.uuid = generateKeyForUrl(url);
-  }
-
-  static fromObject(obj) {
-    return new ReleaseItem(obj.url, obj.artist, obj.title);
-  }
-}
 
 export class Release {
   /**
@@ -91,6 +78,7 @@ export class Release {
   ) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
+    undefined;
     this.published = datePublished;
     this.modified = dateModified;
     this.tracks = tracks;

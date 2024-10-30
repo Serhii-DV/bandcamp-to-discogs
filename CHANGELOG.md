@@ -1,5 +1,14 @@
 # Change log
 
+## 0.17.0 (2024-10-30)
+
+### Features
+
+- core: Use Chrome History API for history data instead of saving it to storage
+- core: Save artist/label data with albums in the storage
+- popup: Show Bandcamp artist/label page in the history
+- popup: Open artist/label page in the releases tab
+
 ## 0.16.0 (2024-10-08)
 
 ### Features

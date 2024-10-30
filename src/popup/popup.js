@@ -42,6 +42,7 @@ import { setupReleaseCardTab } from './tabs/release-card_tab.js';
 import { PageTypeEnum } from '../bandcamp/app/page-type.js';
 import { isValidBandcampURL } from '../bandcamp/modules/url';
 import { Storage } from '../app/core/storage';
+import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
@@ -164,6 +165,9 @@ function initialize(tab) {
   } else {
     showBandcampTab();
   }
+
+  // TODO: Remove this logic in the release 0.19.0
+  removeNonUuidRecordsFromStorage();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

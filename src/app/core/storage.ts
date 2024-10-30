@@ -31,6 +31,19 @@ export class Storage {
     });
   }
 
+  async getAll(): Promise<StorageDataMap> {
+    return new Promise<StorageDataMap>((resolve, reject) => {
+      this.storage.get(null, (items) => {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
+
+        log('[Storage] Get all');
+        resolve(items);
+      });
+    });
+  }
+
   async set(key: string, data: StorageData): Promise<void> {
     return new Promise((resolve, reject) => {
       this.storage.set({ [key]: data }, () => {

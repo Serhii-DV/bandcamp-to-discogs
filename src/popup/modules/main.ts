@@ -57,3 +57,20 @@ export function getReleasesTabElement(): HTMLElement | null {
 export function getReleasesContentElement(): HTMLElement | null {
   return document.getElementById('releases');
 }
+
+export function setupNavigationLinks(): void {
+  const storage = globalThis.storage;
+
+  const wishlistLink = document.getElementById('wishlist-link');
+  const feedLink = document.getElementById('feed-link');
+
+  if (!wishlistLink || !feedLink) return;
+
+  storage.get(['bandcamp']).then((item) => {
+    if (!item.bandcamp) return;
+    const user = item.bandcamp.user;
+
+    feedLink.setAttribute('href', user.url + '/feed');
+    wishlistLink.setAttribute('href', user.url);
+  });
+}

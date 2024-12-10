@@ -31,10 +31,26 @@ const storage = new Storage();
 export function setupPageMusic(pageType) {
   listenForMessage('BANDCAMP_DATA', (messageData) => {
     const music = createMusic(messageData.bandData);
-    storage.save(music);
+
+    storage.save(music).then(() => {
+      savePageData(messageData.pageData);
+    });
+
     setupSendMessageToPopup(pageType, music);
   });
   setupIsotope();
+}
+
+function savePageData(pageData) {
+  const username = pageData.identities.fan.username;
+  const url = pageData.identities.fan.url;
+
+  return storage.set('bandcamp', {
+    user: {
+      username,
+      url
+    }
+  });
 }
 
 function createMusic(bandData) {

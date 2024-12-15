@@ -1,10 +1,11 @@
 # Change log
 
-## 0.17.1 (2024-11-11)
+## 0.17.1 (2024-12-YY)
 
 ### Features
 
 - discogs: Removed extension link from the release notes
+- popup: Added Bandcamp wishlist and feed links to the main navigation
 
 ## 0.17.0 (2024-10-30)
 

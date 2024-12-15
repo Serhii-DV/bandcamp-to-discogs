@@ -96,8 +96,7 @@ export function fillDurations() {
 function extractTitleAndTime(str) {
   const parts = str.split(' ');
 
-  // Check if the last part matches the time format (minutes:seconds)
-  const timeFormatRegex = /^\d+:\d+$/; // Example: 7:38
+  const timeFormatRegex = /^(\d{1,2}:)?\d{1,2}:\d{2}$/; // Matches hh:mm:ss or mm:ss
   const lastPart = parts[parts.length - 1];
 
   if (!timeFormatRegex.test(lastPart)) {

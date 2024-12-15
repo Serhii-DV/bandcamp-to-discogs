@@ -1,5 +1,11 @@
+import { STORAGE_KEY } from '../../app/core/storage';
 import { Release } from '../../app/release';
-import { click } from '../../utils/html';
+import {
+  click,
+  getDataAttribute,
+  hasDataAttribute,
+  setDataAttribute
+} from '../../utils/html';
 import { ReleasesList } from '../components/releases-list';
 import { setupReleaseCardTab } from '../tabs/release-card_tab';
 import { setupReleasesTab } from '../tabs/releases_tab';
@@ -66,11 +72,39 @@ export function setupNavigationLinks(): void {
 
   if (!wishlistLink || !feedLink) return;
 
-  storage.get(['bandcamp']).then((item) => {
-    if (!item.bandcamp) return;
-    const user = item.bandcamp.user;
+  backupTitleAttribute(wishlistLink);
+  backupTitleAttribute(feedLink);
+
+  const dataKey = STORAGE_KEY.BANDCAMP_DATA;
+
+  storage.get([dataKey]).then((item) => {
+    if (!item[dataKey]) return;
+    const user = item[dataKey].user;
+    const usernameInTitle = ` [${user.username}]`;
 
     feedLink.setAttribute('href', user.url + '/feed');
+    feedLink.setAttribute(
+      'title',
+      getOriginalTitle(feedLink) + usernameInTitle
+    );
     wishlistLink.setAttribute('href', user.url);
+    wishlistLink.setAttribute(
+      'title',
+      getOriginalTitle(wishlistLink) + usernameInTitle
+    );
   });
+}
+
+function backupTitleAttribute(element: HTMLElement): HTMLElement {
+  if (hasDataAttribute(element, 'org-title')) return element;
+
+  const title = element.getAttribute('title');
+  if (title) {
+    setDataAttribute(element, 'org-title', title);
+  }
+  return element;
+}
+
+function getOriginalTitle(element: HTMLElement): string {
+  return getDataAttribute(element, 'org-title');
 }

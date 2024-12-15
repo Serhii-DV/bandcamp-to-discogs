@@ -35,7 +35,8 @@ import {
   getReleaseCardTabElement,
   showReleasesTabContent,
   showReleaseCardTab,
-  setupReleasesTabElement
+  setupReleasesTabElement,
+  setupNavigationLinks
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
@@ -142,6 +143,7 @@ function setupNavigation() {
 
   setupBandcampTab(btnHistoryTab);
   setupReleasesTabElement();
+  setupNavigationLinks();
 }
 
 function initialize(tab) {

@@ -7,6 +7,10 @@
 - discogs: Removed extension link from the release notes
 - popup: Added Bandcamp wishlist and feed links to the main navigation
 
+### Fixed
+
+- discogs: Fixed extracting track time with hours on draft page
+
 ## 0.17.0 (2024-10-30)
 
 ### Features

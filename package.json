@@ -23,7 +23,7 @@
     "mustache": "^4.2.0",
     "prettier": "^3.4.2",
     "source-map-loader": "^5.0.0",
-    "terser-webpack-plugin": "^5.3.10",
+    "terser-webpack-plugin": "^5.3.11",
     "ts-loader": "^9.5.1",
     "typescript": "^5.7.2",
     "uuid": "^11.0.3",

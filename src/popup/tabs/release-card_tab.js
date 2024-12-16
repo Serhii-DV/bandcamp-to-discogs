@@ -12,6 +12,7 @@ import { Release } from '../../app/release.js';
 import { getReleaseCardContentElement } from '../modules/main';
 import { getUrlHistory } from '../../utils/history';
 import { getUrlHostnameUrl, getUrlSubdomain } from '../../utils/url';
+import { setupConsoleLogRelease } from '../console.js';
 
 /**
  * @param {Release} release
@@ -27,6 +28,7 @@ export function setupReleaseCardTab(release) {
   if (isRelease) {
     getUrlHistory(release.url, (history) => {
       renderReleaseCard(release, history, contentElement.querySelector('main'));
+      setupConsoleLogRelease(release);
     });
   }
 }

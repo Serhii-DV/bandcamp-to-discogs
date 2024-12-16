@@ -38,11 +38,14 @@ class ConsoleCommand extends HTMLElement {
 
   setCommand(commandName, handler) {
     const self = this;
-    self.commands[commandName] = handler;
 
-    const option = document.createElement('option');
-    option.value = commandName;
-    self.datalist.appendChild(option);
+    if (!self.commands[commandName]) {
+      const option = document.createElement('option');
+      option.value = commandName;
+      self.datalist.appendChild(option);
+    }
+
+    self.commands[commandName] = handler;
 
     return self;
   }

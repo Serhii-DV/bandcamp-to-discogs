@@ -11,6 +11,7 @@ import { toggleElements } from '../../utils/html';
 import { Release } from '../../app/release.js';
 import { getReleaseCardContentElement } from '../modules/main';
 import { getUrlHistory } from '../../utils/history';
+import { getUrlHostnameUrl, getUrlSubdomain } from '../../utils/url';
 
 /**
  * @param {Release} release
@@ -59,6 +60,16 @@ function renderReleaseCard(release, history, element) {
   const releaseHistory = history.map((date) => dateToTemplate(date)).reverse();
   const published = dateToTemplate(release.published);
   const modified = dateToTemplate(release.modified);
+  const bcReleaseArtistLink = {
+    href: getUrlHostnameUrl(release.url),
+    content: getUrlSubdomain(release.url),
+    title: 'Open Bandcamp artist page\n' + getUrlHostnameUrl(release.url)
+  };
+  const bcReleaseLink = {
+    href: release.url,
+    content: 'release',
+    title: 'Open Bandcamp release page\n' + release.url
+  };
 
   render(document.getElementById('releaseCardTemplate'), element, {
     release,
@@ -66,7 +77,9 @@ function renderReleaseCard(release, history, element) {
     history: releaseHistory,
     modified,
     published,
-    discogsSearchUrl
+    discogsSearchUrl,
+    bcReleaseArtistLink,
+    bcReleaseLink
   });
 
   setupBtnToDownloadReleasesAsCsv(

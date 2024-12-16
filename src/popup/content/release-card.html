@@ -48,11 +48,11 @@
       <!-- Info -->
       <div class="tab-pane fade show active" id="release-card-info" role="tabpanel" aria-labelledby="release-card-info-tab" tabindex="0">
         <div>
-          <a class="btn btn-dark btn-sm" href="{{ release.url }}" title="Open Bandcamp artist page" target="_blank">
-            <b2d-icon name="bandcamp-png"></b2d-icon> {{ release.artistHostname }}
+          <a class="btn btn-dark btn-sm" href="{{ bcReleaseArtistLink.href }}" title="{{ bcReleaseArtistLink.title }}" target="_blank">
+            <b2d-icon name="bandcamp-png"></b2d-icon> {{  bcReleaseArtistLink.content }}
           </a>
-          <a class="btn btn-dark btn-sm" href="{{ release.url }}" title="Open Bandcamp release page" target="_blank">
-            <b2d-icon name="bandcamp-png"></b2d-icon> {{ release.releaseHostname }}
+          <a class="btn btn-dark btn-sm" href="{{ bcReleaseLink.href }}" title="{{ bcReleaseLink.title }}" target="_blank">
+            <b2d-icon name="bandcamp-png"></b2d-icon> {{ bcReleaseLink.content }}
           </a>
         </div>
         <div class="mt-3">

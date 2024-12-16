@@ -1,3 +1,4 @@
+import config from '../../config.js';
 import {
   keywordsToDiscogsGenres,
   keywordsToDiscogsStyles
@@ -88,7 +89,7 @@ export class Metadata {
       qty: trackQty,
       description: formatDescription
     };
-    self.country = country;
+    self.country = country ?? config.metadata.country;
     self.released = released;
     self.tracklist = tracklist;
     self.credits = credits;

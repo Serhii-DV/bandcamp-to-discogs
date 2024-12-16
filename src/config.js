@@ -17,5 +17,8 @@ export default {
     // Submission notes text
     notes:
       'This draft was created via CSV upload and Bandcamp To Discogs Google Chrome and Firefox extension\n\nRelease url: {release_url}'
+  },
+  metadata: {
+    country: 'Worldwide'
   }
 };

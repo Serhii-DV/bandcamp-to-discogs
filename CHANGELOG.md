@@ -5,6 +5,7 @@
 ### Features
 
 - discogs: Removed extension link from the release notes
+- discogs: Set default release country to `Worldwide`
 - popup: Added Bandcamp wishlist and feed links to the main navigation
 
 ### Fixed

@@ -19,6 +19,7 @@ export function setupConsoleLogRelease(release) {
   setCommand('log.discogsCsv', () => {
     const discogsCsv = releaseToDiscogsCsv(release);
     log('Console Discogs CSV:', discogsCsv);
+    console.table(discogsCsv.toCsvObject());
   });
 
   setCommand('log.metadata', () => {

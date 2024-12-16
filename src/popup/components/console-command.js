@@ -36,7 +36,7 @@ class ConsoleCommand extends HTMLElement {
     self.datalist = self.shadowRoot.querySelector('#command-list');
   }
 
-  addCommand(commandName, handler) {
+  setCommand(commandName, handler) {
     const self = this;
     self.commands[commandName] = handler;
 

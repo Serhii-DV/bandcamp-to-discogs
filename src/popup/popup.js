@@ -27,7 +27,12 @@ import {
 import { disable, enable, click } from '../utils/html';
 import { setupCsvDataTab } from './tabs/csv_data_tab.js';
 import { bytesToSize } from '../utils/utils';
-import { setupConsole, setupConsoleRelease } from './console.js';
+import {
+  setupConsoleLogStorage,
+  setupConsoleLogKeywordsMapping,
+  setupConsoleLogRelease,
+  setupConsoleLogSchema
+} from './console.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
@@ -89,7 +94,9 @@ function processBandcampResponse(response) {
     loadDiscogsGenres(config.genres_url).then(() => {
       loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
         storage.getByUuid(response.uuid).then((release) => {
-          setupConsoleRelease(release, keywordsMapping, response.schema);
+          setupConsoleLogKeywordsMapping(keywordsMapping);
+          setupConsoleLogRelease(release);
+          setupConsoleLogSchema(response.schema);
           processBandcampPageAlbumResponse(
             release,
             response.schema,
@@ -152,7 +159,7 @@ function initialize(tab) {
   logInfo('Popup initialization');
   logInfo('Current URL', currentTabUrl);
 
-  setupConsole();
+  setupConsoleLogStorage();
   setupNavigation();
   replaceVersion(document);
   checkStorageSize();

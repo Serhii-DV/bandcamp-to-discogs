@@ -49,6 +49,7 @@ import { PageTypeEnum } from '../bandcamp/app/page-type.js';
 import { isValidBandcampURL } from '../bandcamp/modules/url';
 import { Storage } from '../app/core/storage';
 import { removeNonUuidRecordsFromStorage } from '../utils/storage';
+import { MessageType } from '../app/core/messageType';
 
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
@@ -57,7 +58,7 @@ async function proceedBandcampData() {
   logInfo('Proceed Bandcamp data');
 
   chromeSendMessageToCurrentTab(
-    { type: 'B2D_BC_DATA' },
+    { type: MessageType.BANDCAMP_DATA },
     processBandcampResponse,
     showBandcampTab
   );

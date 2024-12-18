@@ -24,6 +24,7 @@ import { chromeListenToMessage } from '../../utils/chrome';
 import { Music } from '../../app/music';
 import { ArtistItem } from '../../app/artistItem';
 import { Storage, StorageKey } from '../../app/core/storage';
+import { MessageType } from '../../app/core/messageType';
 
 const storage = new Storage();
 
@@ -69,7 +70,7 @@ function createMusic(bandData) {
 
 function setupSendMessageToPopup(pageType, music) {
   chromeListenToMessage((message, sender, sendResponse) => {
-    if (message.type === 'B2D_BC_DATA') {
+    if (message.type === MessageType.BANDCAMP_DATA) {
       sendResponse({
         pageType: pageType.value,
         uuid: music.artist.uuid,

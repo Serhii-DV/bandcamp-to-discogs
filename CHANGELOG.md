@@ -9,6 +9,7 @@
 - popup: Added Bandcamp wishlist and feed links to the main navigation
 - popup: Small improvements on the release card tab for release urls
 - core: Improved initialization of console log commands
+- core: Use one tab for release card and releases
 
 ### Fixed
 

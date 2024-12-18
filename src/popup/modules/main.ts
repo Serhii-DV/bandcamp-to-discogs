@@ -4,6 +4,7 @@ import {
   click,
   getDataAttribute,
   hasDataAttribute,
+  setActiveTab,
   setDataAttribute
 } from '../../utils/html';
 import { ReleasesList } from '../components/releases-list';
@@ -11,15 +12,11 @@ import { setupReleaseCardTab } from '../tabs/release-card_tab';
 import { setupReleasesTab } from '../tabs/releases_tab';
 import { Music } from 'src/app/music';
 
-export function showReleaseCardTab(release: Release) {
-  const btnReleaseCardTab = getReleaseCardTabElement();
-
-  if (!btnReleaseCardTab) {
-    return;
-  }
-
-  click(btnReleaseCardTab);
-  setupReleaseCardTab(release);
+export function showReleaseCardTab(release: Release): void {
+  const tab = getReleaseCardContentElement();
+  showCardTab(tab, getCards()).then(() => {
+    setupReleaseCardTab(release);
+  });
 }
 
 export function setupReleasesTabElement(): void {
@@ -41,15 +38,22 @@ export function showReleasesTabContent(
   music: Music,
   searchValue: string | undefined
 ): void {
-  const btnReleasesTab = getReleasesTabElement();
-  if (!btnReleasesTab) return;
-
-  click(btnReleasesTab);
-  setupReleasesTab(music, searchValue);
+  const tab = getReleasesContentElement();
+  showCardTab(tab, getCards()).then(() => {
+    setupReleasesTab(music, searchValue);
+  });
 }
 
-export function getReleaseCardTabElement(): HTMLElement | null {
-  return document.getElementById('release-card-tab');
+export function getBandcampTabElement(): HTMLElement | null {
+  return document.getElementById('bandcamp-tab');
+}
+
+export function getBandcampTabContentElement(): HTMLElement | null {
+  return document.getElementById('bandcamp');
+}
+
+export function getCardTabElement(): HTMLElement | null {
+  return document.getElementById('card-tab');
 }
 
 export function getReleaseCardContentElement(): HTMLElement | null {
@@ -107,4 +111,29 @@ function backupTitleAttribute(element: HTMLElement): HTMLElement {
 
 function getOriginalTitle(element: HTMLElement): string {
   return getDataAttribute(element, 'org-title');
+}
+
+function showCardTab(
+  tab: HTMLElement | null,
+  tabs: (HTMLElement | null)[]
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const btnTab = getCardTabElement();
+    if (!btnTab) {
+      reject(new Error('Card tab element not found'));
+      return;
+    }
+    if (!tab) {
+      reject(new Error('Tab element not found'));
+      return;
+    }
+
+    click(btnTab);
+    setActiveTab(tab, tabs);
+    resolve();
+  });
+}
+
+function getCards(): Array<HTMLElement | null> {
+  return [getReleaseCardContentElement(), getReleasesContentElement()];
 }

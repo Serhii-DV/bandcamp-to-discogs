@@ -378,3 +378,19 @@ export const createIconLink = ({
 
   return link;
 };
+
+export function setActiveTab(
+  activeTab: HTMLElement | null,
+  tabs: (HTMLElement | null)[]
+): void {
+  if (!activeTab) return;
+
+  for (const tab of tabs) {
+    if (!tab) continue;
+    if (tab === activeTab) {
+      tab.classList.remove('d-none');
+    } else {
+      tab.classList.add('d-none');
+    }
+  }
+}

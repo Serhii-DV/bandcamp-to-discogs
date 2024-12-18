@@ -24,7 +24,7 @@ import {
   setHistoryTabSearchValue,
   setupHistoryTab
 } from './tabs/history_tab.js';
-import { disable, enable, click } from '../utils/html';
+import { disable, click } from '../utils/html';
 import { setupCsvDataTab } from './tabs/csv_data_tab.js';
 import { bytesToSize } from '../utils/utils';
 import {
@@ -37,11 +37,11 @@ import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
 import {
-  getReleaseCardTabElement,
   showReleasesTabContent,
   showReleaseCardTab,
   setupReleasesTabElement,
-  setupNavigationLinks
+  setupNavigationLinks,
+  getBandcampTabElement
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
@@ -52,8 +52,7 @@ import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
-const btnBandcampTab = document.getElementById('bandcamp-tab');
-const btnReleaseCardTab = getReleaseCardTabElement();
+const btnBandcampTab = getBandcampTabElement();
 const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
 
@@ -139,10 +138,6 @@ function replaceVersion(document) {
 
 function setupNavigation() {
   logInfo('Setup navigation');
-
-  btnReleaseCardTab.addEventListener('click', () => {
-    enable(btnCsvDataTab);
-  });
 
   btnHistoryTab.addEventListener('click', () => {
     setupHistoryTab(document.getElementById('history'));

@@ -13,6 +13,7 @@ import { log } from '../utils/console';
 
 import './css/b2d.css';
 import './css/notification.css';
+import { MessageType } from '../app/core/messageType';
 
 main();
 
@@ -60,7 +61,7 @@ const showNotInitializedMessage = (message) => {
 
 function setupSendMessageToPopup() {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === 'B2D_DISCOGS_EDIT_PAGE_DATA') {
+    if (request.type === MessageType.DISCOGS_EDIT_PAGE_DATA) {
       sendResponse(prepareSendMessageData());
     }
   });

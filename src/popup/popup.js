@@ -68,7 +68,7 @@ async function proceedDiscogsEditPageData() {
   logInfo('Proceed Discogs edit page data');
 
   chromeSendMessageToCurrentTab(
-    { type: 'B2D_DISCOGS_EDIT_PAGE_DATA' },
+    { type: MessageType.DISCOGS_EDIT_PAGE_DATA },
     processDiscogsDraftPageResponse
   );
 }

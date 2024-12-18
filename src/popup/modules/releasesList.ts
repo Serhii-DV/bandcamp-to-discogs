@@ -13,6 +13,7 @@ import { Metadata } from '../../discogs/app/metadata';
 import { ReleaseItem } from '../../app/releaseItem';
 import { BandcampItem } from '../../app/bandcampItem';
 import { Music } from '../../app/music';
+import { MessageType } from '../../app/core/messageType';
 
 export type ArtistOrReleaseItem = ArtistItem | ReleaseItem;
 
@@ -137,7 +138,7 @@ export const createApplyMetadataLink = (item: ReleaseItem) =>
         if (storageItem instanceof Release) {
           const metadata = Metadata.fromRelease(storageItem);
           chromeSendMessageToCurrentTab({
-            type: 'B2D_METADATA',
+            type: MessageType.METADATA,
             metadata
           });
         }

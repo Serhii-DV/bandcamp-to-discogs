@@ -1,5 +1,6 @@
 'use strict';
 
+import { MessageType } from '../../app/core/messageType';
 import { click } from '../../utils/html';
 import { convertNewlinesToBreaks } from '../../utils/utils';
 import {
@@ -36,7 +37,7 @@ export const initialize = () => {
   setupReadMetadataButton();
 
   chrome.runtime.onMessage.addListener((request) => {
-    if (request.type === 'B2D_METADATA') {
+    if (request.type === MessageType.METADATA) {
       applyMetadata(request.metadata);
     }
 

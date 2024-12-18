@@ -70,7 +70,7 @@ function createMusic(bandData) {
 
 function setupSendMessageToPopup(pageType, music) {
   chromeListenToMessage((message, sender, sendResponse) => {
-    if (message.type === MessageType.BANDCAMP_DATA) {
+    if (message.type === MessageType.BandcampData) {
       sendResponse({
         pageType: pageType.value,
         uuid: music.artist.uuid,

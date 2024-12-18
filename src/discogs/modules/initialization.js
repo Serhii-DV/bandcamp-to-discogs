@@ -37,7 +37,7 @@ export const initialize = () => {
   setupReadMetadataButton();
 
   chrome.runtime.onMessage.addListener((request) => {
-    if (request.type === MessageType.METADATA) {
+    if (request.type === MessageType.Metadata) {
       applyMetadata(request.metadata);
     }
 

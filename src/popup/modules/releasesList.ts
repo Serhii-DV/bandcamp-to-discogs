@@ -138,7 +138,7 @@ export const createApplyMetadataLink = (item: ReleaseItem) =>
         if (storageItem instanceof Release) {
           const metadata = Metadata.fromRelease(storageItem);
           chromeSendMessageToCurrentTab({
-            type: MessageType.METADATA,
+            type: MessageType.Metadata,
             metadata
           });
         }

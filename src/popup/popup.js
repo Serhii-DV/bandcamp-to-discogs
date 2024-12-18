@@ -58,7 +58,7 @@ async function proceedBandcampData() {
   logInfo('Proceed Bandcamp data');
 
   chromeSendMessageToCurrentTab(
-    { type: MessageType.BANDCAMP_DATA },
+    { type: MessageType.BandcampData },
     processBandcampResponse,
     showBandcampTab
   );
@@ -68,7 +68,7 @@ async function proceedDiscogsEditPageData() {
   logInfo('Proceed Discogs edit page data');
 
   chromeSendMessageToCurrentTab(
-    { type: MessageType.DISCOGS_EDIT_PAGE_DATA },
+    { type: MessageType.DiscogsEditPageData },
     processDiscogsDraftPageResponse
   );
 }

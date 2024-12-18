@@ -15,7 +15,7 @@ export function setupPageAlbum(pageType) {
   storage.save(release);
 
   chromeListenToMessage((message, sender, sendResponse) => {
-    if (message.type === MessageType.BANDCAMP_DATA) {
+    if (message.type === MessageType.BandcampData) {
       sendResponse({
         pageType: pageType.value,
         uuid: release.uuid,

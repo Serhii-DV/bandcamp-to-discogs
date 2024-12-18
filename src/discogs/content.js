@@ -61,7 +61,7 @@ const showNotInitializedMessage = (message) => {
 
 function setupSendMessageToPopup() {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === MessageType.DISCOGS_EDIT_PAGE_DATA) {
+    if (request.type === MessageType.DiscogsEditPageData) {
       sendResponse(prepareSendMessageData());
     }
   });

@@ -24,6 +24,7 @@ import {
   historyItemsToArtistOrReleaseItems
 } from '../../bandcamp/modules/history';
 import { isBandcampArtistUrl } from '../../bandcamp/modules/url';
+import { MessageType } from '../../app/core/messageType';
 
 export function setupReleasesTab(storage, music, searchValue) {
   log('Setup releases card tab', music, searchValue);
@@ -73,7 +74,7 @@ function setupSearchInput(searchInput, searchValue) {
     searchInput.addEventListener('input', () => {
       chromeSendMessageToTab(
         {
-          type: 'releases-list-search',
+          type: MessageType.Search,
           search: searchInput.value
         },
         tab

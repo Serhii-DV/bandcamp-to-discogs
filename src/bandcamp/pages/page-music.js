@@ -161,7 +161,7 @@ function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
   });
 
   chrome.runtime.onMessage.addListener((message) => {
-    if (message.type === 'releases-list-search') {
+    if (message.type === MessageType.Search) {
       input(artistFilter, message.search);
     }
   });

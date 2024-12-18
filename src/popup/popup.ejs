@@ -12,9 +12,6 @@
       <button class="btn btn-dark rounded-0" id="card-tab" data-bs-toggle="tab" data-bs-target="#card" role="tab" aria-controls="release-card" aria-selected="false" type="button" title="Release preview">
         <b2d-icon name="card-text"></b2d-icon>
       </button>
-      <button class="btn btn-dark rounded-0 visually-hidden" id="csvData-tab" data-bs-toggle="tab" data-bs-target="#csvData" role="tab" aria-controls="csvData" aria-selected="false" type="button" title="Preview Discogs CSV data">
-        <b2d-icon name="table"></b2d-icon>
-      </button>
       <button class="btn btn-dark rounded-0" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="tab" aria-controls="history" aria-selected="false" type="button" title="History">
         <b2d-icon name="clock-history"></b2d-icon>
       </button>
@@ -47,8 +44,6 @@
           <%= tabContentReleases %>
         </div>
       </div>
-      <!-- CSV data -->
-      <div class="tab-pane fade small content-text" id="csvData" role="tabpanel" aria-labelledby="csvData-tab" tabindex="0"></div>
       <!-- History data -->
       <div class="tab-pane fade small" id="history" role="tabpanel" aria-labelledby="history-tab" tabindex="0">
         <%= tabContentHistory %>

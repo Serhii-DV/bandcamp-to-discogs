@@ -10,6 +10,7 @@
 - popup: Small improvements on the release card tab for release urls
 - core: Improved initialization of console log commands
 - core: Use one tab for release card and releases
+- core: Removed CSV data tab. Data is available through console
 
 ### Fixed
 

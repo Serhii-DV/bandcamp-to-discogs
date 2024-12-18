@@ -24,8 +24,7 @@ import {
   setHistoryTabSearchValue,
   setupHistoryTab
 } from './tabs/history_tab.js';
-import { disable, click } from '../utils/html';
-import { setupCsvDataTab } from './tabs/csv_data_tab.js';
+import { click } from '../utils/html';
 import { bytesToSize } from '../utils/utils';
 import {
   setupConsoleLogStorage,
@@ -53,7 +52,6 @@ import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
 const btnBandcampTab = getBandcampTabElement();
-const btnCsvDataTab = document.getElementById('csvData-tab');
 const btnHistoryTab = document.getElementById('history-tab');
 
 async function proceedBandcampData() {
@@ -76,7 +74,6 @@ async function proceedDiscogsEditPageData() {
 }
 
 function showBandcampTab() {
-  disable(btnCsvDataTab);
   click(btnBandcampTab);
 }
 
@@ -114,14 +111,12 @@ function processBandcampResponse(response) {
 function processBandcampPageAlbumResponse(release) {
   try {
     showReleaseCardTab(release);
-    setupCsvDataTab(release, btnCsvDataTab);
   } catch (error) {
     console.error(error);
   }
 }
 
 function processDiscogsDraftPageResponse(response) {
-  disable(btnCsvDataTab);
   click(btnHistoryTab);
   setHistoryTabSearchValue(response.data.artistName);
 }

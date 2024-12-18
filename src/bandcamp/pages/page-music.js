@@ -160,7 +160,7 @@ function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
     window.scrollBy(0, -1);
   });
 
-  chrome.runtime.onMessage.addListener((message) => {
+  chromeListenToMessage((message) => {
     if (message.type === MessageType.Search) {
       input(artistFilter, message.search);
     }

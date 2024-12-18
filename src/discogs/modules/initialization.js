@@ -1,5 +1,6 @@
 'use strict';
 
+import { chromeListenToMessage } from '../../utils/chrome';
 import { MessageType } from '../../app/core/messageType';
 import { click } from '../../utils/html';
 import { convertNewlinesToBreaks } from '../../utils/utils';
@@ -36,12 +37,10 @@ export const initialize = () => {
 
   setupReadMetadataButton();
 
-  chrome.runtime.onMessage.addListener((request) => {
-    if (request.type === MessageType.Metadata) {
-      applyMetadata(request.metadata);
+  chromeListenToMessage((message) => {
+    if (message.type === MessageType.Metadata) {
+      applyMetadata(message.metadata);
     }
-
-    return true;
   });
 };
 

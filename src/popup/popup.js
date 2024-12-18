@@ -38,7 +38,6 @@ import { setupBandcampTab } from './tabs/bandcamp_tab.js';
 import {
   showReleasesTabContent,
   showReleaseCardTab,
-  setupReleasesTabElement,
   setupNavigationLinks,
   getHistoryTabElement,
   getHistoryContentElement,
@@ -133,7 +132,6 @@ function setupNavigation() {
 
   const btnHistoryTab = getHistoryTabElement();
   setupBandcampTab(btnHistoryTab, storage);
-  setupReleasesTabElement();
   setupHistoryTab(btnHistoryTab, getHistoryContentElement(), storage);
   setupNavigationLinks(storage);
 }

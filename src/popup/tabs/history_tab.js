@@ -18,12 +18,12 @@ import {
 } from '../../bandcamp/modules/history';
 import { populateReleasesList } from '../modules/releasesList';
 
-export function setupHistoryTab(tab, tabContent) {
+export function setupHistoryTab(tab, tabContent, storage) {
   onClick(tab, () => {
     const releasesListElement = getReleasesListElement();
 
     if (!hasDataAttribute(tabContent, 'buttons-initialized')) {
-      setupReleasesListComponent(tabContent, releasesListElement);
+      setupReleasesListComponent(tabContent, releasesListElement, storage);
       setDataAttribute(tabContent, 'buttons-initialized');
     }
 
@@ -57,8 +57,9 @@ function updateReleasesListData(releasesListElement) {
 /**
  * @param {Element} tab
  * @param {ReleasesList} releasesListElement
+ * @param {Storage} storage
  */
-function setupReleasesListComponent(tab, releasesListElement) {
+function setupReleasesListComponent(tab, releasesListElement, storage) {
   const btnDownloadCsv = createElementFromHTML(`
 <button id="downloadHistory" class="btn btn-primary rounded-0" type="button" title="Download selected releases from the history as Discogs CSV file" disabled>
   <b2d-icon name="download"></b2d-icon>
@@ -71,7 +72,6 @@ function setupReleasesListComponent(tab, releasesListElement) {
 <button id="historyDataClear" type="button" class="btn btn-dark" title="Remove all items from the history" data-bs-toggle="modal" data-bs-target="#historyTabDeleteAllModal">
   <b2d-icon name="database-x"></b2d-icon>
 </button>`);
-  const storage = globalThis.storage;
 
   const downloadCsvFile = (event) => {
     const button = event.target;

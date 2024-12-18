@@ -132,10 +132,10 @@ function setupNavigation() {
   logInfo('Setup navigation');
 
   const btnHistoryTab = getHistoryTabElement();
-  setupBandcampTab(btnHistoryTab);
+  setupBandcampTab(btnHistoryTab, storage);
   setupReleasesTabElement();
-  setupHistoryTab(btnHistoryTab, getHistoryContentElement());
-  setupNavigationLinks();
+  setupHistoryTab(btnHistoryTab, getHistoryContentElement(), storage);
+  setupNavigationLinks(storage);
 }
 
 function initialize(tab) {
@@ -144,13 +144,13 @@ function initialize(tab) {
   logInfo('Popup initialization');
   logInfo('Current URL', currentTabUrl);
 
-  setupConsoleLogStorage();
+  setupConsoleLogStorage(storage);
   setupNavigation();
   replaceVersion(document);
   checkStorageSize();
 
   setupReleaseCardTab();
-  setupReleasesTab();
+  setupReleasesTab(storage);
 
   if (isValidBandcampURL(currentTabUrl)) {
     proceedBandcampData();
@@ -161,7 +161,7 @@ function initialize(tab) {
   }
 
   // TODO: Remove this logic in the release 0.19.0
-  removeNonUuidRecordsFromStorage();
+  removeNonUuidRecordsFromStorage(storage);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

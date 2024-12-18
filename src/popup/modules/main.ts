@@ -1,4 +1,4 @@
-import { STORAGE_KEY } from '../../app/core/storage';
+import { Storage, STORAGE_KEY } from '../../app/core/storage';
 import { Release } from '../../app/release';
 import {
   click,
@@ -48,7 +48,8 @@ export function showReleasesTabContent(
 ): void {
   const tab = getReleasesContentElement();
   showCardTab(tab, getCards()).then(() => {
-    setupReleasesTab(music, searchValue);
+    const storage = globalThis.storage;
+    setupReleasesTab(storage, music, searchValue);
   });
 }
 
@@ -84,9 +85,7 @@ export function getHistoryContentElement(): HTMLElement | null {
   return document.getElementById('history');
 }
 
-export function setupNavigationLinks(): void {
-  const storage = globalThis.storage;
-
+export function setupNavigationLinks(storage: Storage): void {
   const wishlistLink = document.getElementById('wishlist-link');
   const feedLink = document.getElementById('feed-link');
 

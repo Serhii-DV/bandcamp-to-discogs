@@ -25,7 +25,7 @@ import {
 } from '../../bandcamp/modules/history';
 import { isBandcampArtistUrl } from '../../bandcamp/modules/url';
 
-export function setupReleasesTab(music, searchValue) {
+export function setupReleasesTab(storage, music, searchValue) {
   log('Setup releases card tab', music, searchValue);
 
   const isMusic = music instanceof Music;
@@ -50,7 +50,7 @@ export function setupReleasesTab(music, searchValue) {
     return;
   }
 
-  initDownloadButton(releasesList);
+  initDownloadButton(releasesList, storage);
 
   releasesList.addStatusElement(
     document.getElementById('selectedStatusInfo'),
@@ -84,7 +84,7 @@ function setupSearchInput(searchInput, searchValue) {
   input(searchInput, searchValue);
 }
 
-function initDownloadButton(releasesListElement) {
+function initDownloadButton(releasesListElement, storage) {
   let btnNavDownload = releasesListElement.querySelector(
     '#releasesTabLIst__downloadBtn'
   );
@@ -107,8 +107,6 @@ function initDownloadButton(releasesListElement) {
     const checkedUrls = Array.from(bcLinks).map((link) =>
       link.getAttribute('href')
     );
-
-    const storage = globalThis.storage;
 
     // Open selected releases (add to the storage)
     openTabsAndClose(checkedUrls).then(() => {

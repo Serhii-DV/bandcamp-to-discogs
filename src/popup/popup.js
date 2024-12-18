@@ -40,9 +40,9 @@ import {
   showReleaseCardTab,
   setupReleasesTabElement,
   setupNavigationLinks,
-  getBandcampTabElement,
   getHistoryTabElement,
-  getHistoryContentElement
+  getHistoryContentElement,
+  showBandcampTab
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
@@ -53,7 +53,6 @@ import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
-const btnBandcampTab = getBandcampTabElement();
 
 async function proceedBandcampData() {
   logInfo('Proceed Bandcamp data');
@@ -72,10 +71,6 @@ async function proceedDiscogsEditPageData() {
     { type: 'B2D_DISCOGS_EDIT_PAGE_DATA' },
     processDiscogsDraftPageResponse
   );
-}
-
-function showBandcampTab() {
-  click(btnBandcampTab);
 }
 
 function processBandcampResponse(response) {

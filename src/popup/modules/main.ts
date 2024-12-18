@@ -12,6 +12,14 @@ import { setupReleaseCardTab } from '../tabs/release-card_tab';
 import { setupReleasesTab } from '../tabs/releases_tab';
 import { Music } from 'src/app/music';
 
+export function showBandcampTab(): void {
+  const btnBandcampTab = getBandcampTabElement();
+
+  if (btnBandcampTab) {
+    click(btnBandcampTab);
+  }
+}
+
 export function showReleaseCardTab(release: Release): void {
   const tab = getReleaseCardContentElement();
   showCardTab(tab, getCards()).then(() => {

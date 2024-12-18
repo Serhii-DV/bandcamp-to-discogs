@@ -23,7 +23,7 @@ import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Music } from '../../app/music';
 import { ArtistItem } from '../../app/artistItem';
-import { Storage, STORAGE_KEY } from '../../app/core/storage';
+import { Storage, StorageKey } from '../../app/core/storage';
 
 const storage = new Storage();
 
@@ -47,7 +47,7 @@ function savePageData(pageData) {
   const username = pageData.identities.fan.username;
   const url = pageData.identities.fan.url;
 
-  storage.set(STORAGE_KEY.BANDCAMP_DATA, {
+  storage.set(StorageKey.BANDCAMP_DATA, {
     user: {
       username,
       url

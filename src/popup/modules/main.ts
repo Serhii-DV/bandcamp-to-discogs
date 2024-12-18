@@ -1,4 +1,4 @@
-import { Storage, STORAGE_KEY } from '../../app/core/storage';
+import { Storage, StorageKey } from '../../app/core/storage';
 import { Release } from '../../app/release';
 import {
   click,
@@ -78,7 +78,7 @@ export function setupNavigationLinks(storage: Storage): void {
   backupTitleAttribute(wishlistLink);
   backupTitleAttribute(feedLink);
 
-  const dataKey = STORAGE_KEY.BANDCAMP_DATA;
+  const dataKey = StorageKey.BANDCAMP_DATA;
 
   storage.get([dataKey]).then((item) => {
     if (!item[dataKey]) return;

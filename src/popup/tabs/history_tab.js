@@ -1,6 +1,7 @@
 import {
   createElementFromHTML,
   hasDataAttribute,
+  onClick,
   setDataAttribute
 } from '../../utils/html';
 import {
@@ -17,17 +18,19 @@ import {
 } from '../../bandcamp/modules/history';
 import { populateReleasesList } from '../modules/releasesList';
 
-export function setupHistoryTab(tab) {
-  const releasesListElement = getReleasesListElement();
+export function setupHistoryTab(tab, tabContent) {
+  onClick(tab, () => {
+    const releasesListElement = getReleasesListElement();
 
-  if (!hasDataAttribute(tab, 'buttons-initialized')) {
-    setupReleasesListComponent(tab, releasesListElement);
-    setDataAttribute(tab, 'buttons-initialized');
-  }
+    if (!hasDataAttribute(tabContent, 'buttons-initialized')) {
+      setupReleasesListComponent(tabContent, releasesListElement);
+      setDataAttribute(tabContent, 'buttons-initialized');
+    }
 
-  loadDiscogsGenres(config.genres_url).then(() => {
-    loadKeywordMapping(config.keyword_mapping_url).then(() => {
-      updateReleasesListData(releasesListElement);
+    loadDiscogsGenres(config.genres_url).then(() => {
+      loadKeywordMapping(config.keyword_mapping_url).then(() => {
+        updateReleasesListData(releasesListElement);
+      });
     });
   });
 }

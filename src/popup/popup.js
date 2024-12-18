@@ -40,7 +40,9 @@ import {
   showReleaseCardTab,
   setupReleasesTabElement,
   setupNavigationLinks,
-  getBandcampTabElement
+  getBandcampTabElement,
+  getHistoryTabElement,
+  getHistoryContentElement
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
@@ -52,7 +54,6 @@ import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
 const btnBandcampTab = getBandcampTabElement();
-const btnHistoryTab = document.getElementById('history-tab');
 
 async function proceedBandcampData() {
   logInfo('Proceed Bandcamp data');
@@ -117,6 +118,7 @@ function processBandcampPageAlbumResponse(release) {
 }
 
 function processDiscogsDraftPageResponse(response) {
+  const btnHistoryTab = getHistoryTabElement();
   click(btnHistoryTab);
   setHistoryTabSearchValue(response.data.artistName);
 }
@@ -134,12 +136,10 @@ function replaceVersion(document) {
 function setupNavigation() {
   logInfo('Setup navigation');
 
-  btnHistoryTab.addEventListener('click', () => {
-    setupHistoryTab(document.getElementById('history'));
-  });
-
+  const btnHistoryTab = getHistoryTabElement();
   setupBandcampTab(btnHistoryTab);
   setupReleasesTabElement();
+  setupHistoryTab(btnHistoryTab, getHistoryContentElement());
   setupNavigationLinks();
 }
 

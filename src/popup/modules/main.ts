@@ -68,6 +68,14 @@ export function getReleasesContentElement(): HTMLElement | null {
   return document.getElementById('releases');
 }
 
+export function getHistoryTabElement(): HTMLElement | null {
+  return document.getElementById('history-tab');
+}
+
+export function getHistoryContentElement(): HTMLElement | null {
+  return document.getElementById('history');
+}
+
 export function setupNavigationLinks(): void {
   const storage = globalThis.storage;
 

@@ -19,7 +19,12 @@ export function setupReleaseCardTab(release) {
 
   if (isRelease) {
     getUrlHistory(release.url, (history) => {
-      renderReleaseCard(release, history, contentElement.querySelector('main'));
+      renderReleaseCard(
+        release,
+        history,
+        document.getElementById('releaseCardTemplate'),
+        contentElement.querySelector('main')
+      );
       setupConsoleLogRelease(release);
     });
   }

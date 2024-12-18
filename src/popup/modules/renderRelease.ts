@@ -13,8 +13,11 @@ import { History } from '../../types';
 export function renderReleaseCard(
   release: Release,
   history: History,
+  releaseCardTemplate: HTMLElement | null,
   element: HTMLElement
 ): void {
+  if (!releaseCardTemplate) return;
+
   setBackgroundImage(
     document.querySelector('.bg-image') as HTMLElement,
     release.image
@@ -44,20 +47,16 @@ export function renderReleaseCard(
     title: 'Open Bandcamp release page\n' + release.url
   };
 
-  render(
-    document.getElementById('releaseCardTemplate') as HTMLElement,
-    element,
-    {
-      release,
-      tracks,
-      history: releaseHistory,
-      modified,
-      published,
-      discogsSearchUrl,
-      bcReleaseArtistLink,
-      bcReleaseLink
-    }
-  );
+  render(releaseCardTemplate, element, {
+    release,
+    tracks,
+    history: releaseHistory,
+    modified,
+    published,
+    discogsSearchUrl,
+    bcReleaseArtistLink,
+    bcReleaseLink
+  });
 
   setupBtnToDownloadReleasesAsCsv(
     element.querySelector('#downloadReleaseCsv') as HTMLElement,

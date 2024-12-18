@@ -9,7 +9,7 @@ export type StorageObject = Music | Release;
 export interface UuidMap {
   [key: Uuid]: StorageObject | undefined;
 }
-export interface History extends Array<Date> {}
+export type History = Date[];
 export type HistoryItem = chrome.history.HistoryItem;
 
 export type GetUrlHistoryCallback = (history: History) => void;

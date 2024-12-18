@@ -87,7 +87,7 @@ module.exports = (env, argv) => {
           tabContentHistory: fs.readFileSync('./src/popup/content/history_tab.html', 'utf-8'),
           tabContentAbout: fs.readFileSync('./src/popup/content/about.html', 'utf-8'),
           templates: [
-            fs.readFileSync('./src/popup/content/release-card.html', 'utf-8'),
+            fs.readFileSync('./src/popup/content/release-card-template.html', 'utf-8'),
           ]
         },
         minify: true,

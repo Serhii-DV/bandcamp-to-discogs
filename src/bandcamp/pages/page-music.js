@@ -247,8 +247,8 @@ function createArtistFilterWidget(releaseItems) {
 
 function createAlbumAmountWidget(releaseItems) {
   return createElementFromHTML(
-    `<div class="b2d-albumAmount b2d-widget" title="The amount of releases on the page">
-Releases: <span class="b2d-visible">${releaseItems.length}</span> / <span class="b2d-total">${releaseItems.length}</span>
+    `<div class="b2d-albumAmount b2d-widget" title="The displayed and total amount of albums on the page">
+Displayed: <span class="b2d-badge b2d-visible">${releaseItems.length}</span> Total: <span class="b2d-badge b2d-total">${releaseItems.length}</span>
 </div>`
   );
 }

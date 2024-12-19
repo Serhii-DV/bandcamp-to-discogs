@@ -5,7 +5,11 @@ import {
   capitalizeEachWord,
   removeLeadingZeroOrColon
 } from '../../utils/utils';
-import { getUrlHostnameUrl, getUrlSubdomain } from '../../utils/url';
+import {
+  getUrlHostnameUrl,
+  getUrlPath,
+  getUrlSubdomain
+} from '../../utils/url';
 import { render } from '../../utils/render';
 import { setupBtnToDownloadReleasesAsCsv } from '../tabs/download_tab';
 import { History } from '../../types';
@@ -43,7 +47,7 @@ export function renderReleaseCard(
   };
   const bcReleaseLink = {
     href: release.url,
-    content: 'release',
+    content: getUrlPath(release.url),
     title: 'Open Bandcamp release page\n' + release.url
   };
 

@@ -239,6 +239,16 @@ function createArtistFilterWidget(releaseItems) {
     artistFilterData,
     'artist-filter-data'
   );
+  const artistFilterInput =
+    artistFilterElement.querySelector('#b2dArtistFilter');
+
+  // Extract background-color from the BC input element
+  const bcSearchInputElement = document.querySelector('input.search-bar');
+  const bcSearchInputElementStyle =
+    window.getComputedStyle(bcSearchInputElement);
+  artistFilterInput.style.backgroundColor =
+    bcSearchInputElementStyle.backgroundColor;
+  artistFilterInput.style.color = bcSearchInputElementStyle.color;
 
   artistFilterElement.append(artistFilterDatalist);
 

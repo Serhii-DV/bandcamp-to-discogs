@@ -1,8 +1,3 @@
-import {
-  getUrlHostname,
-  getUrlHostnameUrl,
-  removeProtocol
-} from '../utils/url';
 import { ReleaseItem } from './releaseItem';
 import TrackTime from './trackTime.js';
 
@@ -97,7 +92,7 @@ export class Release {
   }
 
   get releaseHostname() {
-    return removeProtocol(this.releaseItem.url);
+    return this.releaseItem.url.withoutProtocol;
   }
 
   get title() {
@@ -113,18 +108,18 @@ export class Release {
   }
 
   get artistHostname() {
-    return getUrlHostname(this.releaseItem.url);
+    return this.releaseItem.artistHostname;
   }
 
   get artistUrl() {
-    return getUrlHostnameUrl(this.releaseItem.url);
+    return this.releaseItem.artistUrl;
   }
 
   toStorageObject() {
     return {
       artist: this.releaseItem.artist,
       title: this.releaseItem.title,
-      url: this.releaseItem.url,
+      url: this.releaseItem.url.toString(),
       label: this.label,
       published: this.published.toISOString(),
       modified: this.modified.toISOString(),

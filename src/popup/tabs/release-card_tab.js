@@ -18,7 +18,7 @@ export function setupReleaseCardTab(release) {
   toggleElements(!isRelease, getWarningElement(contentElement));
 
   if (isRelease) {
-    getUrlHistory(release.url, (history) => {
+    getUrlHistory(release.url.toString(), (history) => {
       renderReleaseCard(
         release,
         history,

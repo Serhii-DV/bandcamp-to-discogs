@@ -5,11 +5,6 @@ import {
   capitalizeEachWord,
   removeLeadingZeroOrColon
 } from '../../utils/utils';
-import {
-  getUrlHostnameUrl,
-  getUrlPath,
-  getUrlSubdomain
-} from '../../utils/url';
 import { render } from '../../utils/render';
 import { setupBtnToDownloadReleasesAsCsv } from '../tabs/download_tab';
 import { History } from '../../types';
@@ -41,14 +36,14 @@ export function renderReleaseCard(
   const published = dateToTemplate(release.published);
   const modified = dateToTemplate(release.modified);
   const bcReleaseArtistLink = {
-    href: getUrlHostnameUrl(release.url),
-    content: getUrlSubdomain(release.url),
-    title: 'Open Bandcamp artist page\n' + getUrlHostnameUrl(release.url)
+    href: release.url.hostnameWithProtocol,
+    content: release.url.subdomain,
+    title: 'Open Bandcamp artist page\n' + release.url.hostnameWithProtocol
   };
   const bcReleaseLink = {
-    href: release.url,
-    content: getUrlPath(release.url),
-    title: 'Open Bandcamp release page\n' + release.url
+    href: release.url.toString(),
+    content: release.url.pathname,
+    title: 'Open Bandcamp release page\n' + release.url.toString()
   };
 
   render(releaseCardTemplate, element, {

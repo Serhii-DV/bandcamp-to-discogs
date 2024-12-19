@@ -18,7 +18,7 @@ export class ArtistItem extends BandcampItem {
   toStorageData(): StorageData {
     const self = this;
     return {
-      url: self.url,
+      url: self.url.toString(),
       name: self.name,
       image: self.image,
       visit: self.visit?.toISOString(),

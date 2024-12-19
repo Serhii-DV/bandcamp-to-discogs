@@ -21,7 +21,7 @@ export function showBandcampTab(): void {
 
 export function showReleaseCardTab(release: Release): void {
   const tab = getReleaseCardContentElement();
-  showCardTab(tab, getCards()).then(() => {
+  showCardTab(tab, getContentCards()).then(() => {
     setupReleaseCardTab(release);
   });
 }
@@ -31,7 +31,7 @@ export function showReleasesTabContent(
   searchValue: string | undefined
 ): void {
   const tab = getReleasesContentElement();
-  showCardTab(tab, getCards()).then(() => {
+  showCardTab(tab, getContentCards()).then(() => {
     const storage = globalThis.storage;
     setupReleasesTab(storage, music, searchValue);
   });
@@ -133,6 +133,10 @@ function showCardTab(
   });
 }
 
-function getCards(): Array<HTMLElement | null> {
-  return [getReleaseCardContentElement(), getReleasesContentElement()];
+function getContentCards(): Array<HTMLElement | null> {
+  return [
+    document.getElementById('data-not-provided'),
+    getReleaseCardContentElement(),
+    getReleasesContentElement()
+  ];
 }

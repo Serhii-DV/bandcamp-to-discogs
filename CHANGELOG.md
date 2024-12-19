@@ -11,6 +11,7 @@
 - core: Improved initialization of console log commands
 - core: Use one tab for release card and releases
 - core: Removed CSV data tab. Data is available through console
+- core: Introduced Bandcamp URL class
 - bandcamp: Improved styling for albums filter widget
 
 ### Fixed

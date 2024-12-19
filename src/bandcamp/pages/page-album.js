@@ -3,6 +3,7 @@ import { getMusicAlbumSchemaData } from '../modules/html.js';
 import { createReleaseFromSchema } from '../../utils/schema';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Storage } from '../../app/core/storage';
+import { MessageType } from '../../app/core/messageType';
 
 const storage = new Storage();
 
@@ -14,7 +15,7 @@ export function setupPageAlbum(pageType) {
   storage.save(release);
 
   chromeListenToMessage((message, sender, sendResponse) => {
-    if (message.type === 'B2D_BC_DATA') {
+    if (message.type === MessageType.BandcampData) {
       sendResponse({
         pageType: pageType.value,
         uuid: release.uuid,

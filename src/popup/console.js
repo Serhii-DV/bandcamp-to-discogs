@@ -2,56 +2,68 @@ import { Metadata } from '../discogs/app/metadata.js';
 import { releaseToDiscogsCsv } from '../discogs/modules/discogs.js';
 import { log, logInfo } from '../utils/console';
 
-export function setupConsole() {
-  initConsole((consoleCommand) => {
-    consoleCommand.addCommand('log.storage', () => {
-      globalThis.storage.log();
-    });
+export function setupConsoleLogStorage(storage) {
+  setCommand('log.storage', () => {
+    storage.log();
   });
 }
 
 /**
  * @param {Release} release
- * @param {Object} schema
  */
-export function setupConsoleRelease(release, keywordsMapping, schema) {
-  initConsole((consoleCommand) => {
-    consoleCommand.addCommand('log.release', () => {
-      log('Release:', release);
-    });
+export function setupConsoleLogRelease(release) {
+  setCommand('log.release', () => {
+    log('Console Release:', release);
+  });
 
-    consoleCommand.addCommand('log.keywordsMapping', () => {
-      log('Keywords mapping:', keywordsMapping);
-    });
-
+  setCommand('log.discogsCsv', () => {
     const discogsCsv = releaseToDiscogsCsv(release);
-    consoleCommand.addCommand('log.discogsCsv', () => {
-      log('Discogs CSV:', discogsCsv);
-    });
+    log('Console Discogs CSV:', discogsCsv);
+    console.table(discogsCsv.toCsvObject());
+  });
 
+  setCommand('log.metadata', () => {
     const metadata = Metadata.fromRelease(release);
-    consoleCommand.addCommand('log.metadata', () => {
-      log('Release metadata:', metadata);
-    });
-
-    consoleCommand.addCommand('log.schema', () => {
-      log('Bandcamp schema:', schema);
-    });
+    log('Console Release Metadata:', metadata);
   });
 }
 
-function initConsole(onInit) {
-  logInfo('Init console');
+export function setupConsoleLogKeywordsMapping(keywordsMapping) {
+  setCommand('log.keywordsMapping', () => {
+    log('Console Keywords mapping:', keywordsMapping);
+  });
+}
+
+/**
+ * @param {Object} schema
+ */
+export function setupConsoleLogSchema(schema) {
+  setCommand('log.schema', () => {
+    log('Bandcamp schema:', schema);
+  });
+}
+
+let consoleCommand;
+
+function setCommand(command, handler) {
+  if (consoleCommand) {
+    setConsoleCommand(command, handler);
+    return;
+  }
 
   // TODO: find a better solution
   // Wait for dashboard content load
   const interval = 100;
   const intervalId = setInterval(() => {
-    const consoleCommand = document.querySelector('console-command');
+    consoleCommand = document.querySelector('console-command');
     if (consoleCommand) {
-      onInit(consoleCommand);
-      logInfo('Console initialized');
+      setConsoleCommand(command, handler);
       clearInterval(intervalId);
     }
   }, interval);
+}
+
+function setConsoleCommand(command, handler) {
+  consoleCommand.setCommand(command, handler);
+  logInfo('Set console command', command);
 }

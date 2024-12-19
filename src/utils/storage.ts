@@ -1,9 +1,8 @@
+import { Storage } from 'src/app/core/storage';
 import { validate as isUUID } from 'uuid';
 
 // Storage utilities
-export function removeNonUuidRecordsFromStorage(): void {
-  const storage = globalThis.storage;
-
+export function removeNonUuidRecordsFromStorage(storage: Storage): void {
   storage.get(['maintenance']).then((item) => {
     if (item.maintenance && item.maintenance.removedNonUuidKeys) return;
 

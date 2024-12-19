@@ -1,39 +1,28 @@
-import { STORAGE_KEY } from '../../app/core/storage';
+import { Storage, StorageKey } from '../../app/core/storage';
 import { Release } from '../../app/release';
 import {
   click,
   getDataAttribute,
   hasDataAttribute,
+  setActiveTab,
   setDataAttribute
 } from '../../utils/html';
-import { ReleasesList } from '../components/releases-list';
 import { setupReleaseCardTab } from '../tabs/release-card_tab';
 import { setupReleasesTab } from '../tabs/releases_tab';
 import { Music } from 'src/app/music';
 
-export function showReleaseCardTab(release: Release) {
-  const btnReleaseCardTab = getReleaseCardTabElement();
+export function showBandcampTab(): void {
+  const btnBandcampTab = getBandcampTabElement();
 
-  if (!btnReleaseCardTab) {
-    return;
+  if (btnBandcampTab) {
+    click(btnBandcampTab);
   }
-
-  click(btnReleaseCardTab);
-  setupReleaseCardTab(release);
 }
 
-export function setupReleasesTabElement(): void {
-  const btnReleasesTab = getReleasesTabElement();
-  if (!btnReleasesTab) return;
-
-  btnReleasesTab.addEventListener('click', () => {
-    const releasesContentElement = getReleasesContentElement();
-    if (!releasesContentElement) return;
-
-    const releasesList = releasesContentElement.querySelector('releases-list');
-    if (!releasesList) return;
-
-    (releasesList as ReleasesList).refreshStatus();
+export function showReleaseCardTab(release: Release): void {
+  const tab = getReleaseCardContentElement();
+  showCardTab(tab, getContentCards()).then(() => {
+    setupReleaseCardTab(release);
   });
 }
 
@@ -41,15 +30,23 @@ export function showReleasesTabContent(
   music: Music,
   searchValue: string | undefined
 ): void {
-  const btnReleasesTab = getReleasesTabElement();
-  if (!btnReleasesTab) return;
-
-  click(btnReleasesTab);
-  setupReleasesTab(music, searchValue);
+  const tab = getReleasesContentElement();
+  showCardTab(tab, getContentCards()).then(() => {
+    const storage = globalThis.storage;
+    setupReleasesTab(storage, music, searchValue);
+  });
 }
 
-export function getReleaseCardTabElement(): HTMLElement | null {
-  return document.getElementById('release-card-tab');
+export function getBandcampTabElement(): HTMLElement | null {
+  return document.getElementById('bandcamp-tab');
+}
+
+export function getBandcampTabContentElement(): HTMLElement | null {
+  return document.getElementById('bandcamp');
+}
+
+export function getCardTabElement(): HTMLElement | null {
+  return document.getElementById('card-tab');
 }
 
 export function getReleaseCardContentElement(): HTMLElement | null {
@@ -64,9 +61,15 @@ export function getReleasesContentElement(): HTMLElement | null {
   return document.getElementById('releases');
 }
 
-export function setupNavigationLinks(): void {
-  const storage = globalThis.storage;
+export function getHistoryTabElement(): HTMLElement | null {
+  return document.getElementById('history-tab');
+}
 
+export function getHistoryContentElement(): HTMLElement | null {
+  return document.getElementById('history');
+}
+
+export function setupNavigationLinks(storage: Storage): void {
   const wishlistLink = document.getElementById('wishlist-link');
   const feedLink = document.getElementById('feed-link');
 
@@ -75,7 +78,7 @@ export function setupNavigationLinks(): void {
   backupTitleAttribute(wishlistLink);
   backupTitleAttribute(feedLink);
 
-  const dataKey = STORAGE_KEY.BANDCAMP_DATA;
+  const dataKey = StorageKey.BANDCAMP_DATA;
 
   storage.get([dataKey]).then((item) => {
     if (!item[dataKey]) return;
@@ -107,4 +110,33 @@ function backupTitleAttribute(element: HTMLElement): HTMLElement {
 
 function getOriginalTitle(element: HTMLElement): string {
   return getDataAttribute(element, 'org-title');
+}
+
+function showCardTab(
+  tab: HTMLElement | null,
+  tabs: (HTMLElement | null)[]
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const btnTab = getCardTabElement();
+    if (!btnTab) {
+      reject(new Error('Card tab element not found'));
+      return;
+    }
+    if (!tab) {
+      reject(new Error('Tab element not found'));
+      return;
+    }
+
+    click(btnTab);
+    setActiveTab(tab, tabs);
+    resolve();
+  });
+}
+
+function getContentCards(): Array<HTMLElement | null> {
+  return [
+    document.getElementById('data-not-provided'),
+    getReleaseCardContentElement(),
+    getReleasesContentElement()
+  ];
 }

@@ -23,7 +23,8 @@ import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Music } from '../../app/music';
 import { ArtistItem } from '../../app/artistItem';
-import { Storage, STORAGE_KEY } from '../../app/core/storage';
+import { Storage, StorageKey } from '../../app/core/storage';
+import { MessageType } from '../../app/core/messageType';
 
 const storage = new Storage();
 
@@ -47,7 +48,7 @@ function savePageData(pageData) {
   const username = pageData.identities.fan.username;
   const url = pageData.identities.fan.url;
 
-  storage.set(STORAGE_KEY.BANDCAMP_DATA, {
+  storage.set(StorageKey.BANDCAMP_DATA, {
     user: {
       username,
       url
@@ -69,7 +70,7 @@ function createMusic(bandData) {
 
 function setupSendMessageToPopup(pageType, music) {
   chromeListenToMessage((message, sender, sendResponse) => {
-    if (message.type === 'B2D_BC_DATA') {
+    if (message.type === MessageType.BandcampData) {
       sendResponse({
         pageType: pageType.value,
         uuid: music.artist.uuid,
@@ -159,8 +160,8 @@ function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
     window.scrollBy(0, -1);
   });
 
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message.type === 'releases-list-search') {
+  chromeListenToMessage((message) => {
+    if (message.type === MessageType.Search) {
       input(artistFilter, message.search);
     }
   });
@@ -238,6 +239,16 @@ function createArtistFilterWidget(releaseItems) {
     artistFilterData,
     'artist-filter-data'
   );
+  const artistFilterInput =
+    artistFilterElement.querySelector('#b2dArtistFilter');
+
+  // Extract background-color from the BC input element
+  const bcSearchInputElement = document.querySelector('input.search-bar');
+  const bcSearchInputElementStyle =
+    window.getComputedStyle(bcSearchInputElement);
+  artistFilterInput.style.backgroundColor =
+    bcSearchInputElementStyle.backgroundColor;
+  artistFilterInput.style.color = bcSearchInputElementStyle.color;
 
   artistFilterElement.append(artistFilterDatalist);
 
@@ -246,8 +257,8 @@ function createArtistFilterWidget(releaseItems) {
 
 function createAlbumAmountWidget(releaseItems) {
   return createElementFromHTML(
-    `<div class="b2d-albumAmount b2d-widget" title="The amount of releases on the page">
-Releases: <span class="b2d-visible">${releaseItems.length}</span> / <span class="b2d-total">${releaseItems.length}</span>
+    `<div class="b2d-albumAmount b2d-widget" title="The displayed and total amount of albums on the page">
+Displayed: <span class="b2d-badge b2d-visible">${releaseItems.length}</span> Total: <span class="b2d-badge b2d-total">${releaseItems.length}</span>
 </div>`
   );
 }

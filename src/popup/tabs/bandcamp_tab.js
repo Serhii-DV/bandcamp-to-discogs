@@ -6,14 +6,13 @@ import {
 } from '../../bandcamp/modules/history';
 import { Release } from '../../app/release';
 
-export function setupBandcampTab(btnHistoryTab) {
+export function setupBandcampTab(btnHistoryTab, storage) {
   log('Setup bandcamp tab');
 
-  setupLatestVisitedWidget(btnHistoryTab);
+  setupLatestVisitedWidget(btnHistoryTab, storage);
 }
 
-function setupLatestVisitedWidget(btnHistoryTab) {
-  const storage = globalThis.storage;
+function setupLatestVisitedWidget(btnHistoryTab, storage) {
   const visitedReleasesWidget = document.getElementById('visitedReleases');
   const limit = getDataAttribute(visitedReleasesWidget, 'limit', 50);
 

@@ -46,10 +46,10 @@ import {
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
 import { PageTypeEnum } from '../bandcamp/app/page-type.js';
-import { isValidBandcampURL } from '../bandcamp/modules/url';
 import { Storage } from '../app/core/storage';
 import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 import { MessageType } from '../app/core/messageType';
+import { isValidBandcampURL } from '../app/core/bandcampUrl';
 
 globalThis.storage = new Storage();
 const storage = globalThis.storage;

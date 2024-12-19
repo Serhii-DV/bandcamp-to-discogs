@@ -23,8 +23,8 @@ import {
   bandcampReleasesAndArtistsHistorySearch,
   historyItemsToArtistOrReleaseItems
 } from '../../bandcamp/modules/history';
-import { isBandcampArtistUrl } from '../../bandcamp/modules/url';
 import { MessageType } from '../../app/core/messageType';
+import { BandcampURL } from '../../app/core/bandcampUrl';
 
 export function setupReleasesTab(storage, music, searchValue) {
   log('Setup releases card tab', music, searchValue);
@@ -69,7 +69,14 @@ export function setupReleasesTab(storage, music, searchValue) {
 
 function setupSearchInput(searchInput, searchValue) {
   getCurrentTab().then((tab) => {
-    if (!tab || !isBandcampArtistUrl(tab.url)) return;
+    if (!tab) return;
+
+    try {
+      const bandcampUrl = new BandcampURL(tab.url);
+      if (!bandcampUrl.isMusic) return;
+    } catch {
+      return;
+    }
 
     searchInput.addEventListener('input', () => {
       chromeSendMessageToTab(

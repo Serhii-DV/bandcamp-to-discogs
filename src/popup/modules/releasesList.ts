@@ -110,7 +110,7 @@ const createItemViewLink = (item: BandcampItem) =>
         } else if (storageItem instanceof Music) {
           showReleasesTabContent(storageItem, undefined);
         } else {
-          openTabsAndClose([item.url]).then(() => {
+          openTabsAndClose([item.url.toString()]).then(() => {
             setTimeout(() => {
               storage.getByUuid(item.uuid).then((storageItem) => {
                 if (storageItem instanceof Release) {

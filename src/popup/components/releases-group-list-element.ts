@@ -109,7 +109,7 @@ export class ReleasesGroupListElement extends HTMLElement {
     );
 
     if (contentElement) {
-      const url = item.url;
+      const url = item.url.toString();
       self.addItem(
         'artist',
         url,
@@ -134,7 +134,7 @@ export class ReleasesGroupListElement extends HTMLElement {
     );
 
     if (contentElement) {
-      const url = artist.url;
+      const url = artist.url.toString();
       self.addItem(
         'artist',
         url,
@@ -161,7 +161,7 @@ export class ReleasesGroupListElement extends HTMLElement {
     );
 
     if (contentElement) {
-      const url = item.url;
+      const url = item.url.toString();
       self.addItem(
         'release',
         url,
@@ -185,7 +185,7 @@ export class ReleasesGroupListElement extends HTMLElement {
     );
 
     if (contentElement) {
-      const url = release.url;
+      const url = release.url.toString();
       self.addItem(
         'release',
         url,

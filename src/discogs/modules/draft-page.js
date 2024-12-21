@@ -1,4 +1,4 @@
-import { log } from '../../utils/console';
+import { log, logError } from '../../utils/console';
 import {
   camelCaseToReadable,
   hasOwnProperty,
@@ -16,6 +16,10 @@ export const getReleaseTitleInput = () => {
 
 export const getQuantityInput = () => {
   return document.querySelector('input[aria-label="Quantity of format"]');
+};
+
+export const getCountrySelect = () => {
+  return document.getElementById('release-country-select');
 };
 
 export const getTrackTitleInputs = () => {
@@ -118,6 +122,11 @@ export function setFormat(format) {
   selectFormatDescription(format.description);
 }
 
+export function setCountry(country) {
+  const countrySelect = getCountrySelect();
+  selectOptionByValue(countrySelect, country);
+}
+
 export function setSubmissionNotes(submissionNotes) {
   const submissionNotesTextarea = getSubmissionNotesTextarea();
   setInputValue(submissionNotesTextarea, submissionNotes);
@@ -150,9 +159,35 @@ function checkInput(inputElement) {
   inputElement.blur();
 }
 
+function selectOptionByValue(selectElement, value) {
+  if (!selectElement || !(selectElement instanceof HTMLSelectElement)) {
+    throw new Error('The first argument must be a valid <select> element.');
+  }
+
+  const option = Array.from(selectElement.options).find(
+    (opt) => opt.value === value
+  );
+
+  if (option) {
+    selectElement.value = value;
+    triggerChangeEvent(selectElement);
+    selectElement.blur();
+    const label = selectElement.getAttribute('aria-label');
+    log(`"${label}" select value changed`, value);
+    return;
+  }
+
+  logError(`Option with value "${value}" not found.`);
+}
+
 function triggerInputEvent(element) {
   const inputEvent = new Event('input', { bubbles: true, cancelable: true });
   element.dispatchEvent(inputEvent);
+}
+
+function triggerChangeEvent(element) {
+  const changeEvent = new Event('change', { bubbles: true, cancelable: true });
+  element.dispatchEvent(changeEvent);
 }
 
 export const setSectionHint = ({ section, title, text }) => {

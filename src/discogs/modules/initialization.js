@@ -13,7 +13,8 @@ import {
   getSubmissionNotesTextarea,
   setFormat,
   setSubmissionNotes,
-  setNotes
+  setNotes,
+  setCountry
 } from './draft-page.js';
 import {
   showNotificationInfo,
@@ -70,6 +71,7 @@ function applyMetadata(metadata) {
 
   setMetadataHints(metadata);
   setFormat(metadata.format);
+  setCountry(metadata.country);
   autofillDurations();
   setSubmissionNotes(metadata.submissionNotes);
   setNotes('');

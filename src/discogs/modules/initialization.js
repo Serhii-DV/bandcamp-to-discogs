@@ -38,11 +38,19 @@ function setupReadMetadataButton() {
 
   onClick(readMetadataBtn, () => {
     try {
-      const metadata = getMetadataFromNotes();
+      const notesTextarea = getNotesTextarea();
+
+      if (!notesTextarea.value) {
+        showNotificationWarning('No Metadata in Notes');
+        return;
+      }
+
+      const metadata = JSON.parse(notesTextarea.value);
       applyMetadata(metadata);
     } catch (error) {
-      logError(error);
-      showNotificationWarning(error.message);
+      const message = 'Invalid Metadata in Notes';
+      logError(message, error);
+      showNotificationWarning(message);
     }
   });
 
@@ -52,19 +60,6 @@ function setupReadMetadataButton() {
   const submissionNotesTextarea = getSubmissionNotesTextarea();
   if (submissionNotesTextarea.value) {
     click(readMetadataBtn);
-  }
-}
-
-/**
- * @return {Metadata} metadata
- */
-function getMetadataFromNotes() {
-  try {
-    const notesTextarea = getNotesTextarea();
-    return JSON.parse(notesTextarea.value);
-  } catch (error) {
-    logError('Invalid JSON metadata in Notes', error);
-    throw new Error('Invalid metadata in Notes');
   }
 }
 

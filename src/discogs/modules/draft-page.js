@@ -1,3 +1,4 @@
+import { log } from '../../utils/console';
 import {
   camelCaseToReadable,
   hasOwnProperty,
@@ -48,10 +49,9 @@ export function selectFormatFileType(fileType) {
 
   if (fileTypeInput) {
     checkInput(fileTypeInput);
-    console.log(`B2D: Format file type ${fileType} was checked`);
-  } else {
-    console.log(`B2D: Format file type ${fileType} not found`);
   }
+
+  log(`Format file type ${fileType}`, fileTypeInput ? 'Checked' : 'Not Found');
 }
 
 /**
@@ -64,10 +64,12 @@ export function selectFormatDescription(formatDescription) {
 
   if (descriptionInput) {
     checkInput(descriptionInput);
-    console.log(`B2D: Format description ${formatDescription} was checked`);
-  } else {
-    console.log(`B2D: Format description ${formatDescription} not found`);
   }
+
+  log(
+    `Format description ${formatDescription}.`,
+    descriptionInput ? 'Checked' : 'Not Found'
+  );
 }
 
 export function autofillDurations() {
@@ -133,7 +135,7 @@ export function setInputValue(inputElement, value) {
   triggerInputEvent(inputElement);
   inputElement.blur();
 
-  console.log(`B2D: Value changed from "${oldValue}" to "${value}"`);
+  log(`Value changed from "${oldValue}" to "${value}"`);
 }
 
 function checkInput(inputElement) {

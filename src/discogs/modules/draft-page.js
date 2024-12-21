@@ -129,13 +129,14 @@ export function setNotes(notes) {
 }
 
 export function setInputValue(inputElement, value) {
-  const oldValue = inputElement.value;
+  const prev = inputElement.value;
   inputElement.focus();
   inputElement.value = value;
   triggerInputEvent(inputElement);
   inputElement.blur();
 
-  log(`Value changed from "${oldValue}" to "${value}"`);
+  const inputLabel = inputElement.getAttribute('aria-label');
+  log(`"${inputLabel}" input value changed`, { prev, value });
 }
 
 function checkInput(inputElement) {

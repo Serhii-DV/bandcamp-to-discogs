@@ -20,6 +20,7 @@ import {
   showNotificationInfo,
   showNotificationWarning
 } from './notification.js';
+import { log, logError } from '../../utils/console';
 
 let artistNameInput;
 let qtyInput;
@@ -27,7 +28,7 @@ let notesTextarea;
 let submissionNotesTextarea;
 
 export const initialize = () => {
-  console.log('[B2D] Initialization... (discogs/script.js)');
+  log('Initialization... (discogs/script.js)');
 
   // Detect elements
   artistNameInput = getArtistNameInput();
@@ -53,7 +54,7 @@ function setupReadMetadataButton() {
       const metadata = getMetadataFromNotes();
       applyMetadata(metadata);
     } catch (error) {
-      console.error(error);
+      logError(error);
       showNotificationWarning(error.message);
     }
   });
@@ -70,8 +71,7 @@ function getMetadataFromNotes() {
   try {
     return JSON.parse(notesTextarea.value);
   } catch (error) {
-    console.error('[B2D] Invalid JSON metadata in Notes');
-    console.error(error);
+    logError('Invalid JSON metadata in Notes', error);
     throw new Error('Invalid metadata in Notes');
   }
 }

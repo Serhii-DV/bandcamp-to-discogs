@@ -70,7 +70,7 @@ export function selectFormatDescription(formatDescription) {
   }
 }
 
-export function fillDurations() {
+export function autofillDurations() {
   const trackTitleInputs = getTrackTitleInputs();
   const trackDurationInputs = document.querySelectorAll(
     'input[aria-label="Track duration"]'
@@ -107,6 +107,23 @@ function extractTitleAndTime(str) {
   const modifiedString = parts.join(' ');
 
   return [modifiedString, timeValue];
+}
+
+export function setFormat(format) {
+  const qtyInput = getQuantityInput();
+  setInputValue(qtyInput, format.qty);
+  selectFormatFileType(format.fileType);
+  selectFormatDescription(format.description);
+}
+
+export function setSubmissionNotes(submissionNotes) {
+  const submissionNotesTextarea = getSubmissionNotesTextarea();
+  setInputValue(submissionNotesTextarea, submissionNotes);
+}
+
+export function setNotes(notes) {
+  const notesTextarea = getNotesTextarea();
+  setInputValue(notesTextarea, notes);
 }
 
 export function setInputValue(inputElement, value) {

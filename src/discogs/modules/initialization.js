@@ -2,19 +2,18 @@
 
 import { chromeListenToMessage } from '../../utils/chrome';
 import { MessageType } from '../../app/core/messageType';
-import { click } from '../../utils/html';
+import { click, onClick } from '../../utils/html';
 import { convertNewlinesToBreaks } from '../../utils/utils';
 import {
   setSectionHint,
-  fillDurations,
+  autofillDurations,
   getSubmissionFormSectionNotes,
-  selectFormatDescription,
-  selectFormatFileType,
-  setInputValue,
   getArtistNameInput,
-  getQuantityInput,
   getNotesTextarea,
-  getSubmissionNotesTextarea
+  getSubmissionNotesTextarea,
+  setFormat,
+  setSubmissionNotes,
+  setNotes
 } from './draft-page.js';
 import {
   showNotificationInfo,
@@ -22,22 +21,9 @@ import {
 } from './notification.js';
 import { log, logError } from '../../utils/console';
 
-let artistNameInput;
-let qtyInput;
-let notesTextarea;
-let submissionNotesTextarea;
-
 export const initialize = () => {
   log('Initialization... (discogs/script.js)');
-
-  // Detect elements
-  artistNameInput = getArtistNameInput();
-  qtyInput = getQuantityInput();
-  notesTextarea = getNotesTextarea();
-  submissionNotesTextarea = getSubmissionNotesTextarea();
-
   setupReadMetadataButton();
-
   chromeListenToMessage((message) => {
     if (message.type === MessageType.Metadata) {
       applyMetadata(message.metadata);
@@ -49,7 +35,8 @@ function setupReadMetadataButton() {
   const readMetadataBtn = document.createElement('button');
   readMetadataBtn.classList.add('button', 'button-small', 'button-blue');
   readMetadataBtn.textContent = 'Read metadata';
-  readMetadataBtn.addEventListener('click', () => {
+
+  onClick(readMetadataBtn, () => {
     try {
       const metadata = getMetadataFromNotes();
       applyMetadata(metadata);
@@ -62,13 +49,18 @@ function setupReadMetadataButton() {
   const submissionFormSectionNotes = getSubmissionFormSectionNotes();
   submissionFormSectionNotes.append(readMetadataBtn);
 
+  const submissionNotesTextarea = getSubmissionNotesTextarea();
   if (submissionNotesTextarea.value) {
     click(readMetadataBtn);
   }
 }
 
+/**
+ * @return {Metadata} metadata
+ */
 function getMetadataFromNotes() {
   try {
+    const notesTextarea = getNotesTextarea();
     return JSON.parse(notesTextarea.value);
   } catch (error) {
     logError('Invalid JSON metadata in Notes', error);
@@ -76,29 +68,30 @@ function getMetadataFromNotes() {
   }
 }
 
+/**
+ * @param {Metadata} metadata
+ */
 function applyMetadata(metadata) {
   setMetadataHints(metadata);
-  updateQuantity(metadata.format.qty);
-  selectFormatFileType(metadata.format.fileType);
-  selectFormatDescription(metadata.format.description);
-  fillDurations();
-  setInputValue(submissionNotesTextarea, metadata.submissionNotes);
-  setInputValue(notesTextarea, '');
+  setFormat(metadata.format);
+  autofillDurations();
+  setSubmissionNotes(metadata.submissionNotes);
+  setNotes('');
+
   showNotificationInfo(
     `Release metadata was applied.<br>${metadata.artist} - ${metadata.title}`
   );
+
+  autofocus();
+}
+
+function autofocus() {
+  const artistNameInput = getArtistNameInput();
 
   if (artistNameInput) {
     // Focus on artist name input
     artistNameInput.focus();
   }
-}
-
-/**
- * @param {Number} qty
- */
-function updateQuantity(qty) {
-  setInputValue(qtyInput, qty);
 }
 
 function setMetadataHints(metadata) {

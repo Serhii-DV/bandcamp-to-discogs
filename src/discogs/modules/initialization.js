@@ -2,41 +2,29 @@
 
 import { chromeListenToMessage } from '../../utils/chrome';
 import { MessageType } from '../../app/core/messageType';
-import { click } from '../../utils/html';
+import { click, onClick } from '../../utils/html';
 import { convertNewlinesToBreaks } from '../../utils/utils';
 import {
   setSectionHint,
-  fillDurations,
+  autofillDurations,
   getSubmissionFormSectionNotes,
-  selectFormatDescription,
-  selectFormatFileType,
-  setInputValue,
   getArtistNameInput,
-  getQuantityInput,
   getNotesTextarea,
-  getSubmissionNotesTextarea
+  getSubmissionNotesTextarea,
+  setFormat,
+  setSubmissionNotes,
+  setNotes,
+  setCountry
 } from './draft-page.js';
 import {
   showNotificationInfo,
   showNotificationWarning
 } from './notification.js';
-
-let artistNameInput;
-let qtyInput;
-let notesTextarea;
-let submissionNotesTextarea;
+import { log, logError } from '../../utils/console';
 
 export const initialize = () => {
-  console.log('[B2D] Initialization... (discogs/script.js)');
-
-  // Detect elements
-  artistNameInput = getArtistNameInput();
-  qtyInput = getQuantityInput();
-  notesTextarea = getNotesTextarea();
-  submissionNotesTextarea = getSubmissionNotesTextarea();
-
+  log('Initialization... (discogs/script.js)');
   setupReadMetadataButton();
-
   chromeListenToMessage((message) => {
     if (message.type === MessageType.Metadata) {
       applyMetadata(message.metadata);
@@ -48,45 +36,57 @@ function setupReadMetadataButton() {
   const readMetadataBtn = document.createElement('button');
   readMetadataBtn.classList.add('button', 'button-small', 'button-blue');
   readMetadataBtn.textContent = 'Read metadata';
-  readMetadataBtn.addEventListener('click', () => {
+
+  onClick(readMetadataBtn, () => {
     try {
-      const metadata = getMetadataFromNotes();
+      const notesTextarea = getNotesTextarea();
+
+      if (!notesTextarea.value) {
+        showNotificationWarning('No Metadata in Notes');
+        return;
+      }
+
+      const metadata = JSON.parse(notesTextarea.value);
       applyMetadata(metadata);
     } catch (error) {
-      console.error(error);
-      showNotificationWarning(error.message);
+      showNotificationWarning('Invalid Metadata in Notes');
+      logError(error);
     }
   });
 
   const submissionFormSectionNotes = getSubmissionFormSectionNotes();
   submissionFormSectionNotes.append(readMetadataBtn);
 
+  const submissionNotesTextarea = getSubmissionNotesTextarea();
   if (submissionNotesTextarea.value) {
     click(readMetadataBtn);
   }
 }
 
-function getMetadataFromNotes() {
-  try {
-    return JSON.parse(notesTextarea.value);
-  } catch (error) {
-    console.error('[B2D] Invalid JSON metadata in Notes');
-    console.error(error);
-    throw new Error('Invalid metadata in Notes');
-  }
-}
-
+/**
+ * @param {Metadata} metadata
+ */
 function applyMetadata(metadata) {
+  log('Applying metadata...', metadata);
+
   setMetadataHints(metadata);
-  updateQuantity(metadata.format.qty);
-  selectFormatFileType(metadata.format.fileType);
-  selectFormatDescription(metadata.format.description);
-  fillDurations();
-  setInputValue(submissionNotesTextarea, metadata.submissionNotes);
-  setInputValue(notesTextarea, '');
+  setFormat(metadata.format);
+  setCountry(metadata.country);
+  autofillDurations();
+  setSubmissionNotes(metadata.submissionNotes);
+  setNotes('');
+
   showNotificationInfo(
     `Release metadata was applied.<br>${metadata.artist} - ${metadata.title}`
   );
+
+  autofocus();
+}
+
+function autofocus() {
+  log('Autofocusing...');
+
+  const artistNameInput = getArtistNameInput();
 
   if (artistNameInput) {
     // Focus on artist name input
@@ -94,14 +94,9 @@ function applyMetadata(metadata) {
   }
 }
 
-/**
- * @param {Number} qty
- */
-function updateQuantity(qty) {
-  setInputValue(qtyInput, qty);
-}
-
 function setMetadataHints(metadata) {
+  log('Setting metadata hints...');
+
   setSectionHint({
     section: 'artist',
     text: `<var>${metadata.artist}</var>`,

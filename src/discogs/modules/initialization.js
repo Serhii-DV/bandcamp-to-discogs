@@ -48,9 +48,8 @@ function setupReadMetadataButton() {
       const metadata = JSON.parse(notesTextarea.value);
       applyMetadata(metadata);
     } catch (error) {
-      const message = 'Invalid Metadata in Notes';
-      logError(message, error);
-      showNotificationWarning(message);
+      showNotificationWarning('Invalid Metadata in Notes');
+      logError(error);
     }
   });
 
@@ -67,6 +66,8 @@ function setupReadMetadataButton() {
  * @param {Metadata} metadata
  */
 function applyMetadata(metadata) {
+  log('Applying metadata...', metadata);
+
   setMetadataHints(metadata);
   setFormat(metadata.format);
   autofillDurations();
@@ -81,6 +82,8 @@ function applyMetadata(metadata) {
 }
 
 function autofocus() {
+  log('Autofocusing...');
+
   const artistNameInput = getArtistNameInput();
 
   if (artistNameInput) {
@@ -90,6 +93,8 @@ function autofocus() {
 }
 
 function setMetadataHints(metadata) {
+  log('Setting metadata hints...');
+
   setSectionHint({
     section: 'artist',
     text: `<var>${metadata.artist}</var>`,

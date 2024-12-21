@@ -1,5 +1,6 @@
 // Notifications
 
+import { log } from '../../utils/console';
 import { getExtensionManifest } from '../../utils/chrome';
 import { isFunction } from '../../utils/utils';
 
@@ -26,6 +27,8 @@ function createNotificationStack() {
 }
 
 export const showNotification = (type, message, onShow) => {
+  log(`Notification: ${type} - ${message}`);
+
   const manifest = getExtensionManifest();
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;

@@ -50,7 +50,8 @@ export function getReleaseItems() {
 }
 
 export function getBandPhotoSrc() {
-  return document.querySelector('.band-photo')?.src;
+  const bandPhoto = document.querySelector('.band-photo');
+  return bandPhoto ? bandPhoto.src : undefined;
 }
 
 export function extractBCSearchInputStyle() {

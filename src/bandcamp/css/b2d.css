@@ -32,13 +32,6 @@
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: var(--bs-badge-border-radius);
-
-  color: #fff !important;
-  background-color: RGBA(
-    var(--bs-secondary-rgb),
-    var(--bs-bg-opacity, 1)
-  ) !important;
-  background-color: #31154b !important;
 }
 
 .b2d-albumAmount .b2d-visible,
@@ -49,4 +42,15 @@
 input#b2dArtistFilter {
   field-sizing: content;
   min-width: 10em;
+  border: 1px solid;
+  padding: 2px 5px;
+}
+
+button#b2dArtistFilterClear {
+  background: transparent;
+  color: inherit;
+  border: none;
+  margin: 0 0 0 3px;
+  padding: 0;
+  vertical-align: middle;
 }

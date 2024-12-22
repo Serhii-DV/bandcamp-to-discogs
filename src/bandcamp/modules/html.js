@@ -50,5 +50,15 @@ export function getReleaseItems() {
 }
 
 export function getBandPhotoSrc() {
-  return document.querySelector('.band-photo')?.src;
+  const bandPhoto = document.querySelector('.band-photo');
+  return bandPhoto ? bandPhoto.src : undefined;
+}
+
+export function extractBCSearchInputStyle() {
+  // Extract background-color from the BC input element
+  const bcSearchInputElement = document.querySelector('input.search-bar');
+  const bcSearchInputElementStyle =
+    window.getComputedStyle(bcSearchInputElement);
+
+  return bcSearchInputElementStyle;
 }

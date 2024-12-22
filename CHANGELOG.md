@@ -13,6 +13,7 @@
 - core: Removed CSV data tab. Data is available through console
 - core: Introduced Bandcamp URL class
 - bandcamp: Improved styling for albums filter widget
+- bandcamp: Added clear filter button to the albums filter widget
 
 ### Fixed
 

@@ -52,3 +52,12 @@ export function getReleaseItems() {
 export function getBandPhotoSrc() {
   return document.querySelector('.band-photo')?.src;
 }
+
+export function extractBCSearchInputStyle() {
+  // Extract background-color from the BC input element
+  const bcSearchInputElement = document.querySelector('input.search-bar');
+  const bcSearchInputElementStyle =
+    window.getComputedStyle(bcSearchInputElement);
+
+  return bcSearchInputElementStyle;
+}

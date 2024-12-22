@@ -18,6 +18,7 @@ import {
   removeBrackets
 } from '../../utils/utils';
 import {
+  extractBCSearchInputStyle,
   getBandPhotoSrc,
   getReleaseItems as getReleaseItemsFromPage
 } from '../modules/html.js';
@@ -111,8 +112,9 @@ function setupIsotope() {
     );
   });
 
-  const artistFilterWidget = createArtistFilterWidget(releaseItems);
-  const albumAmountWidget = createAlbumAmountWidget(releaseItems);
+  const bcStyle = extractBCSearchInputStyle();
+  const artistFilterWidget = createArtistFilterWidget(releaseItems, bcStyle);
+  const albumAmountWidget = createAlbumAmountWidget(releaseItems, bcStyle);
 
   const filterBlock = createElementFromHTML(
     `<div class="b2d-widget-container"></div>`
@@ -229,7 +231,7 @@ function getArtistListData(releaseItems) {
   return [...new Set(filterData)];
 }
 
-function createArtistFilterWidget(releaseItems) {
+function createArtistFilterWidget(releaseItems, bcStyle) {
   let artistFilterElement = createElementFromHTML(
     `<div class="b2d-widget">
   <label for="b2dArtistFilter">Artist / Album:</label>
@@ -243,14 +245,8 @@ function createArtistFilterWidget(releaseItems) {
   );
   const artistFilterInput =
     artistFilterElement.querySelector('#b2dArtistFilter');
-
-  // Extract background-color from the BC input element
-  const bcSearchInputElement = document.querySelector('input.search-bar');
-  const bcSearchInputElementStyle =
-    window.getComputedStyle(bcSearchInputElement);
-  artistFilterInput.style.backgroundColor =
-    bcSearchInputElementStyle.backgroundColor;
-  artistFilterInput.style.color = bcSearchInputElementStyle.color;
+  artistFilterInput.style.backgroundColor = bcStyle.backgroundColor;
+  artistFilterInput.style.color = bcStyle.color;
 
   artistFilterElement.append(artistFilterDatalist);
 
@@ -273,10 +269,17 @@ function createArtistFilterWidget(releaseItems) {
   return artistFilterElement;
 }
 
-function createAlbumAmountWidget(releaseItems) {
-  return createElementFromHTML(
+function createAlbumAmountWidget(releaseItems, bcStyle) {
+  const widget = createElementFromHTML(
     `<div class="b2d-albumAmount b2d-widget" title="The displayed and total amount of albums on the page">
 Displayed: <span class="b2d-badge b2d-visible">${releaseItems.length}</span> Total: <span class="b2d-badge b2d-total">${releaseItems.length}</span>
 </div>`
   );
+  const badges = widget.querySelectorAll('.b2d-badge');
+  badges?.forEach((badge) => {
+    badge.style.backgroundColor = bcStyle.backgroundColor;
+    badge.style.color = bcStyle.color;
+  });
+
+  return widget;
 }

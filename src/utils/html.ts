@@ -171,8 +171,11 @@ export function input(
   return element;
 }
 
-function triggerInputEvent(element: HTMLInputElement): HTMLInputElement {
-  element.dispatchEvent(new Event('input', { bubbles: true }));
+export function triggerInputEvent(
+  element: HTMLInputElement,
+  eventInitDict?: EventInit
+): HTMLInputElement {
+  element.dispatchEvent(new Event('input', eventInitDict ?? { bubbles: true }));
   return element;
 }
 

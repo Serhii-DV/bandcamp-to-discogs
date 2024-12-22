@@ -49,4 +49,15 @@
 input#b2dArtistFilter {
   field-sizing: content;
   min-width: 10em;
+  border: 1px solid;
+  padding: 2px 5px;
+}
+
+button#b2dArtistFilterClear {
+  background: transparent;
+  color: inherit;
+  border: none;
+  margin: 0 0 0 3px;
+  padding: 0;
+  vertical-align: middle;
 }

@@ -50,6 +50,5 @@ export function getReleaseItems() {
 }
 
 export function getBandPhotoSrc() {
-  const imgBandPhoto = document.querySelector('.band-photo');
-  return imgBandPhoto.src;
+  return document.querySelector('.band-photo')?.src;
 }

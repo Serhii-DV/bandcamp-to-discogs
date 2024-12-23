@@ -8,6 +8,8 @@ import {
 import { render } from '../../utils/render';
 import { setupBtnToDownloadReleasesAsCsv } from '../tabs/download_tab';
 import { History } from '../../types';
+import { onClick } from '../../utils/html';
+import { showLatestViewed } from './main';
 
 export function renderReleaseCard(
   release: Release,
@@ -61,6 +63,13 @@ export function renderReleaseCard(
     element.querySelector('#downloadReleaseCsv') as HTMLElement,
     [release]
   );
+
+  const latestViewedBtn = element.querySelector(
+    '#latestViewedButton'
+  ) as HTMLElement;
+  onClick(latestViewedBtn, () => {
+    showLatestViewed();
+  });
 
   const releaseArtist = element.querySelector('#release-artist') as HTMLElement;
   const releaseTitle = element.querySelector('#release-title') as HTMLElement;

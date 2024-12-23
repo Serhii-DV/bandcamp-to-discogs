@@ -1,5 +1,4 @@
 import { log } from '../../utils/console';
-import { toggleElements } from '../../utils/html';
 import { Release } from '../../app/release.js';
 import { getReleaseCardContentElement } from '../modules/main';
 import { getUrlHistory } from '../../utils/history';
@@ -15,8 +14,6 @@ export function setupReleaseCardTab(release) {
   const contentElement = getReleaseCardContentElement();
   const isRelease = release instanceof Release;
 
-  toggleElements(!isRelease, getWarningElement(contentElement));
-
   if (isRelease) {
     getUrlHistory(release.url.toString(), (history) => {
       renderReleaseCard(
@@ -28,8 +25,4 @@ export function setupReleaseCardTab(release) {
       setupConsoleLogRelease(release);
     });
   }
-}
-
-function getWarningElement(tab) {
-  return tab.querySelector('.b2d-warning');
 }

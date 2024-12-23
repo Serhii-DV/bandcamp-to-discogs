@@ -44,7 +44,6 @@ export function setupReleasesTab(storage, music, searchValue) {
     musicHeadline.textContent = music.artist.name;
   }
 
-  toggleElements(isEmptyReleaseItems, getWarningElement(contentElement));
   toggleElements(!isEmptyReleaseItems, releasesList);
 
   if (isEmptyReleaseItems) {
@@ -133,8 +132,4 @@ function initDownloadButton(releasesListElement, storage) {
   releasesListElement
     .appendButton(btnNavDownload)
     .addStateButton(btnNavDownload);
-}
-
-function getWarningElement(tab) {
-  return tab.querySelector('.b2d-warning');
 }

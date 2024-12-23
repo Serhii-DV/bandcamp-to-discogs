@@ -70,7 +70,7 @@ export class ReleasesGroupListElement extends HTMLElement {
     if (content instanceof Element) {
       item.appendChild(content);
     } else {
-      item.textContent = content;
+      item.innerHTML = content;
     }
 
     if (onClick !== null) {

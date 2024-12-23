@@ -31,17 +31,18 @@ function setupLatestVisitedWidget(btnHistoryTab, storage) {
         visitedReleasesWidget.add(uuidItem ?? item);
       });
 
-      visitedReleasesWidget.addItem(
+      const historyItem = visitedReleasesWidget.addItem(
         'link',
         '#history',
-        'More...',
-        'More...',
+        '<b2d-icon name="clock-history"></b2d-icon> Go to History',
+        'View All History',
         false,
         (event) => {
           click(btnHistoryTab);
           event.preventDefault();
         }
       );
+      historyItem.classList.add('view-all-history');
     });
   }, limit);
 

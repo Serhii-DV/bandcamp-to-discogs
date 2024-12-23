@@ -16,3 +16,7 @@
   user-select: none;
   text-anchor: middle;
 }
+
+.list-group-item.view-all-history {
+  text-align: center;
+}

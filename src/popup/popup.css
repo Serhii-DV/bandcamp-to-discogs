@@ -88,9 +88,3 @@ console-command {
   width: var(--popup-width);
   z-index: 999999;
 }
-
-.sub-navigation {
-  .btn {
-    font-size: 80%;
-  }
-}

@@ -8,8 +8,8 @@
 - discogs: Set default release country to `Worldwide`
 - popup: Added Bandcamp wishlist and feed links to the main navigation
 - popup: Small improvements on the release card tab for release urls
+- popup: Use one tab for the latest viewed releases, release card and releases
 - core: Improved initialization of console log commands
-- core: Use one tab for release card and releases
 - core: Removed CSV data tab. Data is available through console
 - core: Introduced Bandcamp URL class
 - bandcamp: Improved styling for albums filter widget

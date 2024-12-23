@@ -12,16 +12,13 @@ import { setupReleasesTab } from '../tabs/releases_tab';
 import { Music } from 'src/app/music';
 
 export function showLatestViewed(): void {
-  const btnBandcampTab = getBandcampTabElement();
-
-  if (btnBandcampTab) {
-    click(btnBandcampTab);
-  }
+  const tab = getLatestViewedContentElement();
+  showBandcampTab(tab);
 }
 
 export function showReleaseCard(release: Release): void {
   const tab = getReleaseCardContentElement();
-  showCardTab(tab, getContentCards()).then(() => {
+  showBandcampTab(tab).then(() => {
     setupReleaseCardTab(release);
   });
 }
@@ -31,7 +28,7 @@ export function showReleases(
   searchValue: string | undefined
 ): void {
   const tab = getReleasesContentElement();
-  showCardTab(tab, getContentCards()).then(() => {
+  showBandcampTab(tab).then(() => {
     const storage = globalThis.storage;
     setupReleasesTab(storage, music, searchValue);
   });
@@ -45,8 +42,8 @@ export function getBandcampTabContentElement(): HTMLElement | null {
   return document.getElementById('bandcamp');
 }
 
-export function getCardTabElement(): HTMLElement | null {
-  return document.getElementById('card-tab');
+export function getLatestViewedContentElement(): HTMLElement | null {
+  return document.getElementById('latest-viewed');
 }
 
 export function getReleaseCardContentElement(): HTMLElement | null {
@@ -112,12 +109,16 @@ function getOriginalTitle(element: HTMLElement): string {
   return getDataAttribute(element, 'org-title');
 }
 
+function showBandcampTab(tab: HTMLElement | null): Promise<void> {
+  return showCardTab(tab, getContentCards(), getBandcampTabElement());
+}
+
 function showCardTab(
   tab: HTMLElement | null,
-  tabs: (HTMLElement | null)[]
+  tabs: (HTMLElement | null)[],
+  btnTab: HTMLElement | null
 ): Promise<void> {
   return new Promise((resolve, reject) => {
-    const btnTab = getCardTabElement();
     if (!btnTab) {
       reject(new Error('Card tab element not found'));
       return;
@@ -135,7 +136,7 @@ function showCardTab(
 
 function getContentCards(): Array<HTMLElement | null> {
   return [
-    document.getElementById('data-not-provided'),
+    getLatestViewedContentElement(),
     getReleaseCardContentElement(),
     getReleasesContentElement()
   ];

@@ -4,6 +4,7 @@ import {
   click,
   getDataAttribute,
   hasDataAttribute,
+  onClick,
   setActiveTab,
   setDataAttribute
 } from '../../utils/html';
@@ -34,7 +35,7 @@ export function showReleases(
   });
 }
 
-export function getBandcampTabElement(): HTMLElement | null {
+export function getBandcampTabButton(): HTMLElement | null {
   return document.getElementById('bandcamp-tab');
 }
 
@@ -64,6 +65,12 @@ export function getHistoryTabElement(): HTMLElement | null {
 
 export function getHistoryContentElement(): HTMLElement | null {
   return document.getElementById('history');
+}
+
+export function setupLatestViewedButton(btn: HTMLElement | null): void {
+  onClick(btn, () => {
+    showLatestViewed();
+  });
 }
 
 export function setupNavigationLinks(storage: Storage): void {
@@ -110,7 +117,7 @@ function getOriginalTitle(element: HTMLElement): string {
 }
 
 function showBandcampTab(tab: HTMLElement | null): Promise<void> {
-  return showCardTab(tab, getContentCards(), getBandcampTabElement());
+  return showCardTab(tab, getContentCards(), getBandcampTabButton());
 }
 
 function showCardTab(

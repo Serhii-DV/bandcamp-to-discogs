@@ -36,12 +36,12 @@ import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
 import {
-  showReleasesTabContent,
-  showReleaseCardTab,
+  showReleases,
+  showReleaseCard,
   setupNavigationLinks,
   getHistoryTabElement,
   getHistoryContentElement,
-  showBandcampTab
+  showLatestViewed
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
@@ -60,7 +60,7 @@ async function proceedBandcampData() {
   chromeSendMessageToCurrentTab(
     { type: MessageType.BandcampData },
     processBandcampResponse,
-    showBandcampTab
+    showLatestViewed
   );
 }
 
@@ -99,14 +99,14 @@ function processBandcampResponse(response) {
     });
   } else if (isPageMusic) {
     storage.getByUuid(response.uuid).then((music) => {
-      showReleasesTabContent(music, response.popup.search);
+      showReleases(music, response.popup.search);
     });
   }
 }
 
 function processBandcampPageAlbumResponse(release) {
   try {
-    showReleaseCardTab(release);
+    showReleaseCard(release);
   } catch (error) {
     console.error(error);
   }
@@ -156,7 +156,7 @@ function initialize(tab) {
   } else if (isValidDiscogsReleaseEditUrl(currentTabUrl)) {
     proceedDiscogsEditPageData();
   } else {
-    showBandcampTab();
+    showLatestViewed();
   }
 
   // TODO: Remove this logic in the release 0.19.0

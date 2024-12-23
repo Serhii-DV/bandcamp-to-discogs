@@ -6,11 +6,8 @@
 <body>
   <header>
     <nav id="mainNav" class="btn-group d-flex" role="tablist">
-      <button class="btn btn-dark rounded-0" id="bandcamp-tab" data-bs-toggle="tab" data-bs-target="#bandcamp" role="tab" aria-controls="bandcamp" aria-selected="false" type="button" title="Bandcamp">
+      <button class="btn btn-dark rounded-0" id="bandcamp-tab" data-bs-toggle="tab" data-bs-target="#bandcamp" role="tab" aria-controls="bandcamp" aria-selected="false" type="button" title="Bandcamp latest viewed releases">
         <b2d-icon name="view-list"></b2d-icon>
-      </button>
-      <button class="btn btn-dark rounded-0" id="card-tab" data-bs-toggle="tab" data-bs-target="#card" role="tab" aria-controls="release-card" aria-selected="false" type="button" title="Release preview">
-        <b2d-icon name="card-text"></b2d-icon>
       </button>
       <button class="btn btn-dark rounded-0" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="tab" aria-controls="history" aria-selected="false" type="button" title="History">
         <b2d-icon name="clock-history"></b2d-icon>
@@ -30,13 +27,10 @@
 
     <div class="tab-content">
       <!-- Bandcamp -->
-      <div class="tab-pane fade content-text" id="bandcamp" role="tabpanel" aria-labelledby="bandcamp-tab" tabindex="0">
-        <%= tabContentBandcamp %>
-      </div>
-      <!-- Card -->
-      <div class="tab-pane fade overflow-hidden" id="card" role="tabpanel" aria-labelledby="card-tab" tabindex="0">
-        <div id="data-not-provided">
-          <%= dataNotProvidedHtml %>
+      <div class="tab-pane fade" id="bandcamp" role="tabpanel" aria-labelledby="bandcamp-tab" tabindex="0">
+        <!-- Latest viewed -->
+        <div id="latest-viewed" class="content-text">
+          <%= tabContentBandcamp %>
         </div>
         <!-- Release -->
         <div id="release-card" class="d-none">

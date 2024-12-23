@@ -5,7 +5,7 @@ import {
   hide,
   show
 } from '../../utils/html';
-import { showReleaseCardTab, showReleasesTabContent } from '../modules/main';
+import { showReleaseCard, showReleases } from '../modules/main';
 import { ReleaseItem } from '../../app/releaseItem';
 import { ArtistItem } from '../../app/artistItem';
 import { BandcampItem } from '../../app/bandcampItem';
@@ -70,7 +70,7 @@ export class ReleasesGroupListElement extends HTMLElement {
     if (content instanceof Element) {
       item.appendChild(content);
     } else {
-      item.textContent = content;
+      item.innerHTML = content;
     }
 
     if (onClick !== null) {
@@ -142,7 +142,7 @@ export class ReleasesGroupListElement extends HTMLElement {
         `Show artist/label information`,
         false,
         (event: Event) => {
-          showReleasesTabContent(item, undefined);
+          showReleases(item, undefined);
           event.preventDefault();
         }
       );
@@ -193,7 +193,7 @@ export class ReleasesGroupListElement extends HTMLElement {
         `Open release card`,
         false,
         (event: Event) => {
-          showReleaseCardTab(release);
+          showReleaseCard(release);
           event.preventDefault();
         }
       );

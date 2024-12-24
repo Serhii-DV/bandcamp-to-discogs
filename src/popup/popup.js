@@ -41,9 +41,7 @@ import {
   setupNavigationLinks,
   getHistoryTabElement,
   getHistoryContentElement,
-  showLatestViewed,
-  getBandcampTabButton,
-  setupLatestViewedButton
+  showLatestViewed
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
@@ -133,7 +131,6 @@ function replaceVersion(document) {
 function setupNavigation() {
   logInfo('Setup navigation');
 
-  setupLatestViewedButton(getBandcampTabButton());
   const btnHistoryTab = getHistoryTabElement();
   setupBandcampTab(btnHistoryTab, storage);
   setupHistoryTab(btnHistoryTab, getHistoryContentElement(), storage);

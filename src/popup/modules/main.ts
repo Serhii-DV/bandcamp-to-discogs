@@ -103,7 +103,7 @@ export function setupNavigationLinks(storage: Storage): void {
       'title',
       getOriginalTitle(feedLink) + usernameInTitle
     );
-    wishlistLink.setAttribute('href', user.url);
+    wishlistLink.setAttribute('href', user.url + '/wishlist');
     wishlistLink.setAttribute(
       'title',
       getOriginalTitle(wishlistLink) + usernameInTitle

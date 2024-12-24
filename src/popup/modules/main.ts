@@ -1,8 +1,10 @@
+import { log } from '../../utils/console';
 import { Storage, StorageKey } from '../../app/core/storage';
 import { Release } from '../../app/release';
 import {
   click,
   getDataAttribute,
+  getVisibleElement,
   hasDataAttribute,
   onClick,
   setActiveTab,
@@ -10,7 +12,8 @@ import {
 } from '../../utils/html';
 import { setupReleaseCardTab } from '../tabs/release-card_tab';
 import { setupReleasesTab } from '../tabs/releases_tab';
-import { Music } from 'src/app/music';
+import { Music } from '../../app/music';
+import { hasClass } from '../../utils/utils';
 
 export function showLatestViewed(): void {
   const tab = getLatestViewedContentElement();
@@ -18,21 +21,21 @@ export function showLatestViewed(): void {
 }
 
 export function showReleaseCard(release: Release): void {
+  setupReleaseCardTab(release);
+
   const tab = getReleaseCardContentElement();
-  showBandcampTab(tab).then(() => {
-    setupReleaseCardTab(release);
-  });
+  showBandcampTab(tab);
 }
 
 export function showReleases(
   music: Music,
   searchValue: string | undefined
 ): void {
+  const storage = globalThis.storage;
+  setupReleasesTab(storage, music, searchValue);
+
   const tab = getReleasesContentElement();
-  showBandcampTab(tab).then(() => {
-    const storage = globalThis.storage;
-    setupReleasesTab(storage, music, searchValue);
-  });
+  showBandcampTab(tab);
 }
 
 export function getBandcampTabButton(): HTMLElement | null {
@@ -67,9 +70,15 @@ export function getHistoryContentElement(): HTMLElement | null {
   return document.getElementById('history');
 }
 
-export function setupLatestViewedButton(btn: HTMLElement | null): void {
+export function setupBandcampButton(): void {
+  const btn = getBandcampTabButton();
   onClick(btn, () => {
-    showLatestViewed();
+    const tabs = getBandcampContentCards();
+    const visibleTab = getVisibleElement(tabs);
+
+    if (visibleTab && visibleTab !== getLatestViewedContentElement()) {
+      showLatestViewed();
+    }
   });
 }
 
@@ -94,7 +103,7 @@ export function setupNavigationLinks(storage: Storage): void {
       'title',
       getOriginalTitle(feedLink) + usernameInTitle
     );
-    wishlistLink.setAttribute('href', user.url);
+    wishlistLink.setAttribute('href', user.url + '/wishlist');
     wishlistLink.setAttribute(
       'title',
       getOriginalTitle(wishlistLink) + usernameInTitle
@@ -116,32 +125,18 @@ function getOriginalTitle(element: HTMLElement): string {
   return getDataAttribute(element, 'org-title');
 }
 
-function showBandcampTab(tab: HTMLElement | null): Promise<void> {
-  return showCardTab(tab, getContentCards(), getBandcampTabButton());
+function showBandcampTab(tab: HTMLElement | null): void {
+  log(`Show bandcamp tab "${tab?.id}"`);
+
+  const btn = getBandcampTabButton();
+  if (btn && !hasClass(btn, 'active')) {
+    click(btn);
+  }
+
+  setActiveTab(tab, getBandcampContentCards());
 }
 
-function showCardTab(
-  tab: HTMLElement | null,
-  tabs: (HTMLElement | null)[],
-  btnTab: HTMLElement | null
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (!btnTab) {
-      reject(new Error('Card tab element not found'));
-      return;
-    }
-    if (!tab) {
-      reject(new Error('Tab element not found'));
-      return;
-    }
-
-    click(btnTab);
-    setActiveTab(tab, tabs);
-    resolve();
-  });
-}
-
-function getContentCards(): Array<HTMLElement | null> {
+function getBandcampContentCards(): Array<HTMLElement | null> {
   return [
     getLatestViewedContentElement(),
     getReleaseCardContentElement(),

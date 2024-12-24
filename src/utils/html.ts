@@ -397,3 +397,23 @@ export function setActiveTab(
     }
   }
 }
+
+export function getVisibleElement(
+  elements: (HTMLElement | null)[]
+): HTMLElement | undefined {
+  return elements.find((element) => isElementVisible(element)) || undefined;
+}
+
+export function isElementVisible(element: HTMLElement | null): boolean {
+  if (!element) {
+    return false;
+  }
+
+  const style = getComputedStyle(element);
+  return (
+    !element.classList.contains('d-none') &&
+    style.display !== 'none' &&
+    style.visibility !== 'hidden' &&
+    style.opacity !== '0'
+  );
+}

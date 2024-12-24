@@ -3,14 +3,10 @@ import {
   historyItemToReleaseItem,
   historySearch
 } from '../../utils/history';
-import {
-  isBandcampAlbumUrl,
-  isBandcampArtistUrl,
-  isBandcampSiteUrl
-} from './url';
 import { ArtistOrReleaseItem } from 'src/popup/modules/releasesList';
 import { log } from '../../utils/console';
 import { GetLatestVisitsCallback, HistoryItem, Uuid } from '../../types';
+import { BandcampURL } from '../../app/core/bandcampUrl';
 
 export function bandcampReleasesAndArtistsHistorySearch(
   callable: GetLatestVisitsCallback,
@@ -19,28 +15,15 @@ export function bandcampReleasesAndArtistsHistorySearch(
   historySearch('bandcamp.com', callable, maxResults);
 }
 
-export function filterBandcampUrls(historyItems: HistoryItem[]): HistoryItem[] {
-  return historyItems.filter(
-    (item) =>
-      item.url &&
-      (isBandcampArtistUrl(item.url) || isBandcampAlbumUrl(item.url))
-  );
-}
-
-export function filterBandcampAlbumUrl(
-  historyItems: HistoryItem[]
-): HistoryItem[] {
-  return historyItems.filter(
-    (item) => item.url && isBandcampAlbumUrl(item.url)
-  );
-}
-
-export function filterBandcampArtistUrl(
-  historyItems: HistoryItem[]
-): HistoryItem[] {
-  return historyItems.filter(
-    (item) => item.url && isBandcampArtistUrl(item.url)
-  );
+function filterBandcampUrls(historyItems: HistoryItem[]): HistoryItem[] {
+  return historyItems.filter((item) => {
+    try {
+      const bandcampUrl = new BandcampURL(item.url ?? '');
+      return bandcampUrl.isMusic || bandcampUrl.isAlbum;
+    } catch (error) {
+      return false;
+    }
+  });
 }
 
 export function historyItemsToArtistOrReleaseItems(
@@ -51,20 +34,23 @@ export function historyItemsToArtistOrReleaseItems(
   const uuids: Uuid[] = [];
 
   bandcampHistoryItems.forEach((historyItem) => {
-    if (!historyItem.url || isBandcampSiteUrl(historyItem.url)) return;
+    try {
+      const bandcampUrl = new BandcampURL(historyItem.url ?? '');
+      if (bandcampUrl.isRegular) return;
 
-    let item = undefined;
+      let item = undefined;
 
-    if (isBandcampAlbumUrl(historyItem.url)) {
-      item = historyItemToReleaseItem(historyItem);
-    } else if (isBandcampArtistUrl(historyItem.url)) {
-      item = historyItemToArtistItem(historyItem);
-    }
+      if (bandcampUrl.isAlbum) {
+        item = historyItemToReleaseItem(historyItem);
+      } else if (bandcampUrl.isMusic) {
+        item = historyItemToArtistItem(historyItem);
+      }
 
-    if (item && !uuids.includes(item.uuid)) {
-      items.push(item);
-      uuids.push(item.uuid);
-    }
+      if (item && !uuids.includes(item.uuid)) {
+        items.push(item);
+        uuids.push(item.uuid);
+      }
+    } catch (error) {}
   });
 
   log('historyItemsToArtistOrReleaseItems', items);

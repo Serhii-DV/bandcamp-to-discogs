@@ -1,3 +1,4 @@
+import { log, logError } from '../../utils/console';
 import {
   camelCaseToReadable,
   hasOwnProperty,
@@ -15,6 +16,10 @@ export const getReleaseTitleInput = () => {
 
 export const getQuantityInput = () => {
   return document.querySelector('input[aria-label="Quantity of format"]');
+};
+
+export const getCountrySelect = () => {
+  return document.getElementById('release-country-select');
 };
 
 export const getTrackTitleInputs = () => {
@@ -48,10 +53,9 @@ export function selectFormatFileType(fileType) {
 
   if (fileTypeInput) {
     checkInput(fileTypeInput);
-    console.log(`B2D: Format file type ${fileType} was checked`);
-  } else {
-    console.log(`B2D: Format file type ${fileType} not found`);
   }
+
+  log(`Format file type ${fileType}`, fileTypeInput ? 'Checked' : 'Not Found');
 }
 
 /**
@@ -64,13 +68,15 @@ export function selectFormatDescription(formatDescription) {
 
   if (descriptionInput) {
     checkInput(descriptionInput);
-    console.log(`B2D: Format description ${formatDescription} was checked`);
-  } else {
-    console.log(`B2D: Format description ${formatDescription} not found`);
   }
+
+  log(
+    `Format description ${formatDescription}.`,
+    descriptionInput ? 'Checked' : 'Not Found'
+  );
 }
 
-export function fillDurations() {
+export function autofillDurations() {
   const trackTitleInputs = getTrackTitleInputs();
   const trackDurationInputs = document.querySelectorAll(
     'input[aria-label="Track duration"]'
@@ -96,8 +102,7 @@ export function fillDurations() {
 function extractTitleAndTime(str) {
   const parts = str.split(' ');
 
-  // Check if the last part matches the time format (minutes:seconds)
-  const timeFormatRegex = /^\d+:\d+$/; // Example: 7:38
+  const timeFormatRegex = /^(\d{1,2}:)?\d{1,2}:\d{2}$/; // Matches hh:mm:ss or mm:ss
   const lastPart = parts[parts.length - 1];
 
   if (!timeFormatRegex.test(lastPart)) {
@@ -110,14 +115,37 @@ function extractTitleAndTime(str) {
   return [modifiedString, timeValue];
 }
 
+export function setFormat(format) {
+  const qtyInput = getQuantityInput();
+  setInputValue(qtyInput, format.qty);
+  selectFormatFileType(format.fileType);
+  selectFormatDescription(format.description);
+}
+
+export function setCountry(country) {
+  const countrySelect = getCountrySelect();
+  selectOptionByValue(countrySelect, country);
+}
+
+export function setSubmissionNotes(submissionNotes) {
+  const submissionNotesTextarea = getSubmissionNotesTextarea();
+  setInputValue(submissionNotesTextarea, submissionNotes);
+}
+
+export function setNotes(notes) {
+  const notesTextarea = getNotesTextarea();
+  setInputValue(notesTextarea, notes);
+}
+
 export function setInputValue(inputElement, value) {
-  const oldValue = inputElement.value;
+  const prev = inputElement.value;
   inputElement.focus();
   inputElement.value = value;
   triggerInputEvent(inputElement);
   inputElement.blur();
 
-  console.log(`B2D: Value changed from "${oldValue}" to "${value}"`);
+  const inputLabel = inputElement.getAttribute('aria-label');
+  log(`"${inputLabel}" input value changed`, { prev, value });
 }
 
 function checkInput(inputElement) {
@@ -131,9 +159,35 @@ function checkInput(inputElement) {
   inputElement.blur();
 }
 
+function selectOptionByValue(selectElement, value) {
+  if (!selectElement || !(selectElement instanceof HTMLSelectElement)) {
+    throw new Error('The first argument must be a valid <select> element.');
+  }
+
+  const option = Array.from(selectElement.options).find(
+    (opt) => opt.value === value
+  );
+
+  if (option) {
+    selectElement.value = value;
+    triggerChangeEvent(selectElement);
+    selectElement.blur();
+    const label = selectElement.getAttribute('aria-label');
+    log(`"${label}" select value changed`, value);
+    return;
+  }
+
+  logError(`Option with value "${value}" not found.`);
+}
+
 function triggerInputEvent(element) {
   const inputEvent = new Event('input', { bubbles: true, cancelable: true });
   element.dispatchEvent(inputEvent);
+}
+
+function triggerChangeEvent(element) {
+  const changeEvent = new Event('change', { bubbles: true, cancelable: true });
+  element.dispatchEvent(changeEvent);
 }
 
 export const setSectionHint = ({ section, title, text }) => {

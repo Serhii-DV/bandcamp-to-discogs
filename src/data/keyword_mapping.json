@@ -18,14 +18,19 @@
   "doom": "Doom Metal",
 
   "//": "Combined",
+  "ambient drone": ["ambient", "drone"],
   "bombastic": ["martial industrial", "neoclassical"],
   "martial industrial": ["martial", "industrial"],
+  "martial industrial ambient": ["martial industrial", "ambient"],
   "martial folk": ["martial", "neofolk"],
 
   "//": "Aliases",
+  "#industrialmusic": ["industrial"],
   "darkambient": ["dark ambient"],
+  "#darkambient": ["dark ambient"],
   "martial-industrial": ["martial industrial"],
   "neo-folk": ["neofolk"],
+  "#neofolk": ["neofolk"],
   "neoklassik": ["neoclassical"],
   "neo-classical": ["neoclassical"],
 

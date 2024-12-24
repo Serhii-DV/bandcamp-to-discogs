@@ -11,6 +11,10 @@ import { Music } from '../music';
 import { hasOwnProperty, isObject } from '../../utils/utils';
 import { validate as isUUID } from 'uuid';
 
+export enum StorageKey {
+  BANDCAMP_DATA = 'bandcamp_data'
+}
+
 export class Storage {
   private storage: chrome.storage.StorageArea;
 

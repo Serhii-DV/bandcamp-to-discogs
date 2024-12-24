@@ -8,11 +8,12 @@ import {
 } from '../../utils/chrome';
 import { isValidDiscogsReleaseEditUrl } from '../../discogs/app/utils';
 import { createIconLink } from '../../utils/html';
-import { showReleaseCardTab, showReleasesTabContent } from './main';
+import { showReleaseCard, showReleases } from './main';
 import { Metadata } from '../../discogs/app/metadata';
 import { ReleaseItem } from '../../app/releaseItem';
 import { BandcampItem } from '../../app/bandcampItem';
 import { Music } from '../../app/music';
+import { MessageType } from '../../app/core/messageType';
 
 export type ArtistOrReleaseItem = ArtistItem | ReleaseItem;
 
@@ -105,17 +106,17 @@ const createItemViewLink = (item: BandcampItem) =>
     onClick: () => {
       storage.getByUuid(item.uuid).then((storageItem) => {
         if (storageItem instanceof Release) {
-          showReleaseCardTab(storageItem);
+          showReleaseCard(storageItem);
         } else if (storageItem instanceof Music) {
-          showReleasesTabContent(storageItem, undefined);
+          showReleases(storageItem, undefined);
         } else {
-          openTabsAndClose([item.url]).then(() => {
+          openTabsAndClose([item.url.toString()]).then(() => {
             setTimeout(() => {
               storage.getByUuid(item.uuid).then((storageItem) => {
                 if (storageItem instanceof Release) {
-                  showReleaseCardTab(storageItem);
+                  showReleaseCard(storageItem);
                 } else if (storageItem instanceof Music) {
-                  showReleasesTabContent(storageItem, undefined);
+                  showReleases(storageItem, undefined);
                 }
               });
             }, 3000);
@@ -137,7 +138,7 @@ export const createApplyMetadataLink = (item: ReleaseItem) =>
         if (storageItem instanceof Release) {
           const metadata = Metadata.fromRelease(storageItem);
           chromeSendMessageToCurrentTab({
-            type: 'B2D_METADATA',
+            type: MessageType.Metadata,
             metadata
           });
         }

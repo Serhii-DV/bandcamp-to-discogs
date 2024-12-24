@@ -23,9 +23,10 @@ import {
   bandcampReleasesAndArtistsHistorySearch,
   historyItemsToArtistOrReleaseItems
 } from '../../bandcamp/modules/history';
-import { isBandcampArtistUrl } from '../../bandcamp/modules/url';
+import { MessageType } from '../../app/core/messageType';
+import { BandcampURL } from '../../app/core/bandcampUrl';
 
-export function setupReleasesTab(music, searchValue) {
+export function setupReleasesTab(storage, music, searchValue) {
   log('Setup releases card tab', music, searchValue);
 
   const isMusic = music instanceof Music;
@@ -43,14 +44,13 @@ export function setupReleasesTab(music, searchValue) {
     musicHeadline.textContent = music.artist.name;
   }
 
-  toggleElements(isEmptyReleaseItems, getWarningElement(contentElement));
   toggleElements(!isEmptyReleaseItems, releasesList);
 
   if (isEmptyReleaseItems) {
     return;
   }
 
-  initDownloadButton(releasesList);
+  initDownloadButton(releasesList, storage);
 
   releasesList.addStatusElement(
     document.getElementById('selectedStatusInfo'),
@@ -68,12 +68,19 @@ export function setupReleasesTab(music, searchValue) {
 
 function setupSearchInput(searchInput, searchValue) {
   getCurrentTab().then((tab) => {
-    if (!tab || !isBandcampArtistUrl(tab.url)) return;
+    if (!tab) return;
+
+    try {
+      const bandcampUrl = new BandcampURL(tab.url);
+      if (!bandcampUrl.isMusic) return;
+    } catch {
+      return;
+    }
 
     searchInput.addEventListener('input', () => {
       chromeSendMessageToTab(
         {
-          type: 'releases-list-search',
+          type: MessageType.Search,
           search: searchInput.value
         },
         tab
@@ -84,7 +91,7 @@ function setupSearchInput(searchInput, searchValue) {
   input(searchInput, searchValue);
 }
 
-function initDownloadButton(releasesListElement) {
+function initDownloadButton(releasesListElement, storage) {
   let btnNavDownload = releasesListElement.querySelector(
     '#releasesTabLIst__downloadBtn'
   );
@@ -108,8 +115,6 @@ function initDownloadButton(releasesListElement) {
       link.getAttribute('href')
     );
 
-    const storage = globalThis.storage;
-
     // Open selected releases (add to the storage)
     openTabsAndClose(checkedUrls).then(() => {
       setTimeout(() => {
@@ -127,8 +132,4 @@ function initDownloadButton(releasesListElement) {
   releasesListElement
     .appendButton(btnNavDownload)
     .addStateButton(btnNavDownload);
-}
-
-function getWarningElement(tab) {
-  return tab.querySelector('.b2d-warning');
 }

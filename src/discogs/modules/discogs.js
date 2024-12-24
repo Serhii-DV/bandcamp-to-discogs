@@ -29,7 +29,6 @@ export function getSearchDiscogsReleaseUrl(artist, release) {
  */
 export function generateSubmissionNotes(releaseUrl) {
   return replaceTokens(config.text.notes, {
-    extension_url: config.extension_url,
     release_url: releaseUrl
   });
 }

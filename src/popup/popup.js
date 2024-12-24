@@ -24,40 +24,43 @@ import {
   setHistoryTabSearchValue,
   setupHistoryTab
 } from './tabs/history_tab.js';
-import { disable, enable, click } from '../utils/html';
-import { setupCsvDataTab } from './tabs/csv_data_tab.js';
+import { click } from '../utils/html';
 import { bytesToSize } from '../utils/utils';
-import { setupConsole, setupConsoleRelease } from './console.js';
+import {
+  setupConsoleLogStorage,
+  setupConsoleLogKeywordsMapping,
+  setupConsoleLogRelease,
+  setupConsoleLogSchema
+} from './console.js';
 import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
 import { logInfo } from '../utils/console';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
 import {
-  getReleaseCardTabElement,
-  showReleasesTabContent,
-  showReleaseCardTab,
-  setupReleasesTabElement
+  showReleases,
+  showReleaseCard,
+  setupNavigationLinks,
+  getHistoryTabElement,
+  getHistoryContentElement,
+  showLatestViewed
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
 import { PageTypeEnum } from '../bandcamp/app/page-type.js';
-import { isValidBandcampURL } from '../bandcamp/modules/url';
 import { Storage } from '../app/core/storage';
 import { removeNonUuidRecordsFromStorage } from '../utils/storage';
+import { MessageType } from '../app/core/messageType';
+import { isValidBandcampURL } from '../app/core/bandcampUrl';
 
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
-const btnBandcampTab = document.getElementById('bandcamp-tab');
-const btnReleaseCardTab = getReleaseCardTabElement();
-const btnCsvDataTab = document.getElementById('csvData-tab');
-const btnHistoryTab = document.getElementById('history-tab');
 
 async function proceedBandcampData() {
   logInfo('Proceed Bandcamp data');
 
   chromeSendMessageToCurrentTab(
-    { type: 'B2D_BC_DATA' },
+    { type: MessageType.BandcampData },
     processBandcampResponse,
-    showBandcampTab
+    showLatestViewed
   );
 }
 
@@ -65,14 +68,9 @@ async function proceedDiscogsEditPageData() {
   logInfo('Proceed Discogs edit page data');
 
   chromeSendMessageToCurrentTab(
-    { type: 'B2D_DISCOGS_EDIT_PAGE_DATA' },
+    { type: MessageType.DiscogsEditPageData },
     processDiscogsDraftPageResponse
   );
-}
-
-function showBandcampTab() {
-  disable(btnCsvDataTab);
-  click(btnBandcampTab);
 }
 
 function processBandcampResponse(response) {
@@ -88,7 +86,9 @@ function processBandcampResponse(response) {
     loadDiscogsGenres(config.genres_url).then(() => {
       loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
         storage.getByUuid(response.uuid).then((release) => {
-          setupConsoleRelease(release, keywordsMapping, response.schema);
+          setupConsoleLogKeywordsMapping(keywordsMapping);
+          setupConsoleLogRelease(release);
+          setupConsoleLogSchema(response.schema);
           processBandcampPageAlbumResponse(
             release,
             response.schema,
@@ -99,22 +99,21 @@ function processBandcampResponse(response) {
     });
   } else if (isPageMusic) {
     storage.getByUuid(response.uuid).then((music) => {
-      showReleasesTabContent(music, response.popup.search);
+      showReleases(music, response.popup.search);
     });
   }
 }
 
 function processBandcampPageAlbumResponse(release) {
   try {
-    showReleaseCardTab(release);
-    setupCsvDataTab(release, btnCsvDataTab);
+    showReleaseCard(release);
   } catch (error) {
     console.error(error);
   }
 }
 
 function processDiscogsDraftPageResponse(response) {
-  disable(btnCsvDataTab);
+  const btnHistoryTab = getHistoryTabElement();
   click(btnHistoryTab);
   setHistoryTabSearchValue(response.data.artistName);
 }
@@ -132,16 +131,10 @@ function replaceVersion(document) {
 function setupNavigation() {
   logInfo('Setup navigation');
 
-  btnReleaseCardTab.addEventListener('click', () => {
-    enable(btnCsvDataTab);
-  });
-
-  btnHistoryTab.addEventListener('click', () => {
-    setupHistoryTab(document.getElementById('history'));
-  });
-
-  setupBandcampTab(btnHistoryTab);
-  setupReleasesTabElement();
+  const btnHistoryTab = getHistoryTabElement();
+  setupBandcampTab(btnHistoryTab, storage);
+  setupHistoryTab(btnHistoryTab, getHistoryContentElement(), storage);
+  setupNavigationLinks(storage);
 }
 
 function initialize(tab) {
@@ -150,24 +143,24 @@ function initialize(tab) {
   logInfo('Popup initialization');
   logInfo('Current URL', currentTabUrl);
 
-  setupConsole();
+  setupConsoleLogStorage(storage);
   setupNavigation();
   replaceVersion(document);
   checkStorageSize();
 
   setupReleaseCardTab();
-  setupReleasesTab();
+  setupReleasesTab(storage);
 
   if (isValidBandcampURL(currentTabUrl)) {
     proceedBandcampData();
   } else if (isValidDiscogsReleaseEditUrl(currentTabUrl)) {
     proceedDiscogsEditPageData();
   } else {
-    showBandcampTab();
+    showLatestViewed();
   }
 
   // TODO: Remove this logic in the release 0.19.0
-  removeNonUuidRecordsFromStorage();
+  removeNonUuidRecordsFromStorage(storage);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

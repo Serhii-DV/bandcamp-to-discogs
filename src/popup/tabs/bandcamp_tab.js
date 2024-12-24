@@ -5,15 +5,16 @@ import {
   historyItemsToArtistOrReleaseItems
 } from '../../bandcamp/modules/history';
 import { Release } from '../../app/release';
+import { setupBandcampButton } from '../modules/main';
 
-export function setupBandcampTab(btnHistoryTab) {
+export function setupBandcampTab(btnHistoryTab, storage) {
   log('Setup bandcamp tab');
 
-  setupLatestVisitedWidget(btnHistoryTab);
+  setupBandcampButton();
+  setupLatestVisitedWidget(btnHistoryTab, storage);
 }
 
-function setupLatestVisitedWidget(btnHistoryTab) {
-  const storage = globalThis.storage;
+function setupLatestVisitedWidget(btnHistoryTab, storage) {
   const visitedReleasesWidget = document.getElementById('visitedReleases');
   const limit = getDataAttribute(visitedReleasesWidget, 'limit', 50);
 
@@ -32,17 +33,18 @@ function setupLatestVisitedWidget(btnHistoryTab) {
         visitedReleasesWidget.add(uuidItem ?? item);
       });
 
-      visitedReleasesWidget.addItem(
+      const historyItem = visitedReleasesWidget.addItem(
         'link',
         '#history',
-        'More...',
-        'More...',
+        '<b2d-icon name="clock-history"></b2d-icon> Go to History',
+        'View All History',
         false,
         (event) => {
           click(btnHistoryTab);
           event.preventDefault();
         }
       );
+      historyItem.classList.add('view-all-history');
     });
   }, limit);
 

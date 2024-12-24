@@ -1,3 +1,4 @@
+import { MessageType } from '../app/core/messageType';
 import { Metadata } from '../discogs/app/metadata';
 import { logInfo } from './console';
 
@@ -68,7 +69,7 @@ export function getExtensionUrl(path: string): string {
 }
 
 interface B2DTabMessage {
-  type: string;
+  type: MessageType;
   metadata?: Metadata;
 }
 

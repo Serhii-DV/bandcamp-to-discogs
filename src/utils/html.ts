@@ -171,8 +171,11 @@ export function input(
   return element;
 }
 
-function triggerInputEvent(element: HTMLInputElement): HTMLInputElement {
-  element.dispatchEvent(new Event('input', { bubbles: true }));
+export function triggerInputEvent(
+  element: HTMLInputElement,
+  eventInitDict?: EventInit
+): HTMLInputElement {
+  element.dispatchEvent(new Event('input', eventInitDict ?? { bubbles: true }));
   return element;
 }
 
@@ -378,3 +381,39 @@ export const createIconLink = ({
 
   return link;
 };
+
+export function setActiveTab(
+  activeTab: HTMLElement | null,
+  tabs: (HTMLElement | null)[]
+): void {
+  if (!activeTab) return;
+
+  for (const tab of tabs) {
+    if (!tab) continue;
+    if (tab === activeTab) {
+      tab.classList.remove('d-none');
+    } else {
+      tab.classList.add('d-none');
+    }
+  }
+}
+
+export function getVisibleElement(
+  elements: (HTMLElement | null)[]
+): HTMLElement | undefined {
+  return elements.find((element) => isElementVisible(element)) || undefined;
+}
+
+export function isElementVisible(element: HTMLElement | null): boolean {
+  if (!element) {
+    return false;
+  }
+
+  const style = getComputedStyle(element);
+  return (
+    !element.classList.contains('d-none') &&
+    style.display !== 'none' &&
+    style.visibility !== 'hidden' &&
+    style.opacity !== '0'
+  );
+}

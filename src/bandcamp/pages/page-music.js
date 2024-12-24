@@ -5,8 +5,10 @@ import {
   createElementFromHTML,
   input,
   listenForMessage,
+  onClick,
   selectElementWithContent,
-  setDataAttribute
+  setDataAttribute,
+  triggerInputEvent
 } from '../../utils/html';
 import {
   containsOneOf,
@@ -16,6 +18,7 @@ import {
   removeBrackets
 } from '../../utils/utils';
 import {
+  extractBCSearchInputStyle,
   getBandPhotoSrc,
   getReleaseItems as getReleaseItemsFromPage
 } from '../modules/html.js';
@@ -23,7 +26,8 @@ import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Music } from '../../app/music';
 import { ArtistItem } from '../../app/artistItem';
-import { Storage } from '../../app/core/storage';
+import { Storage, StorageKey } from '../../app/core/storage';
+import { MessageType } from '../../app/core/messageType';
 
 const storage = new Storage();
 
@@ -31,10 +35,28 @@ const storage = new Storage();
 export function setupPageMusic(pageType) {
   listenForMessage('BANDCAMP_DATA', (messageData) => {
     const music = createMusic(messageData.bandData);
-    storage.save(music);
+
+    storage.save(music).then(() => {
+      savePageData(messageData.pageData);
+    });
+
     setupSendMessageToPopup(pageType, music);
   });
   setupIsotope();
+}
+
+function savePageData(pageData) {
+  if (!pageData.identities.fan) return;
+
+  const username = pageData.identities.fan.username;
+  const url = pageData.identities.fan.url;
+
+  storage.set(StorageKey.BANDCAMP_DATA, {
+    user: {
+      username,
+      url
+    }
+  });
 }
 
 function createMusic(bandData) {
@@ -51,7 +73,7 @@ function createMusic(bandData) {
 
 function setupSendMessageToPopup(pageType, music) {
   chromeListenToMessage((message, sender, sendResponse) => {
-    if (message.type === 'B2D_BC_DATA') {
+    if (message.type === MessageType.BandcampData) {
       sendResponse({
         pageType: pageType.value,
         uuid: music.artist.uuid,
@@ -90,12 +112,13 @@ function setupIsotope() {
     );
   });
 
-  const artistFilterWidget = createArtistFilterWidget(releaseItems);
+  const bcStyle = extractBCSearchInputStyle();
+  const artistFilterWidget = createArtistFilterWidget(releaseItems, bcStyle);
+  const albumAmountWidget = createAlbumAmountWidget(releaseItems, bcStyle);
+
   const filterBlock = createElementFromHTML(
     `<div class="b2d-widget-container"></div>`
   );
-  const albumAmountWidget = createAlbumAmountWidget(releaseItems);
-
   filterBlock.append(artistFilterWidget);
   filterBlock.append(albumAmountWidget);
 
@@ -141,8 +164,8 @@ function setupArtistFilterElement(artistFilterElement, iso, albumAmountWidget) {
     window.scrollBy(0, -1);
   });
 
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message.type === 'releases-list-search') {
+  chromeListenToMessage((message) => {
+    if (message.type === MessageType.Search) {
       input(artistFilter, message.search);
     }
   });
@@ -208,7 +231,7 @@ function getArtistListData(releaseItems) {
   return [...new Set(filterData)];
 }
 
-function createArtistFilterWidget(releaseItems) {
+function createArtistFilterWidget(releaseItems, bcStyle) {
   let artistFilterElement = createElementFromHTML(
     `<div class="b2d-widget">
   <label for="b2dArtistFilter">Artist / Album:</label>
@@ -220,16 +243,43 @@ function createArtistFilterWidget(releaseItems) {
     artistFilterData,
     'artist-filter-data'
   );
+  const artistFilterInput =
+    artistFilterElement.querySelector('#b2dArtistFilter');
+  artistFilterInput.style.backgroundColor = bcStyle.backgroundColor;
+  artistFilterInput.style.color = bcStyle.color;
 
   artistFilterElement.append(artistFilterDatalist);
+
+  const clearButton = createElementFromHTML(
+    `<button id="b2dArtistFilterClear" title="Clear the filter">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+</svg>
+  </button>`
+  );
+
+  onClick(clearButton, () => {
+    artistFilterInput.value = '';
+    triggerInputEvent(artistFilterInput);
+  });
+
+  artistFilterElement.append(clearButton);
 
   return artistFilterElement;
 }
 
-function createAlbumAmountWidget(releaseItems) {
-  return createElementFromHTML(
-    `<div class="b2d-albumAmount b2d-widget" title="The amount of releases on the page">
-Releases: <span class="b2d-visible">${releaseItems.length}</span> / <span class="b2d-total">${releaseItems.length}</span>
+function createAlbumAmountWidget(releaseItems, bcStyle) {
+  const widget = createElementFromHTML(
+    `<div class="b2d-albumAmount b2d-widget" title="The displayed and total amount of albums on the page">
+Displayed: <span class="b2d-badge b2d-visible">${releaseItems.length}</span> Total: <span class="b2d-badge b2d-total">${releaseItems.length}</span>
 </div>`
   );
+  const badges = widget.querySelectorAll('.b2d-badge');
+  badges?.forEach((badge) => {
+    badge.style.backgroundColor = bcStyle.backgroundColor;
+    badge.style.color = bcStyle.color;
+  });
+
+  return widget;
 }

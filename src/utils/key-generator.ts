@@ -9,7 +9,7 @@ export function generateKeyForUrl(url: string): string {
 }
 
 export function generateKeyForReleaseItem(releaseItem: ReleaseItem): string {
-  return generateKeyForUrl(releaseItem.url);
+  return generateKeyForUrl(releaseItem.url.toString());
 }
 
 export function generateKeyForRelease(release: Release): string {

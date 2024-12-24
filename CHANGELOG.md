@@ -1,5 +1,25 @@
 # Change log
 
+## 0.18.0 (2024-12-YY)
+
+### Features
+
+- discogs: Removed extension link from the release notes
+- discogs: Set default release country to `Worldwide`
+- popup: Added Bandcamp wishlist and feed links to the main navigation
+- popup: Added Discogs Drafts page link to the main navigation
+- popup: Small improvements on the release card tab for release urls
+- popup: Use one tab for the latest viewed releases, release card and releases
+- core: Improved initialization of console log commands
+- core: Removed CSV data tab. Data is available through console
+- core: Introduced Bandcamp URL class
+- bandcamp: Improved styling for albums filter widget
+- bandcamp: Added clear filter button to the albums filter widget
+
+### Fixed
+
+- discogs: Fixed extracting track time with hours on draft page
+
 ## 0.17.0 (2024-10-30)
 
 ### Features

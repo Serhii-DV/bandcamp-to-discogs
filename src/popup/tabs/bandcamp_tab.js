@@ -5,12 +5,10 @@ import {
   historyItemsToArtistOrReleaseItems
 } from '../../bandcamp/modules/history';
 import { Release } from '../../app/release';
-import { setupBandcampButton } from '../modules/main';
 
 export function setupBandcampTab(btnHistoryTab, storage) {
   log('Setup bandcamp tab');
 
-  setupBandcampButton();
   setupLatestVisitedWidget(btnHistoryTab, storage);
 }
 

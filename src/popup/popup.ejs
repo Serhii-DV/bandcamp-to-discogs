@@ -9,6 +9,9 @@
       <button class="btn btn-dark rounded-0" id="bandcamp-tab" data-bs-toggle="tab" data-bs-target="#bandcamp" role="tab" aria-controls="bandcamp" aria-selected="false" type="button" title="Bandcamp latest viewed releases">
         <b2d-icon name="view-list"></b2d-icon>
       </button>
+      <button class="btn btn-dark rounded-0" id="card-tab" data-bs-toggle="tab" data-bs-target="#card" role="tab" aria-controls="release-card" aria-selected="false" type="button" title="Artist/Album preview">
+        <b2d-icon name="card-text"></b2d-icon>
+      </button>
       <button class="btn btn-dark rounded-0" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" role="tab" aria-controls="history" aria-selected="false" type="button" title="History">
         <b2d-icon name="clock-history"></b2d-icon>
       </button>
@@ -32,8 +35,14 @@
       <!-- Bandcamp -->
       <div class="tab-pane fade" id="bandcamp" role="tabpanel" aria-labelledby="bandcamp-tab" tabindex="0">
         <!-- Latest viewed -->
-        <div id="latest-viewed" class="content-text d-none">
+        <div id="latest-viewed" class="content-text">
           <%= tabContentBandcamp %>
+        </div>
+      </div>
+      <!-- Card -->
+      <div class="tab-pane fade overflow-hidden" id="card" role="tabpanel" aria-labelledby="card-tab" tabindex="0">
+        <div id="bc-data-not-provided">
+          <%= bcDataNotProvided %>
         </div>
         <!-- Release -->
         <div id="release-card" class="d-none">

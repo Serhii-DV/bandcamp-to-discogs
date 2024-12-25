@@ -129,5 +129,9 @@ function showCardTab(tab: HTMLElement | null): void {
 }
 
 function getCardContentCards(): Array<HTMLElement | null> {
-  return [getReleaseCardContentElement(), getReleasesContentElement()];
+  return [
+    document.getElementById('bc-data-not-provided'),
+    getReleaseCardContentElement(),
+    getReleasesContentElement()
+  ];
 }

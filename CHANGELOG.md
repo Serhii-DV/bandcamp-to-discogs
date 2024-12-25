@@ -1,6 +1,12 @@
 # Change log
 
-## 0.18.0 (2024-12-YY)
+## 0.18.1 (2024-12-25)
+
+### Features
+
+- popup: Show again artist and album information in the separate Card tab
+
+## 0.18.0 (2024-12-24)
 
 ### Features
 

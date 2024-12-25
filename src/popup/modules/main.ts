@@ -4,9 +4,7 @@ import { Release } from '../../app/release';
 import {
   click,
   getDataAttribute,
-  getVisibleElement,
   hasDataAttribute,
-  onClick,
   setActiveTab,
   setDataAttribute
 } from '../../utils/html';
@@ -16,15 +14,17 @@ import { Music } from '../../app/music';
 import { hasClass } from '../../utils/utils';
 
 export function showLatestViewed(): void {
-  const tab = getLatestViewedContentElement();
-  showBandcampTab(tab);
+  const btn = getBandcampTabButton();
+  if (btn) {
+    click(btn);
+  }
 }
 
 export function showReleaseCard(release: Release): void {
   setupReleaseCardTab(release);
 
   const tab = getReleaseCardContentElement();
-  showBandcampTab(tab);
+  showCardTab(tab);
 }
 
 export function showReleases(
@@ -35,7 +35,7 @@ export function showReleases(
   setupReleasesTab(storage, music, searchValue);
 
   const tab = getReleasesContentElement();
-  showBandcampTab(tab);
+  showCardTab(tab);
 }
 
 export function getBandcampTabButton(): HTMLElement | null {
@@ -44,6 +44,10 @@ export function getBandcampTabButton(): HTMLElement | null {
 
 export function getBandcampTabContentElement(): HTMLElement | null {
   return document.getElementById('bandcamp');
+}
+
+export function getCardTabButton(): HTMLElement | null {
+  return document.getElementById('card-tab');
 }
 
 export function getLatestViewedContentElement(): HTMLElement | null {
@@ -68,18 +72,6 @@ export function getHistoryTabElement(): HTMLElement | null {
 
 export function getHistoryContentElement(): HTMLElement | null {
   return document.getElementById('history');
-}
-
-export function setupBandcampButton(): void {
-  const btn = getBandcampTabButton();
-  onClick(btn, () => {
-    const tabs = getBandcampContentCards();
-    const visibleTab = getVisibleElement(tabs);
-
-    if (visibleTab && visibleTab !== getLatestViewedContentElement()) {
-      showLatestViewed();
-    }
-  });
 }
 
 export function setupNavigationLinks(storage: Storage): void {
@@ -125,20 +117,20 @@ function getOriginalTitle(element: HTMLElement): string {
   return getDataAttribute(element, 'org-title');
 }
 
-function showBandcampTab(tab: HTMLElement | null): void {
-  log(`Show bandcamp tab "${tab?.id}"`);
+function showCardTab(tab: HTMLElement | null): void {
+  log(`Show card tab "${tab?.id}"`);
 
-  const btn = getBandcampTabButton();
+  const btn = getCardTabButton();
   if (btn && !hasClass(btn, 'active')) {
     click(btn);
   }
 
-  setActiveTab(tab, getBandcampContentCards());
+  setActiveTab(tab, getCardContentCards());
 }
 
-function getBandcampContentCards(): Array<HTMLElement | null> {
+function getCardContentCards(): Array<HTMLElement | null> {
   return [
-    getLatestViewedContentElement(),
+    document.getElementById('bc-data-not-provided'),
     getReleaseCardContentElement(),
     getReleasesContentElement()
   ];

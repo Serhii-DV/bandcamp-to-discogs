@@ -1,5 +1,11 @@
 # Change log
 
+## 0.19.0 (2024-12-XX)
+
+### Features
+
+- popup: Discogs Search button position improved on Bandcamp release
+
 ## 0.18.1 (2024-12-25)
 
 ### Features

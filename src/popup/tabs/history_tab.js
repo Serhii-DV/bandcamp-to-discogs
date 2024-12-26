@@ -8,9 +8,6 @@ import {
   removeButtonLoadingState,
   setButtonInLoadingState
 } from '../helpers.js';
-import config from '../../config.js';
-import { loadDiscogsGenres } from '../../discogs/modules/genres.js';
-import { loadKeywordMapping } from '../../bandcamp/modules/mapping.js';
 import { downloadReleasesCsv } from './download_tab.js';
 import {
   bandcampReleasesAndArtistsHistorySearch,
@@ -27,11 +24,7 @@ export function setupHistoryTab(tab, tabContent, storage) {
       setDataAttribute(tabContent, 'buttons-initialized');
     }
 
-    loadDiscogsGenres(config.genres_url).then(() => {
-      loadKeywordMapping(config.keyword_mapping_url).then(() => {
-        updateReleasesListData(releasesListElement);
-      });
-    });
+    updateReleasesListData(releasesListElement);
   });
 }
 

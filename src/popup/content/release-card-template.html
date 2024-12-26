@@ -1,5 +1,9 @@
 <script id="releaseCardTemplate" type="text/template">
   <nav class="sub-navigation btn-group d-flex">
+    <!-- Discogs Search -->
+    <a class="btn btn-dark rounded-0" href="{{ discogsSearchUrl }}" title="Search release on Discogs" target="_blank">
+      <b2d-icon name="discogs-png"></b2d-icon> Search
+    </a>
     <!-- Discogs CSV -->
     <button id="downloadReleaseCsv" class="btn btn-primary rounded-0" type="button" title="Download Discogs CSV file">
       <b2d-icon name="download"></b2d-icon> CSV
@@ -7,9 +11,6 @@
     <!-- Discogs Draft page -->
     <a class="btn btn-success rounded-0" href="https://www.discogs.com/release/csv_to_draft" target="_blank" role="button" title="Open Discogs CSV to Draft page and start import">
       <b2d-icon name="discogs-png"></b2d-icon> CSV to Draft
-    </a>
-    <a class="btn btn-dark rounded-0" href="{{ discogsSearchUrl }}" title="Search release on Discogs" target="_blank">
-      <b2d-icon name="discogs-png"></b2d-icon> Search
     </a>
   </nav>
   <div class="release-headline">

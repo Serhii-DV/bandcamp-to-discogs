@@ -50,6 +50,7 @@ import { Storage } from '../app/core/storage';
 import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 import { MessageType } from '../app/core/messageType';
 import { isValidBandcampURL } from '../app/core/bandcampUrl';
+import { mapMusicStyles } from './modules/musicStyles';
 
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
@@ -165,7 +166,9 @@ function initialize(tab) {
 
 document.addEventListener('DOMContentLoaded', () => {
   getCurrentTab().then((tab) => {
-    initialize(tab);
+    mapMusicStyles().then(() => {
+      initialize(tab);
+    });
   });
 });
 

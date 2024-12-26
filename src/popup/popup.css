@@ -90,7 +90,7 @@ console-command {
 }
 
 #visitedReleases {
-  .release-keywords .badge {
+  .release-styles .badge {
     background-color: #111 !important;
     color: #999 !important;
   }

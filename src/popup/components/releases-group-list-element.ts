@@ -11,6 +11,7 @@ import { ArtistItem } from '../../app/artistItem';
 import { BandcampItem } from '../../app/bandcampItem';
 import { getTextInitials } from '../../utils/string';
 import { Music } from '../../app/music';
+import { keywordsToDiscogsStyles } from '../../bandcamp/modules/bandcamp';
 
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
@@ -261,11 +262,10 @@ export class ReleasesGroupListElement extends HTMLElement {
   ): Element | null {
     const self = this;
     const visitDate = visit ?? new Date(0);
-    const keywordsBadges = keywords
-      ? keywords
-          .map((keyword) => `<span class="badge">${keyword}</span>`)
-          .join(' ')
-      : '';
+    const styles = keywords ? keywordsToDiscogsStyles(keywords) : [];
+    const stylesBadges = styles
+      .map((keyword) => `<span class="badge">${keyword}</span>`)
+      .join(' ');
 
     return createElementFromHTML(`
       <div class="d-flex justify-content-between">
@@ -279,7 +279,7 @@ export class ReleasesGroupListElement extends HTMLElement {
           </div>
           <p class="release-title mb-0">${title ?? ''}</p>
           <small class="release-url text-body-secondary text-break">${artistHostname}</small><br>
-          <p class="release-keywords">${keywordsBadges}</p>
+          <small class="release-styles">${stylesBadges}</small>
         </div>
       </div>`);
   }

@@ -88,3 +88,10 @@ console-command {
   width: var(--popup-width);
   z-index: 999999;
 }
+
+#visitedReleases {
+  .release-keywords .badge {
+    background-color: #111 !important;
+    color: #999 !important;
+  }
+}

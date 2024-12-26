@@ -181,7 +181,8 @@ export class ReleasesGroupListElement extends HTMLElement {
       release.releaseItem.artistHostname,
       release.releaseItem.title,
       release.releaseItem.visit,
-      release.image
+      release.image,
+      release.keywords
     );
 
     if (contentElement) {
@@ -255,10 +256,16 @@ export class ReleasesGroupListElement extends HTMLElement {
     artistHostname: string,
     title?: string,
     visit?: Date,
-    image?: string
+    image?: string,
+    keywords?: string[]
   ): Element | null {
     const self = this;
     const visitDate = visit ?? new Date(0);
+    const keywordsBadges = keywords
+      ? keywords
+          .map((keyword) => `<span class="badge">${keyword}</span>`)
+          .join(' ')
+      : '';
 
     return createElementFromHTML(`
       <div class="d-flex justify-content-between">
@@ -271,7 +278,8 @@ export class ReleasesGroupListElement extends HTMLElement {
             <relative-time class="release-visited-date text-body-secondary" datetime="${visitDate.toISOString()}">${visitDate.toLocaleString()}</relative-time>
           </div>
           <p class="release-title mb-0">${title ?? ''}</p>
-          <small class="release-url text-body-secondary text-break">${artistHostname}</small>
+          <small class="release-url text-body-secondary text-break">${artistHostname}</small><br>
+          <p class="release-keywords">${keywordsBadges}</p>
         </div>
       </div>`);
   }

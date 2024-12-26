@@ -264,7 +264,7 @@ export class ReleasesGroupListElement extends HTMLElement {
     const visitDate = visit ?? new Date(0);
     const styles = keywords ? keywordsToDiscogsStyles(keywords) : [];
     const stylesBadges = styles
-      .map((keyword) => `<span class="badge">${keyword}</span>`)
+      .map((keyword) => `<span class="music-style badge">${keyword}</span>`)
       .join(' ');
 
     return createElementFromHTML(`

@@ -8,6 +8,7 @@ import {
 import { render } from '../../utils/render';
 import { setupBtnToDownloadReleasesAsCsv } from '../tabs/download_tab';
 import { History } from '../../types';
+import { keywordsToDiscogsStyles } from '../../bandcamp/modules/bandcamp';
 
 export function renderReleaseCard(
   release: Release,
@@ -45,11 +46,13 @@ export function renderReleaseCard(
     content: release.url.pathname,
     title: 'Open Bandcamp release page\n' + release.url.toString()
   };
+  const styles = keywordsToDiscogsStyles(release.keywords);
 
   render(releaseCardTemplate, element, {
     release,
     tracks,
     history: releaseHistory,
+    styles,
     modified,
     published,
     discogsSearchUrl,

@@ -89,9 +89,7 @@ console-command {
   z-index: 999999;
 }
 
-#visitedReleases {
-  .release-styles .badge {
-    background-color: #111 !important;
-    color: #999 !important;
-  }
+.music-style.badge {
+  background-color: #111 !important;
+  color: #999 !important;
 }

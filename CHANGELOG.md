@@ -5,6 +5,7 @@
 ### Features
 
 - popup: Discogs Search button position improved on Bandcamp release
+- popup: Output album styles on the album card and Bandcamp latest viewed widget
 
 ## 0.18.1 (2024-12-25)
 

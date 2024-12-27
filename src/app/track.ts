@@ -5,14 +5,16 @@ export class Track {
   constructor(
     public readonly num: string,
     public readonly title: string,
-    public readonly time: TrackTime
+    public readonly time: TrackTime,
+    public readonly artist?: string
   ) {}
 
   toStorageObject(): TrackStorageObject {
     return {
       num: this.num,
       title: this.title,
-      time: this.time.value
+      time: this.time.value,
+      artist: this.artist
     };
   }
 
@@ -26,7 +28,8 @@ export class Track {
     return new Track(
       obj.num,
       obj.title,
-      TrackTime.fromString(obj.time || obj.duration!)
+      TrackTime.fromString(obj.time || obj.duration!),
+      obj.artist
     );
   }
 }

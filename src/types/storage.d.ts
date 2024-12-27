@@ -3,3 +3,10 @@ export interface StorageData {
 }
 
 export type StorageDataMap = StorageData;
+
+export interface TrackStorageObject extends StorageData {
+  num: string;
+  title: string;
+  time: string;
+  duration?: string;
+}

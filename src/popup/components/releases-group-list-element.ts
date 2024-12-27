@@ -11,6 +11,7 @@ import { ArtistItem } from '../../app/artistItem';
 import { BandcampItem } from '../../app/bandcampItem';
 import { getTextInitials } from '../../utils/string';
 import { Music } from '../../app/music';
+import { keywordsToDiscogsStyles } from '../../bandcamp/modules/bandcamp';
 
 const HTMLElement =
   globalThis.HTMLElement || (null as unknown as (typeof window)['HTMLElement']);
@@ -181,7 +182,8 @@ export class ReleasesGroupListElement extends HTMLElement {
       release.releaseItem.artistHostname,
       release.releaseItem.title,
       release.releaseItem.visit,
-      release.image
+      release.image,
+      release.keywords
     );
 
     if (contentElement) {
@@ -255,10 +257,15 @@ export class ReleasesGroupListElement extends HTMLElement {
     artistHostname: string,
     title?: string,
     visit?: Date,
-    image?: string
+    image?: string,
+    keywords?: string[]
   ): Element | null {
     const self = this;
     const visitDate = visit ?? new Date(0);
+    const styles = keywords ? keywordsToDiscogsStyles(keywords) : [];
+    const stylesBadges = styles
+      .map((keyword) => `<span class="music-style badge">${keyword}</span>`)
+      .join(' ');
 
     return createElementFromHTML(`
       <div class="d-flex justify-content-between">
@@ -271,7 +278,8 @@ export class ReleasesGroupListElement extends HTMLElement {
             <relative-time class="release-visited-date text-body-secondary" datetime="${visitDate.toISOString()}">${visitDate.toLocaleString()}</relative-time>
           </div>
           <p class="release-title mb-0">${title ?? ''}</p>
-          <small class="release-url text-body-secondary text-break">${artistHostname}</small>
+          <small class="release-url text-body-secondary text-break">${artistHostname}</small><br>
+          <small class="release-styles">${stylesBadges}</small>
         </div>
       </div>`);
   }

@@ -9,10 +9,14 @@ export default {
     'https://chromewebstore.google.com/detail/bandcamp-to-discogs/hipnkehalkffbdjnbbeoefmoondaciok',
   firefox_extension_url:
     'https://addons.mozilla.org/en-US/firefox/addon/bandcamp-to-discogs/',
-  discogs_search_artist_url:
-    'https://www.discogs.com/search?q={artist}&type=artist',
-  discogs_search_release_url:
-    'https://www.discogs.com/search?q={artist}+{release}&type=release',
+  discogs: {
+    search: {
+      all: 'https://www.discogs.com/search/?q={query}',
+      artist: 'https://www.discogs.com/search?q={artist}&type=artist',
+      release:
+        'https://www.discogs.com/search?q={artist}+{release}&type=release'
+    }
+  },
   text: {
     // Submission notes text
     notes:

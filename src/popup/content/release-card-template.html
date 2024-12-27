@@ -1,9 +1,26 @@
 <script id="releaseCardTemplate" type="text/template">
   <nav class="sub-navigation btn-group d-flex">
+    <!-- Bandcamp Links -->
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-dark rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Bandcamp links">
+        <b2d-icon name="bandcamp-png"></b2d-icon> Links
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{{ bcReleaseArtistLink.href }}" title="{{ bcReleaseArtistLink.title }}" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Artist/Label: {{  bcReleaseArtistLink.content }}</a></li>
+        <li><a class="dropdown-item" href="{{ bcReleaseLink.href }}" title="{{ bcReleaseLink.title }}" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Release: {{  bcReleaseLink.content }}</a></li>
+      </ul>
+    </div>
     <!-- Discogs Search -->
-    <a class="btn btn-dark rounded-0" href="{{ discogsSearchUrl }}" title="Search release on Discogs" target="_blank">
-      <b2d-icon name="discogs-png"></b2d-icon> Search
-    </a>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-dark rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <b2d-icon name="discogs-png"></b2d-icon> Search
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{{ discogsSearchArtistUrl }}" title="Search for artist on Discogs" target="_blank"><b2d-icon name="discogs-png"></b2d-icon> Artist: {{ release.artist }}</a></li>
+        <li><a class="dropdown-item" href="{{ discogsSearchReleaseUrl }}" title="Search for artist and release on Discogs" target="_blank"><b2d-icon name="discogs-png"></b2d-icon> Release: {{ release.title }}</a></li>
+        <li><a class="dropdown-item" href="{{ discogsSearchAllUrl }}" title="Search for artist and release on Discogs" target="_blank"><b2d-icon name="discogs-png"></b2d-icon> All: {{ release.artist }} - {{ release.title }}</a></li>
+      </ul>
+    </div>
     <!-- Discogs CSV -->
     <button id="downloadReleaseCsv" class="btn btn-primary rounded-0" type="button" title="Download Discogs CSV file">
       <b2d-icon name="download"></b2d-icon> CSV
@@ -17,6 +34,12 @@
     <h1 id="release-artist" class="display-3">{{ release.artist }}</h1>
     <h2 id="release-title" class="display-6">{{ release.title }}</h2>
     <h3 id="release-year" class="display-6">{{ release.year }}</h3>
+    <!-- Discogs styles -->
+    <div>
+      {{#styles}}
+      <span class="music-style badge">{{.}}</span>
+      {{/styles}}
+    </div>
   </div>
   <div class="release-content small">
     <ul class="nav nav-underline" role="tablist">
@@ -48,15 +71,6 @@
     <div class="tab-content pt-3 overflow-auto">
       <!-- Info -->
       <div class="tab-pane fade show active" id="release-card-info" role="tabpanel" aria-labelledby="release-card-info-tab" tabindex="0">
-        <!-- Bandcamp links -->
-        <div>
-          <a class="btn btn-dark btn-sm" href="{{ bcReleaseArtistLink.href }}" title="{{ bcReleaseArtistLink.title }}" target="_blank">
-            <b2d-icon name="bandcamp-png"></b2d-icon> {{  bcReleaseArtistLink.content }}
-          </a>
-          <a class="btn btn-dark btn-sm" href="{{ bcReleaseLink.href }}" title="{{ bcReleaseLink.title }}" target="_blank">
-            <b2d-icon name="bandcamp-png"></b2d-icon> {{ bcReleaseLink.content }}
-          </a>
-        </div>
         <!-- Bandcamp published/modified dates -->
         <div class="mt-3">
         {{#published}}

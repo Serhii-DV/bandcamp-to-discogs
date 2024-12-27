@@ -1,9 +1,16 @@
 <script id="releaseCardTemplate" type="text/template">
   <nav class="sub-navigation btn-group d-flex">
     <!-- Discogs Search -->
-    <a class="btn btn-dark rounded-0" href="{{ discogsSearchUrl }}" title="Search release on Discogs" target="_blank">
-      <b2d-icon name="discogs-png"></b2d-icon> Search
-    </a>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-dark rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <b2d-icon name="discogs-png"></b2d-icon> Search
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{{ discogsSearchArtistUrl }}" title="Search for artist on Discogs" target="_blank"><b2d-icon name="discogs-png"></b2d-icon> Artist: {{ release.artist }}</a></li>
+        <li><a class="dropdown-item" href="{{ discogsSearchReleaseUrl }}" title="Search for artist and release on Discogs" target="_blank"><b2d-icon name="discogs-png"></b2d-icon> Release: {{ release.title }}</a></li>
+        <li><a class="dropdown-item" href="{{ discogsSearchAllUrl }}" title="Search for artist and release on Discogs" target="_blank"><b2d-icon name="discogs-png"></b2d-icon> All: {{ release.artist }} - {{ release.title }}</a></li>
+      </ul>
+    </div>
     <!-- Discogs CSV -->
     <button id="downloadReleaseCsv" class="btn btn-primary rounded-0" type="button" title="Download Discogs CSV file">
       <b2d-icon name="download"></b2d-icon> CSV

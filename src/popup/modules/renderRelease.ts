@@ -1,4 +1,8 @@
-import { getSearchDiscogsReleaseUrl } from '../../discogs/modules/discogs';
+import {
+  getDiscogsSearchAllUrl,
+  getSearchDiscogsArtistUrl,
+  getSearchDiscogsReleaseUrl
+} from '../../discogs/modules/discogs';
 import { Release, Track } from '../../app/release';
 import { setBackgroundImage } from '../helpers';
 import {
@@ -23,10 +27,14 @@ export function renderReleaseCard(
     release.image
   );
 
-  const discogsSearchUrl = getSearchDiscogsReleaseUrl(
+  const discogsSearchAllUrl = getDiscogsSearchAllUrl(
+    release.artist + ' ' + release.title
+  );
+  const discogsSearchReleaseUrl = getSearchDiscogsReleaseUrl(
     release.artist,
     release.title
   );
+  const discogsSearchArtistUrl = getSearchDiscogsArtistUrl(release.artist);
   const tracks = release.tracks.map(
     (track: Track) =>
       `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.time.value)})`
@@ -55,7 +63,9 @@ export function renderReleaseCard(
     styles,
     modified,
     published,
-    discogsSearchUrl,
+    discogsSearchAllUrl,
+    discogsSearchArtistUrl,
+    discogsSearchReleaseUrl,
     bcReleaseArtistLink,
     bcReleaseLink
   });

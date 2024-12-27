@@ -35,7 +35,7 @@ export function renderReleaseCard(
 
   const tracks = release.tracks.map(
     (track: Track) =>
-      `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.time.value)})`
+      `${track.num}. ${capitalizeEachWord(track.displayName)} (${removeLeadingZeroOrColon(track.time.value)})`
   );
   const releaseHistory = history
     .map((date: Date) => dateToTemplate(date))

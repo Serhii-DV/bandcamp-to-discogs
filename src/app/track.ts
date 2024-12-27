@@ -9,6 +9,14 @@ export class Track {
     public readonly artist?: string
   ) {}
 
+  /**
+   * Getter for the display name.
+   * Returns "artist - title" if artist is set, otherwise "title".
+   */
+  get displayName(): string {
+    return this.artist ? `${this.artist} - ${this.title}` : this.title;
+  }
+
   toStorageObject(): TrackStorageObject {
     return {
       num: this.num,

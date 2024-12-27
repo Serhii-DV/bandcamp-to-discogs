@@ -3,7 +3,7 @@ import {
   getSearchDiscogsArtistUrl,
   getSearchDiscogsReleaseUrl
 } from '../../discogs/modules/discogs';
-import { Release, Track } from '../../app/release';
+import { Release } from '../../app/release';
 import { setBackgroundImage } from '../helpers';
 import {
   capitalizeEachWord,
@@ -18,6 +18,7 @@ import {
   getBandcampSearchReleaseUrl,
   keywordsToDiscogsStyles
 } from '../../bandcamp/modules/bandcamp';
+import { Track } from '../../app/track';
 
 export function renderReleaseCard(
   release: Release,

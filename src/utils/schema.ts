@@ -1,4 +1,5 @@
-import { Release, Track } from '../app/release.js';
+import { Track } from '../app/track';
+import { Release } from '../app/release.js';
 import TrackTime from '../app/trackTime.js';
 import { convertNewlinesToBreaks } from './utils';
 

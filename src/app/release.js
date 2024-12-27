@@ -1,5 +1,5 @@
 import { ReleaseItem } from './releaseItem';
-import TrackTime from './trackTime.js';
+import { Track } from './track';
 
 export class Release {
   /**
@@ -163,55 +163,6 @@ export class Release {
       obj.image,
       obj.keywords,
       obj.credit ?? ''
-    );
-  }
-}
-
-export class Track {
-  /**
-   * @type {String}
-   */
-  num;
-
-  /**
-   * @type {String}
-   */
-  title;
-
-  /**
-   * @type {TrackTime}
-   */
-  time;
-
-  /**
-   * @param {String} num
-   * @param {String} title
-   * @param {TrackTime} time
-   */
-  constructor(num, title, time) {
-    this.num = num;
-    this.title = title;
-    this.time = time;
-  }
-
-  toStorageObject() {
-    return {
-      num: this.num,
-      title: this.title,
-      time: this.time.value
-    };
-  }
-
-  /**
-   * Create an instance of the Track class from the object.
-   * @param {Object} obj - A simple object.
-   * @returns {Track} An instance of the Track class.
-   */
-  static fromStorageObject(obj) {
-    return new Track(
-      obj.num,
-      obj.title,
-      TrackTime.fromString(obj.time || obj.duration)
     );
   }
 }

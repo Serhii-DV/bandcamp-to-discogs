@@ -1,4 +1,8 @@
-import { getSearchDiscogsReleaseUrl } from '../../discogs/modules/discogs';
+import {
+  getDiscogsSearchAllUrl,
+  getSearchDiscogsArtistUrl,
+  getSearchDiscogsReleaseUrl
+} from '../../discogs/modules/discogs';
 import { Release, Track } from '../../app/release';
 import { setBackgroundImage } from '../helpers';
 import {
@@ -8,6 +12,12 @@ import {
 import { render } from '../../utils/render';
 import { setupBtnToDownloadReleasesAsCsv } from '../tabs/download_tab';
 import { History } from '../../types';
+import {
+  getBandcampSearchArtistUrl,
+  getBandcampSearchReleaseAllUrl,
+  getBandcampSearchReleaseUrl,
+  keywordsToDiscogsStyles
+} from '../../bandcamp/modules/bandcamp';
 
 export function renderReleaseCard(
   release: Release,
@@ -22,10 +32,6 @@ export function renderReleaseCard(
     release.image
   );
 
-  const discogsSearchUrl = getSearchDiscogsReleaseUrl(
-    release.artist,
-    release.title
-  );
   const tracks = release.tracks.map(
     (track: Track) =>
       `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.time.value)})`
@@ -35,26 +41,39 @@ export function renderReleaseCard(
     .reverse();
   const published = dateToTemplate(release.published);
   const modified = dateToTemplate(release.modified);
-  const bcReleaseArtistLink = {
-    href: release.url.hostnameWithProtocol,
-    content: release.url.subdomain,
-    title: 'Open Bandcamp artist page\n' + release.url.hostnameWithProtocol
+  const releaseLinks = {
+    bandcamp: {
+      artistUrl: release.url.hostnameWithProtocol,
+      releaseUrl: release.url.toString(),
+      searchArtistUrl: getBandcampSearchArtistUrl(release.artist),
+      searchReleaseUrl: getBandcampSearchReleaseUrl(
+        release.artist,
+        release.title
+      ),
+      searchAllUrl: getBandcampSearchReleaseAllUrl(
+        release.artist,
+        release.title
+      )
+    },
+    discogs: {
+      searchArtistUrl: getSearchDiscogsArtistUrl(release.artist),
+      searchReleaseUrl: getSearchDiscogsReleaseUrl(
+        release.artist,
+        release.title
+      ),
+      searchAllUrl: getDiscogsSearchAllUrl(release.artist + ' ' + release.title)
+    }
   };
-  const bcReleaseLink = {
-    href: release.url.toString(),
-    content: release.url.pathname,
-    title: 'Open Bandcamp release page\n' + release.url.toString()
-  };
+  const styles = keywordsToDiscogsStyles(release.keywords);
 
   render(releaseCardTemplate, element, {
     release,
     tracks,
     history: releaseHistory,
+    styles,
     modified,
     published,
-    discogsSearchUrl,
-    bcReleaseArtistLink,
-    bcReleaseLink
+    releaseLinks
   });
 
   setupBtnToDownloadReleasesAsCsv(

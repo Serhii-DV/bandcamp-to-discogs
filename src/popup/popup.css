@@ -88,3 +88,8 @@ console-command {
   width: var(--popup-width);
   z-index: 999999;
 }
+
+.music-style.badge {
+  background-color: #111 !important;
+  color: #999 !important;
+}

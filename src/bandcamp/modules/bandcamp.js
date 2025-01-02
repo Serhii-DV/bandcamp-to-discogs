@@ -1,4 +1,10 @@
-import { arrayUnique, isArray, isString } from '../../utils/utils';
+import config from '../../config';
+import {
+  arrayUnique,
+  isArray,
+  isString,
+  replaceTokens
+} from '../../utils/utils';
 import { Style, getMapping } from './mapping.js';
 
 /**
@@ -69,4 +75,26 @@ export function keywordsToDiscogsGenres(keywords) {
  */
 export function keywordsToDiscogsStyles(keywords) {
   return arrayUnique(keywords.map(keywordToDiscogsStyles));
+}
+
+export function getBandcampSearchAllUrl(query) {
+  return replaceTokens(config.bandcamp.search.all, {
+    query: encodeURIComponent(query)
+  });
+}
+
+export function getBandcampSearchArtistUrl(artist) {
+  return replaceTokens(config.bandcamp.search.artist, {
+    query: encodeURIComponent(artist)
+  });
+}
+
+export function getBandcampSearchReleaseUrl(artist, release) {
+  return replaceTokens(config.bandcamp.search.release, {
+    query: encodeURIComponent(artist + ' ' + release)
+  });
+}
+
+export function getBandcampSearchReleaseAllUrl(artist, release) {
+  return getBandcampSearchAllUrl(artist + ' ' + release);
 }

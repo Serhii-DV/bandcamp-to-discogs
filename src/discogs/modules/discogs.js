@@ -10,14 +10,20 @@ export function releaseToDiscogsCsv(release) {
   return DiscogsCsv.fromRelease(release);
 }
 
+export function getDiscogsSearchAllUrl(query) {
+  return replaceTokens(config.discogs.search.all, {
+    query: encodeURIComponent(query)
+  });
+}
+
 export function getSearchDiscogsArtistUrl(artist) {
-  return replaceTokens(config.discogs_search_artist_url, {
+  return replaceTokens(config.discogs.search.artist, {
     artist: encodeURIComponent(artist)
   });
 }
 
 export function getSearchDiscogsReleaseUrl(artist, release) {
-  return replaceTokens(config.discogs_search_release_url, {
+  return replaceTokens(config.discogs.search.release, {
     artist: encodeURIComponent(artist),
     release: encodeURIComponent(release)
   });

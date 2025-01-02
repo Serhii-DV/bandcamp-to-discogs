@@ -12,7 +12,12 @@ import {
 import { render } from '../../utils/render';
 import { setupBtnToDownloadReleasesAsCsv } from '../tabs/download_tab';
 import { History } from '../../types';
-import { keywordsToDiscogsStyles } from '../../bandcamp/modules/bandcamp';
+import {
+  getBandcampSearchArtistUrl,
+  getBandcampSearchReleaseAllUrl,
+  getBandcampSearchReleaseUrl,
+  keywordsToDiscogsStyles
+} from '../../bandcamp/modules/bandcamp';
 
 export function renderReleaseCard(
   release: Release,
@@ -52,6 +57,17 @@ export function renderReleaseCard(
     href: release.url.toString(),
     content: release.url.pathname
   };
+  const releaseLinks = {
+    bandcampSearchArtistUrl: getBandcampSearchArtistUrl(release.artist),
+    bandcampSearchReleaseUrl: getBandcampSearchReleaseUrl(
+      release.artist,
+      release.title
+    ),
+    bandcampSearchAllUrl: getBandcampSearchReleaseAllUrl(
+      release.artist,
+      release.title
+    )
+  };
   const styles = keywordsToDiscogsStyles(release.keywords);
 
   render(releaseCardTemplate, element, {
@@ -65,7 +81,8 @@ export function renderReleaseCard(
     discogsSearchArtistUrl,
     discogsSearchReleaseUrl,
     bcReleaseArtistLink,
-    bcReleaseLink
+    bcReleaseLink,
+    releaseLinks
   });
 
   setupBtnToDownloadReleasesAsCsv(

@@ -7,8 +7,12 @@
         <span class="visually-hidden">Bandcamp links</span>
       </button>
       <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="{{ bcReleaseArtistLink.href }}" title="Open Bandcamp artist page&#010;{{ bcReleaseArtistLink.href }}" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Artist/Label: {{  bcReleaseArtistLink.content }}</a></li>
-        <li><a class="dropdown-item" href="{{ bcReleaseLink.href }}" title="Open Bandcamp release page&#010;{{ bcReleaseLink.href }}" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Release: {{  bcReleaseLink.content }}</a></li>
+        <li><a class="dropdown-item" href="{{ bcReleaseArtistLink.href }}" title="Open Bandcamp artist page&#010;{{ bcReleaseArtistLink.href }}" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Visit artist/label: {{  release.url.subdomain }}</a></li>
+        <li><a class="dropdown-item" href="{{ bcReleaseLink.href }}" title="Open Bandcamp release page&#010;{{ bcReleaseLink.href }}" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Visit release: {{  release.url.pathname }}</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="{{ releaseLinks.bandcampSearchArtistUrl }}" title="Search Bandcamp artist" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Search artist: {{  release.artist }}</a></li>
+        <li><a class="dropdown-item" href="{{ releaseLinks.bandcampSearchReleaseUrl }}" title="Search Bandcamp release" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Search release: {{  release.artist }} - {{  release.title }}</a></li>
+        <li><a class="dropdown-item" href="{{ releaseLinks.bandcampSearchAllUrl }}" title="Search Bandcamp all" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Search all: {{  release.artist }} - {{  release.title }}</a></li>
       </ul>
     </div>
     <!-- Discogs Search -->

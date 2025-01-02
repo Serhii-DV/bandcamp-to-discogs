@@ -2,8 +2,9 @@
   <nav class="sub-navigation btn-group d-flex">
     <!-- Bandcamp Links -->
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-dark rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Bandcamp links">
-        <b2d-icon name="bandcamp-png"></b2d-icon> Links
+      <button type="button" class="btn btn-dark rounded-0"><b2d-icon name="bandcamp-png"></b2d-icon></button>
+      <button type="button" class="btn btn-dark rounded-0 dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" title="Bandcamp links">
+        <span class="visually-hidden">Bandcamp links</span>
       </button>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="{{ bcReleaseArtistLink.href }}" title="{{ bcReleaseArtistLink.title }}" target="_blank"><b2d-icon name="bandcamp-png"></b2d-icon> Artist/Label: {{  bcReleaseArtistLink.content }}</a></li>
@@ -12,8 +13,9 @@
     </div>
     <!-- Discogs Search -->
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-dark rounded-0 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        <b2d-icon name="discogs-png"></b2d-icon> Search
+      <button type="button" class="btn btn-dark rounded-0"><b2d-icon name="discogs-png"></b2d-icon></button>
+      <button type="button" class="btn btn-dark rounded-0 dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" title="Discogs links">
+        <span class="visually-hidden">Discogs links</span>
       </button>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="{{ discogsSearchArtistUrl }}" title="Search for artist on Discogs" target="_blank"><b2d-icon name="discogs-png"></b2d-icon> Artist: {{ release.artist }}</a></li>

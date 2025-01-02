@@ -46,13 +46,11 @@ export function renderReleaseCard(
   const modified = dateToTemplate(release.modified);
   const bcReleaseArtistLink = {
     href: release.url.hostnameWithProtocol,
-    content: release.url.subdomain,
-    title: 'Open Bandcamp artist page\n' + release.url.hostnameWithProtocol
+    content: release.url.subdomain
   };
   const bcReleaseLink = {
     href: release.url.toString(),
-    content: release.url.pathname,
-    title: 'Open Bandcamp release page\n' + release.url.toString()
+    content: release.url.pathname
   };
   const styles = keywordsToDiscogsStyles(release.keywords);
 

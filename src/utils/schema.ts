@@ -1,4 +1,5 @@
-import { Release, Track } from '../app/release.js';
+import { Track } from '../app/track';
+import { Release } from '../app/release.js';
 import TrackTime from '../app/trackTime.js';
 import { convertNewlinesToBreaks } from './utils';
 
@@ -19,6 +20,9 @@ interface Schema {
       item: {
         name: string;
         duration: string;
+        byArtist?: {
+          name: string;
+        };
       };
     }[];
   };
@@ -40,7 +44,8 @@ export function createReleaseFromSchema(schema: Schema): Release {
           new Track(
             track.position,
             track.item.name,
-            TrackTime.fromDuration(track.item.duration)
+            TrackTime.fromDuration(track.item.duration),
+            track.item.byArtist?.name
           )
       )
     : [];

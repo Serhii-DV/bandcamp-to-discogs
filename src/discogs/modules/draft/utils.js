@@ -1,10 +1,10 @@
-import { log, logError } from '../../utils/console';
+import { log, logError } from '../../../utils/console';
 import {
   camelCaseToReadable,
   hasOwnProperty,
   isArray,
   isObject
-} from '../../utils/utils';
+} from '../../../utils/utils';
 
 export const getArtistNameInput = () => {
   return document.getElementById('artist-name-input');

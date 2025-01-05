@@ -22,7 +22,7 @@ import {
 } from '../notification.js';
 import { log, logError } from '../../../utils/console.js';
 
-export const initializeDraftPage = () => {
+export const setupDraftPage = () => {
   log('Initialization... (src/discogs/modules/draft/initialization.js)');
   setupReadMetadataButton();
   chromeListenToMessage((message) => {

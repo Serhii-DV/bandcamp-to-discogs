@@ -1,9 +1,9 @@
 'use strict';
 
-import { chromeListenToMessage } from '../../../utils/chrome.js';
-import { MessageType } from '../../../app/core/messageType.js';
-import { click, onClick } from '../../../utils/html.js';
-import { convertNewlinesToBreaks } from '../../../utils/utils.js';
+import { chromeListenToMessage } from '../../../utils/chrome';
+import { MessageType } from '../../../app/core/messageType';
+import { click, onClick } from '../../../utils/html';
+import { convertNewlinesToBreaks } from '../../../utils/utils';
 import {
   setSectionHint,
   autofillDurations,
@@ -15,15 +15,16 @@ import {
   setSubmissionNotes,
   setNotes,
   setCountry
-} from './utils.js';
+} from './utils';
 import {
   showNotificationInfo,
   showNotificationWarning
-} from '../notification.js';
-import { log, logError } from '../../../utils/console.js';
+} from '../notification';
+import { log, logError } from '../../../utils/console';
+import { Metadata } from '../../app/metadata';
 
 export const setupDraftPage = () => {
-  log('Initialization... (src/discogs/modules/draft/initialization.js)');
+  log('Setup draft page... (src/discogs/modules/draft/setup.ts)');
   setupReadMetadataButton();
   chromeListenToMessage((message) => {
     if (message.type === MessageType.Metadata) {
@@ -39,14 +40,14 @@ function setupReadMetadataButton() {
 
   onClick(readMetadataBtn, () => {
     try {
-      const notesTextarea = getNotesTextarea();
+      const notesTextarea = getNotesTextarea() as HTMLInputElement;
 
       if (!notesTextarea.value) {
         showNotificationWarning('No Metadata in Notes');
         return;
       }
 
-      const metadata = JSON.parse(notesTextarea.value);
+      const metadata: Metadata = JSON.parse(notesTextarea.value);
       applyMetadata(metadata);
     } catch (error) {
       showNotificationWarning('Invalid Metadata in Notes');
@@ -55,18 +56,15 @@ function setupReadMetadataButton() {
   });
 
   const submissionFormSectionNotes = getSubmissionFormSectionNotes();
-  submissionFormSectionNotes.append(readMetadataBtn);
+  submissionFormSectionNotes?.append(readMetadataBtn);
 
-  const submissionNotesTextarea = getSubmissionNotesTextarea();
+  const submissionNotesTextarea = getSubmissionNotesTextarea() as HTMLInputElement;
   if (submissionNotesTextarea.value) {
     click(readMetadataBtn);
   }
 }
 
-/**
- * @param {Metadata} metadata
- */
-function applyMetadata(metadata) {
+function applyMetadata(metadata: Metadata) {
   log('Applying metadata...', metadata);
 
   setMetadataHints(metadata);
@@ -94,7 +92,7 @@ function autofocus() {
   }
 }
 
-function setMetadataHints(metadata) {
+function setMetadataHints(metadata: Metadata) {
   log('Setting metadata hints...');
 
   setSectionHint({

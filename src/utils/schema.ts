@@ -1,6 +1,6 @@
 import { Track } from '../app/track';
 import { Release } from '../app/release';
-import TrackTime from '../app/trackTime.js';
+import TrackTime from '../app/trackTime';
 import { convertNewlinesToBreaks } from './utils';
 
 interface Schema {

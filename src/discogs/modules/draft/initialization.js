@@ -20,10 +20,10 @@ import {
   showNotificationInfo,
   showNotificationWarning
 } from '../notification.js';
-import { log, logError } from '../../../utils/console.js';
+import { log, logError } from '../../../utils/console';
 
-export const initialize = () => {
-  log('Initialization... (discogs/script.js)');
+export const initializeDraftPage = () => {
+  log('Initialization... (src/discogs/modules/draft/initialization.js)');
   setupReadMetadataButton();
   chromeListenToMessage((message) => {
     if (message.type === MessageType.Metadata) {

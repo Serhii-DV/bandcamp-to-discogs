@@ -1,5 +1,5 @@
 import { injectCSSFile } from '../utils/html';
-import { initialize } from './modules/draft/initialization';
+import { initializeDraftPage } from './modules/draft/initialization';
 import {
   getArtistNameInput,
   getReleaseTitleInput
@@ -33,7 +33,7 @@ function main() {
     if (loadingElement) return;
 
     try {
-      initialize();
+      initializeDraftPage();
     } catch (error) {
       console.error(error);
       showNotInitializedMessage(error.message);
@@ -53,7 +53,7 @@ const showNotInitializedMessage = (message) => {
       notification
         .querySelector('.action-restart')
         .addEventListener('click', () => {
-          initialize();
+          initializeDraftPage();
           closeNotification(notification);
         });
     }

@@ -1,11 +1,11 @@
-import config from '../../config.js';
+import config from '../../config';
 import {
   keywordsToDiscogsGenres,
   keywordsToDiscogsStyles
-} from '../../bandcamp/modules/bandcamp.js';
+} from '../../bandcamp/modules/bandcamp';
 import { getExtensionManifest } from '../../utils/chrome';
-import { generateSubmissionNotes } from '../modules/discogs.js';
-import { getDiscogsDateValue } from './utils.js';
+import { generateSubmissionNotes } from '../modules/discogs';
+import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
 

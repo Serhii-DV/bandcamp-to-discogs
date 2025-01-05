@@ -1,12 +1,12 @@
 import {
   keywordsToDiscogsGenres,
   keywordsToDiscogsStyles
-} from '../../bandcamp/modules/bandcamp.js';
+} from '../../bandcamp/modules/bandcamp';
 import {
   capitalizeEachWord,
   removeLeadingZeroOrColon
 } from '../../utils/utils';
-import { getDiscogsDateValue } from './utils.js';
+import { getDiscogsDateValue } from './utils';
 import { Metadata } from './metadata';
 import { convertArtistName } from '../modules/submission';
 

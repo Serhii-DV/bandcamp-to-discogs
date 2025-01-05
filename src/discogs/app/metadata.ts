@@ -87,11 +87,6 @@ export class Metadata {
     this.submissionNotes = generateSubmissionNotes(releaseUrl);
   }
 
-  /**
-   * Creates a Metadata instance from a Release object.
-   * @param {Release} release - The Release object to convert.
-   * @return {Metadata} - The converted Metadata instance.
-   */
   static fromRelease(release: Release): Metadata {
     const publishedDate = getDiscogsDateValue(release.published);
     const modifiedDate = getDiscogsDateValue(release.modified);

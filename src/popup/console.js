@@ -1,4 +1,4 @@
-import { Metadata } from '../discogs/app/metadata.js';
+import { Metadata } from '../discogs/app/metadata';
 import { releaseToDiscogsCsv } from '../discogs/modules/discogs.js';
 import { log, logInfo } from '../utils/console';
 

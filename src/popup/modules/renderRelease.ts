@@ -3,7 +3,7 @@ import {
   getSearchDiscogsArtistUrl,
   getSearchDiscogsReleaseUrl
 } from '../../discogs/modules/discogs';
-import { Release, Track } from '../../app/release';
+import { Release } from '../../app/release';
 import { setBackgroundImage } from '../helpers';
 import {
   capitalizeEachWord,
@@ -18,6 +18,7 @@ import {
   getBandcampSearchReleaseUrl,
   keywordsToDiscogsStyles
 } from '../../bandcamp/modules/bandcamp';
+import { Track } from '../../app/track';
 
 export function renderReleaseCard(
   release: Release,
@@ -34,7 +35,7 @@ export function renderReleaseCard(
 
   const tracks = release.tracks.map(
     (track: Track) =>
-      `${track.num}. ${capitalizeEachWord(track.title)} (${removeLeadingZeroOrColon(track.time.value)})`
+      `${track.num}. ${capitalizeEachWord(track.displayName)} (${removeLeadingZeroOrColon(track.time.value)})`
   );
   const releaseHistory = history
     .map((date: Date) => dateToTemplate(date))

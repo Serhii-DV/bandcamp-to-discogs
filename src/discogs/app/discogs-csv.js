@@ -7,7 +7,8 @@ import {
   removeLeadingZeroOrColon
 } from '../../utils/utils';
 import { getDiscogsDateValue } from './utils.js';
-import { Metadata } from './metadata.js';
+import { Metadata } from './metadata';
+import { convertArtistName } from '../modules/submission';
 
 /**
  * Represents a Discogs CSV entry.
@@ -41,7 +42,7 @@ export class DiscogsCsv {
     date,
     images
   }) {
-    this.artist = artist;
+    this.artist = convertArtistName(artist);
     this.title = title;
     this.label = label;
     this.catno = catno;
@@ -145,7 +146,7 @@ export class DiscogsCsv {
     const tracks = this.tracks
       .map(
         (track) =>
-          `${capitalizeEachWord(track.title)} ${removeLeadingZeroOrColon(track.time.value)}`
+          `${capitalizeEachWord(track.displayName)} ${removeLeadingZeroOrColon(track.time.value)}`
       )
       .join('\r');
     const notes = this.notes ? this.notes.replace(/"/g, '""') : '';

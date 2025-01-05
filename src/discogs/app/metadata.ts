@@ -6,62 +6,53 @@ import {
 import { getExtensionManifest } from '../../utils/chrome';
 import { generateSubmissionNotes } from '../modules/discogs.js';
 import { getDiscogsDateValue } from './utils.js';
+import { Release } from '../../app/release';
+import { convertArtistName } from '../modules/submission';
+
+interface Format {
+  fileType: string;
+  qty: number;
+  description: string;
+}
+
+interface Released {
+  publishedDate: string;
+  modifiedDate: string;
+}
+
+interface Genres {
+  keywords: string[];
+  autoDetectedGenres: string[];
+  autoDetectedStyles: string[];
+}
+
+interface MetadataParams {
+  artist: string;
+  title: string;
+  label: string;
+  trackQty: number;
+  formatFileType: string;
+  formatDescription: string;
+  country?: string;
+  released: Released;
+  tracklist: string;
+  credits: string;
+  genres: Genres;
+  releaseUrl: string;
+}
 
 export class Metadata {
-  /**
-   * @param {String}
-   */
-  version;
-
-  /**
-   * @param {String}
-   */
-  artist;
-
-  /**
-   * @param {String}
-   */
-  title;
-
-  /**
-   * @param {String}
-   */
-  label;
-
-  /**
-   * @param {Object}
-   */
-  format;
-
-  /**
-   * @param {String}
-   */
-  country;
-
-  /**
-   * @param {Array}
-   */
-  released;
-
-  /**
-   * @param {String}
-   */
-  tracklist;
-
-  /**
-   * @param {String}
-   */
-  credits;
-
-  /**
-   * @param {String}
-   */
-  genres;
-
-  /**
-   * @param {String}
-   */
-  submissionNotes;
+  version: string;
+  artist: string;
+  title: string;
+  label: string;
+  format: Format;
+  country: string;
+  released: Released;
+  tracklist: string;
+  credits: string;
+  genres: Genres;
+  submissionNotes: string;
 
   constructor({
     artist,
@@ -76,25 +67,24 @@ export class Metadata {
     credits,
     genres,
     releaseUrl
-  }) {
-    const self = this;
+  }: MetadataParams) {
     const manifest = getExtensionManifest();
 
-    self.version = manifest.version;
-    self.artist = artist;
-    self.title = title;
-    self.label = label;
-    self.format = {
+    this.version = manifest.version;
+    this.artist = convertArtistName(artist);
+    this.title = title;
+    this.label = label;
+    this.format = {
       fileType: formatFileType,
       qty: trackQty,
       description: formatDescription
     };
-    self.country = country ?? config.metadata.country;
-    self.released = released;
-    self.tracklist = tracklist;
-    self.credits = credits;
-    self.genres = genres;
-    self.submissionNotes = generateSubmissionNotes(releaseUrl);
+    this.country = country ?? config.metadata.country;
+    this.released = released;
+    this.tracklist = tracklist;
+    this.credits = credits;
+    this.genres = genres;
+    this.submissionNotes = generateSubmissionNotes(releaseUrl);
   }
 
   /**
@@ -102,7 +92,7 @@ export class Metadata {
    * @param {Release} release - The Release object to convert.
    * @return {Metadata} - The converted Metadata instance.
    */
-  static fromRelease(release) {
+  static fromRelease(release: Release): Metadata {
     const publishedDate = getDiscogsDateValue(release.published);
     const modifiedDate = getDiscogsDateValue(release.modified);
     const discogsGenres = keywordsToDiscogsGenres(release.keywords);
@@ -125,7 +115,8 @@ export class Metadata {
         autoDetectedStyles: discogsStyles
       },
       releaseUrl: release.url,
-      credits: release.credit
+      credits: release.credit,
+      tracklist: '' // TODO: Implement tracklist
     });
   }
 }

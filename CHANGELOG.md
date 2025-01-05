@@ -1,12 +1,13 @@
 # Change log
 
-## 0.19.0 (2024-12-XX)
+## 0.19.0 (2025-01-XX)
 
 ### Features
 
 - popup: Improved Discogs Search button. Added more options for searching
 - popup: Added Bandcamp release and search links to the release card navigation
 - popup: Output album styles on the album card and Bandcamp latest viewed widget
+- bandcamp: Improved getting artists from tracks in case of various artists release
 
 ## 0.18.1 (2024-12-25)
 

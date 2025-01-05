@@ -1,5 +1,5 @@
 import { log } from '../../utils/console';
-import { Release } from '../../app/release.js';
+import { Release } from '../../app/release';
 import { getReleaseCardContentElement } from '../modules/main';
 import { getUrlHistory } from '../../utils/history';
 import { setupConsoleLogRelease } from '../console.js';

@@ -9,3 +9,8 @@ export const isValidDiscogsReleaseEditUrl = (url: string): boolean => {
   const discogsEditUrl = 'www.discogs.com/release/edit/';
   return url.includes(discogsEditUrl);
 };
+
+export const isValidDiscogsReleaseAddUrl = (url: string): boolean => {
+  const discogsEditUrl = 'www.discogs.com/release/add';
+  return url.includes(discogsEditUrl);
+};

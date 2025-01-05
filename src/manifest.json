@@ -18,7 +18,10 @@
     },
     {
       "js": ["discogs.draft.js"],
-      "matches": ["https://www.discogs.com/release/edit/*"],
+      "matches": [
+        "https://www.discogs.com/release/add",
+        "https://www.discogs.com/release/edit/*"
+      ],
       "run_at": "document_end"
     }
   ],

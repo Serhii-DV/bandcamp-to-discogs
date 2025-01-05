@@ -44,8 +44,8 @@ export function renderReleaseCard(
   const modified = dateToTemplate(release.modified);
   const releaseLinks = {
     bandcamp: {
-      artistUrl: release.url.hostnameWithProtocol,
-      releaseUrl: release.url.toString(),
+      artistUrl: release.artistUrl,
+      releaseUrl: release.url,
       searchArtistUrl: getBandcampSearchArtistUrl(release.artist),
       searchReleaseUrl: getBandcampSearchReleaseUrl(
         release.artist,

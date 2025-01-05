@@ -8,6 +8,7 @@ import {
 } from '../../utils/utils';
 import { getDiscogsDateValue } from './utils.js';
 import { Metadata } from './metadata';
+import { convertArtistName } from '../modules/submission';
 
 /**
  * Represents a Discogs CSV entry.
@@ -41,7 +42,7 @@ export class DiscogsCsv {
     date,
     images
   }) {
-    this.artist = artist;
+    this.artist = convertArtistName(artist);
     this.title = title;
     this.label = label;
     this.catno = catno;

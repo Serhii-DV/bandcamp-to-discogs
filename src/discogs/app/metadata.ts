@@ -7,6 +7,7 @@ import { getExtensionManifest } from '../../utils/chrome';
 import { generateSubmissionNotes } from '../modules/discogs.js';
 import { getDiscogsDateValue } from './utils.js';
 import { Release } from '../../app/release';
+import { convertArtistName } from '../modules/submission';
 
 interface Format {
   fileType: string;
@@ -70,7 +71,7 @@ export class Metadata {
     const manifest = getExtensionManifest();
 
     this.version = manifest.version;
-    this.artist = artist;
+    this.artist = convertArtistName(artist);
     this.title = title;
     this.label = label;
     this.format = {

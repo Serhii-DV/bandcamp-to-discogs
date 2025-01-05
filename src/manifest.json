@@ -17,7 +17,7 @@
       "run_at": "document_end"
     },
     {
-      "js": ["discogs.content.js"],
+      "js": ["discogs.draft.js"],
       "matches": ["https://www.discogs.com/release/edit/*"],
       "run_at": "document_end"
     }
@@ -47,7 +47,7 @@
       "matches": ["https://*.bandcamp.com/*"]
     },
     {
-      "resources": ["discogs.content.css"],
+      "resources": ["discogs.draft.css"],
       "matches": ["https://www.discogs.com/*"]
     }
   ],

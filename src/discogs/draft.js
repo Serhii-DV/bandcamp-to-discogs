@@ -1,5 +1,5 @@
 import { injectCSSFile } from '../utils/html';
-import { initializeDraftPage } from './modules/draft/initialization';
+import { initializeDraftPage } from './modules/draft/setup';
 import {
   getArtistNameInput,
   getReleaseTitleInput

@@ -1,9 +1,9 @@
 'use strict';
 
-import { chromeListenToMessage } from '../../../utils/chrome';
-import { MessageType } from '../../../app/core/messageType';
-import { click, onClick } from '../../../utils/html';
-import { convertNewlinesToBreaks } from '../../../utils/utils';
+import { chromeListenToMessage } from '../../../utils/chrome.js';
+import { MessageType } from '../../../app/core/messageType.js';
+import { click, onClick } from '../../../utils/html.js';
+import { convertNewlinesToBreaks } from '../../../utils/utils.js';
 import {
   setSectionHint,
   autofillDurations,
@@ -20,7 +20,7 @@ import {
   showNotificationInfo,
   showNotificationWarning
 } from '../notification.js';
-import { log, logError } from '../../../utils/console';
+import { log, logError } from '../../../utils/console.js';
 
 export const initializeDraftPage = () => {
   log('Initialization... (src/discogs/modules/draft/initialization.js)');

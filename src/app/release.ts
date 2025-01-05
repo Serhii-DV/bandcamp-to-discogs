@@ -2,78 +2,30 @@ import { ReleaseItem } from './releaseItem';
 import { Track } from './track';
 
 export class Release {
-  /**
-   * @type {ReleaseItem}
-   */
-  releaseItem;
+  releaseItem: ReleaseItem;
+  label: string;
+  published: Date;
+  modified: Date;
+  tracks: Track[];
+  tracksQty: number;
+  image: string;
+  keywords: string[];
+  credit: string;
 
-  /**
-   * @type {string}
-   */
-  label;
-
-  /**
-   * @type {Date}
-   */
-  published;
-
-  /**
-   * @type {Date}
-   */
-  modified;
-
-  /**
-   * @type {Array.<Track>}
-   */
-  tracks;
-
-  /**
-   * @type {Number}
-   */
-  tracksQty;
-
-  /**
-   * @type {string}
-   */
-  image;
-
-  /**
-   * @type {Array.<string>}
-   */
-  keywords;
-
-  /**
-   * @type {string}
-   */
-  credit;
-
-  /**
-   * @param {string} artist
-   * @param {string} title
-   * @param {string} label
-   * @param {Date} datePublished
-   * @param {Date} dateModified
-   * @param {Array.<Track>} tracks
-   * @param {string} url
-   * @param {string} image
-   * @param {Array.<string>} keywords
-   * @param {string} credit
-   */
   constructor(
-    artist,
-    title,
-    label,
-    datePublished,
-    dateModified,
-    tracks,
-    url,
-    image,
-    keywords,
-    credit
+    artist: string,
+    title: string,
+    label: string,
+    datePublished: Date,
+    dateModified: Date,
+    tracks: Track[],
+    url: string,
+    image: string,
+    keywords: string[],
+    credit: string
   ) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
-    undefined;
     this.published = datePublished;
     this.modified = dateModified;
     this.tracks = tracks;
@@ -83,39 +35,39 @@ export class Release {
     this.credit = credit;
   }
 
-  get artist() {
+  get artist(): string {
     return this.releaseItem.artist;
   }
 
-  get url() {
-    return this.releaseItem.url;
+  get url(): string {
+    return this.releaseItem.url.toString();
   }
 
-  get releaseHostname() {
+  get releaseHostname(): string {
     return this.releaseItem.url.withoutProtocol;
   }
 
-  get title() {
+  get title(): string {
     return this.releaseItem.title;
   }
 
-  get uuid() {
+  get uuid(): string {
     return this.releaseItem.uuid;
   }
 
-  get year() {
+  get year(): number {
     return this.published.getFullYear();
   }
 
-  get artistHostname() {
+  get artistHostname(): string {
     return this.releaseItem.artistHostname;
   }
 
-  get artistUrl() {
+  get artistUrl(): string {
     return this.releaseItem.artistUrl;
   }
 
-  toStorageObject() {
+  toStorageObject(): object {
     return {
       artist: this.releaseItem.artist,
       title: this.releaseItem.title,
@@ -130,17 +82,12 @@ export class Release {
     };
   }
 
-  /**
-   * Create an instance of the Release class from the object.
-   * @param {Object} obj - A simple object.
-   * @returns {Release} An instance of the Release class.
-   */
-  static fromStorageObject(obj) {
+  static fromStorageObject(obj: any): Release {
     if (!obj.url || !obj.tracks) {
-      throw new Error('Cannot create Release object from object', obj);
+      throw new Error('Cannot create Release object from object');
     }
 
-    const tracks = obj.tracks.map((trackData) =>
+    const tracks = obj.tracks.map((trackData: any) =>
       Track.fromStorageObject(trackData)
     );
 

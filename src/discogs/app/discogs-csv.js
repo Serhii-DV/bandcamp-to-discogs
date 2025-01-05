@@ -7,7 +7,7 @@ import {
   removeLeadingZeroOrColon
 } from '../../utils/utils';
 import { getDiscogsDateValue } from './utils.js';
-import { Metadata } from './metadata.js';
+import { Metadata } from './metadata';
 
 /**
  * Represents a Discogs CSV entry.

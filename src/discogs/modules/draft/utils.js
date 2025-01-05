@@ -190,26 +190,28 @@ function triggerChangeEvent(element) {
   element.dispatchEvent(changeEvent);
 }
 
-export const setSectionHint = ({ section, title, text }) => {
-  if (!text) {
+export const setSectionHint = ({ section, title, items }) => {
+  log('Setting section hint', { section, title, items });
+
+  if (!items) {
     return;
   }
 
-  if (isObject(text)) {
+  if (!isArray(items) && isObject(items)) {
     let textArr = [];
-    for (const key in text) {
-      if (hasOwnProperty(text, key)) {
+    for (const key in items) {
+      if (hasOwnProperty(items, key)) {
         textArr.push({
           title: camelCaseToReadable(key),
-          value: text[key]
+          value: items[key]
         });
       }
     }
-    text = textArr;
+    items = textArr;
   }
 
-  if (isArray(text)) {
-    text = text
+  if (isArray(items)) {
+    items = items
       .map((textItem) => {
         let value = isArray(textItem.value)
           ? textItem.value.join(', ')
@@ -230,5 +232,5 @@ export const setSectionHint = ({ section, title, text }) => {
     sectionLabel.insertAdjacentElement('afterend', sectionHint);
   }
 
-  sectionHint.innerHTML = `<h4>${title}</h4><p>${text}</p>`;
+  sectionHint.innerHTML = `<h4>${title}</h4><p>${items}</p>`;
 };

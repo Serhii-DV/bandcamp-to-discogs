@@ -41,9 +41,23 @@ interface MetadataParams {
   releaseUrl: string;
 }
 
+export class MetadataValue {
+  original: string;
+  value: string;
+  variations: string[];
+
+  constructor(original: string, value: string, variations: string[] = []) {
+    this.original = original;
+    this.value = value;
+    this.variations = Array.from(
+      new Set([value, ...variations, original])
+    ) as string[];
+  }
+}
+
 export class Metadata {
   version: string;
-  artist: string;
+  artist: MetadataValue;
   title: string;
   label: string;
   format: Format;
@@ -71,7 +85,7 @@ export class Metadata {
     const manifest = getExtensionManifest();
 
     this.version = manifest.version;
-    this.artist = convertArtistName(artist);
+    this.artist = new MetadataValue(artist, convertArtistName(artist));
     this.title = title;
     this.label = label;
     this.format = {

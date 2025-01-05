@@ -16,10 +16,7 @@ import {
   setNotes,
   setCountry
 } from './utils';
-import {
-  showNotificationInfo,
-  showNotificationWarning
-} from '../notification';
+import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
 import { Metadata } from '../../app/metadata';
 
@@ -58,7 +55,8 @@ function setupReadMetadataButton() {
   const submissionFormSectionNotes = getSubmissionFormSectionNotes();
   submissionFormSectionNotes?.append(readMetadataBtn);
 
-  const submissionNotesTextarea = getSubmissionNotesTextarea() as HTMLInputElement;
+  const submissionNotesTextarea =
+    getSubmissionNotesTextarea() as HTMLInputElement;
   if (submissionNotesTextarea.value) {
     click(readMetadataBtn);
   }
@@ -97,47 +95,47 @@ function setMetadataHints(metadata: Metadata) {
 
   setSectionHint({
     section: 'artist',
-    text: `<var>${metadata.artist}</var>`,
+    items: metadata.artist.variations,
     title: 'Bandcamp artist name'
   });
   setSectionHint({
     section: 'title',
-    text: `<var>${metadata.title}</var>`,
+    items: `<var>${metadata.title}</var>`,
     title: 'Bandcamp release title'
   });
   setSectionHint({
     section: 'label',
-    text: `<var>${metadata.label}</var>`,
+    items: `<var>${metadata.label}</var>`,
     title: 'Bandcamp page label or artist name'
   });
   setSectionHint({
     section: 'country',
-    text: metadata.country,
+    items: metadata.country,
     title: 'Bandcamp country'
   });
   setSectionHint({
     section: 'format',
-    text: metadata.format,
+    items: metadata.format,
     title: 'Bandcamp auto-detected format'
   });
   setSectionHint({
     section: 'released',
-    text: metadata.released,
+    items: metadata.released,
     title: 'Bandcamp release dates'
   });
   setSectionHint({
     section: 'credits',
-    text: metadata.credits,
+    items: metadata.credits,
     title: 'Bandcamp credits'
   });
   setSectionHint({
     section: 'genres',
-    text: metadata.genres,
+    items: metadata.genres,
     title: 'Bandcamp genres related data'
   });
   setSectionHint({
     section: 'submission_notes',
-    text: `<var>${convertNewlinesToBreaks(metadata.submissionNotes)}</var>`,
+    items: `<var>${convertNewlinesToBreaks(metadata.submissionNotes)}</var>`,
     title: 'Auto-generated submission notes'
   });
 }

@@ -191,6 +191,18 @@ function triggerChangeEvent(element) {
   element.dispatchEvent(changeEvent);
 }
 
+function generateHintVariations(variations) {
+  if (!isArray(variations)) {
+    throw new Error('Variations should be an array');
+  }
+
+  return (
+    '<div class="b2d-variations">' +
+    variations.map((variation) => `<var>${variation}</var>`).join(' ') +
+    '</div>'
+  );
+}
+
 function generateHintOriginalValue(original) {
   if (!original) {
     return '';
@@ -215,7 +227,7 @@ function generateHintOriginalValue(original) {
         let value = isArray(textItem.value)
           ? textItem.value.join(', ')
           : textItem.value;
-        return `${textItem.title}: <var>${value}</var>`;
+        return `${textItem.title}: <b>${value}</b>`;
       })
       .join('<br />');
   }
@@ -223,10 +235,16 @@ function generateHintOriginalValue(original) {
   return original;
 }
 
-export const setSectionHint = ({ section, title, original }) => {
-  log('Setting section hint', { section, title, original });
+export const setSectionHint = ({
+  section,
+  title,
+  original,
+  variations = ['']
+}) => {
+  log('Setting section hint', { section, title, original, variations });
 
-  const content = generateHintOriginalValue(original);
+  let content = generateHintOriginalValue(original);
+  content += generateHintVariations(variations);
 
   const sectionElement = getSection(section);
   let sectionHint = sectionElement.querySelector('.b2d-section-hint');

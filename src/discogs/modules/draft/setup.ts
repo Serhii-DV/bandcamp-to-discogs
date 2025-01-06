@@ -96,6 +96,7 @@ function setMetadataHints(metadata: Metadata) {
   setSectionHint({
     section: 'artist',
     original: metadata.artist.original,
+    variations: metadata.artist.variations,
     title: 'Bandcamp artist name'
   });
   setSectionHint({

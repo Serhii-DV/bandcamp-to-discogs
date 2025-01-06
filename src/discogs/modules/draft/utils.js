@@ -191,14 +191,12 @@ function triggerChangeEvent(element) {
   element.dispatchEvent(changeEvent);
 }
 
-export const setSectionHint = ({ section, title, original }) => {
-  log('Setting section hint', { section, title, original });
-
+function generateHintOriginalValue(original) {
   if (!original) {
-    return;
+    return '';
   }
 
-  if (!isArray(original) && isObject(original)) {
+  if (isObject(original)) {
     let textArr = [];
     for (const key in original) {
       if (hasOwnProperty(original, key)) {
@@ -222,6 +220,14 @@ export const setSectionHint = ({ section, title, original }) => {
       .join('<br />');
   }
 
+  return original;
+}
+
+export const setSectionHint = ({ section, title, original }) => {
+  log('Setting section hint', { section, title, original });
+
+  const content = generateHintOriginalValue(original);
+
   const sectionElement = getSection(section);
   let sectionHint = sectionElement.querySelector('.b2d-section-hint');
 
@@ -233,5 +239,5 @@ export const setSectionHint = ({ section, title, original }) => {
     sectionLabel.insertAdjacentElement('afterend', sectionHint);
   }
 
-  sectionHint.innerHTML = `<h4>${title}</h4><p>${original}</p>`;
+  sectionHint.innerHTML = `<h4>${title}</h4><p>${content}</p>`;
 };

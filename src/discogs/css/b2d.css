@@ -12,10 +12,12 @@ div.b2d-section-hint {
   margin: 0 0 20px 0;
 }
 
-div.b2d-section-hint var {
-  display: inline-block;
-  padding: 0 5px;
+div.b2d-section-hint div.b2d-original {
+  margin: 5px 0;
+}
+
+div.b2d-section-hint .b2d-variation {
   font-style: normal;
-  background: var(--var-bg-color) !important;
   color: var(--var-txt-color) !important;
+  background-color: var(--var-bg-color) !important;
 }

@@ -4,7 +4,8 @@ import {
   camelCaseToReadable,
   hasOwnProperty,
   isArray,
-  isObject
+  isObject,
+  isString
 } from '../../../utils/utils';
 
 export const getArtistNameInput = () => {
@@ -198,9 +199,15 @@ function generateHintVariations(variations) {
 
   return (
     '<div class="b2d-variations">' +
-    variations.map((variation) => `<var>${variation}</var>`).join(' ') +
+    variations.map(getVariation).join(' ') +
     '</div>'
   );
+}
+
+function getVariation(variation) {
+  return variation
+    ? `<button class="b2d-variation button button-small">${variation}</button>`
+    : '';
 }
 
 function generateHintOriginalValue(original) {
@@ -208,7 +215,9 @@ function generateHintOriginalValue(original) {
     return '';
   }
 
-  if (isObject(original)) {
+  if (isString(original)) {
+    original = getVariation(original);
+  } else if (isObject(original)) {
     let textArr = [];
     for (const key in original) {
       if (hasOwnProperty(original, key)) {
@@ -227,12 +236,12 @@ function generateHintOriginalValue(original) {
         let value = isArray(textItem.value)
           ? textItem.value.join(', ')
           : textItem.value;
-        return `${textItem.title}: <b>${value}</b>`;
+        return `${textItem.title}: ` + getVariation(value);
       })
       .join('<br />');
   }
 
-  return original;
+  return `<div class="b2d-original">${original}</div>`;
 }
 
 export const setSectionHint = ({
@@ -257,5 +266,5 @@ export const setSectionHint = ({
     sectionLabel.insertAdjacentElement('afterend', sectionHint);
   }
 
-  sectionHint.innerHTML = `<h4>${title}</h4><p>${content}</p>`;
+  sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
 };

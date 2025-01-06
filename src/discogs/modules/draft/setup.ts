@@ -101,12 +101,12 @@ function setMetadataHints(metadata: Metadata) {
   });
   setSectionHint({
     section: 'title',
-    original: `<var>${metadata.title}</var>`,
+    original: metadata.title,
     title: 'Bandcamp release title'
   });
   setSectionHint({
     section: 'label',
-    original: `<var>${metadata.label}</var>`,
+    original: metadata.label,
     title: 'Bandcamp page label or artist name'
   });
   setSectionHint({
@@ -136,7 +136,8 @@ function setMetadataHints(metadata: Metadata) {
   });
   setSectionHint({
     section: 'submission_notes',
-    original: `<var>${convertNewlinesToBreaks(metadata.submissionNotes)}</var>`,
+    original: '',
+    variations: [convertNewlinesToBreaks(metadata.submissionNotes)],
     title: 'Auto-generated submission notes'
   });
 }

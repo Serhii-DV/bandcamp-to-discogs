@@ -50,7 +50,7 @@ export class MetadataValue {
     this.original = original;
     this.value = value;
     this.variations = Array.from(
-      new Set([value, ...variations, original])
+      new Set(original === value ? variations : [value, ...variations])
     ) as string[];
   }
 }

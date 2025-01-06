@@ -1,3 +1,4 @@
+import { createElementFromHTML } from '../../../utils/html';
 import { log, logError } from '../../../utils/console';
 import {
   camelCaseToReadable,
@@ -190,28 +191,28 @@ function triggerChangeEvent(element) {
   element.dispatchEvent(changeEvent);
 }
 
-export const setSectionHint = ({ section, title, items }) => {
-  log('Setting section hint', { section, title, items });
+export const setSectionHint = ({ section, title, original }) => {
+  log('Setting section hint', { section, title, original });
 
-  if (!items) {
+  if (!original) {
     return;
   }
 
-  if (!isArray(items) && isObject(items)) {
+  if (!isArray(original) && isObject(original)) {
     let textArr = [];
-    for (const key in items) {
-      if (hasOwnProperty(items, key)) {
+    for (const key in original) {
+      if (hasOwnProperty(original, key)) {
         textArr.push({
           title: camelCaseToReadable(key),
-          value: items[key]
+          value: original[key]
         });
       }
     }
-    items = textArr;
+    original = textArr;
   }
 
-  if (isArray(items)) {
-    items = items
+  if (isArray(original)) {
+    original = original
       .map((textItem) => {
         let value = isArray(textItem.value)
           ? textItem.value.join(', ')
@@ -225,12 +226,12 @@ export const setSectionHint = ({ section, title, items }) => {
   let sectionHint = sectionElement.querySelector('.b2d-section-hint');
 
   if (!sectionHint) {
-    sectionHint = document.createElement('div');
-    sectionHint.classList.add('b2d-section-hint');
-
+    sectionHint = createElementFromHTML(`
+<div class="b2d-section-hint"></div>
+`);
     const sectionLabel = sectionElement.querySelector('label');
     sectionLabel.insertAdjacentElement('afterend', sectionHint);
   }
 
-  sectionHint.innerHTML = `<h4>${title}</h4><p>${items}</p>`;
+  sectionHint.innerHTML = `<h4>${title}</h4><p>${original}</p>`;
 };

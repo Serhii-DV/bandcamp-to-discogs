@@ -95,47 +95,47 @@ function setMetadataHints(metadata: Metadata) {
 
   setSectionHint({
     section: 'artist',
-    items: metadata.artist.variations,
+    original: metadata.artist.original,
     title: 'Bandcamp artist name'
   });
   setSectionHint({
     section: 'title',
-    items: `<var>${metadata.title}</var>`,
+    original: `<var>${metadata.title}</var>`,
     title: 'Bandcamp release title'
   });
   setSectionHint({
     section: 'label',
-    items: `<var>${metadata.label}</var>`,
+    original: `<var>${metadata.label}</var>`,
     title: 'Bandcamp page label or artist name'
   });
   setSectionHint({
     section: 'country',
-    items: metadata.country,
+    original: metadata.country,
     title: 'Bandcamp country'
   });
   setSectionHint({
     section: 'format',
-    items: metadata.format,
+    original: metadata.format,
     title: 'Bandcamp auto-detected format'
   });
   setSectionHint({
     section: 'released',
-    items: metadata.released,
+    original: metadata.released,
     title: 'Bandcamp release dates'
   });
   setSectionHint({
     section: 'credits',
-    items: metadata.credits,
+    original: metadata.credits,
     title: 'Bandcamp credits'
   });
   setSectionHint({
     section: 'genres',
-    items: metadata.genres,
+    original: metadata.genres,
     title: 'Bandcamp genres related data'
   });
   setSectionHint({
     section: 'submission_notes',
-    items: `<var>${convertNewlinesToBreaks(metadata.submissionNotes)}</var>`,
+    original: `<var>${convertNewlinesToBreaks(metadata.submissionNotes)}</var>`,
     title: 'Auto-generated submission notes'
   });
 }

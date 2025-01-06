@@ -7,6 +7,7 @@ import {
   isObject,
   isString
 } from '../../../utils/utils';
+import { copyToClipboard } from '../../../utils/clipboard';
 
 export const getArtistNameInput = () => {
   return document.getElementById('artist-name-input');
@@ -267,4 +268,13 @@ export const setSectionHint = ({
   }
 
   sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
+
+  sectionHint
+    .querySelector('.b2d-variation')
+    .addEventListener('click', (event) => {
+      const text = event.target.textContent;
+      copyToClipboard(text).then(() => {
+        log('Text copied: ', text);
+      });
+    });
 };

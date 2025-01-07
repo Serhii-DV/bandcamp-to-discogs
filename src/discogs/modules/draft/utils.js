@@ -1,4 +1,8 @@
-import { createElementFromHTML } from '../../../utils/html';
+import {
+  createElementFromHTML,
+  getDataAttribute,
+  onClick
+} from '../../../utils/html';
 import { log, logError } from '../../../utils/console';
 import {
   camelCaseToReadable,
@@ -7,7 +11,6 @@ import {
   isObject,
   isString
 } from '../../../utils/utils';
-import { copyToClipboard } from '../../../utils/clipboard';
 
 export const getArtistNameInput = () => {
   return document.getElementById('artist-name-input');
@@ -206,8 +209,10 @@ function generateHintVariations(variations) {
 }
 
 function getVariation(variation) {
+  const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
+
   return variation
-    ? `<button class="b2d-variation button button-small">${variation}</button>`
+    ? `<span class="b2d-variation button button-small" title="Apply value to the field" data-text="${variation}">${icon} ${variation}</span>`
     : '';
 }
 
@@ -269,12 +274,8 @@ export const setSectionHint = ({
 
   sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
 
-  sectionHint
-    .querySelector('.b2d-variation')
-    .addEventListener('click', (event) => {
-      const text = event.target.textContent;
-      copyToClipboard(text).then(() => {
-        log('Text copied: ', text);
-      });
-    });
+  onClick(sectionHint.querySelector('.b2d-variation'), (event) => {
+    const text = getDataAttribute(event.target, 'text');
+    log('Apply text:', text);
+  });
 };

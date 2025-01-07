@@ -6,7 +6,6 @@ import {
 import { log, logError } from '../../../utils/console';
 import {
   camelCaseToReadable,
-  hasClass,
   hasOwnProperty,
   isArray,
   isObject,

@@ -326,8 +326,11 @@ export const setSectionHint = ({
     sectionHint.querySelectorAll('.b2d-variation')
   ) as HTMLElement[];
 
-  if (elementToApply instanceof HTMLInputElement) {
-    setupInputListener(
+  if (
+    elementToApply instanceof HTMLInputElement ||
+    elementToApply instanceof HTMLSelectElement
+  ) {
+    setupFormElementListener(
       elementToApply,
       variationButtons,
       'button-green',
@@ -342,39 +345,44 @@ export const setSectionHint = ({
 
     if (elementToApply instanceof HTMLInputElement) {
       setInputValue(elementToApply, text);
-      toggleClass(variationButtons, button, 'button-green');
+      toggleClass(variationButtons, 'button-green', button);
     } else if (elementToApply instanceof HTMLSelectElement) {
       selectOptionByValue(elementToApply, text);
-      toggleClass(variationButtons, button, 'button-green');
+      toggleClass(variationButtons, 'button-green', button);
     }
   });
 };
 
 function toggleClass<T extends HTMLElement>(
   elements: T[],
-  activeElement: T,
-  className: string
+  className: string,
+  activeElement?: T
 ): void {
   elements.forEach((element) => element.classList.remove(className));
-  activeElement.classList.add(className);
+  activeElement?.classList.add(className);
 }
 
-function setupInputListener(
-  input: HTMLInputElement,
+function setupFormElementListener(
+  element: HTMLInputElement | HTMLSelectElement,
   buttons: HTMLElement[],
   toggleClassName: string,
   dataAttr: string
 ): void {
-  const applyLogic = () => {
-    const inputValue = input.value.trim();
+  const applyButtonLogic = () => {
+    const value =
+      element instanceof HTMLInputElement
+        ? element.value.trim()
+        : element.value;
 
+    toggleClass(buttons, toggleClassName);
     buttons.forEach((button) => {
-      if (button.getAttribute(dataAttr) === inputValue) {
-        toggleClass(buttons, button, toggleClassName);
+      if (button.getAttribute(dataAttr) === value) {
+        button.classList.add(toggleClassName);
       }
     });
   };
 
-  input.addEventListener('input', applyLogic);
-  applyLogic();
+  const eventType = element instanceof HTMLInputElement ? 'input' : 'change';
+  element.addEventListener(eventType, applyButtonLogic);
+  applyButtonLogic();
 }

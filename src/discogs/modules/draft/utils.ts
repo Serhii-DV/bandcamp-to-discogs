@@ -233,6 +233,7 @@ function generateHintVariations(variations: string[]): string {
   return (
     '<div class="b2d-variations">' +
     variations.map(getVariation).join(' ') +
+    getClearFieldButton() +
     '</div>'
   );
 }
@@ -243,6 +244,10 @@ function getVariation(variation: string): string {
   return variation
     ? `<span class="b2d-variation button button-small" title="Apply value to the field" data-text="${variation}">${icon} ${variation}</span>`
     : '';
+}
+
+function getClearFieldButton(): string {
+  return `<span class="b2d-variation button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
 }
 
 interface TitleValue {

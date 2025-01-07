@@ -326,6 +326,15 @@ export const setSectionHint = ({
     sectionHint.querySelectorAll('.b2d-variation')
   ) as HTMLElement[];
 
+  if (elementToApply instanceof HTMLInputElement) {
+    setupInputListener(
+      elementToApply,
+      variationButtons,
+      'button-green',
+      'data-text'
+    );
+  }
+
   onClick(variationButtons, (event) => {
     const button = event.target as HTMLElement;
     const text = getDataAttribute(button, 'text');
@@ -348,4 +357,24 @@ function toggleClass<T extends HTMLElement>(
 ): void {
   elements.forEach((element) => element.classList.remove(className));
   activeElement.classList.add(className);
+}
+
+function setupInputListener(
+  input: HTMLInputElement,
+  buttons: HTMLElement[],
+  toggleClassName: string,
+  dataAttr: string
+): void {
+  const applyLogic = () => {
+    const inputValue = input.value.trim();
+
+    buttons.forEach((button) => {
+      if (button.getAttribute(dataAttr) === inputValue) {
+        toggleClass(buttons, button, toggleClassName);
+      }
+    });
+  };
+
+  input.addEventListener('input', applyLogic);
+  applyLogic();
 }

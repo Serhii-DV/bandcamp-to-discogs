@@ -104,31 +104,39 @@ function setMetadataHints(metadata: Metadata) {
   setSectionHint({
     section: 'artist',
     original: metadata.artist.original,
-    variations: metadata.artist.variations,
+    variations: [metadata.artist.original, ...metadata.artist.variations],
     title: 'Bandcamp artist name',
     elementToApply: getArtistNameInput()
   });
   setSectionHint({
     section: 'title',
     original: metadata.title,
+    variations: [metadata.title],
     title: 'Bandcamp release title',
     elementToApply: getReleaseTitleInput()
   });
   setSectionHint({
     section: 'label',
     original: metadata.label,
+    variations: [metadata.label],
     title: 'Bandcamp page label or artist name',
     elementToApply: getLabelNameInput()
   });
   setSectionHint({
     section: 'country',
     original: metadata.country,
+    variations: [metadata.country],
     title: 'Bandcamp country',
     elementToApply: getCountrySelect()
   });
   setSectionHint({
     section: 'format',
     original: metadata.format,
+    variations: [
+      metadata.format.qty.toString(),
+      metadata.format.fileType,
+      metadata.format.description
+    ],
     title: 'Bandcamp auto-detected format',
     elementToApply: undefined
   });
@@ -145,6 +153,7 @@ function setMetadataHints(metadata: Metadata) {
   setSectionHint({
     section: 'credits',
     original: metadata.credits,
+    variations: [metadata.credits],
     title: 'Bandcamp credits',
     elementToApply: undefined
   });

@@ -266,7 +266,7 @@ function generateHintOriginalValue(original: OriginalValue): string {
   }
 
   if (isString(original)) {
-    original = getVariation(original as string);
+    original = `<b>${original}</b>`;
   } else if (isObject(original)) {
     let textArr = [];
     for (const key in original as ObjectByStringKey) {

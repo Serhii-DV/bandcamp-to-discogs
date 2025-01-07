@@ -328,7 +328,8 @@ export const setSectionHint = ({
 
   if (
     elementToApply instanceof HTMLInputElement ||
-    elementToApply instanceof HTMLSelectElement
+    elementToApply instanceof HTMLSelectElement ||
+    elementToApply instanceof HTMLTextAreaElement
   ) {
     setupFormElementListener(
       elementToApply,
@@ -343,7 +344,10 @@ export const setSectionHint = ({
     const text = getDataAttribute(button, 'text');
     log('Apply text:', text, ' to element ', elementToApply?.id);
 
-    if (elementToApply instanceof HTMLInputElement) {
+    if (
+      elementToApply instanceof HTMLInputElement ||
+      elementToApply instanceof HTMLTextAreaElement
+    ) {
       setInputValue(elementToApply, text);
       toggleClass(variationButtons, 'button-green', button);
     } else if (elementToApply instanceof HTMLSelectElement) {
@@ -363,14 +367,15 @@ function toggleClass<T extends HTMLElement>(
 }
 
 function setupFormElementListener(
-  element: HTMLInputElement | HTMLSelectElement,
+  element: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
   buttons: HTMLElement[],
   toggleClassName: string,
   dataAttr: string
 ): void {
   const applyButtonLogic = () => {
     const value =
-      element instanceof HTMLInputElement
+      element instanceof HTMLInputElement ||
+      element instanceof HTMLTextAreaElement
         ? element.value.trim()
         : element.value;
 
@@ -382,7 +387,11 @@ function setupFormElementListener(
     });
   };
 
-  const eventType = element instanceof HTMLInputElement ? 'input' : 'change';
+  const eventType =
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement
+      ? 'input'
+      : 'change';
   element.addEventListener(eventType, applyButtonLogic);
   applyButtonLogic();
 }

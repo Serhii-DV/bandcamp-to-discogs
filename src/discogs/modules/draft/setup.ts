@@ -38,7 +38,7 @@ function setupReadMetadataButton() {
 
   onClick(readMetadataBtn, () => {
     try {
-      const notesTextarea = getNotesTextarea() as HTMLInputElement;
+      const notesTextarea = getNotesTextarea() as HTMLTextAreaElement;
 
       if (!notesTextarea.value) {
         showNotificationWarning('No Metadata in Notes');
@@ -57,7 +57,7 @@ function setupReadMetadataButton() {
   submissionFormSectionNotes?.append(readMetadataBtn);
 
   const submissionNotesTextarea =
-    getSubmissionNotesTextarea() as HTMLInputElement;
+    getSubmissionNotesTextarea() as HTMLTextAreaElement;
   if (submissionNotesTextarea.value) {
     click(readMetadataBtn);
   }
@@ -67,7 +67,11 @@ function applyMetadata(metadata: Metadata) {
   log('Applying metadata...', metadata);
 
   setMetadataHints(metadata);
-  setFormat(metadata.format);
+  setFormat(
+    metadata.format.qty.toString(),
+    metadata.format.fileType,
+    metadata.format.description
+  );
   setCountry(metadata.country);
   autofillDurations();
   setSubmissionNotes(metadata.submissionNotes);

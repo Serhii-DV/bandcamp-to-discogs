@@ -9,53 +9,54 @@ import {
   hasOwnProperty,
   isArray,
   isObject,
-  isString
+  isString,
+  ObjectByStringKey
 } from '../../../utils/utils';
 
-export const getArtistNameInput = () => {
-  return document.getElementById('artist-name-input');
+export const getArtistNameInput = (): HTMLInputElement | null => {
+  return document.getElementById('artist-name-input') as HTMLInputElement;
 };
 
-export const getReleaseTitleInput = () => {
-  return document.getElementById('release-title-input');
+export const getReleaseTitleInput = (): HTMLInputElement | null => {
+  return document.getElementById('release-title-input') as HTMLInputElement;
 };
 
-export const getQuantityInput = () => {
-  return document.querySelector('input[aria-label="Quantity of format"]');
+export const getQuantityInput = (): HTMLInputElement | null => {
+  return document.querySelector('input[aria-label="Quantity of format"]') as HTMLInputElement;
 };
 
-export const getCountrySelect = () => {
-  return document.getElementById('release-country-select');
+export const getCountrySelect = (): HTMLSelectElement | null => {
+  return document.getElementById('release-country-select') as HTMLSelectElement;
 };
 
-export const getTrackTitleInputs = () => {
-  return document.querySelectorAll('.track_input');
+export const getTrackTitleInputs = (): NodeListOf<HTMLInputElement> => {
+  return document.querySelectorAll('.track_input') as NodeListOf<HTMLInputElement>;
 };
 
-export const getNotesTextarea = () => {
-  return document.querySelector('textarea#release-notes-textarea');
+export const getNotesTextarea = (): HTMLTextAreaElement | null => {
+  return document.querySelector('textarea#release-notes-textarea') as HTMLTextAreaElement;
 };
 
-export const getSubmissionNotesTextarea = () => {
-  return document.querySelector('textarea#release-submission-notes-textarea');
+export const getSubmissionNotesTextarea = (): HTMLTextAreaElement | null => {
+  return document.querySelector('textarea#release-submission-notes-textarea') as HTMLTextAreaElement;
 };
 
-export function getSection(name) {
+export function getSection(name: string): HTMLElement {
   const artistBlock = document.querySelector(`[data-ref-overview="${name}"]`);
-  return artistBlock.parentElement;
+  return artistBlock!.parentElement as HTMLElement;
 }
 
-export function getSubmissionFormSectionNotes() {
+export function getSubmissionFormSectionNotes(): HTMLElement | null {
   return document.querySelector('#subform .notes');
 }
 
 /**
  * @param {String} fileType
  */
-export function selectFormatFileType(fileType) {
+export function selectFormatFileType(fileType: string): void {
   const fileTypeInput = document.querySelector(
     'input[value="' + fileType + '"]'
-  );
+  ) as HTMLInputElement;
 
   if (fileTypeInput) {
     checkInput(fileTypeInput);
@@ -67,10 +68,10 @@ export function selectFormatFileType(fileType) {
 /**
  * @param {String} formatDescription
  */
-export function selectFormatDescription(formatDescription) {
+export function selectFormatDescription(formatDescription: string): void {
   const descriptionInput = document.querySelector(
     '.format_descriptions_type input[value="' + formatDescription + '"]'
-  );
+  ) as HTMLInputElement;
 
   if (descriptionInput) {
     checkInput(descriptionInput);
@@ -82,11 +83,11 @@ export function selectFormatDescription(formatDescription) {
   );
 }
 
-export function autofillDurations() {
+export function autofillDurations(): void {
   const trackTitleInputs = getTrackTitleInputs();
   const trackDurationInputs = document.querySelectorAll(
     'input[aria-label="Track duration"]'
-  );
+  ) as NodeListOf<HTMLInputElement>;
 
   trackDurationInputs.forEach((durationInput, index) => {
     if (durationInput.value !== '') {
@@ -105,7 +106,7 @@ export function autofillDurations() {
  * @param {String} str
  * @returns {Array<String, String>}
  */
-function extractTitleAndTime(str) {
+function extractTitleAndTime(str: string): [string, string] {
   const parts = str.split(' ');
 
   const timeFormatRegex = /^(\d{1,2}:)?\d{1,2}:\d{2}$/; // Matches hh:mm:ss or mm:ss
@@ -115,35 +116,35 @@ function extractTitleAndTime(str) {
     return [str, ''];
   }
 
-  const timeValue = parts.pop();
+  const timeValue = parts.pop()!;
   const modifiedString = parts.join(' ');
 
   return [modifiedString, timeValue];
 }
 
-export function setFormat(format) {
-  const qtyInput = getQuantityInput();
-  setInputValue(qtyInput, format.qty);
-  selectFormatFileType(format.fileType);
-  selectFormatDescription(format.description);
+export function setFormat(qty: string, fileType: string, description: string): void {
+  const qtyInput = getQuantityInput() as HTMLInputElement;
+  setInputValue(qtyInput, qty);
+  selectFormatFileType(fileType);
+  selectFormatDescription(description);
 }
 
-export function setCountry(country) {
+export function setCountry(country: string): void {
   const countrySelect = getCountrySelect();
   selectOptionByValue(countrySelect, country);
 }
 
-export function setSubmissionNotes(submissionNotes) {
-  const submissionNotesTextarea = getSubmissionNotesTextarea();
+export function setSubmissionNotes(submissionNotes: string): void {
+  const submissionNotesTextarea = getSubmissionNotesTextarea() as HTMLTextAreaElement;
   setInputValue(submissionNotesTextarea, submissionNotes);
 }
 
-export function setNotes(notes) {
-  const notesTextarea = getNotesTextarea();
+export function setNotes(notes: string): void {
+  const notesTextarea = getNotesTextarea() as HTMLTextAreaElement;
   setInputValue(notesTextarea, notes);
 }
 
-export function setInputValue(inputElement, value) {
+export function setInputValue(inputElement: HTMLInputElement | HTMLTextAreaElement, value: string): void {
   const prev = inputElement.value;
   inputElement.focus();
   inputElement.value = value;
@@ -154,7 +155,7 @@ export function setInputValue(inputElement, value) {
   log(`"${inputLabel}" input value changed`, { prev, value });
 }
 
-function checkInput(inputElement) {
+function checkInput(inputElement: HTMLInputElement): void {
   if (inputElement.checked) {
     return;
   }
@@ -165,7 +166,7 @@ function checkInput(inputElement) {
   inputElement.blur();
 }
 
-function selectOptionByValue(selectElement, value) {
+function selectOptionByValue(selectElement: HTMLSelectElement | null, value: string): void {
   if (!selectElement || !(selectElement instanceof HTMLSelectElement)) {
     throw new Error('The first argument must be a valid <select> element.');
   }
@@ -186,17 +187,17 @@ function selectOptionByValue(selectElement, value) {
   logError(`Option with value "${value}" not found.`);
 }
 
-function triggerInputEvent(element) {
+function triggerInputEvent(element: HTMLElement): void {
   const inputEvent = new Event('input', { bubbles: true, cancelable: true });
   element.dispatchEvent(inputEvent);
 }
 
-function triggerChangeEvent(element) {
+function triggerChangeEvent(element: HTMLElement): void {
   const changeEvent = new Event('change', { bubbles: true, cancelable: true });
   element.dispatchEvent(changeEvent);
 }
 
-function generateHintVariations(variations) {
+function generateHintVariations(variations: string[]): string {
   if (!isArray(variations)) {
     throw new Error('Variations should be an array');
   }
@@ -208,7 +209,7 @@ function generateHintVariations(variations) {
   );
 }
 
-function getVariation(variation) {
+function getVariation(variation: string): string {
   const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
   return variation
@@ -216,20 +217,29 @@ function getVariation(variation) {
     : '';
 }
 
-function generateHintOriginalValue(original) {
+interface TitleValue {
+  title: string;
+  value: string | string[];
+}
+type OriginalValue = string
+  | { [key: string]: string }
+  | TitleValue[]
+  | ObjectByStringKey;
+
+function generateHintOriginalValue(original: OriginalValue): string {
   if (!original) {
     return '';
   }
 
   if (isString(original)) {
-    original = getVariation(original);
+    original = getVariation(original as string);
   } else if (isObject(original)) {
     let textArr = [];
-    for (const key in original) {
-      if (hasOwnProperty(original, key)) {
+    for (const key in original as ObjectByStringKey) {
+      if (hasOwnProperty(original as ObjectByStringKey, key)) {
         textArr.push({
           title: camelCaseToReadable(key),
-          value: original[key]
+          value: (original as ObjectByStringKey)[key]
         });
       }
     }
@@ -237,17 +247,25 @@ function generateHintOriginalValue(original) {
   }
 
   if (isArray(original)) {
-    original = original
-      .map((textItem) => {
+    original = (original as TitleValue[])
+      .map((textItem: TitleValue) => {
         let value = isArray(textItem.value)
-          ? textItem.value.join(', ')
+          ? (textItem.value as string[]).join(', ')
           : textItem.value;
-        return `${textItem.title}: ` + getVariation(value);
+        return `${textItem.title}: ` + getVariation(value as string);
       })
       .join('<br />');
   }
 
   return `<div class="b2d-original">${original}</div>`;
+}
+
+interface SectionHint {
+  section: string;
+  title: string;
+  original: OriginalValue;
+  variations?: string[];
+  elementToApply?: HTMLElement | null;
 }
 
 export const setSectionHint = ({
@@ -256,7 +274,7 @@ export const setSectionHint = ({
   original,
   variations = [''],
   elementToApply
-}) => {
+}: SectionHint): void => {
   log('Setting section hint', { section, title, original, variations });
 
   let content = generateHintOriginalValue(original);
@@ -268,19 +286,19 @@ export const setSectionHint = ({
   if (!sectionHint) {
     sectionHint = createElementFromHTML(`
 <div class="b2d-section-hint"></div>
-`);
+`) as HTMLElement;
     const sectionLabel = sectionElement.querySelector('label');
-    sectionLabel.insertAdjacentElement('afterend', sectionHint);
+    sectionLabel!.insertAdjacentElement('afterend', sectionHint);
   }
 
   sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
 
-  onClick(sectionHint.querySelector('.b2d-variation'), (event) => {
-    const text = getDataAttribute(event.target, 'text');
+  onClick(sectionHint.querySelector('.b2d-variation') as HTMLElement, (event) => {
+    const text = getDataAttribute(event.target as HTMLElement, 'text');
     log('Apply text:', text);
 
     if (elementToApply instanceof HTMLElement) {
-      setInputValue(elementToApply, text);
+      setInputValue(elementToApply as HTMLInputElement, text);
     }
   });
 };

@@ -322,9 +322,10 @@ export const setSectionHint = ({
 
   sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
 
-  const variationButtons = sectionHint.querySelectorAll(
-    '.b2d-variation'
-  ) as NodeListOf<HTMLElement>;
+  const variationButtons = Array.from(
+    sectionHint.querySelectorAll('.b2d-variation')
+  ) as HTMLElement[];
+
   onClick(variationButtons, (event) => {
     const button = event.target as HTMLElement;
     const text = getDataAttribute(button, 'text');
@@ -332,9 +333,19 @@ export const setSectionHint = ({
 
     if (elementToApply instanceof HTMLInputElement) {
       setInputValue(elementToApply, text);
-
-      variationButtons.forEach((btn) => btn.classList.remove('button-green'));
-      button.classList.add('button-green');
+      toggleClass(variationButtons, button, 'button-green');
+    } else if (elementToApply instanceof HTMLSelectElement) {
+      selectOptionByValue(elementToApply, text);
+      toggleClass(variationButtons, button, 'button-green');
     }
   });
 };
+
+function toggleClass<T extends HTMLElement>(
+  elements: T[],
+  activeElement: T,
+  className: string
+): void {
+  elements.forEach((element) => element.classList.remove(className));
+  activeElement.classList.add(className);
+}

@@ -17,7 +17,8 @@ import {
   setCountry,
   getReleaseTitleInput,
   getLabelNameInput,
-  getReleasedDateInput
+  getReleasedDateInput,
+  getCountrySelect
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
@@ -123,7 +124,7 @@ function setMetadataHints(metadata: Metadata) {
     section: 'country',
     original: metadata.country,
     title: 'Bandcamp country',
-    elementToApply: undefined
+    elementToApply: getCountrySelect()
   });
   setSectionHint({
     section: 'format',

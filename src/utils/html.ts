@@ -137,7 +137,7 @@ export function click(element: HTMLElement): HTMLElement {
 }
 
 export function onClick(
-  elements: HTMLElement | NodeListOf<HTMLElement> | null,
+  elements: HTMLElement | HTMLElement[] | NodeListOf<HTMLElement> | null,
   callback: (event: MouseEvent) => void
 ): void {
   if (!elements) return;

@@ -22,7 +22,9 @@ export const getReleaseTitleInput = (): HTMLInputElement | null => {
 };
 
 export const getQuantityInput = (): HTMLInputElement | null => {
-  return document.querySelector('input[aria-label="Quantity of format"]') as HTMLInputElement;
+  return document.querySelector(
+    'input[aria-label="Quantity of format"]'
+  ) as HTMLInputElement;
 };
 
 export const getCountrySelect = (): HTMLSelectElement | null => {
@@ -30,15 +32,21 @@ export const getCountrySelect = (): HTMLSelectElement | null => {
 };
 
 export const getTrackTitleInputs = (): NodeListOf<HTMLInputElement> => {
-  return document.querySelectorAll('.track_input') as NodeListOf<HTMLInputElement>;
+  return document.querySelectorAll(
+    '.track_input'
+  ) as NodeListOf<HTMLInputElement>;
 };
 
 export const getNotesTextarea = (): HTMLTextAreaElement | null => {
-  return document.querySelector('textarea#release-notes-textarea') as HTMLTextAreaElement;
+  return document.querySelector(
+    'textarea#release-notes-textarea'
+  ) as HTMLTextAreaElement;
 };
 
 export const getSubmissionNotesTextarea = (): HTMLTextAreaElement | null => {
-  return document.querySelector('textarea#release-submission-notes-textarea') as HTMLTextAreaElement;
+  return document.querySelector(
+    'textarea#release-submission-notes-textarea'
+  ) as HTMLTextAreaElement;
 };
 
 export function getSection(name: string): HTMLElement {
@@ -122,7 +130,11 @@ function extractTitleAndTime(str: string): [string, string] {
   return [modifiedString, timeValue];
 }
 
-export function setFormat(qty: string, fileType: string, description: string): void {
+export function setFormat(
+  qty: string,
+  fileType: string,
+  description: string
+): void {
   const qtyInput = getQuantityInput() as HTMLInputElement;
   setInputValue(qtyInput, qty);
   selectFormatFileType(fileType);
@@ -135,7 +147,8 @@ export function setCountry(country: string): void {
 }
 
 export function setSubmissionNotes(submissionNotes: string): void {
-  const submissionNotesTextarea = getSubmissionNotesTextarea() as HTMLTextAreaElement;
+  const submissionNotesTextarea =
+    getSubmissionNotesTextarea() as HTMLTextAreaElement;
   setInputValue(submissionNotesTextarea, submissionNotes);
 }
 
@@ -144,7 +157,10 @@ export function setNotes(notes: string): void {
   setInputValue(notesTextarea, notes);
 }
 
-export function setInputValue(inputElement: HTMLInputElement | HTMLTextAreaElement, value: string): void {
+export function setInputValue(
+  inputElement: HTMLInputElement | HTMLTextAreaElement,
+  value: string
+): void {
   const prev = inputElement.value;
   inputElement.focus();
   inputElement.value = value;
@@ -166,7 +182,10 @@ function checkInput(inputElement: HTMLInputElement): void {
   inputElement.blur();
 }
 
-function selectOptionByValue(selectElement: HTMLSelectElement | null, value: string): void {
+function selectOptionByValue(
+  selectElement: HTMLSelectElement | null,
+  value: string
+): void {
   if (!selectElement || !(selectElement instanceof HTMLSelectElement)) {
     throw new Error('The first argument must be a valid <select> element.');
   }
@@ -221,7 +240,8 @@ interface TitleValue {
   title: string;
   value: string | string[];
 }
-type OriginalValue = string
+type OriginalValue =
+  | string
   | { [key: string]: string }
   | TitleValue[]
   | ObjectByStringKey;
@@ -293,12 +313,15 @@ export const setSectionHint = ({
 
   sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
 
-  onClick(sectionHint.querySelector('.b2d-variation') as HTMLElement, (event) => {
-    const text = getDataAttribute(event.target as HTMLElement, 'text');
-    log('Apply text:', text);
+  onClick(
+    sectionHint.querySelector('.b2d-variation') as HTMLElement,
+    (event) => {
+      const text = getDataAttribute(event.target as HTMLElement, 'text');
+      log('Apply text:', text);
 
-    if (elementToApply instanceof HTMLElement) {
-      setInputValue(elementToApply as HTMLInputElement, text);
+      if (elementToApply instanceof HTMLInputElement) {
+        setInputValue(elementToApply, text);
+      }
     }
-  });
+  );
 };

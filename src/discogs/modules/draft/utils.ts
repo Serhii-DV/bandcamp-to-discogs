@@ -230,12 +230,12 @@ function generateHintVariations(variations: string[]): string {
     throw new Error('Variations should be an array');
   }
 
-  return (
-    '<div class="b2d-variations">' +
-    variations.map(getVariation).join(' ') +
-    getClearFieldButton() +
-    '</div>'
-  );
+  return `
+<div class="b2d-variations">
+  ${variations.map(getVariation).join(' ')}
+  ${getClearFieldButton()}
+</div>
+`;
 }
 
 function getVariation(variation: string): string {

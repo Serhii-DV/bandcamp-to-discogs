@@ -14,7 +14,8 @@ import {
   setFormat,
   setSubmissionNotes,
   setNotes,
-  setCountry
+  setCountry,
+  getReleaseTitleInput
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
@@ -97,47 +98,56 @@ function setMetadataHints(metadata: Metadata) {
     section: 'artist',
     original: metadata.artist.original,
     variations: metadata.artist.variations,
-    title: 'Bandcamp artist name'
+    title: 'Bandcamp artist name',
+    elementToApply: getArtistNameInput()
   });
   setSectionHint({
     section: 'title',
     original: metadata.title,
-    title: 'Bandcamp release title'
+    title: 'Bandcamp release title',
+    elementToApply: getReleaseTitleInput()
   });
   setSectionHint({
     section: 'label',
     original: metadata.label,
-    title: 'Bandcamp page label or artist name'
+    title: 'Bandcamp page label or artist name',
+    elementToApply: undefined
   });
   setSectionHint({
     section: 'country',
     original: metadata.country,
-    title: 'Bandcamp country'
+    title: 'Bandcamp country',
+    elementToApply: undefined
   });
   setSectionHint({
     section: 'format',
     original: metadata.format,
-    title: 'Bandcamp auto-detected format'
+    title: 'Bandcamp auto-detected format',
+    elementToApply: undefined
   });
   setSectionHint({
     section: 'released',
     original: metadata.released,
-    title: 'Bandcamp release dates'
+    title: 'Bandcamp release dates',
+    elementToApply: undefined
   });
   setSectionHint({
     section: 'credits',
     original: metadata.credits,
-    title: 'Bandcamp credits'
+    title: 'Bandcamp credits',
+    elementToApply: undefined
   });
   setSectionHint({
     section: 'genres',
     original: metadata.genres,
-    title: 'Bandcamp genres related data'
+    title: 'Bandcamp genres related data',
+    elementToApply: undefined
   });
   setSectionHint({
     section: 'submission_notes',
     original: '',
     variations: [convertNewlinesToBreaks(metadata.submissionNotes)],
-    title: 'Auto-generated submission notes'
+    title: 'Auto-generated submission notes',
+    elementToApply: getSubmissionNotesTextarea()
   });
 }

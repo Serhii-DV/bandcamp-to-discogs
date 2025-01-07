@@ -254,7 +254,8 @@ export const setSectionHint = ({
   section,
   title,
   original,
-  variations = ['']
+  variations = [''],
+  elementToApply
 }) => {
   log('Setting section hint', { section, title, original, variations });
 
@@ -277,5 +278,9 @@ export const setSectionHint = ({
   onClick(sectionHint.querySelector('.b2d-variation'), (event) => {
     const text = getDataAttribute(event.target, 'text');
     log('Apply text:', text);
+
+    if (elementToApply instanceof HTMLElement) {
+      setInputValue(elementToApply, text);
+    }
   });
 };

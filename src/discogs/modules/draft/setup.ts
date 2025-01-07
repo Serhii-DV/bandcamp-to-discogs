@@ -15,7 +15,9 @@ import {
   setSubmissionNotes,
   setNotes,
   setCountry,
-  getReleaseTitleInput
+  getReleaseTitleInput,
+  getLabelNameInput,
+  getReleasedDateInput
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
@@ -115,7 +117,7 @@ function setMetadataHints(metadata: Metadata) {
     section: 'label',
     original: metadata.label,
     title: 'Bandcamp page label or artist name',
-    elementToApply: undefined
+    elementToApply: getLabelNameInput()
   });
   setSectionHint({
     section: 'country',
@@ -133,7 +135,11 @@ function setMetadataHints(metadata: Metadata) {
     section: 'released',
     original: metadata.released,
     title: 'Bandcamp release dates',
-    elementToApply: undefined
+    variations: [
+      metadata.released.publishedDate,
+      metadata.released.modifiedDate
+    ],
+    elementToApply: getReleasedDateInput()
   });
   setSectionHint({
     section: 'credits',

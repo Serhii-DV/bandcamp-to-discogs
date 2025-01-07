@@ -21,6 +21,10 @@ export const getReleaseTitleInput = (): HTMLInputElement | null => {
   return document.getElementById('release-title-input') as HTMLInputElement;
 };
 
+export const getLabelNameInput = (): HTMLInputElement | null => {
+  return document.getElementById('label-name-input-0') as HTMLInputElement;
+};
+
 export const getQuantityInput = (): HTMLInputElement | null => {
   return document.querySelector(
     'input[aria-label="Quantity of format"]'
@@ -29,6 +33,10 @@ export const getQuantityInput = (): HTMLInputElement | null => {
 
 export const getCountrySelect = (): HTMLSelectElement | null => {
   return document.getElementById('release-country-select') as HTMLSelectElement;
+};
+
+export const getReleasedDateInput = (): HTMLInputElement | null => {
+  return document.getElementById('release-date') as HTMLInputElement;
 };
 
 export const getTrackTitleInputs = (): NodeListOf<HTMLInputElement> => {
@@ -272,7 +280,7 @@ function generateHintOriginalValue(original: OriginalValue): string {
         let value = isArray(textItem.value)
           ? (textItem.value as string[]).join(', ')
           : textItem.value;
-        return `${textItem.title}: ` + getVariation(value as string);
+        return `${textItem.title}: <b>${value}</b>`;
       })
       .join('<br />');
   }
@@ -313,15 +321,12 @@ export const setSectionHint = ({
 
   sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
 
-  onClick(
-    sectionHint.querySelector('.b2d-variation') as HTMLElement,
-    (event) => {
-      const text = getDataAttribute(event.target as HTMLElement, 'text');
-      log('Apply text:', text);
+  onClick(sectionHint.querySelectorAll('.b2d-variation'), (event) => {
+    const text = getDataAttribute(event.target as HTMLElement, 'text');
+    log('Apply text:', text, ' to element ', elementToApply?.id);
 
-      if (elementToApply instanceof HTMLInputElement) {
-        setInputValue(elementToApply, text);
-      }
+    if (elementToApply instanceof HTMLInputElement) {
+      setInputValue(elementToApply, text);
     }
-  );
+  });
 };

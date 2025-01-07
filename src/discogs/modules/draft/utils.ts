@@ -6,6 +6,7 @@ import {
 import { log, logError } from '../../../utils/console';
 import {
   camelCaseToReadable,
+  hasClass,
   hasOwnProperty,
   isArray,
   isObject,
@@ -321,12 +322,19 @@ export const setSectionHint = ({
 
   sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
 
-  onClick(sectionHint.querySelectorAll('.b2d-variation'), (event) => {
-    const text = getDataAttribute(event.target as HTMLElement, 'text');
+  const variationButtons = sectionHint.querySelectorAll(
+    '.b2d-variation'
+  ) as NodeListOf<HTMLElement>;
+  onClick(variationButtons, (event) => {
+    const button = event.target as HTMLElement;
+    const text = getDataAttribute(button, 'text');
     log('Apply text:', text, ' to element ', elementToApply?.id);
 
     if (elementToApply instanceof HTMLInputElement) {
       setInputValue(elementToApply, text);
+
+      variationButtons.forEach((btn) => btn.classList.remove('button-green'));
+      button.classList.add('button-green');
     }
   });
 };

@@ -18,7 +18,10 @@ import {
   getReleaseTitleInput,
   getLabelNameInput,
   getReleasedDateInput,
-  getCountrySelect
+  getCountrySelect,
+  getQuantityInput,
+  ElementVariation,
+  VariationsGroup
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
@@ -106,39 +109,59 @@ function setMetadataHints(metadata: Metadata) {
     original: metadata.artist.original,
     variations: [metadata.artist.original, ...metadata.artist.variations],
     title: 'Bandcamp artist name',
-    elementToApply: getArtistNameInput()
+    elementToApply: getArtistNameInput(),
+    variationGroups: []
   });
   setSectionHint({
     section: 'title',
     original: metadata.title,
     variations: [metadata.title],
     title: 'Bandcamp release title',
-    elementToApply: getReleaseTitleInput()
+    elementToApply: getReleaseTitleInput(),
+    variationGroups: []
   });
   setSectionHint({
     section: 'label',
     original: metadata.label,
     variations: [metadata.label],
     title: 'Bandcamp page label or artist name',
-    elementToApply: getLabelNameInput()
+    elementToApply: getLabelNameInput(),
+    variationGroups: []
   });
   setSectionHint({
     section: 'country',
     original: metadata.country,
     variations: [metadata.country],
     title: 'Bandcamp country',
-    elementToApply: getCountrySelect()
+    elementToApply: getCountrySelect(),
+    variationGroups: []
   });
+
+  const qtyInput = getQuantityInput();
+
+  const formatTypeGroup = new VariationsGroup('Format type', [
+    new ElementVariation('#release-format-select', 'File')
+  ]);
+  const qtyGroup = new VariationsGroup('Quantity', [
+    new ElementVariation(qtyInput, metadata.format.qty.toString())
+  ]);
+
+  const fileTypes = ['MP3', 'FLAC', 'WAV'];
+  const fileTypeVariations: ElementVariation[] = [];
+  fileTypes.forEach((fileType) => {
+    fileTypeVariations.push(
+      new ElementVariation('input[value="' + fileType + '"]', fileType)
+    );
+  });
+  const fileTypeGroup = new VariationsGroup('File type', fileTypeVariations);
+
   setSectionHint({
     section: 'format',
     original: metadata.format,
-    variations: [
-      metadata.format.qty.toString(),
-      metadata.format.fileType,
-      metadata.format.description
-    ],
+    variations: [],
     title: 'Bandcamp auto-detected format',
-    elementToApply: undefined
+    elementToApply: undefined,
+    variationGroups: [formatTypeGroup, qtyGroup, fileTypeGroup]
   });
   setSectionHint({
     section: 'released',
@@ -148,26 +171,30 @@ function setMetadataHints(metadata: Metadata) {
       metadata.released.publishedDate,
       metadata.released.modifiedDate
     ],
-    elementToApply: getReleasedDateInput()
+    elementToApply: getReleasedDateInput(),
+    variationGroups: []
   });
   setSectionHint({
     section: 'credits',
     original: metadata.credits,
     variations: [metadata.credits],
     title: 'Bandcamp credits',
-    elementToApply: undefined
+    elementToApply: undefined,
+    variationGroups: []
   });
   setSectionHint({
     section: 'genres',
     original: metadata.genres,
     title: 'Bandcamp genres related data',
-    elementToApply: undefined
+    elementToApply: undefined,
+    variationGroups: []
   });
   setSectionHint({
     section: 'submission_notes',
     original: '',
     variations: [convertNewlinesToBreaks(metadata.submissionNotes)],
     title: 'Auto-generated submission notes',
-    elementToApply: getSubmissionNotesTextarea()
+    elementToApply: getSubmissionNotesTextarea(),
+    variationGroups: []
   });
 }

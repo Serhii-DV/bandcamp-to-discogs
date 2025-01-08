@@ -137,6 +137,7 @@ function extractTitleAndTime(str: string): [string, string] {
 
   return [modifiedString, timeValue];
 }
+getQuantityInput();
 
 export function setFormat(
   qty: string,
@@ -245,6 +246,30 @@ function getVariation(variation: string): string {
     : '';
 }
 
+function generateElementVariation(elementVariation: ElementVariation): string {
+  return getVariation(elementVariation.variation);
+}
+
+function generateElementVariations(items: ElementVariation[]): string {
+  if (!items.length) {
+    return '';
+  }
+
+  return items.map(generateElementVariation).join(' ') + getClearFieldButton();
+}
+
+function generateVariationsGroup(group: VariationsGroup): string {
+  return `
+<div class="b2d-variations">
+  ${group.title}: ${generateElementVariations(group.variations)}
+</div>
+`;
+}
+
+function generateVariationsGroups(groups: VariationsGroup[]): string {
+  return groups.map(generateVariationsGroup).join('<br>');
+}
+
 function getClearFieldButton(): string {
   return `<span class="b2d-variation button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
 }
@@ -293,12 +318,35 @@ function generateHintOriginalValue(original: OriginalValue): string {
   return `<div class="b2d-original">${original}</div>`;
 }
 
+export type FormElement = HTMLElement | HTMLInputElement | string | null;
+
+export class ElementVariation {
+  element: FormElement;
+  variation: string;
+
+  constructor(element: FormElement, variation: string) {
+    this.element = element;
+    this.variation = variation;
+  }
+}
+
+export class VariationsGroup {
+  title: string;
+  variations: ElementVariation[];
+
+  constructor(title: string, variations: ElementVariation[]) {
+    this.title = title;
+    this.variations = variations;
+  }
+}
+
 interface SectionHint {
   section: string;
   title: string;
   original: OriginalValue;
   variations?: string[];
   elementToApply?: HTMLElement | null;
+  variationGroups: VariationsGroup[];
 }
 
 export const setSectionHint = ({
@@ -306,12 +354,14 @@ export const setSectionHint = ({
   title,
   original,
   variations = [''],
-  elementToApply
+  elementToApply,
+  variationGroups
 }: SectionHint): void => {
   log('Setting section hint', { section, title, original, variations });
 
   let content = generateHintOriginalValue(original);
   content += generateHintVariations(variations);
+  content += generateVariationsGroups(variationGroups);
 
   const sectionElement = getSection(section);
   let sectionHint = sectionElement.querySelector('.b2d-section-hint');

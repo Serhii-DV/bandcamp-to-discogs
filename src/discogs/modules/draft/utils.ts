@@ -14,6 +14,7 @@ import {
   isString,
   ObjectByStringKey
 } from '../../../utils/utils';
+import { truncateText } from '../../../utils/string';
 
 export const getArtistNameInput = (): HTMLInputElement | null => {
   return document.getElementById('artist-name-input') as HTMLInputElement;
@@ -236,24 +237,24 @@ function generateVariations(variations: string[]): string {
     return '';
   }
 
-  const variationElements = variations.map((variation: string) =>
-    getVariation(variation)
-  );
-
   return `
 <div class="b2d-variations">
-  ${variationElements.join(' ')}
+  ${variations.map(getVariation).join(' ')}
   ${getClearFieldButton()}
 </div>
 `;
 }
 
-function getVariation(variation: string, className: string = ''): string {
+function getVariation(variation: string): string {
   const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
-  return variation
-    ? `<span class="b2d-variation button button-small ${className}" title="Apply value to the field" data-text="${variation}">${icon} ${variation}</span>`
-    : '';
+  if (!variation) {
+    return '';
+  }
+
+  const content = truncateText(variation, 50);
+
+  return `<span class="b2d-variation button button-small" title="Set value:\n\n${variation}" data-text="${variation}">${icon} ${content}</span>`;
 }
 
 function generateVariationsGroup(group: VariationsGroup): string {

@@ -201,7 +201,7 @@ function setMetadataHints(metadata: Metadata) {
   setSectionHint({
     section: 'credits',
     original: metadata.credits,
-    variations: [metadata.credits],
+    variations: [],
     title: 'Bandcamp credits',
     elementToApply: undefined,
     variationsGroups: []
@@ -213,12 +213,19 @@ function setMetadataHints(metadata: Metadata) {
     elementToApply: undefined,
     variationsGroups: []
   });
+
+  const submissionNotesGroup = new VariationsGroup(
+    'Submission notes',
+    getSubmissionNotesTextarea(),
+    [metadata.submissionNotes]
+  );
+
   setSectionHint({
     section: 'submission_notes',
     original: '',
-    variations: [convertNewlinesToBreaks(metadata.submissionNotes)],
+    variations: [],
     title: 'Auto-generated submission notes',
     elementToApply: getSubmissionNotesTextarea(),
-    variationsGroups: []
+    variationsGroups: [submissionNotesGroup]
   });
 }

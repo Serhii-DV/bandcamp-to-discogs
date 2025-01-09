@@ -12,3 +12,18 @@ export function getTextInitials(text: string): string {
     .map((word) => word.charAt(0).toUpperCase())
     .join('');
 }
+
+/**
+ * Truncates the text to the specified length and adds '...' at the end.
+ * If the text is shorter than or equal to the specified length, it returns the text unchanged.
+ *
+ * Examples:
+ * truncateText("Hello World", 5) => "Hello..."
+ * truncateText("Hello", 10) => "Hello"
+ */
+export function truncateText(text: string, length: number): string {
+  if (text.length <= length) {
+    return text;
+  }
+  return text.substring(0, length) + '...';
+}

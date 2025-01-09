@@ -22,7 +22,8 @@ export default {
       artist: 'https://www.discogs.com/search?q={artist}&type=artist',
       release:
         'https://www.discogs.com/search?q={artist}+{release}&type=release'
-    }
+    },
+    self_released: 'Not On Label ({artist} Self-released)'
   },
   text: {
     // Submission notes text

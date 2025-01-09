@@ -9,6 +9,7 @@ import {
 import { getDiscogsDateValue } from './utils';
 import { Metadata } from './metadata';
 import { convertArtistName } from '../modules/submission';
+import { generateSelfReleasedLabel } from '../modules/discogs';
 
 /**
  * Represents a Discogs CSV entry.
@@ -63,7 +64,7 @@ export class DiscogsCsv {
   static fromRelease(release) {
     const label =
       release.artist === release.label
-        ? `Not On Label (${release.artist} Self-released)`
+        ? generateSelfReleasedLabel(release.artist)
         : release.label;
     const metadata = Metadata.fromRelease(release);
 

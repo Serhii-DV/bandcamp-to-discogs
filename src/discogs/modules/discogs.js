@@ -38,3 +38,7 @@ export function generateSubmissionNotes(releaseUrl) {
     release_url: releaseUrl
   });
 }
+
+export function generateSelfReleasedLabel(artist) {
+  return replaceTokens(config.discogs.self_released, { artist });
+}

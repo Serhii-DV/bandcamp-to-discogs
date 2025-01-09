@@ -14,7 +14,6 @@ import {
   isString,
   ObjectByStringKey
 } from '../../../utils/utils';
-import { v4 as uuid4 } from 'uuid';
 
 export const getArtistNameInput = (): HTMLInputElement | null => {
   return document.getElementById('artist-name-input') as HTMLInputElement;
@@ -258,7 +257,7 @@ function getVariation(variation: string, className: string = ''): string {
 }
 
 function generateElementVariation(elementVariation: ElementVariation): string {
-  return getVariation(elementVariation.variation, 'v-' + elementVariation.uuid);
+  return getVariation(elementVariation.variation);
 }
 
 function generateElementVariations(items: ElementVariation[]): string {
@@ -337,12 +336,10 @@ export type FormElement =
 export class ElementVariation {
   element: FormElement | null;
   variation: string;
-  uuid: string;
 
   constructor(element: FormElement | null, variation: string) {
     this.element = element;
     this.variation = variation;
-    this.uuid = uuid4();
   }
 }
 

@@ -227,7 +227,7 @@ function triggerChangeEvent(element: HTMLElement): void {
   element.dispatchEvent(changeEvent);
 }
 
-function generateHintVariations(variations: string[]): string {
+function generateVariations(variations: string[]): string {
   if (!isArray(variations)) {
     throw new Error('Variations should be an array');
   }
@@ -256,22 +256,12 @@ function getVariation(variation: string, className: string = ''): string {
     : '';
 }
 
-function generateElementVariation(elementVariation: ElementVariation): string {
-  return getVariation(elementVariation.variation);
-}
-
-function generateElementVariations(items: ElementVariation[]): string {
-  if (!items.length) {
-    return '';
-  }
-
-  return items.map(generateElementVariation).join(' ') + getClearFieldButton();
-}
-
 function generateVariationsGroup(group: VariationsGroup): string {
   return `
 <div class="b2d-variations group-${group.alias}">
-  ${group.title}: ${generateElementVariations(group.variations)}
+  ${group.title}:
+  ${generateVariations(group.variations)}
+  ${getClearFieldButton()}
 </div>
 `;
 }
@@ -347,12 +337,12 @@ export class VariationsGroup {
   title: string;
   alias: string;
   element: FormElement | null;
-  variations: ElementVariation[];
+  variations: string[];
 
   constructor(
     title: string,
     element: FormElement | null,
-    variations: ElementVariation[]
+    variations: string[]
   ) {
     this.title = title;
     this.alias = convertToAlias(title);
@@ -381,7 +371,7 @@ export const setSectionHint = ({
   log('Setting section hint', { section, title, original, variations });
 
   let content = generateHintOriginalValue(original);
-  content += generateHintVariations(variations);
+  content += generateVariations(variations);
   content += generateVariationsGroups(variationsGroups);
 
   const sectionElement = getSection(section);
@@ -458,10 +448,6 @@ function setupVariationsGroup(group: VariationsGroup, section: Element): void {
     const button = event.target as HTMLElement;
     setupVariationButton(button, group, buttons);
   });
-
-  group.variations.forEach((elementVariation: ElementVariation) =>
-    setupElementVariationListener(elementVariation, section)
-  );
 }
 
 function setupVariationButton(
@@ -484,30 +470,6 @@ function setupVariationButton(
     selectOptionByValue(element, text);
     toggleClass(buttons, 'button-green', button);
   }
-}
-
-function setupElementVariationListener(
-  elementVariation: ElementVariation,
-  section: Element
-): void {
-  const variationElement = section.querySelector(`.v-${elementVariation.uuid}`);
-  const text = getDataAttribute(variationElement as HTMLElement, 'text');
-
-  log('Setup variation', elementVariation, section);
-
-  onClick(variationElement as HTMLElement, () => {
-    const elementToApply = elementVariation.element;
-
-    log('Click variation', elementVariation, elementToApply);
-    if (
-      elementToApply instanceof HTMLInputElement ||
-      elementToApply instanceof HTMLTextAreaElement
-    ) {
-      setInputValue(elementToApply, text);
-    } else if (elementToApply instanceof HTMLSelectElement) {
-      selectOptionByValue(elementToApply, text);
-    }
-  });
 }
 
 function toggleClass<T extends HTMLElement>(

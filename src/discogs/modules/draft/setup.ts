@@ -20,7 +20,6 @@ import {
   getReleasedDateInput,
   getCountrySelect,
   getQuantityInput,
-  ElementVariation,
   VariationsGroup
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
@@ -105,8 +104,8 @@ function setMetadataHints(metadata: Metadata) {
   log('Setting metadata hints...');
 
   const artistGroup = new VariationsGroup('Name', getArtistNameInput(), [
-    new ElementVariation(getArtistNameInput(), metadata.artist.original),
-    new ElementVariation(getArtistNameInput(), 'Test Artist Name')
+    metadata.artist.original,
+    'Test Artist Name'
   ]);
 
   setSectionHint({
@@ -147,31 +146,17 @@ function setMetadataHints(metadata: Metadata) {
   const formatTypeGroup = new VariationsGroup(
     'Format type',
     element('#release-format-select') as HTMLSelectElement,
-    [
-      new ElementVariation(
-        element('#release-format-select') as HTMLSelectElement,
-        'File'
-      )
-    ]
+    ['File']
   );
   const qtyGroup = new VariationsGroup('Quantity', qtyInput, [
-    new ElementVariation(qtyInput, metadata.format.qty.toString())
+    metadata.format.qty.toString()
   ]);
 
   const fileTypes = ['MP3', 'FLAC', 'WAV'];
-  const fileTypeVariations: ElementVariation[] = [];
-  fileTypes.forEach((fileType) => {
-    fileTypeVariations.push(
-      new ElementVariation(
-        element('input[value="' + fileType + '"]') as HTMLInputElement,
-        fileType
-      )
-    );
-  });
   const fileTypeGroup = new VariationsGroup(
     'File type',
     element('.format_descriptions input[type="checkbox"]') as HTMLInputElement,
-    fileTypeVariations
+    fileTypes
   );
 
   setSectionHint({

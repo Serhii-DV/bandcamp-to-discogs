@@ -258,10 +258,9 @@ function getVariation(variation: string, className: string = ''): string {
 
 function generateVariationsGroup(group: VariationsGroup): string {
   return `
-<div class="b2d-variations group-${group.alias}">
+<div class="b2d-variations-group-${group.alias}">
   ${group.title}:
   ${generateVariations(group.variations)}
-  ${getClearFieldButton()}
 </div>
 `;
 }
@@ -431,7 +430,7 @@ export const setSectionHint = ({
 
 function setupVariationsGroup(group: VariationsGroup, section: Element): void {
   const buttons = elements(
-    `.b2d-variations.group-${group.alias} .b2d-variation`,
+    `.b2d-variations-group-${group.alias} .b2d-variation`,
     section
   );
 

@@ -12,6 +12,7 @@ import {
   isString,
   ObjectByStringKey
 } from '../../../utils/utils';
+import { v4 as uuid4 } from 'uuid';
 
 export const getArtistNameInput = (): HTMLInputElement | null => {
   return document.getElementById('artist-name-input') as HTMLInputElement;
@@ -234,24 +235,28 @@ function generateHintVariations(variations: string[]): string {
     return '';
   }
 
+  const variationElements = variations.map((variation: string) =>
+    getVariation(variation)
+  );
+
   return `
 <div class="b2d-variations">
-  ${variations.map(getVariation).join(' ')}
+  ${variationElements.join(' ')}
   ${getClearFieldButton()}
 </div>
 `;
 }
 
-function getVariation(variation: string): string {
+function getVariation(variation: string, className: string = ''): string {
   const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
   return variation
-    ? `<span class="b2d-variation button button-small" title="Apply value to the field" data-text="${variation}">${icon} ${variation}</span>`
+    ? `<span class="b2d-variation button button-small ${className}" title="Apply value to the field" data-text="${variation}">${icon} ${variation}</span>`
     : '';
 }
 
 function generateElementVariation(elementVariation: ElementVariation): string {
-  return getVariation(elementVariation.variation);
+  return getVariation(elementVariation.variation, 'v-' + elementVariation.uuid);
 }
 
 function generateElementVariations(items: ElementVariation[]): string {
@@ -327,10 +332,12 @@ export type FormElement = HTMLElement | HTMLInputElement | string | null;
 export class ElementVariation {
   element: FormElement;
   variation: string;
+  uuid: string;
 
   constructor(element: FormElement, variation: string) {
     this.element = element;
     this.variation = variation;
+    this.uuid = uuid4();
   }
 }
 
@@ -380,6 +387,17 @@ export const setSectionHint = ({
 
   sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
 
+  if (variationGroups.length) {
+    // Setup variation groups
+    variationGroups.forEach((group: VariationsGroup) => {
+      group.variations.forEach((elementVariation: ElementVariation) =>
+        setupElementVariationListener(elementVariation, sectionHint)
+      );
+    });
+
+    return;
+  }
+
   const variationButtons = Array.from(
     sectionHint.querySelectorAll('.b2d-variation')
   ) as HTMLElement[];
@@ -414,6 +432,33 @@ export const setSectionHint = ({
     }
   });
 };
+
+function setupElementVariationListener(
+  elementVariation: ElementVariation,
+  section: Element
+): void {
+  const variationElement = section.querySelector(`.v-${elementVariation.uuid}`);
+  const text = getDataAttribute(variationElement as HTMLElement, 'text');
+
+  log('Setup variation', elementVariation, section);
+
+  onClick(variationElement as HTMLElement, () => {
+    const element = elementVariation.element;
+    const elementToApply = isString(element)
+      ? (document.querySelector(element as string) as HTMLElement)
+      : element;
+
+    log('Click variation', elementVariation, elementToApply);
+    if (
+      elementToApply instanceof HTMLInputElement ||
+      elementToApply instanceof HTMLTextAreaElement
+    ) {
+      setInputValue(elementToApply, text);
+    } else if (elementToApply instanceof HTMLSelectElement) {
+      selectOptionByValue(elementToApply, text);
+    }
+  });
+}
 
 function toggleClass<T extends HTMLElement>(
   elements: T[],

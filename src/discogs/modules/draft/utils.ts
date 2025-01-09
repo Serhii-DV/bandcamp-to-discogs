@@ -1,11 +1,13 @@
 import {
   createElementFromHTML,
+  elements,
   getDataAttribute,
   onClick
 } from '../../../utils/html';
 import { log, logError } from '../../../utils/console';
 import {
   camelCaseToReadable,
+  convertToAlias,
   hasOwnProperty,
   isArray,
   isObject,
@@ -269,7 +271,7 @@ function generateElementVariations(items: ElementVariation[]): string {
 
 function generateVariationsGroup(group: VariationsGroup): string {
   return `
-<div class="b2d-variations">
+<div class="b2d-variations group-${group.alias}">
   ${group.title}: ${generateElementVariations(group.variations)}
 </div>
 `;
@@ -328,9 +330,9 @@ function generateHintOriginalValue(original: OriginalValue): string {
 }
 
 export type FormElement =
-  | HTMLElement
   | HTMLInputElement
-  | NodeListOf<HTMLElement>;
+  | HTMLSelectElement
+  | HTMLTextAreaElement;
 
 export class ElementVariation {
   element: FormElement | null;
@@ -346,6 +348,7 @@ export class ElementVariation {
 
 export class VariationsGroup {
   title: string;
+  alias: string;
   element: FormElement | null;
   variations: ElementVariation[];
 
@@ -355,6 +358,7 @@ export class VariationsGroup {
     variations: ElementVariation[]
   ) {
     this.title = title;
+    this.alias = convertToAlias(title);
     this.element = element;
     this.variations = variations;
   }
@@ -439,10 +443,50 @@ export const setSectionHint = ({
 };
 
 function setupVariationsGroup(group: VariationsGroup, section: Element): void {
-  const element = group.element;
+  const buttons = elements(
+    `.b2d-variations.group-${group.alias} .b2d-variation`,
+    section
+  );
+
+  if (group.element) {
+    setupFormElementListener(
+      group.element,
+      buttons,
+      'button-green',
+      'data-text'
+    );
+  }
+
+  onClick(buttons, (event) => {
+    const button = event.target as HTMLElement;
+    setupVariationButton(button, group, buttons);
+  });
+
   group.variations.forEach((elementVariation: ElementVariation) =>
     setupElementVariationListener(elementVariation, section)
   );
+}
+
+function setupVariationButton(
+  button: HTMLElement,
+  group: VariationsGroup,
+  buttons: HTMLElement[]
+): void {
+  const text = getDataAttribute(button, 'text');
+  const element = group.element;
+
+  log('Apply text:', text, ' to element ', element);
+
+  if (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement
+  ) {
+    setInputValue(element, text);
+    toggleClass(buttons, 'button-green', button);
+  } else if (element instanceof HTMLSelectElement) {
+    selectOptionByValue(element, text);
+    toggleClass(buttons, 'button-green', button);
+  }
 }
 
 function setupElementVariationListener(
@@ -455,10 +499,7 @@ function setupElementVariationListener(
   log('Setup variation', elementVariation, section);
 
   onClick(variationElement as HTMLElement, () => {
-    const element = elementVariation.element;
-    const elementToApply = isString(element)
-      ? (document.querySelector(element as string) as HTMLElement)
-      : element;
+    const elementToApply = elementVariation.element;
 
     log('Click variation', elementVariation, elementToApply);
     if (
@@ -482,7 +523,7 @@ function toggleClass<T extends HTMLElement>(
 }
 
 function setupFormElementListener(
-  element: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement,
+  element: FormElement,
   buttons: HTMLElement[],
   toggleClassName: string,
   dataAttr: string

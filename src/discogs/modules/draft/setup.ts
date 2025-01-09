@@ -2,7 +2,7 @@
 
 import { chromeListenToMessage } from '../../../utils/chrome';
 import { MessageType } from '../../../app/core/messageType';
-import { click, elements, onClick } from '../../../utils/html';
+import { click, element, onClick } from '../../../utils/html';
 import { convertNewlinesToBreaks } from '../../../utils/utils';
 import {
   setSectionHint,
@@ -104,7 +104,7 @@ function autofocus() {
 function setMetadataHints(metadata: Metadata) {
   log('Setting metadata hints...');
 
-  const artistGroup = new VariationsGroup('Artist', getArtistNameInput(), [
+  const artistGroup = new VariationsGroup('Name', getArtistNameInput(), [
     new ElementVariation(getArtistNameInput(), metadata.artist.original),
     new ElementVariation(getArtistNameInput(), 'Test Artist Name')
   ]);
@@ -112,7 +112,7 @@ function setMetadataHints(metadata: Metadata) {
   setSectionHint({
     section: 'artist',
     original: metadata.artist.original,
-    variations: [metadata.artist.original, ...metadata.artist.variations],
+    variations: [],
     title: 'Bandcamp artist name',
     elementToApply: getArtistNameInput(),
     variationsGroups: [artistGroup]
@@ -146,8 +146,13 @@ function setMetadataHints(metadata: Metadata) {
 
   const formatTypeGroup = new VariationsGroup(
     'Format type',
-    elements('#release-format-select'),
-    [new ElementVariation(elements('#release-format-select'), 'File')]
+    element('#release-format-select') as HTMLSelectElement,
+    [
+      new ElementVariation(
+        element('#release-format-select') as HTMLSelectElement,
+        'File'
+      )
+    ]
   );
   const qtyGroup = new VariationsGroup('Quantity', qtyInput, [
     new ElementVariation(qtyInput, metadata.format.qty.toString())
@@ -158,14 +163,14 @@ function setMetadataHints(metadata: Metadata) {
   fileTypes.forEach((fileType) => {
     fileTypeVariations.push(
       new ElementVariation(
-        elements('input[value="' + fileType + '"]'),
+        element('input[value="' + fileType + '"]') as HTMLInputElement,
         fileType
       )
     );
   });
   const fileTypeGroup = new VariationsGroup(
     'File type',
-    elements('.format_descriptions input[type="checkbox"]'),
+    element('.format_descriptions input[type="checkbox"]') as HTMLInputElement,
     fileTypeVariations
   );
 

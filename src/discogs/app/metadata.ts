@@ -4,7 +4,7 @@ import {
   keywordsToDiscogsStyles
 } from '../../bandcamp/modules/bandcamp';
 import { getExtensionManifest } from '../../utils/chrome';
-import { generateSubmissionNotes } from '../modules/discogs';
+import { generateSubmissionNotesDefault } from '../modules/discogs';
 import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
@@ -98,7 +98,7 @@ export class Metadata {
     this.tracklist = tracklist;
     this.credits = credits;
     this.genres = genres;
-    this.submissionNotes = generateSubmissionNotes(releaseUrl);
+    this.submissionNotes = generateSubmissionNotesDefault(releaseUrl);
   }
 
   static fromRelease(release: Release): Metadata {

@@ -33,12 +33,18 @@ export function getSearchDiscogsReleaseUrl(artist, release) {
  * @param {String} releaseUrl
  * @returns {String}
  */
-export function generateSubmissionNotes(releaseUrl) {
-  return replaceTokens(config.text.notes, {
+export function generateSubmissionNotesDefault(releaseUrl) {
+  return replaceTokens(config.discogs.draft.submission_notes.default, {
+    release_url: releaseUrl
+  });
+}
+
+export function generateSubmissionNotesShort(releaseUrl) {
+  return replaceTokens(config.discogs.draft.submission_notes.short, {
     release_url: releaseUrl
   });
 }
 
 export function generateSelfReleasedLabel(artist) {
-  return replaceTokens(config.discogs.self_released, { artist });
+  return replaceTokens(config.discogs.draft.self_released, { artist });
 }

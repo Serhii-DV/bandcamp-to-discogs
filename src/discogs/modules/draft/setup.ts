@@ -2,7 +2,7 @@
 
 import { chromeListenToMessage } from '../../../utils/chrome';
 import { MessageType } from '../../../app/core/messageType';
-import { click, onClick } from '../../../utils/html';
+import { click, elements, onClick } from '../../../utils/html';
 import { convertNewlinesToBreaks } from '../../../utils/utils';
 import {
   setSectionHint,
@@ -104,13 +104,18 @@ function autofocus() {
 function setMetadataHints(metadata: Metadata) {
   log('Setting metadata hints...');
 
+  const artistGroup = new VariationsGroup('Artist', getArtistNameInput(), [
+    new ElementVariation(getArtistNameInput(), metadata.artist.original),
+    new ElementVariation(getArtistNameInput(), 'Test Artist Name')
+  ]);
+
   setSectionHint({
     section: 'artist',
     original: metadata.artist.original,
     variations: [metadata.artist.original, ...metadata.artist.variations],
     title: 'Bandcamp artist name',
     elementToApply: getArtistNameInput(),
-    variationGroups: []
+    variationsGroups: [artistGroup]
   });
   setSectionHint({
     section: 'title',
@@ -118,7 +123,7 @@ function setMetadataHints(metadata: Metadata) {
     variations: [metadata.title],
     title: 'Bandcamp release title',
     elementToApply: getReleaseTitleInput(),
-    variationGroups: []
+    variationsGroups: []
   });
   setSectionHint({
     section: 'label',
@@ -126,7 +131,7 @@ function setMetadataHints(metadata: Metadata) {
     variations: [metadata.label],
     title: 'Bandcamp page label or artist name',
     elementToApply: getLabelNameInput(),
-    variationGroups: []
+    variationsGroups: []
   });
   setSectionHint({
     section: 'country',
@@ -134,15 +139,17 @@ function setMetadataHints(metadata: Metadata) {
     variations: [metadata.country],
     title: 'Bandcamp country',
     elementToApply: getCountrySelect(),
-    variationGroups: []
+    variationsGroups: []
   });
 
   const qtyInput = getQuantityInput();
 
-  const formatTypeGroup = new VariationsGroup('Format type', [
-    new ElementVariation('#release-format-select', 'File')
-  ]);
-  const qtyGroup = new VariationsGroup('Quantity', [
+  const formatTypeGroup = new VariationsGroup(
+    'Format type',
+    elements('#release-format-select'),
+    [new ElementVariation(elements('#release-format-select'), 'File')]
+  );
+  const qtyGroup = new VariationsGroup('Quantity', qtyInput, [
     new ElementVariation(qtyInput, metadata.format.qty.toString())
   ]);
 
@@ -150,10 +157,17 @@ function setMetadataHints(metadata: Metadata) {
   const fileTypeVariations: ElementVariation[] = [];
   fileTypes.forEach((fileType) => {
     fileTypeVariations.push(
-      new ElementVariation('input[value="' + fileType + '"]', fileType)
+      new ElementVariation(
+        elements('input[value="' + fileType + '"]'),
+        fileType
+      )
     );
   });
-  const fileTypeGroup = new VariationsGroup('File type', fileTypeVariations);
+  const fileTypeGroup = new VariationsGroup(
+    'File type',
+    elements('.format_descriptions input[type="checkbox"]'),
+    fileTypeVariations
+  );
 
   setSectionHint({
     section: 'format',
@@ -161,7 +175,7 @@ function setMetadataHints(metadata: Metadata) {
     variations: [],
     title: 'Bandcamp auto-detected format',
     elementToApply: undefined,
-    variationGroups: [formatTypeGroup, qtyGroup, fileTypeGroup]
+    variationsGroups: [formatTypeGroup, qtyGroup, fileTypeGroup]
   });
   setSectionHint({
     section: 'released',
@@ -172,7 +186,7 @@ function setMetadataHints(metadata: Metadata) {
       metadata.released.modifiedDate
     ],
     elementToApply: getReleasedDateInput(),
-    variationGroups: []
+    variationsGroups: []
   });
   setSectionHint({
     section: 'credits',
@@ -180,14 +194,14 @@ function setMetadataHints(metadata: Metadata) {
     variations: [metadata.credits],
     title: 'Bandcamp credits',
     elementToApply: undefined,
-    variationGroups: []
+    variationsGroups: []
   });
   setSectionHint({
     section: 'genres',
     original: metadata.genres,
     title: 'Bandcamp genres related data',
     elementToApply: undefined,
-    variationGroups: []
+    variationsGroups: []
   });
   setSectionHint({
     section: 'submission_notes',
@@ -195,6 +209,6 @@ function setMetadataHints(metadata: Metadata) {
     variations: [convertNewlinesToBreaks(metadata.submissionNotes)],
     title: 'Auto-generated submission notes',
     elementToApply: getSubmissionNotesTextarea(),
-    variationGroups: []
+    variationsGroups: []
   });
 }

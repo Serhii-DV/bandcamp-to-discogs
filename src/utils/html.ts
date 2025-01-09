@@ -2,6 +2,10 @@ import { B2DIconComponent } from '../popup/components/icon';
 import { log } from './console';
 import { isFunction, isString } from './utils';
 
+export function elements(selector: string): NodeListOf<HTMLElement> {
+  return document.querySelectorAll(selector);
+}
+
 export function hasDataAttribute(
   element: Element,
   attributeName: string

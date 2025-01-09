@@ -327,14 +327,17 @@ function generateHintOriginalValue(original: OriginalValue): string {
   return `<div class="b2d-original">${original}</div>`;
 }
 
-export type FormElement = HTMLElement | HTMLInputElement | string | null;
+export type FormElement =
+  | HTMLElement
+  | HTMLInputElement
+  | NodeListOf<HTMLElement>;
 
 export class ElementVariation {
-  element: FormElement;
+  element: FormElement | null;
   variation: string;
   uuid: string;
 
-  constructor(element: FormElement, variation: string) {
+  constructor(element: FormElement | null, variation: string) {
     this.element = element;
     this.variation = variation;
     this.uuid = uuid4();
@@ -343,10 +346,16 @@ export class ElementVariation {
 
 export class VariationsGroup {
   title: string;
+  element: FormElement | null;
   variations: ElementVariation[];
 
-  constructor(title: string, variations: ElementVariation[]) {
+  constructor(
+    title: string,
+    element: FormElement | null,
+    variations: ElementVariation[]
+  ) {
     this.title = title;
+    this.element = element;
     this.variations = variations;
   }
 }
@@ -357,7 +366,7 @@ interface SectionHint {
   original: OriginalValue;
   variations?: string[];
   elementToApply?: HTMLElement | null;
-  variationGroups: VariationsGroup[];
+  variationsGroups: VariationsGroup[];
 }
 
 export const setSectionHint = ({
@@ -366,13 +375,13 @@ export const setSectionHint = ({
   original,
   variations = [''],
   elementToApply,
-  variationGroups
+  variationsGroups
 }: SectionHint): void => {
   log('Setting section hint', { section, title, original, variations });
 
   let content = generateHintOriginalValue(original);
   content += generateHintVariations(variations);
-  content += generateVariationsGroups(variationGroups);
+  content += generateVariationsGroups(variationsGroups);
 
   const sectionElement = getSection(section);
   let sectionHint = sectionElement.querySelector('.b2d-section-hint');
@@ -387,14 +396,10 @@ export const setSectionHint = ({
 
   sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
 
-  if (variationGroups.length) {
-    // Setup variation groups
-    variationGroups.forEach((group: VariationsGroup) => {
-      group.variations.forEach((elementVariation: ElementVariation) =>
-        setupElementVariationListener(elementVariation, sectionHint)
-      );
-    });
-
+  if (variationsGroups.length) {
+    variationsGroups.forEach((group: VariationsGroup) =>
+      setupVariationsGroup(group, sectionHint)
+    );
     return;
   }
 
@@ -432,6 +437,13 @@ export const setSectionHint = ({
     }
   });
 };
+
+function setupVariationsGroup(group: VariationsGroup, section: Element): void {
+  const element = group.element;
+  group.variations.forEach((elementVariation: ElementVariation) =>
+    setupElementVariationListener(elementVariation, section)
+  );
+}
 
 function setupElementVariationListener(
   elementVariation: ElementVariation,

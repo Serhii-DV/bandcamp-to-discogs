@@ -3,7 +3,6 @@
 import { chromeListenToMessage } from '../../../utils/chrome';
 import { MessageType } from '../../../app/core/messageType';
 import { click, element, onClick } from '../../../utils/html';
-import { convertNewlinesToBreaks } from '../../../utils/utils';
 import {
   setSectionHint,
   autofillDurations,
@@ -20,7 +19,8 @@ import {
   getReleasedDateInput,
   getCountrySelect,
   getQuantityInput,
-  VariationsGroup
+  VariationsGroup,
+  generateHintContent
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
@@ -110,7 +110,7 @@ function setMetadataHints(metadata: Metadata) {
 
   setSectionHint({
     section: 'artist',
-    original: metadata.artist.original,
+    content: '',
     variations: [],
     title: 'Bandcamp artist name',
     elementToApply: getArtistNameInput(),
@@ -123,7 +123,6 @@ function setMetadataHints(metadata: Metadata) {
 
   setSectionHint({
     section: 'title',
-    original: metadata.title,
     variations: [],
     title: 'Bandcamp release title',
     elementToApply: getReleaseTitleInput(),
@@ -137,7 +136,6 @@ function setMetadataHints(metadata: Metadata) {
 
   setSectionHint({
     section: 'label',
-    original: metadata.label,
     variations: [],
     title: 'Bandcamp page label or artist name',
     elementToApply: getLabelNameInput(),
@@ -150,7 +148,6 @@ function setMetadataHints(metadata: Metadata) {
 
   setSectionHint({
     section: 'country',
-    original: metadata.country,
     variations: [],
     title: 'Bandcamp country',
     elementToApply: getCountrySelect(),
@@ -191,7 +188,7 @@ function setMetadataHints(metadata: Metadata) {
 
   setSectionHint({
     section: 'released',
-    original: metadata.released,
+    content: generateHintContent(metadata.released),
     title: 'Bandcamp release dates',
     variations: [],
     elementToApply: getReleasedDateInput(),
@@ -200,7 +197,7 @@ function setMetadataHints(metadata: Metadata) {
 
   setSectionHint({
     section: 'credits',
-    original: metadata.credits,
+    content: metadata.credits,
     variations: [],
     title: 'Bandcamp credits',
     elementToApply: undefined,
@@ -208,7 +205,7 @@ function setMetadataHints(metadata: Metadata) {
   });
   setSectionHint({
     section: 'genres',
-    original: metadata.genres,
+    content: generateHintContent(metadata.genres),
     title: 'Bandcamp genres related data',
     elementToApply: undefined,
     variationsGroups: []
@@ -222,7 +219,6 @@ function setMetadataHints(metadata: Metadata) {
 
   setSectionHint({
     section: 'submission_notes',
-    original: '',
     variations: [],
     title: 'Auto-generated submission notes',
     elementToApply: getSubmissionNotesTextarea(),

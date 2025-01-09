@@ -284,7 +284,7 @@ type OriginalValue =
   | TitleValue[]
   | ObjectByStringKey;
 
-function generateHintOriginalValue(original: OriginalValue): string {
+export function generateHintContent(original?: OriginalValue): string {
   if (!original) {
     return '';
   }
@@ -354,7 +354,7 @@ export class VariationsGroup {
 interface SectionHint {
   section: string;
   title: string;
-  original: OriginalValue;
+  content?: string;
   variations?: string[];
   elementToApply?: HTMLElement | null;
   variationsGroups: VariationsGroup[];
@@ -363,14 +363,13 @@ interface SectionHint {
 export const setSectionHint = ({
   section,
   title,
-  original,
+  content = '',
   variations = [''],
   elementToApply,
   variationsGroups
 }: SectionHint): void => {
-  log('Setting section hint', { section, title, original, variations });
+  log('Setting section hint', { section, title, content, variations });
 
-  let content = generateHintOriginalValue(original);
   content += generateVariations(variations);
   content += generateVariationsGroups(variationsGroups);
 

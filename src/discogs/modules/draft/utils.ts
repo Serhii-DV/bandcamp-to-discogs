@@ -230,6 +230,10 @@ function generateHintVariations(variations: string[]): string {
     throw new Error('Variations should be an array');
   }
 
+  if (variations.length === 0) {
+    return '';
+  }
+
   return `
 <div class="b2d-variations">
   ${variations.map(getVariation).join(' ')}

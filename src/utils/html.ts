@@ -2,8 +2,17 @@ import { B2DIconComponent } from '../popup/components/icon';
 import { log } from './console';
 import { isFunction, isString } from './utils';
 
-export function elements(selector: string): NodeListOf<HTMLElement> {
-  return document.querySelectorAll(selector);
+export function elements(selector: string, parent?: Element): HTMLElement[] {
+  return Array.from(
+    (parent ? parent : document).querySelectorAll(selector)
+  ) as HTMLElement[];
+}
+
+export function element(
+  selector: string,
+  parent?: Element
+): HTMLElement | null {
+  return (parent ? parent : document).querySelector(selector);
 }
 
 export function hasDataAttribute(

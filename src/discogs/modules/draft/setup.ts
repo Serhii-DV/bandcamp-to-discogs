@@ -183,17 +183,21 @@ function setMetadataHints(metadata: Metadata) {
     elementToApply: undefined,
     variationsGroups: [formatTypeGroup, qtyGroup, fileTypeGroup]
   });
+
+  const releasedGroup = new VariationsGroup('Date', getReleasedDateInput(), [
+    metadata.released.publishedDate,
+    metadata.released.modifiedDate
+  ]);
+
   setSectionHint({
     section: 'released',
     original: metadata.released,
     title: 'Bandcamp release dates',
-    variations: [
-      metadata.released.publishedDate,
-      metadata.released.modifiedDate
-    ],
+    variations: [],
     elementToApply: getReleasedDateInput(),
-    variationsGroups: []
+    variationsGroups: [releasedGroup]
   });
+
   setSectionHint({
     section: 'credits',
     original: metadata.credits,

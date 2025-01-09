@@ -25,6 +25,7 @@ import {
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
 import { Metadata } from '../../app/metadata';
+import { generateSelfReleasedLabel } from '../discogs';
 
 export const setupDraftPage = () => {
   log('Setup draft page... (src/discogs/modules/draft/setup.ts)');
@@ -104,8 +105,7 @@ function setMetadataHints(metadata: Metadata) {
   log('Setting metadata hints...');
 
   const artistGroup = new VariationsGroup('Name', getArtistNameInput(), [
-    metadata.artist.original,
-    'Test Artist Name'
+    metadata.artist.original
   ]);
 
   setSectionHint({
@@ -116,29 +116,45 @@ function setMetadataHints(metadata: Metadata) {
     elementToApply: getArtistNameInput(),
     variationsGroups: [artistGroup]
   });
+
+  const titleGroup = new VariationsGroup('Title', getReleaseTitleInput(), [
+    metadata.title
+  ]);
+
   setSectionHint({
     section: 'title',
     original: metadata.title,
-    variations: [metadata.title],
+    variations: [],
     title: 'Bandcamp release title',
     elementToApply: getReleaseTitleInput(),
-    variationsGroups: []
+    variationsGroups: [titleGroup]
   });
+
+  const labelGroup = new VariationsGroup('Label', getLabelNameInput(), [
+    metadata.label,
+    generateSelfReleasedLabel(metadata.label)
+  ]);
+
   setSectionHint({
     section: 'label',
     original: metadata.label,
-    variations: [metadata.label],
+    variations: [],
     title: 'Bandcamp page label or artist name',
     elementToApply: getLabelNameInput(),
-    variationsGroups: []
+    variationsGroups: [labelGroup]
   });
+
+  const countryGroup = new VariationsGroup('Country', getCountrySelect(), [
+    metadata.country
+  ]);
+
   setSectionHint({
     section: 'country',
     original: metadata.country,
-    variations: [metadata.country],
+    variations: [],
     title: 'Bandcamp country',
     elementToApply: getCountrySelect(),
-    variationsGroups: []
+    variationsGroups: [countryGroup]
   });
 
   const qtyInput = getQuantityInput();

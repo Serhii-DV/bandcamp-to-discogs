@@ -155,30 +155,41 @@ function setMetadataHints(metadata: Metadata) {
   });
 
   const qtyInput = getQuantityInput();
-
-  const formatTypeGroup = new VariationsGroup(
-    'Format type',
-    element('#release-format-select') as HTMLSelectElement,
-    ['File']
-  );
   const qtyGroup = new VariationsGroup('Quantity', qtyInput, [
     metadata.format.qty.toString()
   ]);
 
-  const fileTypes = ['MP3', 'FLAC', 'WAV'];
+  const fileTypes = ['FLAC', 'WAV', 'MP3'];
   const fileTypeGroup = new VariationsGroup(
-    'File type',
+    'File Type',
     element('.format_descriptions input[type="checkbox"]') as HTMLInputElement,
     fileTypes
   );
 
+  const formatDescriptionGroup = new VariationsGroup(
+    'Format Description',
+    element('.format_descriptions input[type="checkbox"]') as HTMLInputElement,
+    [metadata.format.description]
+  );
+
+  const formatFreeTextGroup = new VariationsGroup(
+    'Free Text',
+    element('input#free-text-input-0') as HTMLInputElement,
+    ['24-bit/44.1kHz', '320 kbps', '128 kbps']
+  );
+
   setSectionHint({
     section: 'format',
-    original: metadata.format,
+    content: generateHintContent(metadata.format),
     variations: [],
     title: 'Bandcamp auto-detected format',
     elementToApply: undefined,
-    variationsGroups: [formatTypeGroup, qtyGroup, fileTypeGroup]
+    variationsGroups: [
+      qtyGroup,
+      fileTypeGroup,
+      formatDescriptionGroup,
+      formatFreeTextGroup
+    ]
   });
 
   const releasedGroup = new VariationsGroup('Date', getReleasedDateInput(), [

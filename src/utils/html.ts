@@ -430,3 +430,21 @@ export function isElementVisible(element: HTMLElement | null): boolean {
     style.opacity !== '0'
   );
 }
+
+export function isCheckbox(input: HTMLInputElement): boolean {
+  return input.type === 'checkbox';
+}
+
+export function checkOneByValue(
+  checkboxes: HTMLInputElement[],
+  value: string,
+  callback?: (checkbox: HTMLInputElement) => void
+): void {
+  checkboxes.filter(isCheckbox).forEach((checkbox) => {
+    checkbox.checked = checkbox.value === value;
+
+    if (callback) {
+      callback(checkbox);
+    }
+  });
+}

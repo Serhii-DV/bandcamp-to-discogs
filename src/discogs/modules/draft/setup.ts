@@ -2,7 +2,7 @@
 
 import { chromeListenToMessage } from '../../../utils/chrome';
 import { MessageType } from '../../../app/core/messageType';
-import { click, element, onClick } from '../../../utils/html';
+import { click, element, elements, onClick } from '../../../utils/html';
 import {
   setSectionHint,
   autofillDurations,
@@ -20,7 +20,8 @@ import {
   getCountrySelect,
   getQuantityInput,
   VariationsGroup,
-  generateHintContent
+  generateHintContent,
+  FormElement
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
@@ -104,9 +105,11 @@ function autofocus() {
 function setMetadataHints(metadata: Metadata) {
   log('Setting metadata hints...');
 
-  const artistGroup = new VariationsGroup('Name', getArtistNameInput(), [
-    metadata.artist.original
-  ]);
+  const artistGroup = new VariationsGroup(
+    'Name',
+    [getArtistNameInput()],
+    [metadata.artist.original]
+  );
 
   setSectionHint({
     section: 'artist',
@@ -117,9 +120,11 @@ function setMetadataHints(metadata: Metadata) {
     variationsGroups: [artistGroup]
   });
 
-  const titleGroup = new VariationsGroup('Title', getReleaseTitleInput(), [
-    metadata.title
-  ]);
+  const titleGroup = new VariationsGroup(
+    'Title',
+    [getReleaseTitleInput()],
+    [metadata.title]
+  );
 
   setSectionHint({
     section: 'title',
@@ -129,10 +134,11 @@ function setMetadataHints(metadata: Metadata) {
     variationsGroups: [titleGroup]
   });
 
-  const labelGroup = new VariationsGroup('Label', getLabelNameInput(), [
-    metadata.label,
-    generateSelfReleasedLabel(metadata.label)
-  ]);
+  const labelGroup = new VariationsGroup(
+    'Label',
+    [getLabelNameInput()],
+    [metadata.label, generateSelfReleasedLabel(metadata.label)]
+  );
 
   setSectionHint({
     section: 'label',
@@ -142,9 +148,11 @@ function setMetadataHints(metadata: Metadata) {
     variationsGroups: [labelGroup]
   });
 
-  const countryGroup = new VariationsGroup('Country', getCountrySelect(), [
-    metadata.country
-  ]);
+  const countryGroup = new VariationsGroup(
+    'Country',
+    [getCountrySelect()],
+    [metadata.country]
+  );
 
   setSectionHint({
     section: 'country',
@@ -155,26 +163,30 @@ function setMetadataHints(metadata: Metadata) {
   });
 
   const qtyInput = getQuantityInput();
-  const qtyGroup = new VariationsGroup('Quantity', qtyInput, [
-    metadata.format.qty.toString()
-  ]);
+  const qtyGroup = new VariationsGroup(
+    'Quantity',
+    [qtyInput],
+    [metadata.format.qty.toString()]
+  );
 
   const fileTypes = ['FLAC', 'WAV', 'MP3'];
   const fileTypeGroup = new VariationsGroup(
     'File Type',
-    element('.format_descriptions input[type="checkbox"]') as HTMLInputElement,
+    elements(
+      '.format_descriptions input[type="checkbox"]'
+    ) as HTMLInputElement[],
     fileTypes
   );
 
   const formatDescriptionGroup = new VariationsGroup(
     'Format Description',
-    element('.format_descriptions input[type="checkbox"]') as HTMLInputElement,
+    elements('.format_descriptions input[type="checkbox"]') as FormElement[],
     [metadata.format.description]
   );
 
   const formatFreeTextGroup = new VariationsGroup(
     'Free Text',
-    element('input#free-text-input-0') as HTMLInputElement,
+    [element('input#free-text-input-0') as HTMLInputElement],
     ['24-bit/44.1kHz', '320 kbps', '128 kbps']
   );
 
@@ -192,10 +204,11 @@ function setMetadataHints(metadata: Metadata) {
     ]
   });
 
-  const releasedGroup = new VariationsGroup('Date', getReleasedDateInput(), [
-    metadata.released.publishedDate,
-    metadata.released.modifiedDate
-  ]);
+  const releasedGroup = new VariationsGroup(
+    'Date',
+    [getReleasedDateInput()],
+    [metadata.released.publishedDate, metadata.released.modifiedDate]
+  );
 
   setSectionHint({
     section: 'released',
@@ -224,7 +237,7 @@ function setMetadataHints(metadata: Metadata) {
 
   const submissionNotesGroup = new VariationsGroup(
     'Submission notes',
-    getSubmissionNotesTextarea(),
+    [getSubmissionNotesTextarea()],
     [metadata.submissionNotes]
   );
 

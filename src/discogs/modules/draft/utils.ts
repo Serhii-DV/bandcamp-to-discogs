@@ -1,7 +1,9 @@
 import {
+  click,
   createElementFromHTML,
   elements,
   getDataAttribute,
+  isCheckbox,
   onClick
 } from '../../../utils/html';
 import { log, logError } from '../../../utils/console';
@@ -184,9 +186,9 @@ export function setInputValue(
 }
 
 function checkInput(inputElement: HTMLInputElement): void {
-  if (inputElement.checked) {
-    return;
-  }
+  // if (inputElement.checked) {
+  //   return;
+  // }
 
   inputElement.focus();
   inputElement.click();
@@ -321,7 +323,8 @@ export function generateHintContent(original?: OriginalValue): string {
 export type FormElement =
   | HTMLInputElement
   | HTMLSelectElement
-  | HTMLTextAreaElement;
+  | HTMLTextAreaElement
+  | null;
 
 export class ElementVariation {
   element: FormElement | null;
@@ -336,17 +339,13 @@ export class ElementVariation {
 export class VariationsGroup {
   title: string;
   alias: string;
-  element: FormElement | null;
+  elements: FormElement[];
   variations: string[];
 
-  constructor(
-    title: string,
-    element: FormElement | null,
-    variations: string[]
-  ) {
+  constructor(title: string, elements: FormElement[], variations: string[]) {
     this.title = title;
     this.alias = convertToAlias(title);
-    this.element = element;
+    this.elements = elements;
     this.variations = variations;
   }
 }
@@ -365,7 +364,6 @@ export const setSectionHint = ({
   title,
   content = '',
   variations = [''],
-  elementToApply,
   variationsGroups
 }: SectionHint): void => {
   log('Setting section hint', { section, title, content, variations });
@@ -390,42 +388,7 @@ export const setSectionHint = ({
     variationsGroups.forEach((group: VariationsGroup) =>
       setupVariationsGroup(group, sectionHint)
     );
-    return;
   }
-
-  const variationButtons = Array.from(
-    sectionHint.querySelectorAll('.b2d-variation')
-  ) as HTMLElement[];
-
-  if (
-    elementToApply instanceof HTMLInputElement ||
-    elementToApply instanceof HTMLSelectElement ||
-    elementToApply instanceof HTMLTextAreaElement
-  ) {
-    setupFormElementListener(
-      elementToApply,
-      variationButtons,
-      'button-green',
-      'data-text'
-    );
-  }
-
-  onClick(variationButtons, (event) => {
-    const button = event.target as HTMLElement;
-    const text = getDataAttribute(button, 'text');
-    log('Apply text:', text, ' to element ', elementToApply?.id);
-
-    if (
-      elementToApply instanceof HTMLInputElement ||
-      elementToApply instanceof HTMLTextAreaElement
-    ) {
-      setInputValue(elementToApply, text);
-      toggleClass(variationButtons, 'button-green', button);
-    } else if (elementToApply instanceof HTMLSelectElement) {
-      selectOptionByValue(elementToApply, text);
-      toggleClass(variationButtons, 'button-green', button);
-    }
-  });
 };
 
 function setupVariationsGroup(group: VariationsGroup, section: Element): void {
@@ -434,41 +397,57 @@ function setupVariationsGroup(group: VariationsGroup, section: Element): void {
     section
   );
 
-  if (group.element) {
-    setupFormElementListener(
-      group.element,
-      buttons,
-      'button-green',
-      'data-text'
-    );
-  }
+  setupFormElementListener(
+    group.elements,
+    buttons,
+    'button-green',
+    'data-text'
+  );
 
-  onClick(buttons, (event) => {
-    const button = event.target as HTMLElement;
-    setupVariationButton(button, group, buttons);
-  });
+  onClick(buttons, (event) =>
+    setupVariationButton(event.target as HTMLButtonElement, group, buttons)
+  );
 }
 
 function setupVariationButton(
-  button: HTMLElement,
+  button: HTMLButtonElement,
   group: VariationsGroup,
   buttons: HTMLElement[]
 ): void {
   const text = getDataAttribute(button, 'text');
-  const element = group.element;
+  const elements = group.elements;
 
-  log('Apply text:', text, ' to element ', element);
+  log('Apply text:', text, ' to elements ', elements);
 
-  if (
-    element instanceof HTMLInputElement ||
-    element instanceof HTMLTextAreaElement
-  ) {
-    setInputValue(element, text);
-    toggleClass(buttons, 'button-green', button);
-  } else if (element instanceof HTMLSelectElement) {
-    selectOptionByValue(element, text);
-    toggleClass(buttons, 'button-green', button);
-  }
+  elements.forEach((element) => {
+    const checkbox = element as HTMLInputElement;
+
+    if (!isCheckbox(checkbox)) return;
+
+    const isChecked = checkbox.checked;
+    const isCurrentValue = checkbox.value === text;
+
+    if ((isChecked && !isCurrentValue) || (!isChecked && isCurrentValue)) {
+      click(checkbox);
+    }
+  });
+
+  elements
+    .filter((element: FormElement) => !isCheckbox(element as HTMLInputElement))
+    .forEach((element) => {
+      if (
+        element instanceof HTMLInputElement ||
+        element instanceof HTMLTextAreaElement
+      ) {
+        setInputValue(element, text);
+      } else if (element instanceof HTMLSelectElement) {
+        selectOptionByValue(element, text);
+      } else {
+        return;
+      }
+
+      toggleClass(buttons, 'button-green', button);
+    });
 }
 
 function toggleClass<T extends HTMLElement>(
@@ -481,17 +460,18 @@ function toggleClass<T extends HTMLElement>(
 }
 
 function setupFormElementListener(
-  element: FormElement,
+  targets: FormElement[],
   buttons: HTMLElement[],
   toggleClassName: string,
   dataAttr: string
 ): void {
-  const applyButtonLogic = () => {
+  const applyButtonLogic = (target: FormElement) => {
     const value =
-      element instanceof HTMLInputElement ||
-      element instanceof HTMLTextAreaElement
-        ? element.value.trim()
-        : element.value;
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement
+        ? target.value.trim()
+        : '';
 
     toggleClass(buttons, toggleClassName);
     buttons.forEach((button) => {
@@ -501,11 +481,16 @@ function setupFormElementListener(
     });
   };
 
-  const eventType =
-    element instanceof HTMLInputElement ||
-    element instanceof HTMLTextAreaElement
-      ? 'input'
-      : 'change';
-  element.addEventListener(eventType, applyButtonLogic);
-  applyButtonLogic();
+  targets.forEach((target) => {
+    const eventType =
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement
+        ? 'input'
+        : 'change';
+
+    if (target) {
+      target.addEventListener(eventType, () => applyButtonLogic(target));
+      applyButtonLogic(target);
+    }
+  });
 }

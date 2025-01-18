@@ -420,18 +420,18 @@ function setupVariationButton(
 
   log('Apply text:', text, ' to elements ', elements);
 
-  elements.forEach((element) => {
-    const checkbox = element as HTMLInputElement;
+  elements
+    .filter((element: FormElement) => isCheckbox(element as HTMLInputElement))
+    .forEach((element) => {
+      const checkbox = element as HTMLInputElement;
+      const isChecked = checkbox.checked;
+      const isCurrentValue = checkbox.value === text;
 
-    if (!isCheckbox(checkbox)) return;
-
-    const isChecked = checkbox.checked;
-    const isCurrentValue = checkbox.value === text;
-
-    if ((isChecked && !isCurrentValue) || (!isChecked && isCurrentValue)) {
-      click(checkbox);
-    }
-  });
+      if ((isChecked && !isCurrentValue) || (!isChecked && isCurrentValue)) {
+        click(checkbox);
+        toggleClass(buttons, 'button-green', button);
+      }
+    });
 
   elements
     .filter((element: FormElement) => !isCheckbox(element as HTMLInputElement))

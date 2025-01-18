@@ -327,16 +327,6 @@ export type FormElement =
   | HTMLTextAreaElement
   | null;
 
-export class ElementVariation {
-  element: FormElement | null;
-  variation: string;
-
-  constructor(element: FormElement | null, variation: string) {
-    this.element = element;
-    this.variation = variation;
-  }
-}
-
 export class VariationsGroup {
   title: string;
   alias: string;

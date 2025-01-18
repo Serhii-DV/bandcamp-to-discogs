@@ -218,11 +218,19 @@ function setMetadataHints(metadata: Metadata) {
   );
 
   setSection(new Section('credits', 'Bandcamp credits', metadata.credits));
+
+  const genresGroup = new VariationsGroup(
+    'Genres',
+    elements('.genres input[type="checkbox"]') as HTMLInputElement[],
+    metadata.genres.autoDetectedGenres.map((genre) => new Variation(genre))
+  );
+
   setSection(
     new Section(
       'genres',
       'Bandcamp genres related data',
-      generateHintContent(metadata.genres)
+      generateHintContent(metadata.genres),
+      [genresGroup]
     )
   );
 

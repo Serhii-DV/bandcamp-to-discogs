@@ -255,9 +255,10 @@ function generateVariation(variation: Variation): string {
     return '';
   }
 
-  const content = truncateText(variation.title, 50);
+  const value = variation.toString();
+  const content = truncateText(value, 50);
 
-  return `<span class="b2d-variation button button-small" title="Set value:\n\n${variation.title}" data-text="${variation.title}">${icon} ${content}</span>`;
+  return `<span class="b2d-variation button button-small" title="Set value:\n\n${value}" data-text="${value}">${icon} ${content}</span>`;
 }
 
 function generateVariationsGroup(group: VariationsGroup): string {
@@ -328,12 +329,14 @@ export type FormElement =
   | null;
 
 export class Variation {
-  title: string;
-  values: string[];
+  value: string;
 
-  constructor(title: string, values: string[] = []) {
-    this.title = title;
-    this.values = values;
+  constructor(value: string) {
+    this.value = value;
+  }
+
+  toString(): string {
+    return this.value;
   }
 }
 

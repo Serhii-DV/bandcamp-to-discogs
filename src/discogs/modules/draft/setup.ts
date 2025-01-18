@@ -174,17 +174,27 @@ function setMetadataHints(metadata: Metadata) {
     new Variation('WAV'),
     new Variation('MP3')
   ];
+  const formatDescriptionTypeElements = elements(
+    '.format_descriptions_type_column'
+  );
+  const formatFileTypeContainer = formatDescriptionTypeElements[0];
+  const formatDescriptionContainer = formatDescriptionTypeElements[2];
+
   const fileTypeGroup = new VariationsGroup(
     'File Type',
     elements(
-      '.format_descriptions input[type="checkbox"]'
+      'input[type="checkbox"]',
+      formatFileTypeContainer
     ) as HTMLInputElement[],
     fileTypes
   );
 
   const formatDescriptionGroup = new VariationsGroup(
     'Format Description',
-    elements('.format_descriptions input[type="checkbox"]') as FormElement[],
+    elements(
+      'input[type="checkbox"]',
+      formatDescriptionContainer
+    ) as FormElement[],
     [new Variation(metadata.format.description)]
   );
 

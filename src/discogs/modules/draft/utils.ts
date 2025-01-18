@@ -354,25 +354,32 @@ export class VariationsGroup {
   }
 }
 
-interface SectionHint {
+export class Section {
   section: string;
   title: string;
-  content?: string;
-  elementToApply?: HTMLElement | null;
+  content: string;
   variationsGroups: VariationsGroup[];
+
+  constructor(
+    section: string,
+    title: string,
+    content?: string,
+    variationsGroups?: VariationsGroup[]
+  ) {
+    this.section = section;
+    this.title = title;
+    this.content = content || '';
+    this.variationsGroups = variationsGroups || [];
+  }
 }
 
-export const setSectionHint = ({
-  section,
-  title,
-  content = '',
-  variationsGroups
-}: SectionHint): void => {
-  log('Setting section hint', { section, title, content });
+export function setSection(section: Section): void {
+  log('Setting section', section);
 
-  content += generateVariationsGroups(variationsGroups);
+  let content = section.content;
+  content += generateVariationsGroups(section.variationsGroups);
 
-  const sectionElement = getSection(section);
+  const sectionElement = getSection(section.section);
   let sectionHint = sectionElement.querySelector('.b2d-section-hint');
 
   if (!sectionHint) {
@@ -383,14 +390,14 @@ export const setSectionHint = ({
     sectionLabel!.insertAdjacentElement('afterend', sectionHint);
   }
 
-  sectionHint.innerHTML = `<h4>${title}</h4>${content}`;
+  sectionHint.innerHTML = `<h4>${section.title}</h4>${content}`;
 
-  if (variationsGroups.length) {
-    variationsGroups.forEach((group: VariationsGroup) =>
+  if (section.variationsGroups.length) {
+    section.variationsGroups.forEach((group: VariationsGroup) =>
       setupVariationsGroup(group, sectionHint)
     );
   }
-};
+}
 
 function setupVariationsGroup(group: VariationsGroup, section: Element): void {
   const buttons = elements(

@@ -448,3 +448,12 @@ export function checkOneByValue(
     }
   });
 }
+
+export function toggleClass<T extends HTMLElement>(
+  elements: T[],
+  className: string,
+  activeElement?: T
+): void {
+  elements.forEach((element) => element.classList.remove(className));
+  activeElement?.classList.add(className);
+}

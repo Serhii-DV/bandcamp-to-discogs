@@ -4,7 +4,8 @@ import {
   elements,
   getDataAttribute,
   isCheckbox,
-  onClick
+  onClick,
+  toggleClass
 } from '../../../utils/html';
 import { log, logError } from '../../../utils/console';
 import {
@@ -397,7 +398,7 @@ function setupVariationsGroup(group: VariationsGroup, section: Element): void {
     section
   );
 
-  setupFormElementListener(
+  setupFormElementsListener(
     group.elements,
     buttons,
     'button-green',
@@ -450,16 +451,7 @@ function setupVariationButton(
     });
 }
 
-function toggleClass<T extends HTMLElement>(
-  elements: T[],
-  className: string,
-  activeElement?: T
-): void {
-  elements.forEach((element) => element.classList.remove(className));
-  activeElement?.classList.add(className);
-}
-
-function setupFormElementListener(
+function setupFormElementsListener(
   targets: FormElement[],
   buttons: HTMLElement[],
   toggleClassName: string,

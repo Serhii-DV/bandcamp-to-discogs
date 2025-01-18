@@ -231,7 +231,7 @@ function triggerChangeEvent(element: HTMLElement): void {
   element.dispatchEvent(changeEvent);
 }
 
-function generateVariations(variations: string[]): string {
+function generateVariations(variations: Variation[]): string {
   if (!isArray(variations)) {
     throw new Error('Variations should be an array');
   }
@@ -242,22 +242,22 @@ function generateVariations(variations: string[]): string {
 
   return `
 <div class="b2d-variations">
-  ${variations.map(getVariation).join(' ')}
+  ${variations.map(generateVariation).join(' ')}
   ${getClearFieldButton()}
 </div>
 `;
 }
 
-function getVariation(variation: string): string {
+function generateVariation(variation: Variation): string {
   const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
   if (!variation) {
     return '';
   }
 
-  const content = truncateText(variation, 50);
+  const content = truncateText(variation.title, 50);
 
-  return `<span class="b2d-variation button button-small" title="Set value:\n\n${variation}" data-text="${variation}">${icon} ${content}</span>`;
+  return `<span class="b2d-variation button button-small" title="Set value:\n\n${variation.title}" data-text="${variation.title}">${icon} ${content}</span>`;
 }
 
 function generateVariationsGroup(group: VariationsGroup): string {
@@ -327,13 +327,23 @@ export type FormElement =
   | HTMLTextAreaElement
   | null;
 
+export class Variation {
+  title: string;
+  values: string[];
+
+  constructor(title: string, values: string[] = []) {
+    this.title = title;
+    this.values = values;
+  }
+}
+
 export class VariationsGroup {
   title: string;
   alias: string;
   elements: FormElement[];
-  variations: string[];
+  variations: Variation[];
 
-  constructor(title: string, elements: FormElement[], variations: string[]) {
+  constructor(title: string, elements: FormElement[], variations: Variation[]) {
     this.title = title;
     this.alias = convertToAlias(title);
     this.elements = elements;
@@ -345,7 +355,6 @@ interface SectionHint {
   section: string;
   title: string;
   content?: string;
-  variations?: string[];
   elementToApply?: HTMLElement | null;
   variationsGroups: VariationsGroup[];
 }
@@ -354,12 +363,10 @@ export const setSectionHint = ({
   section,
   title,
   content = '',
-  variations = [''],
   variationsGroups
 }: SectionHint): void => {
-  log('Setting section hint', { section, title, content, variations });
+  log('Setting section hint', { section, title, content });
 
-  content += generateVariations(variations);
   content += generateVariationsGroups(variationsGroups);
 
   const sectionElement = getSection(section);

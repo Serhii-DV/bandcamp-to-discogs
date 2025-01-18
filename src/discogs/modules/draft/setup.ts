@@ -21,7 +21,8 @@ import {
   getQuantityInput,
   VariationsGroup,
   generateHintContent,
-  FormElement
+  FormElement,
+  Variation
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
@@ -108,13 +109,12 @@ function setMetadataHints(metadata: Metadata) {
   const artistGroup = new VariationsGroup(
     'Name',
     [getArtistNameInput()],
-    [metadata.artist.original]
+    [new Variation(metadata.artist.original)]
   );
 
   setSectionHint({
     section: 'artist',
     content: '',
-    variations: [],
     title: 'Bandcamp artist name',
     elementToApply: getArtistNameInput(),
     variationsGroups: [artistGroup]
@@ -123,12 +123,11 @@ function setMetadataHints(metadata: Metadata) {
   const titleGroup = new VariationsGroup(
     'Title',
     [getReleaseTitleInput()],
-    [metadata.title]
+    [new Variation(metadata.title)]
   );
 
   setSectionHint({
     section: 'title',
-    variations: [],
     title: 'Bandcamp release title',
     elementToApply: getReleaseTitleInput(),
     variationsGroups: [titleGroup]
@@ -137,12 +136,14 @@ function setMetadataHints(metadata: Metadata) {
   const labelGroup = new VariationsGroup(
     'Label',
     [getLabelNameInput()],
-    [metadata.label, generateSelfReleasedLabel(metadata.label)]
+    [
+      new Variation(metadata.label),
+      new Variation(generateSelfReleasedLabel(metadata.label))
+    ]
   );
 
   setSectionHint({
     section: 'label',
-    variations: [],
     title: 'Bandcamp page label or artist name',
     elementToApply: getLabelNameInput(),
     variationsGroups: [labelGroup]
@@ -151,12 +152,11 @@ function setMetadataHints(metadata: Metadata) {
   const countryGroup = new VariationsGroup(
     'Country',
     [getCountrySelect()],
-    [metadata.country]
+    [new Variation(metadata.country)]
   );
 
   setSectionHint({
     section: 'country',
-    variations: [],
     title: 'Bandcamp country',
     elementToApply: getCountrySelect(),
     variationsGroups: [countryGroup]
@@ -166,10 +166,14 @@ function setMetadataHints(metadata: Metadata) {
   const qtyGroup = new VariationsGroup(
     'Quantity',
     [qtyInput],
-    [metadata.format.qty.toString()]
+    [new Variation(metadata.format.qty.toString())]
   );
 
-  const fileTypes = ['FLAC', 'WAV', 'MP3'];
+  const fileTypes = [
+    new Variation('FLAC'),
+    new Variation('WAV'),
+    new Variation('MP3')
+  ];
   const fileTypeGroup = new VariationsGroup(
     'File Type',
     elements(
@@ -181,19 +185,22 @@ function setMetadataHints(metadata: Metadata) {
   const formatDescriptionGroup = new VariationsGroup(
     'Format Description',
     elements('.format_descriptions input[type="checkbox"]') as FormElement[],
-    [metadata.format.description]
+    [new Variation(metadata.format.description)]
   );
 
   const formatFreeTextGroup = new VariationsGroup(
     'Free Text',
     [element('input#free-text-input-0') as HTMLInputElement],
-    ['24-bit/44.1kHz', '320 kbps', '128 kbps']
+    [
+      new Variation('24-bit/44.1kHz'),
+      new Variation('320 kbps'),
+      new Variation('128 kbps')
+    ]
   );
 
   setSectionHint({
     section: 'format',
     content: generateHintContent(metadata.format),
-    variations: [],
     title: 'Bandcamp auto-detected format',
     elementToApply: undefined,
     variationsGroups: [
@@ -207,14 +214,16 @@ function setMetadataHints(metadata: Metadata) {
   const releasedGroup = new VariationsGroup(
     'Date',
     [getReleasedDateInput()],
-    [metadata.released.publishedDate, metadata.released.modifiedDate]
+    [
+      new Variation(metadata.released.publishedDate),
+      new Variation(metadata.released.modifiedDate)
+    ]
   );
 
   setSectionHint({
     section: 'released',
     content: generateHintContent(metadata.released),
     title: 'Bandcamp release dates',
-    variations: [],
     elementToApply: getReleasedDateInput(),
     variationsGroups: [releasedGroup]
   });
@@ -222,7 +231,6 @@ function setMetadataHints(metadata: Metadata) {
   setSectionHint({
     section: 'credits',
     content: metadata.credits,
-    variations: [],
     title: 'Bandcamp credits',
     elementToApply: undefined,
     variationsGroups: []
@@ -238,12 +246,11 @@ function setMetadataHints(metadata: Metadata) {
   const submissionNotesGroup = new VariationsGroup(
     'Submission notes',
     [getSubmissionNotesTextarea()],
-    [metadata.submissionNotes]
+    [new Variation(metadata.submissionNotes)]
   );
 
   setSectionHint({
     section: 'submission_notes',
-    variations: [],
     title: 'Auto-generated submission notes',
     elementToApply: getSubmissionNotesTextarea(),
     variationsGroups: [submissionNotesGroup]

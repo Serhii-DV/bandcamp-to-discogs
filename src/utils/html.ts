@@ -151,19 +151,18 @@ export function click<T extends HTMLElement>(element: T | T[] | null): void {
   return;
 }
 
-export function onClick(
-  elements: HTMLElement | HTMLElement[] | NodeListOf<HTMLElement> | null,
+export function onClick<T extends HTMLElement>(
+  element: T | T[] | NodeListOf<T> | null,
   callback: (event: MouseEvent) => void
 ): void {
-  if (!elements) return;
-
-  if (elements instanceof HTMLElement) {
-    elements.addEventListener('click', (event) =>
-      callback(event as MouseEvent)
-    );
-  } else {
-    elements.forEach((element) => onClick(element, callback));
+  if (!element) return;
+  if (!(element instanceof HTMLElement)) {
+    (element as T[]).forEach((el) => onClick(el, callback));
+    return;
   }
+  (element as T).addEventListener('click', callback);
+
+  return;
 }
 
 /**

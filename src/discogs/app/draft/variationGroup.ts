@@ -5,13 +5,13 @@ import { Variation } from './variation';
 export class VariationsGroup {
   title: string;
   alias: string;
-  elements: FormElement[];
+  targets: FormElement[];
   variations: Variation[];
 
-  constructor(title: string, elements: FormElement[], variations: Variation[]) {
+  constructor(title: string, targets: FormElement[], variations: Variation[]) {
     this.title = title;
     this.alias = convertToAlias(title);
-    this.elements = elements;
+    this.targets = targets;
     this.variations = variations;
   }
 }

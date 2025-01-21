@@ -357,7 +357,7 @@ function setupVariationsGroup(group: VariationsGroup, section: Element): void {
   );
 
   setupFormElementsListener(
-    group.elements,
+    group.targets,
     buttons,
     'button-green',
     'data-text'
@@ -374,11 +374,11 @@ function setupVariationButton(
   buttons: HTMLElement[]
 ): void {
   const text = getDataAttribute(button, 'text');
-  const elements = group.elements;
+  const targets = group.targets;
 
-  log('Apply text:', text, ' to elements ', elements);
+  log('Apply text:', text, ' to target elements ', targets);
 
-  elements
+  targets
     .filter((element: FormElement) => isCheckbox(element as HTMLInputElement))
     .forEach((element) => {
       const checkbox = element as HTMLInputElement;
@@ -391,7 +391,7 @@ function setupVariationButton(
       }
     });
 
-  elements
+  targets
     .filter((element: FormElement) => !isCheckbox(element as HTMLInputElement))
     .forEach((element) => {
       if (

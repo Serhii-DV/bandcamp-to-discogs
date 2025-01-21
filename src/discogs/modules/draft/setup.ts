@@ -224,6 +224,11 @@ function setMetadataHints(metadata: Metadata) {
     elements('.genres input[type="checkbox"]') as HTMLInputElement[],
     metadata.genres.autoDetectedGenres.map((genre) => new Variation(genre))
   );
+  const stylesGroup = new VariationsGroup(
+    'Styles',
+    [element('#release-styles') as HTMLSelectElement],
+    metadata.genres.autoDetectedStyles.map((style) => new Variation(style))
+  );
 
   setSection(
     new Section(
@@ -232,6 +237,10 @@ function setMetadataHints(metadata: Metadata) {
       generateHintContent(metadata.genres),
       [genresGroup]
     )
+  );
+
+  setSection(
+    new Section('styles', 'Bandcamp auto generated styles', '', [stylesGroup])
   );
 
   const submissionNotesGroup = new VariationsGroup(

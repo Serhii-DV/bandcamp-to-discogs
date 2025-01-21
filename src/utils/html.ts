@@ -1,6 +1,6 @@
 import { B2DIconComponent } from '../popup/components/icon';
 import { log } from './console';
-import { isFunction, isString } from './utils';
+import { isArray, isFunction, isString } from './utils';
 
 export function elements(selector: string, parent?: Element): HTMLElement[] {
   return Array.from(
@@ -137,15 +137,23 @@ export function enable(
 }
 
 /**
- * Triggers click event on the element
+ * Triggers click event on the element or array of elements
  */
-export function click(element: HTMLElement): HTMLElement {
+export function click(
+  element: HTMLElement | HTMLElement[]
+): HTMLElement | HTMLElement[] {
+  if (isArray(element)) {
+    (element as HTMLElement[]).forEach((el) => click(el));
+    return element;
+  }
+
   const event = new MouseEvent('click', {
     bubbles: true,
     cancelable: true,
     view: window
   });
-  element.dispatchEvent(event);
+  (element as HTMLElement).dispatchEvent(event);
+  console.log('CLICK ON', element);
   return element;
 }
 
@@ -454,6 +462,30 @@ export function toggleClass<T extends HTMLElement>(
   className: string,
   activeElement?: T
 ): void {
-  elements.forEach((element) => element.classList.remove(className));
+  removeClass(elements, className);
   activeElement?.classList.add(className);
+}
+
+export function removeClass<T extends HTMLElement>(
+  element: T | T[] | null,
+  className: string
+): void {
+  if (!element) return;
+  if (Array.isArray(element)) {
+    element.forEach((e) => e.classList.remove(className));
+  } else {
+    element.classList.remove(className);
+  }
+}
+
+export function addClass<T extends HTMLElement>(
+  element: T | T[] | null,
+  className: string
+): void {
+  if (!element) return;
+  if (Array.isArray(element)) {
+    element.forEach((e) => e.classList.add(className));
+  } else {
+    element.classList.add(className);
+  }
 }

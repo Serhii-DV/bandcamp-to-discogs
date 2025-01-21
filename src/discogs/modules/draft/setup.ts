@@ -2,7 +2,15 @@
 
 import { chromeListenToMessage } from '../../../utils/chrome';
 import { MessageType } from '../../../app/core/messageType';
-import { click, element, elements, onClick } from '../../../utils/html';
+import {
+  addClass,
+  click,
+  createElementFromHTML,
+  element,
+  elements,
+  onClick,
+  removeClass
+} from '../../../utils/html';
 import {
   setSection,
   autofillDurations,
@@ -19,7 +27,9 @@ import {
   getReleasedDateInput,
   getCountrySelect,
   getQuantityInput,
-  generateHintContent
+  generateHintContent,
+  generateVariationsGroupClass,
+  getSection
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
@@ -224,11 +234,6 @@ function setMetadataHints(metadata: Metadata) {
     elements('.genres input[type="checkbox"]') as HTMLInputElement[],
     metadata.genres.autoDetectedGenres.map((genre) => new Variation(genre))
   );
-  const stylesGroup = new VariationsGroup(
-    'Styles',
-    [element('#release-styles') as HTMLSelectElement],
-    metadata.genres.autoDetectedStyles.map((style) => new Variation(style))
-  );
 
   setSection(
     new Section(
@@ -239,9 +244,7 @@ function setMetadataHints(metadata: Metadata) {
     )
   );
 
-  setSection(
-    new Section('styles', 'Bandcamp auto generated styles', '', [stylesGroup])
-  );
+  setupSectionStyles(metadata);
 
   const submissionNotesGroup = new VariationsGroup(
     'Submission notes',
@@ -254,4 +257,56 @@ function setMetadataHints(metadata: Metadata) {
       submissionNotesGroup
     ])
   );
+}
+
+function setupSectionStyles(metadata: Metadata): void {
+  const stylesGroup = new VariationsGroup(
+    'Styles',
+    [element('#release-styles') as HTMLSelectElement],
+    metadata.genres.autoDetectedStyles.map((style) => new Variation(style))
+  );
+
+  setSection(
+    new Section('styles', 'Bandcamp auto generated styles', '', [stylesGroup])
+  );
+
+  const variationsGroupElement = element(
+    '.' + generateVariationsGroupClass(stylesGroup) + ' .b2d-variations'
+  );
+  if (!variationsGroupElement) return;
+
+  variationsGroupElement.removeChild(
+    element('.b2d-clear-button', variationsGroupElement) as Node
+  );
+
+  const variationButtons = elements('.b2d-variation', variationsGroupElement);
+  const styleSection = getSection('styles');
+  const stylesButtonGroup = element('.styles ul', styleSection);
+
+  const clearBtn = createElementFromHTML(
+    `<span class="button button-small button-red" title="Clear the field">Clear</span>`
+  );
+  variationsGroupElement.appendChild(clearBtn as Node);
+
+  onClick(clearBtn as HTMLElement, () => {
+    // It re-generates styles block every time, so we just need to remove
+    // the first button until there are no buttons left
+    const buttons = elements('button.facet-tag', stylesButtonGroup as Element);
+    buttons.forEach(() => {
+      let button = element('button.facet-tag', stylesButtonGroup as Element);
+      button?.click();
+    });
+
+    removeClass(variationButtons, 'button-green');
+  });
+
+  const selectAllButton = createElementFromHTML(
+    `<span class="button button-small button-blue" title="Select all fields">Select All</span>`
+  );
+  variationsGroupElement.appendChild(selectAllButton as Node);
+
+  onClick(selectAllButton as HTMLElement, () => {
+    click(variationButtons);
+    addClass(variationButtons, 'button-green');
+  });
 }

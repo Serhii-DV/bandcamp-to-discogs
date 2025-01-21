@@ -265,11 +265,15 @@ function generateVariation(variation: Variation): string {
 
 function generateVariationsGroup(group: VariationsGroup): string {
   return `
-<div class="b2d-variations-group-${group.alias}">
+<div class="${generateVariationsGroupClass(group)}">
   ${group.title}:
   ${generateVariations(group.variations)}
 </div>
 `;
+}
+
+export function generateVariationsGroupClass(group: VariationsGroup): string {
+  return `b2d-variations-group-${group.alias}`;
 }
 
 function generateVariationsGroups(groups: VariationsGroup[]): string {
@@ -277,7 +281,7 @@ function generateVariationsGroups(groups: VariationsGroup[]): string {
 }
 
 function getClearFieldButton(): string {
-  return `<span class="b2d-variation button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
+  return `<span class="b2d-variation b2d-clear-button button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
 }
 
 interface TitleValue {

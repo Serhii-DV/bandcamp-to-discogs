@@ -10,7 +10,6 @@ import {
 import { log, logError } from '../../../utils/console';
 import {
   camelCaseToReadable,
-  convertToAlias,
   hasOwnProperty,
   isArray,
   isObject,
@@ -18,6 +17,10 @@ import {
   ObjectByStringKey
 } from '../../../utils/utils';
 import { truncateText } from '../../../utils/string';
+import { FormElement } from '../../app/draft/types';
+import { Section } from 'src/discogs/app/draft/section';
+import { VariationsGroup } from 'src/discogs/app/draft/variationGroup';
+import { Variation } from 'src/discogs/app/draft/variation';
 
 export const getArtistNameInput = (): HTMLInputElement | null => {
   return document.getElementById('artist-name-input') as HTMLInputElement;
@@ -143,7 +146,6 @@ function extractTitleAndTime(str: string): [string, string] {
 
   return [modifiedString, timeValue];
 }
-getQuantityInput();
 
 export function setFormat(
   qty: string,
@@ -320,57 +322,6 @@ export function generateHintContent(original?: OriginalValue): string {
   }
 
   return `<div class="b2d-original">${original}</div>`;
-}
-
-export type FormElement =
-  | HTMLInputElement
-  | HTMLSelectElement
-  | HTMLTextAreaElement
-  | null;
-
-export class Variation {
-  value: string;
-
-  constructor(value: string) {
-    this.value = value;
-  }
-
-  toString(): string {
-    return this.value;
-  }
-}
-
-export class VariationsGroup {
-  title: string;
-  alias: string;
-  elements: FormElement[];
-  variations: Variation[];
-
-  constructor(title: string, elements: FormElement[], variations: Variation[]) {
-    this.title = title;
-    this.alias = convertToAlias(title);
-    this.elements = elements;
-    this.variations = variations;
-  }
-}
-
-export class Section {
-  section: string;
-  title: string;
-  content: string;
-  variationsGroups: VariationsGroup[];
-
-  constructor(
-    section: string,
-    title: string,
-    content?: string,
-    variationsGroups?: VariationsGroup[]
-  ) {
-    this.section = section;
-    this.title = title;
-    this.content = content || '';
-    this.variationsGroups = variationsGroups || [];
-  }
 }
 
 export function setSection(section: Section): void {

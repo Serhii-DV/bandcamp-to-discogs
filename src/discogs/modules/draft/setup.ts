@@ -19,16 +19,16 @@ import {
   getReleasedDateInput,
   getCountrySelect,
   getQuantityInput,
-  VariationsGroup,
-  generateHintContent,
-  FormElement,
-  Variation,
-  Section
+  generateHintContent
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { log, logError } from '../../../utils/console';
 import { Metadata } from '../../app/metadata';
 import { generateSelfReleasedLabel } from '../discogs';
+import { FormElement } from '../../app/draft/types';
+import { VariationsGroup } from '../../app/draft/variationGroup';
+import { Section } from '../../app/draft/section';
+import { Variation } from '../../app/draft/variation';
 
 export const setupDraftPage = () => {
   log('Setup draft page... (src/discogs/modules/draft/setup.ts)');

@@ -139,22 +139,16 @@ export function enable(
 /**
  * Triggers click event on the element or array of elements
  */
-export function click(
-  element: HTMLElement | HTMLElement[]
-): HTMLElement | HTMLElement[] {
+export function click<T extends HTMLElement>(element: T | T[] | null): void {
+  if (!element) return;
   if (isArray(element)) {
-    (element as HTMLElement[]).forEach((el) => click(el));
-    return element;
+    (element as T[]).forEach((el) => click(el));
+    return;
   }
 
-  const event = new MouseEvent('click', {
-    bubbles: true,
-    cancelable: true,
-    view: window
-  });
-  (element as HTMLElement).dispatchEvent(event);
-  console.log('CLICK ON', element);
-  return element;
+  (element as T).click();
+
+  return;
 }
 
 export function onClick(

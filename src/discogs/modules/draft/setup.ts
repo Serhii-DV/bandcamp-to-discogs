@@ -261,13 +261,18 @@ function setMetadataHints(metadata: Metadata) {
 
 function setupSectionStyles(metadata: Metadata): void {
   const stylesGroup = new VariationsGroup(
-    'Styles',
+    '',
     [element('#release-styles') as HTMLSelectElement],
     metadata.genres.autoDetectedStyles.map((style) => new Variation(style))
   );
 
   setSection(
-    new Section('styles', 'Bandcamp auto generated styles', '', [stylesGroup])
+    new Section(
+      'styles',
+      'Bandcamp auto generated styles',
+      'Styles were generated based on Bandcamp release keywords.',
+      [stylesGroup]
+    )
   );
 
   const variationsGroupElement = element(

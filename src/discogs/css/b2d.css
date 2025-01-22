@@ -5,17 +5,17 @@
   --var-txt-color: #fff;
 }
 
-div.b2d-section-hint {
+div.b2d-section {
   background-color: var(--bg-color) !important;
   color: var(--txt-color) !important;
   padding: 10px;
   margin: 0 0 20px 0;
 }
 
-div.b2d-section-hint div.b2d-original {
-  margin: 5px 0;
+div.b2d-section > div {
+  margin: 10px 0;
 }
 
-div.b2d-section-hint .b2d-variation {
+div.b2d-section .b2d-variation {
   font-style: normal;
 }

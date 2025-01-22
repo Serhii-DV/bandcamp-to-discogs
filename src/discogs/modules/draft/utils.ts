@@ -265,8 +265,8 @@ function generateVariation(variation: Variation): string {
 
 function generateVariationsGroup(group: VariationsGroup): string {
   return `
-<div class="${generateVariationsGroupClass(group)}">
-  ${group.title}:
+<div class="b2d-group ${generateVariationsGroupClass(group)}">
+  ${group.title ? `<b>${group.title}:</b>` : ''}
   ${generateVariations(group.variations)}
 </div>
 `;
@@ -277,7 +277,7 @@ export function generateVariationsGroupClass(group: VariationsGroup): string {
 }
 
 function generateVariationsGroups(groups: VariationsGroup[]): string {
-  return groups.map(generateVariationsGroup).join('<br>');
+  return groups.map(generateVariationsGroup).join('\n');
 }
 
 function getClearFieldButton(): string {
@@ -331,25 +331,26 @@ export function generateHintContent(original?: OriginalValue): string {
 export function setSection(section: Section): void {
   log('Setting section', section);
 
-  let content = section.content;
-  content += generateVariationsGroups(section.variationsGroups);
-
   const sectionElement = getSection(section.section);
-  let sectionHint = sectionElement.querySelector('.b2d-section-hint');
+  let b2dSection = sectionElement.querySelector('.b2d-section');
 
-  if (!sectionHint) {
-    sectionHint = createElementFromHTML(`
-<div class="b2d-section-hint"></div>
-`) as HTMLElement;
+  if (!b2dSection) {
+    b2dSection = createElementFromHTML(
+      `<div class="b2d-section"></div>`
+    ) as HTMLElement;
     const sectionLabel = sectionElement.querySelector('label');
-    sectionLabel!.insertAdjacentElement('afterend', sectionHint);
+    sectionLabel!.insertAdjacentElement('afterend', b2dSection);
   }
 
-  sectionHint.innerHTML = `<h4>${section.title}</h4>${content}`;
+  b2dSection.innerHTML = `
+  <h4>${section.title}</h4>
+  <div class="b2d-content">${section.content}</div>
+  ${generateVariationsGroups(section.variationsGroups)}
+`;
 
   if (section.variationsGroups.length) {
     section.variationsGroups.forEach((group: VariationsGroup) =>
-      setupVariationsGroup(group, sectionHint)
+      setupVariationsGroup(group, b2dSection)
     );
   }
 }

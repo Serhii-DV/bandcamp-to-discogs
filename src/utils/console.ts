@@ -5,7 +5,12 @@ const isDevMode = !('update_url' in chrome.runtime.getManifest());
 
 export const log = (...args: any[]): void => {
   if (!isDevMode) return;
-  console.log(getLogPrefix('debug'), ...args);
+  console.log(getLogPrefix('log'), ...args);
+};
+
+export const debug = (...args: any[]): void => {
+  if (!isDevMode) return;
+  console.debug(getLogPrefix('debug'), ...args);
 };
 
 export const logInfo = (...args: any[]): void => {

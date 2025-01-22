@@ -21,6 +21,5 @@ export const logError = (...args: any[]): void => {
 const manifest = getExtensionManifest();
 
 function getLogPrefix(level: string): string {
-  const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  return `[b2d][${manifest.version}][${level}][${timestamp}]:`;
+  return `[b2d][${manifest.version}][${level}]:`;
 }

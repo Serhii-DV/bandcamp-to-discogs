@@ -9,7 +9,8 @@ import {
   element,
   elements,
   onClick,
-  removeClass
+  removeClass,
+  valueToHtml
 } from '../../../utils/html';
 import {
   setSection,
@@ -27,7 +28,6 @@ import {
   getReleasedDateInput,
   getCountrySelect,
   getQuantityInput,
-  generateHintContent,
   generateVariationsGroupClass,
   getSection
 } from './utils';
@@ -204,7 +204,7 @@ function setMetadataHints(metadata: Metadata) {
     new Section(
       'format',
       'Bandcamp auto-detected format',
-      generateHintContent(metadata.format),
+      valueToHtml(metadata.format),
       [qtyGroup, fileTypeGroup, formatDescriptionGroup, formatFreeTextGroup]
     )
   );
@@ -222,28 +222,14 @@ function setMetadataHints(metadata: Metadata) {
     new Section(
       'released',
       'Bandcamp release dates',
-      generateHintContent(metadata.released),
+      valueToHtml(metadata.released),
       [releasedGroup]
     )
   );
 
   setSection(new Section('credits', 'Bandcamp credits', metadata.credits));
 
-  const genresGroup = new VariationsGroup(
-    'Genres',
-    elements('.genres input[type="checkbox"]') as HTMLInputElement[],
-    metadata.genres.autoDetectedGenres.map((genre) => new Variation(genre))
-  );
-
-  setSection(
-    new Section(
-      'genres',
-      'Bandcamp genres related data',
-      generateHintContent(metadata.genres),
-      [genresGroup]
-    )
-  );
-
+  setupSectionGenres(metadata);
   setupSectionStyles(metadata);
 
   const submissionNotesGroup = new VariationsGroup(
@@ -256,6 +242,23 @@ function setMetadataHints(metadata: Metadata) {
     new Section('submission_notes', 'Auto-generated submission notes', '', [
       submissionNotesGroup
     ])
+  );
+}
+
+function setupSectionGenres(metadata: Metadata): void {
+  const genresGroup = new VariationsGroup(
+    'Genres',
+    elements('.genres input[type="checkbox"]') as HTMLInputElement[],
+    metadata.genres.autoDetectedGenres.map((genre) => new Variation(genre))
+  );
+
+  setSection(
+    new Section(
+      'genres',
+      'Bandcamp genres related data',
+      valueToHtml({ keywords: metadata.genres.keywords }),
+      [genresGroup]
+    )
   );
 }
 

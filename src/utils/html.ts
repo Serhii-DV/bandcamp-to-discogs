@@ -1,6 +1,13 @@
 import { B2DIconComponent } from '../popup/components/icon';
 import { log } from './console';
-import { isArray, isFunction, isString } from './utils';
+import {
+  camelCaseToReadable,
+  getOwnProperty,
+  isArray,
+  isFunction,
+  isObject,
+  isString
+} from './utils';
 
 export function elements(selector: string, parent?: Element): HTMLElement[] {
   return Array.from(
@@ -481,4 +488,28 @@ export function addClass<T extends HTMLElement>(
   } else {
     element.classList.add(className);
   }
+}
+
+export function objectToHtml(
+  object: Object,
+  className: string = 'b2d-value'
+): string {
+  return Object.keys(object)
+    .map(
+      (key) =>
+        `<div class="${className}"><b>${camelCaseToReadable(key)}:</b> ${valueToHtml(getOwnProperty(object, key, ''))}</div>`
+    )
+    .join('');
+}
+
+export function valueToHtml(value: any): string {
+  if (isArray(value)) {
+    return value.join(', ');
+  }
+
+  if (isObject(value)) {
+    return objectToHtml(value);
+  }
+
+  return value;
 }

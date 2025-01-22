@@ -8,14 +8,7 @@ import {
   toggleClass
 } from '../../../utils/html';
 import { log, logError } from '../../../utils/console';
-import {
-  camelCaseToReadable,
-  hasOwnProperty,
-  isArray,
-  isObject,
-  isString,
-  ObjectByStringKey
-} from '../../../utils/utils';
+import { isArray } from '../../../utils/utils';
 import { truncateText } from '../../../utils/string';
 import { FormElement } from '../../app/draft/types';
 import { Section } from 'src/discogs/app/draft/section';
@@ -282,50 +275,6 @@ function generateVariationsGroups(groups: VariationsGroup[]): string {
 
 function getClearFieldButton(): string {
   return `<span class="b2d-variation b2d-clear-button button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
-}
-
-interface TitleValue {
-  title: string;
-  value: string | string[];
-}
-type OriginalValue =
-  | string
-  | { [key: string]: string }
-  | TitleValue[]
-  | ObjectByStringKey;
-
-export function generateHintContent(original?: OriginalValue): string {
-  if (!original) {
-    return '';
-  }
-
-  if (isString(original)) {
-    original = `<b>${original}</b>`;
-  } else if (isObject(original)) {
-    let textArr = [];
-    for (const key in original as ObjectByStringKey) {
-      if (hasOwnProperty(original as ObjectByStringKey, key)) {
-        textArr.push({
-          title: camelCaseToReadable(key),
-          value: (original as ObjectByStringKey)[key]
-        });
-      }
-    }
-    original = textArr;
-  }
-
-  if (isArray(original)) {
-    original = (original as TitleValue[])
-      .map((textItem: TitleValue) => {
-        let value = isArray(textItem.value)
-          ? (textItem.value as string[]).join(', ')
-          : textItem.value;
-        return `${textItem.title}: <b>${value}</b>`;
-      })
-      .join('<br />');
-  }
-
-  return `<div class="b2d-original">${original}</div>`;
 }
 
 export function setSection(section: Section): void {

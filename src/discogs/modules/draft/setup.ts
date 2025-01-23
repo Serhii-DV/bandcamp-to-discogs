@@ -265,35 +265,27 @@ function setupSectionStyles(metadata: Metadata): void {
   );
 
   const variationsGroupElement = element(
-    '.' + generateVariationsGroupClass(stylesGroup) + ' .b2d-variations'
+    `.${generateVariationsGroupClass(stylesGroup)} .b2d-variations`
   );
   if (!variationsGroupElement) return;
 
-  variationsGroupElement.removeChild(
-    element('.b2d-clear-button', variationsGroupElement) as Node
+  // Remove clear button
+  const clearButtonElement = element(
+    '.b2d-clear-button',
+    variationsGroupElement
   );
+  clearButtonElement && variationsGroupElement.removeChild(clearButtonElement);
 
   const variationButtons = elements('.b2d-variation', variationsGroupElement);
   const styleSection = getSection('styles');
   const stylesButtonGroup = element('.styles ul', styleSection);
 
-  const clearBtn = createElementFromHTML(
-    `<span class="button button-small button-red" title="Clear the field">Clear</span>`
-  );
-  variationsGroupElement.appendChild(clearBtn as Node);
+  const getStyleButtons = (): HTMLElement[] =>
+    elements('button.facet-tag', stylesButtonGroup as Element);
 
-  const getStyleButtons = (): HTMLElement[] => {
-    return elements('button.facet-tag', stylesButtonGroup as Element);
-  };
-
-  const styleButtonOnClickHandler = (): void => {
-    updateVariationButtonsState(variationButtons);
-  };
-
-  const updateVariationButtonsState = (
-    variationButtons: HTMLElement[]
-  ): void => {
-    getStyleButtons().forEach((styleButton) => {
+  const updateVariationButtonsState = (): void => {
+    const styleButtons = getStyleButtons();
+    styleButtons.forEach((styleButton) => {
       variationButtons.forEach((variationButton) => {
         if (
           getDataAttribute(variationButton, 'text') ===
@@ -302,18 +294,17 @@ function setupSectionStyles(metadata: Metadata): void {
           addClass(variationButton, 'button-green');
         }
       });
-
-      onClick(styleButton, styleButtonOnClickHandler);
+      onClick(styleButton, updateVariationButtonsState);
     });
   };
 
-  onClick(variationButtons, () => {
-    updateVariationButtonsState(variationButtons);
-  });
+  // Add new clear button
+  const clearButton = createElementFromHTML(
+    `<span class="button button-small button-red" title="Clear the field">Clear</span>`
+  );
+  variationsGroupElement.appendChild(clearButton as Node);
 
-  updateVariationButtonsState(variationButtons);
-
-  onClick(clearBtn as HTMLElement, () => {
+  onClick(clearButton as HTMLElement, () => {
     // It re-generates styles block every time, so we just need to remove
     // the first button until there are no buttons left
     getStyleButtons().forEach(() => {
@@ -332,4 +323,7 @@ function setupSectionStyles(metadata: Metadata): void {
   onClick(selectAllButton as HTMLElement, () => {
     click(variationButtons);
   });
+
+  onClick(variationButtons, updateVariationButtonsState);
+  updateVariationButtonsState(); // Initialize state
 }

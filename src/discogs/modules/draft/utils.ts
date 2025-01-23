@@ -297,17 +297,18 @@ export function setSection(section: Section): void {
   ${generateVariationsGroups(section.variationsGroups)}
 `;
 
-  if (section.variationsGroups.length) {
-    section.variationsGroups.forEach((group: VariationsGroup) =>
-      setupVariationsGroup(group, b2dSection)
-    );
-  }
+  section.variationsGroups.forEach((group: VariationsGroup) =>
+    setupVariationsGroup(group, b2dSection)
+  );
 }
 
-function setupVariationsGroup(group: VariationsGroup, section: Element): void {
+function setupVariationsGroup(
+  group: VariationsGroup,
+  b2dSection: Element
+): void {
   const buttons = elements(
     `.b2d-variations-group-${group.alias} .b2d-variation`,
-    section
+    b2dSection
   );
 
   setupFormElementsListener(
@@ -318,49 +319,61 @@ function setupVariationsGroup(group: VariationsGroup, section: Element): void {
   );
 
   onClick(buttons, (event) =>
-    setupVariationButton(event.target as HTMLButtonElement, group, buttons)
+    variationButtonClickHandler(
+      event.target as HTMLButtonElement,
+      group,
+      buttons
+    )
   );
 }
 
-function setupVariationButton(
+function variationButtonClickHandler(
   button: HTMLButtonElement,
   group: VariationsGroup,
   buttons: HTMLElement[]
 ): void {
-  const text = getDataAttribute(button, 'text');
+  const variation = getDataAttribute(button, 'text');
   const targets = group.targets;
 
-  log('Apply text:', text, ' to target elements ', targets);
+  log('Apply text:', variation, ' to target elements ', targets);
 
-  targets
-    .filter((element: FormElement) => isCheckbox(element as HTMLInputElement))
-    .forEach((element) => {
-      const checkbox = element as HTMLInputElement;
-      const isChecked = checkbox.checked;
-      const isCurrentValue = checkbox.value === text;
+  targets.forEach((element: FormElement) => {
+    if (element instanceof HTMLInputElement) {
+      handleInput(element);
+    } else if (element instanceof HTMLTextAreaElement) {
+      handleTextArea(element);
+    } else if (element instanceof HTMLSelectElement) {
+      handleSelect(element);
+    } else {
+      return;
+    }
 
-      if ((isChecked && !isCurrentValue) || (!isChecked && isCurrentValue)) {
-        click(checkbox);
-        toggleClass(buttons, 'button-green', button);
-      }
-    });
+    toggleClass(buttons, 'button-green', button);
+  });
 
-  targets
-    .filter((element: FormElement) => !isCheckbox(element as HTMLInputElement))
-    .forEach((element) => {
-      if (
-        element instanceof HTMLInputElement ||
-        element instanceof HTMLTextAreaElement
-      ) {
-        setInputValue(element, text);
-      } else if (element instanceof HTMLSelectElement) {
-        selectOptionByValue(element, text);
-      } else {
-        return;
-      }
+  function handleInput(element: HTMLInputElement): void {
+    if (isCheckbox(element)) {
+      handleCheckbox(element, variation);
+    } else {
+      setInputValue(element, variation);
+    }
+  }
 
-      toggleClass(buttons, 'button-green', button);
-    });
+  function handleCheckbox(element: HTMLInputElement, variation: string): void {
+    const shouldClick = element.checked !== (element.value === variation);
+
+    if (shouldClick) {
+      click(element);
+    }
+  }
+
+  function handleTextArea(element: HTMLTextAreaElement): void {
+    setInputValue(element, variation);
+  }
+
+  function handleSelect(element: HTMLSelectElement): void {
+    selectOptionByValue(element, variation);
+  }
 }
 
 function setupFormElementsListener(

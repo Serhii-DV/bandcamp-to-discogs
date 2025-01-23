@@ -1,4 +1,5 @@
 import {
+  addClass,
   click,
   createElementFromHTML,
   elements,
@@ -310,13 +311,7 @@ function setupVariationsGroup(
     `.b2d-variations-group-${group.alias} .b2d-variation`,
     b2dSection
   );
-
-  setupFormElementsListener(
-    group.targets,
-    buttons,
-    'button-green',
-    'data-text'
-  );
+  setupFormElementsListener(group.targets, buttons, 'button-green');
 
   onClick(buttons, (event) =>
     variationButtonClickHandler(
@@ -379,35 +374,50 @@ function variationButtonClickHandler(
 function setupFormElementsListener(
   targets: FormElement[],
   buttons: HTMLElement[],
-  toggleClassName: string,
-  dataAttr: string
+  toggleClassName: string
 ): void {
-  const applyButtonLogic = (target: FormElement) => {
-    const value =
-      target instanceof HTMLInputElement ||
-      target instanceof HTMLTextAreaElement ||
-      target instanceof HTMLSelectElement
-        ? target.value.trim()
-        : '';
+  const getElementValue = (target: FormElement): string =>
+    target instanceof HTMLInputElement ||
+    target instanceof HTMLTextAreaElement ||
+    target instanceof HTMLSelectElement
+      ? target.value.trim()
+      : '';
 
-    toggleClass(buttons, toggleClassName);
+  const handleButtons = (target: FormElement, buttons: HTMLElement[]): void => {
+    const value = getElementValue(target);
+    const isCheckboxTarget = isCheckbox(target as HTMLInputElement);
+    const isChecked = isCheckboxTarget
+      ? (target as HTMLInputElement).checked === true
+      : false;
+
+    if (!isCheckboxTarget) {
+      toggleClass(buttons, toggleClassName);
+    }
+
     buttons.forEach((button) => {
-      if (button.getAttribute(dataAttr) === value) {
-        button.classList.add(toggleClassName);
+      const buttonValue = getDataAttribute(button, 'text');
+      const shouldAddClass = isCheckboxTarget
+        ? isChecked && buttonValue === value
+        : buttonValue === value;
+
+      if (shouldAddClass) {
+        addClass(button, toggleClassName);
       }
     });
   };
 
   targets.forEach((target) => {
+    if (!target) return;
+
     const eventType =
       target instanceof HTMLInputElement ||
       target instanceof HTMLTextAreaElement
         ? 'input'
         : 'change';
 
-    if (target) {
-      target.addEventListener(eventType, () => applyButtonLogic(target));
-      applyButtonLogic(target);
-    }
+    const handleEvent = () => handleButtons(target, buttons);
+
+    target.addEventListener(eventType, handleEvent);
+    handleEvent();
   });
 }

@@ -8,6 +8,7 @@ import {
   createElementFromHTML,
   element,
   elements,
+  getDataAttribute,
   onClick,
   removeClass,
   valueToHtml
@@ -32,7 +33,7 @@ import {
   getSection
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
-import { log, logError } from '../../../utils/console';
+import { debug, log, logError } from '../../../utils/console';
 import { Metadata } from '../../app/metadata';
 import { generateSelfReleasedLabel } from '../discogs';
 import { FormElement } from '../../app/draft/types';
@@ -281,11 +282,41 @@ function setupSectionStyles(metadata: Metadata): void {
   );
   variationsGroupElement.appendChild(clearBtn as Node);
 
+  const getStyleButtons = (): HTMLElement[] => {
+    return elements('button.facet-tag', stylesButtonGroup as Element);
+  };
+
+  const styleButtonOnClickHandler = (): void => {
+    updateVariationButtonsState(variationButtons);
+  };
+
+  const updateVariationButtonsState = (
+    variationButtons: HTMLElement[]
+  ): void => {
+    getStyleButtons().forEach((styleButton) => {
+      variationButtons.forEach((variationButton) => {
+        if (
+          getDataAttribute(variationButton, 'text') ===
+          styleButton.textContent?.trim()
+        ) {
+          addClass(variationButton, 'button-green');
+        }
+      });
+
+      onClick(styleButton, styleButtonOnClickHandler);
+    });
+  };
+
+  onClick(variationButtons, () => {
+    updateVariationButtonsState(variationButtons);
+  });
+
+  updateVariationButtonsState(variationButtons);
+
   onClick(clearBtn as HTMLElement, () => {
     // It re-generates styles block every time, so we just need to remove
     // the first button until there are no buttons left
-    const buttons = elements('button.facet-tag', stylesButtonGroup as Element);
-    buttons.forEach(() => {
+    getStyleButtons().forEach(() => {
       let button = element('button.facet-tag', stylesButtonGroup as Element);
       button?.click();
     });
@@ -300,6 +331,5 @@ function setupSectionStyles(metadata: Metadata): void {
 
   onClick(selectAllButton as HTMLElement, () => {
     click(variationButtons);
-    addClass(variationButtons, 'button-green');
   });
 }

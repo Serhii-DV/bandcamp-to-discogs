@@ -38,7 +38,6 @@ import { generateSelfReleasedLabel } from '../discogs';
 import { FormElement } from '../../app/draft/types';
 import { VariationsGroup } from '../../app/draft/variationGroup';
 import { Section } from '../../app/draft/section';
-import { Variation } from '../../app/draft/variation';
 
 export const setupDraftPage = () => {
   log('Setup draft page... (src/discogs/modules/draft/setup.ts)');
@@ -120,7 +119,7 @@ function setMetadataHints(metadata: Metadata) {
   const artistGroup = new VariationsGroup(
     'Name',
     [getArtistNameInput()],
-    [new Variation(metadata.artist.original)]
+    [metadata.artist.original]
   );
 
   setSection(new Section('artist', 'Bandcamp artist name', '', [artistGroup]));
@@ -128,7 +127,7 @@ function setMetadataHints(metadata: Metadata) {
   const titleGroup = new VariationsGroup(
     'Title',
     [getReleaseTitleInput()],
-    [new Variation(metadata.title)]
+    [metadata.title]
   );
 
   setSection(new Section('title', 'Bandcamp release title', '', [titleGroup]));
@@ -136,10 +135,7 @@ function setMetadataHints(metadata: Metadata) {
   const labelGroup = new VariationsGroup(
     'Label',
     [getLabelNameInput()],
-    [
-      new Variation(metadata.label),
-      new Variation(generateSelfReleasedLabel(metadata.label))
-    ]
+    [metadata.label, generateSelfReleasedLabel(metadata.label)]
   );
 
   setSection(
@@ -149,7 +145,7 @@ function setMetadataHints(metadata: Metadata) {
   const countryGroup = new VariationsGroup(
     'Country',
     [getCountrySelect()],
-    [new Variation(metadata.country)]
+    [metadata.country]
   );
 
   setSection(new Section('country', 'Bandcamp country', '', [countryGroup]));
@@ -158,14 +154,10 @@ function setMetadataHints(metadata: Metadata) {
   const qtyGroup = new VariationsGroup(
     'Quantity',
     [qtyInput],
-    [new Variation(metadata.format.qty.toString())]
+    [metadata.format.qty.toString()]
   );
 
-  const fileTypes = [
-    new Variation('FLAC'),
-    new Variation('WAV'),
-    new Variation('MP3')
-  ];
+  const fileTypes = ['FLAC', 'WAV', 'MP3'];
   const formatDescriptionTypeElements = elements(
     '.format_descriptions_type_column'
   );
@@ -187,17 +179,13 @@ function setMetadataHints(metadata: Metadata) {
       'input[type="checkbox"]',
       formatDescriptionContainer
     ) as FormElement[],
-    [new Variation(metadata.format.description)]
+    [metadata.format.description]
   );
 
   const formatFreeTextGroup = new VariationsGroup(
     'Free Text',
     [element('input#free-text-input-0') as HTMLInputElement],
-    [
-      new Variation('24-bit/44.1kHz'),
-      new Variation('320 kbps'),
-      new Variation('128 kbps')
-    ]
+    ['24-bit/44.1kHz', '320 kbps', '128 kbps']
   );
 
   setSection(
@@ -212,10 +200,7 @@ function setMetadataHints(metadata: Metadata) {
   const releasedGroup = new VariationsGroup(
     'Date',
     [getReleasedDateInput()],
-    [
-      new Variation(metadata.released.publishedDate),
-      new Variation(metadata.released.modifiedDate)
-    ]
+    [metadata.released.publishedDate, metadata.released.modifiedDate]
   );
 
   setSection(
@@ -235,7 +220,7 @@ function setMetadataHints(metadata: Metadata) {
   const submissionNotesGroup = new VariationsGroup(
     'Submission notes',
     [getSubmissionNotesTextarea()],
-    [new Variation(metadata.submissionNotes)]
+    [metadata.submissionNotes]
   );
 
   setSection(
@@ -249,7 +234,7 @@ function setupSectionGenres(metadata: Metadata): void {
   const genresGroup = new VariationsGroup(
     'Genres',
     elements('.genres input[type="checkbox"]') as HTMLInputElement[],
-    metadata.genres.autoDetectedGenres.map((genre) => new Variation(genre))
+    metadata.genres.autoDetectedGenres
   );
 
   setSection(
@@ -266,7 +251,7 @@ function setupSectionStyles(metadata: Metadata): void {
   const stylesGroup = new VariationsGroup(
     '',
     [element('#release-styles') as HTMLSelectElement],
-    metadata.genres.autoDetectedStyles.map((style) => new Variation(style))
+    metadata.genres.autoDetectedStyles
   );
 
   setSection(

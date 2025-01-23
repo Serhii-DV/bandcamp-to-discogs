@@ -8,10 +8,16 @@ export class VariationsGroup {
   targets: FormElement[];
   variations: Variation[];
 
-  constructor(title: string, targets: FormElement[], variations: Variation[]) {
+  constructor(
+    title: string,
+    targets: FormElement[],
+    variations: Variation[] | string[]
+  ) {
     this.title = title;
     this.alias = convertToAlias(title);
     this.targets = targets;
-    this.variations = variations;
+    this.variations = variations.map((variation) =>
+      variation instanceof Variation ? variation : new Variation(variation)
+    );
   }
 }

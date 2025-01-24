@@ -12,10 +12,11 @@ import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
 
-interface Format {
-  fileType: string;
-  qty: number;
-  description: string;
+export interface Format {
+  fileType: MetadataValue;
+  qty: MetadataValue;
+  description: MetadataValue;
+  freeText: MetadataValue;
 }
 
 interface Released {
@@ -88,9 +89,14 @@ export class Metadata {
     this.title = new MetadataValue(title);
     this.label = new MetadataValue(label, [generateSelfReleasedLabel(label)]);
     this.format = {
-      fileType: formatFileType,
-      qty: trackQty,
-      description: formatDescription
+      fileType: new MetadataValue(formatFileType, ['FLAC', 'WAV', 'MP3']),
+      qty: new MetadataValue(trackQty.toString()),
+      description: new MetadataValue(formatDescription),
+      freeText: new MetadataValue('', [
+        '24-bit/44.1kHz',
+        '320 kbps',
+        '128 kbps'
+      ])
     };
     this.country = new MetadataValue(country ?? config.metadata.country, [
       config.metadata.country

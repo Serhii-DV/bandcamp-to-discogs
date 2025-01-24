@@ -34,7 +34,7 @@ import {
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
-import { Metadata, MetadataValue } from '../../app/metadata';
+import { Format, Metadata, MetadataValue } from '../../app/metadata';
 import { FormElement } from '../../app/draft/types';
 import { VariationsGroup } from '../../app/draft/variationGroup';
 import { Section } from '../../app/draft/section';
@@ -86,9 +86,9 @@ function applyMetadata(metadata: Metadata) {
 
   setupSectionHints(metadata);
   setFormat(
-    metadata.format.qty.toString(),
-    metadata.format.fileType,
-    metadata.format.description
+    metadata.format.qty.value,
+    metadata.format.fileType.value,
+    metadata.format.description.value
   );
   setCountry(metadata.country.value);
   autofillDurations();
@@ -120,7 +120,7 @@ function setupSectionHints(metadata: Metadata) {
   setupSectionTitle(metadata.title);
   setupSectionLabel(metadata.label);
   setupSectionCountry(metadata.country);
-  setupSectionFormat(metadata);
+  setupSectionFormat(metadata.format);
   setupSectionReleased(metadata);
   setupSectionCredits(metadata);
   setupSectionGenres(metadata);
@@ -178,15 +178,13 @@ function setupSectionCountry(country: MetadataValue): void {
   );
 }
 
-function setupSectionFormat(metadata: Metadata): void {
-  const qtyInput = getQuantityInput();
+function setupSectionFormat(format: Format): void {
   const qtyGroup = new VariationsGroup(
     'Quantity',
-    [qtyInput],
-    [metadata.format.qty.toString()]
+    [getQuantityInput()],
+    format.qty.variations
   );
 
-  const fileTypes = ['FLAC', 'WAV', 'MP3'];
   const formatDescriptionTypeElements = elements(
     '.format_descriptions_type_column'
   );
@@ -199,7 +197,7 @@ function setupSectionFormat(metadata: Metadata): void {
       'input[type="checkbox"]',
       formatFileTypeContainer
     ) as HTMLInputElement[],
-    fileTypes
+    format.fileType.variations
   );
 
   const formatDescriptionGroup = new VariationsGroup(
@@ -208,20 +206,25 @@ function setupSectionFormat(metadata: Metadata): void {
       'input[type="checkbox"]',
       formatDescriptionContainer
     ) as FormElement[],
-    [metadata.format.description]
+    format.description.variations
   );
 
   const formatFreeTextGroup = new VariationsGroup(
     'Free Text',
     [element('input#free-text-input-0') as HTMLInputElement],
-    ['24-bit/44.1kHz', '320 kbps', '128 kbps']
+    format.freeText.variations
   );
 
   setSection(
     new Section(
       'format',
       'Bandcamp auto-detected format',
-      valueToHtml(metadata.format),
+      valueToHtml({
+        qty: format.qty.value,
+        fileType: format.fileType.value,
+        description: format.description.value,
+        freeText: format.freeText.value
+      }),
       [qtyGroup, fileTypeGroup, formatDescriptionGroup, formatFreeTextGroup]
     )
   );

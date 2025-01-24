@@ -82,39 +82,7 @@ function setupReadMetadataButton() {
 }
 
 function applyMetadata(metadata: Metadata) {
-  debug('Applying metadata...', metadata);
-
-  setupSectionHints(metadata);
-  setFormat(
-    metadata.format.qty.value,
-    metadata.format.fileType.value,
-    metadata.format.description.value
-  );
-  setCountry(metadata.country.value);
-  autofillDurations();
-  setSubmissionNotes(metadata.submissionNotes);
-  setNotes('');
-
-  showNotificationInfo(
-    `Release metadata was applied.<br>${metadata.artist} - ${metadata.title}`
-  );
-
-  autofocus();
-}
-
-function autofocus() {
-  log('Autofocusing...');
-
-  const artistNameInput = getArtistNameInput();
-
-  if (artistNameInput) {
-    // Focus on artist name input
-    artistNameInput.focus();
-  }
-}
-
-function setupSectionHints(metadata: Metadata) {
-  log('Setup hints sections...');
+  debug('Apply Metadata...', metadata);
 
   setupSectionArtist(metadata.artist);
   setupSectionTitle(metadata.title);
@@ -126,6 +94,26 @@ function setupSectionHints(metadata: Metadata) {
   setupSectionGenres(metadata);
   setupSectionStyles(metadata);
   setupSectionSubmissionNotes(metadata);
+
+  autofillDurations();
+  setNotes('');
+
+  showNotificationInfo(
+    `Release metadata was applied.<br>${metadata.artist} - ${metadata.title}`
+  );
+
+  autofocus();
+}
+
+function autofocus() {
+  log('Autofocus...');
+
+  const artistNameInput = getArtistNameInput();
+
+  if (artistNameInput) {
+    // Focus on artist name input
+    artistNameInput.focus();
+  }
 }
 
 function setupSectionArtist(artist: MetadataValue): void {
@@ -176,6 +164,8 @@ function setupSectionCountry(country: MetadataValue): void {
   setSection(
     new Section('country', 'Bandcamp country', country.value, [countryGroup])
   );
+
+  setCountry(country.value);
 }
 
 function setupSectionFormat(format: Format): void {
@@ -228,6 +218,8 @@ function setupSectionFormat(format: Format): void {
       [qtyGroup, fileTypeGroup, formatDescriptionGroup, formatFreeTextGroup]
     )
   );
+
+  setFormat(format.qty.value, format.fileType.value, format.description.value);
 }
 
 function setupSectionReleased(metadata: Metadata): void {
@@ -369,4 +361,6 @@ function setupSectionSubmissionNotes(metadata: Metadata): void {
       submissionNotesGroup
     ])
   );
+
+  setSubmissionNotes(metadata.submissionNotes);
 }

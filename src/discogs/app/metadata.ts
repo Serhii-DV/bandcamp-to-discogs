@@ -6,7 +6,8 @@ import {
 import { getExtensionManifest } from '../../utils/chrome';
 import {
   generateSelfReleasedLabel,
-  generateSubmissionNotesDefault
+  generateSubmissionNotesDefault,
+  generateSubmissionNotesShort
 } from '../modules/discogs';
 import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
@@ -66,7 +67,7 @@ export class Metadata {
   tracklist: string;
   credits: string;
   genres: Genres;
-  submissionNotes: string;
+  submissionNotes: MetadataValue;
 
   constructor({
     artist,
@@ -105,7 +106,10 @@ export class Metadata {
     this.tracklist = tracklist;
     this.credits = credits;
     this.genres = genres;
-    this.submissionNotes = generateSubmissionNotesDefault(releaseUrl);
+    this.submissionNotes = new MetadataValue(
+      generateSubmissionNotesDefault(releaseUrl),
+      [generateSubmissionNotesShort(releaseUrl)]
+    );
   }
 
   static fromRelease(release: Release): Metadata {

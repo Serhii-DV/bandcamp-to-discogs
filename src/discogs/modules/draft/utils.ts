@@ -255,9 +255,9 @@ function generateVariation(variation: Variation): string {
   }
 
   const value = variation.toString();
-  const content = truncateText(value, 50);
+  const content = truncateText(value, 30);
 
-  return `<span class="b2d-variation button button-small" title="Set value:\n${value}" data-text="${value}">${icon} ${content}</span>`;
+  return `<span class="b2d-variation button button-small" title="${value}" data-text="${value}">${icon} ${content}</span>`;
 }
 
 function generateVariationsGroup(group: VariationsGroup): string {

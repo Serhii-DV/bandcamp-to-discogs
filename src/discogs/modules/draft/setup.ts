@@ -93,7 +93,7 @@ function applyMetadata(metadata: Metadata) {
   setupSectionCredits(metadata);
   setupSectionGenres(metadata);
   setupSectionStyles(metadata);
-  setupSectionSubmissionNotes(metadata);
+  setupSectionSubmissionNotes(metadata.submissionNotes);
 
   autofillDurations();
   setNotes('');
@@ -349,11 +349,11 @@ function setupSectionStyles(metadata: Metadata): void {
   updateVariationButtonsState();
 }
 
-function setupSectionSubmissionNotes(metadata: Metadata): void {
+function setupSectionSubmissionNotes(submissionNotes: MetadataValue): void {
   const submissionNotesGroup = new VariationsGroup(
     'Submission notes',
     [getSubmissionNotesTextarea()],
-    [metadata.submissionNotes]
+    submissionNotes.variations
   );
 
   setSection(
@@ -362,5 +362,5 @@ function setupSectionSubmissionNotes(metadata: Metadata): void {
     ])
   );
 
-  setSubmissionNotes(metadata.submissionNotes);
+  setSubmissionNotes(submissionNotes.value);
 }

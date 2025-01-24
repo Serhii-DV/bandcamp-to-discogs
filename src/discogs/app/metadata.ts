@@ -12,6 +12,7 @@ import {
 import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
+import { arrayUnique } from '../../utils/utils';
 
 export interface Format {
   fileType: MetadataValue;
@@ -52,7 +53,7 @@ export class MetadataValue {
 
   constructor(value: string, variations: string[] = []) {
     this.value = value;
-    this.variations = Array.from(new Set([value, ...variations])) as string[];
+    this.variations = arrayUnique([value, ...variations]);
   }
 }
 

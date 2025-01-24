@@ -1,4 +1,4 @@
-import { convertToAlias } from '../../../utils/utils';
+import { arrayUnique, convertToAlias } from '../../../utils/utils';
 import { FormElement } from './types';
 import { Variation } from './variation';
 
@@ -12,8 +12,8 @@ export class VariationsGroup {
     this.title = title;
     this.alias = convertToAlias(title);
     this.targets = targets;
-    this.variations = variations
-      .filter((variation) => !!variation)
-      .map((variation) => new Variation(variation));
+    this.variations = arrayUnique(
+      variations.filter((variation) => !!variation)
+    ).map((variation) => new Variation(variation));
   }
 }

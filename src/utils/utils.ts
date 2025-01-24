@@ -80,7 +80,7 @@ export function isEmptyArray(value: any[]): boolean {
   return !isArray(value) || value.length === 0;
 }
 
-export function arrayUnique(arr: string[][]): string[] {
+export function arrayUnique(arr: string[] | string[][]): string[] {
   return [...new Set(arr.flat())];
 }
 

@@ -35,7 +35,6 @@ import {
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
 import { Metadata } from '../../app/metadata';
-import { generateSelfReleasedLabel } from '../discogs';
 import { FormElement } from '../../app/draft/types';
 import { VariationsGroup } from '../../app/draft/variationGroup';
 import { Section } from '../../app/draft/section';
@@ -85,13 +84,13 @@ function setupReadMetadataButton() {
 function applyMetadata(metadata: Metadata) {
   debug('Applying metadata...', metadata);
 
-  setMetadataHints(metadata);
+  setupSectionHints(metadata);
   setFormat(
     metadata.format.qty.toString(),
     metadata.format.fileType,
     metadata.format.description
   );
-  setCountry(metadata.country);
+  setCountry(metadata.country.value);
   autofillDurations();
   setSubmissionNotes(metadata.submissionNotes);
   setNotes('');
@@ -114,42 +113,59 @@ function autofocus() {
   }
 }
 
-function setMetadataHints(metadata: Metadata) {
-  log('Setting metadata hints...');
+function setupSectionHints(metadata: Metadata) {
+  log('Setup section hints...');
 
   const artistGroup = new VariationsGroup(
     'Name',
     [getArtistNameInput()],
-    [metadata.artist.original]
+    metadata.artist.variations
   );
 
-  setSection(new Section('artist', 'Bandcamp artist name', '', [artistGroup]));
+  setSection(
+    new Section('artist', 'Bandcamp artist name', metadata.artist.value, [
+      artistGroup
+    ])
+  );
 
   const titleGroup = new VariationsGroup(
     'Title',
     [getReleaseTitleInput()],
-    [metadata.title]
+    metadata.title.variations
   );
 
-  setSection(new Section('title', 'Bandcamp release title', '', [titleGroup]));
+  setSection(
+    new Section('title', 'Bandcamp release title', metadata.title.value, [
+      titleGroup
+    ])
+  );
 
   const labelGroup = new VariationsGroup(
     'Label',
     [getLabelNameInput()],
-    [metadata.label, generateSelfReleasedLabel(metadata.label)]
+    metadata.label.variations
   );
 
   setSection(
-    new Section('label', 'Bandcamp page label or artist name', '', [labelGroup])
+    new Section(
+      'label',
+      'Bandcamp page label or artist name',
+      metadata.label.value,
+      [labelGroup]
+    )
   );
 
   const countryGroup = new VariationsGroup(
     'Country',
     [getCountrySelect()],
-    [metadata.country]
+    metadata.country.variations
   );
 
-  setSection(new Section('country', 'Bandcamp country', '', [countryGroup]));
+  setSection(
+    new Section('country', 'Bandcamp country', metadata.country.value, [
+      countryGroup
+    ])
+  );
 
   const qtyInput = getQuantityInput();
   const qtyGroup = new VariationsGroup(

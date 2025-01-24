@@ -4,7 +4,10 @@ import {
   keywordsToDiscogsStyles
 } from '../../bandcamp/modules/bandcamp';
 import { getExtensionManifest } from '../../utils/chrome';
-import { generateSubmissionNotesDefault } from '../modules/discogs';
+import {
+  generateSelfReleasedLabel,
+  generateSubmissionNotesDefault
+} from '../modules/discogs';
 import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
@@ -42,26 +45,22 @@ interface MetadataParams {
 }
 
 export class MetadataValue {
-  original: string;
   value: string;
   variations: string[];
 
-  constructor(original: string, value: string, variations: string[] = []) {
-    this.original = original;
+  constructor(value: string, variations: string[] = []) {
     this.value = value;
-    this.variations = Array.from(
-      new Set(original === value ? variations : [value, ...variations])
-    ) as string[];
+    this.variations = Array.from(new Set([value, ...variations])) as string[];
   }
 }
 
 export class Metadata {
   version: string;
   artist: MetadataValue;
-  title: string;
-  label: string;
+  title: MetadataValue;
+  label: MetadataValue;
   format: Format;
-  country: string;
+  country: MetadataValue;
   released: Released;
   tracklist: string;
   credits: string;
@@ -85,15 +84,17 @@ export class Metadata {
     const manifest = getExtensionManifest();
 
     this.version = manifest.version;
-    this.artist = new MetadataValue(artist, convertArtistName(artist));
-    this.title = title;
-    this.label = label;
+    this.artist = new MetadataValue(artist, [convertArtistName(artist)]);
+    this.title = new MetadataValue(title);
+    this.label = new MetadataValue(label, [generateSelfReleasedLabel(label)]);
     this.format = {
       fileType: formatFileType,
       qty: trackQty,
       description: formatDescription
     };
-    this.country = country ?? config.metadata.country;
+    this.country = new MetadataValue(country ?? config.metadata.country, [
+      config.metadata.country
+    ]);
     this.released = released;
     this.tracklist = tracklist;
     this.credits = credits;

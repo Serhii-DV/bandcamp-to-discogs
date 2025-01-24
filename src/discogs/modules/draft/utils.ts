@@ -230,7 +230,7 @@ function triggerChangeEvent(element: HTMLElement): void {
   element.dispatchEvent(changeEvent);
 }
 
-function generateVariations(variations: Variation[]): string {
+function getVariationsHtml(variations: Variation[]): string {
   if (!isArray(variations)) {
     throw new Error('Variations should be an array');
   }
@@ -241,13 +241,13 @@ function generateVariations(variations: Variation[]): string {
 
   return `
 <div class="b2d-variations">
-  ${variations.map(generateVariation).join(' ')}
-  ${getClearFieldButton()}
+  ${variations.map(getVariationHtml).join(' ')}
+  ${getClearButtonHtml()}
 </div>
 `;
 }
 
-function generateVariation(variation: Variation): string {
+function getVariationHtml(variation: Variation): string {
   const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
   if (!variation) {
@@ -260,24 +260,24 @@ function generateVariation(variation: Variation): string {
   return `<span class="b2d-variation button button-small" title="${value}" data-text="${value}">${icon} ${content}</span>`;
 }
 
-function generateVariationsGroup(group: VariationsGroup): string {
+function getVariationsGroupHtml(group: VariationsGroup): string {
   return `
-<div class="b2d-group ${generateVariationsGroupClass(group)}">
+<div class="b2d-group ${getVariationsGroupClass(group)}">
   ${group.title ? `<b>${group.title}:</b>` : ''}
-  ${generateVariations(group.variations)}
+  ${getVariationsHtml(group.variations)}
 </div>
 `;
 }
 
-export function generateVariationsGroupClass(group: VariationsGroup): string {
+export function getVariationsGroupClass(group: VariationsGroup): string {
   return `b2d-variations-group-${group.alias}`;
 }
 
-function generateVariationsGroups(groups: VariationsGroup[]): string {
-  return groups.map(generateVariationsGroup).join('\n');
+function getVariationsGroupsHtml(groups: VariationsGroup[]): string {
+  return groups.map(getVariationsGroupHtml).join('\n');
 }
 
-function getClearFieldButton(): string {
+function getClearButtonHtml(): string {
   return `<span class="b2d-variation b2d-clear-button button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
 }
 
@@ -298,7 +298,7 @@ export function setSection(section: Section): void {
   b2dSection.innerHTML = `
   <h4>${section.title}</h4>
   <div class="b2d-content">${section.content}</div>
-  ${generateVariationsGroups(section.variationsGroups)}
+  ${getVariationsGroupsHtml(section.variationsGroups)}
 `;
 
   section.variationsGroups.forEach((group: VariationsGroup) =>

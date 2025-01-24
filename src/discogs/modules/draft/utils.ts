@@ -2,10 +2,12 @@ import {
   addClass,
   click,
   createElementFromHTML,
+  element,
   elements,
   getDataAttribute,
   isCheckbox,
   onClick,
+  removeClass,
   toggleClass
 } from '../../../utils/html';
 import { debug, logError } from '../../../utils/console';
@@ -230,7 +232,10 @@ function triggerChangeEvent(element: HTMLElement): void {
   element.dispatchEvent(changeEvent);
 }
 
-function getVariationsHtml(variations: Variation[]): string {
+function getVariationsHtml(
+  variations: Variation[],
+  selectAllBtn: boolean
+): string {
   if (!isArray(variations)) {
     throw new Error('Variations should be an array');
   }
@@ -243,6 +248,7 @@ function getVariationsHtml(variations: Variation[]): string {
 <div class="b2d-variations">
   ${variations.map(getVariationHtml).join(' ')}
   ${getClearButtonHtml()}
+  ${selectAllBtn ? getSelectAllButtonHtml() : ''}
 </div>
 `;
 }
@@ -264,7 +270,7 @@ function getVariationsGroupHtml(group: VariationsGroup): string {
   return `
 <div class="b2d-group ${getVariationsGroupClass(group)}">
   ${group.title ? `<b>${group.title}:</b>` : ''}
-  ${getVariationsHtml(group.variations)}
+  ${getVariationsHtml(group.variations, group.allowSelectAll)}
 </div>
 `;
 }
@@ -278,7 +284,11 @@ function getVariationsGroupsHtml(groups: VariationsGroup[]): string {
 }
 
 function getClearButtonHtml(): string {
-  return `<span class="b2d-variation b2d-clear-button button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
+  return `<span class="b2d-clear-button button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
+}
+
+function getSelectAllButtonHtml(): string {
+  return `<span class="b2d-select-all-button button button-small button-blue" title="Select all fields">Select All</span>`;
 }
 
 export function setSection(section: Section): void {
@@ -310,10 +320,13 @@ function setupVariationsGroup(
   group: VariationsGroup,
   b2dSection: Element
 ): void {
-  const buttons = elements(
-    `.b2d-variations-group-${group.alias} .b2d-variation`,
+  const variationsGroupElement = element(
+    `.${getVariationsGroupClass(group)} .b2d-variations`,
     b2dSection
   );
+  if (!variationsGroupElement) return;
+
+  const buttons = elements('.b2d-variation', variationsGroupElement);
   setupFormElementsListener(group.targets, buttons, 'button-green');
 
   onClick(buttons, (event) =>
@@ -323,6 +336,19 @@ function setupVariationsGroup(
       buttons
     )
   );
+
+  const clearButton = element('.b2d-clear-button', variationsGroupElement);
+  onClick(clearButton as HTMLElement, () => {
+    removeClass(buttons, 'button-green');
+  });
+
+  const selectAllButton = element(
+    '.b2d-select-all-button',
+    variationsGroupElement
+  );
+  onClick(selectAllButton as HTMLElement, () => {
+    click(buttons);
+  });
 }
 
 function variationButtonClickHandler(

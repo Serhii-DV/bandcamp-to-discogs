@@ -264,7 +264,8 @@ function setupSectionStyles(metadata: Metadata): void {
   const stylesGroup = new VariationsGroup(
     '',
     [element('#release-styles') as HTMLSelectElement],
-    metadata.genres.autoDetectedStyles
+    metadata.genres.autoDetectedStyles,
+    true
   );
 
   setSection(
@@ -280,13 +281,6 @@ function setupSectionStyles(metadata: Metadata): void {
     `.${getVariationsGroupClass(stylesGroup)} .b2d-variations`
   );
   if (!variationsGroupElement) return;
-
-  // Remove clear button
-  const clearButtonElement = element(
-    '.b2d-clear-button',
-    variationsGroupElement
-  );
-  clearButtonElement && variationsGroupElement.removeChild(clearButtonElement);
 
   const variationButtons = elements('.b2d-variation', variationsGroupElement);
   const styleSection = getSection('styles');
@@ -319,12 +313,7 @@ function setupSectionStyles(metadata: Metadata): void {
     });
   };
 
-  // Add new clear button
-  const clearButton = createElementFromHTML(
-    `<span class="button button-small button-red" title="Clear the field">Clear</span>`
-  );
-  variationsGroupElement.appendChild(clearButton as Node);
-
+  const clearButton = element('.b2d-clear-button', variationsGroupElement);
   onClick(clearButton as HTMLElement, () => {
     // It re-generates styles block every time, so we just need to remove
     // the first button until there are no buttons left
@@ -332,17 +321,6 @@ function setupSectionStyles(metadata: Metadata): void {
       let button = element('button.facet-tag', stylesButtonGroup as Element);
       button?.click();
     });
-
-    removeClass(variationButtons, 'button-green');
-  });
-
-  const selectAllButton = createElementFromHTML(
-    `<span class="button button-small button-blue" title="Select all fields">Select All</span>`
-  );
-  variationsGroupElement.appendChild(selectAllButton as Node);
-
-  onClick(selectAllButton as HTMLElement, () => {
-    click(variationButtons);
   });
 
   onClick(variationButtons, updateVariationButtonsState);

@@ -8,7 +8,7 @@ import {
   onClick,
   toggleClass
 } from '../../../utils/html';
-import { log, logError } from '../../../utils/console';
+import { debug, logError } from '../../../utils/console';
 import { hasClass, isArray } from '../../../utils/utils';
 import { truncateText } from '../../../utils/string';
 import { FormElement } from '../../app/draft/types';
@@ -81,7 +81,10 @@ export function selectFormatFileType(fileType: string): void {
     checkInput(fileTypeInput);
   }
 
-  log(`Format file type ${fileType}`, fileTypeInput ? 'Checked' : 'Not Found');
+  debug(
+    `Format file type ${fileType}`,
+    fileTypeInput ? 'Checked' : 'Not Found'
+  );
 }
 
 /**
@@ -96,7 +99,7 @@ export function selectFormatDescription(formatDescription: string): void {
     checkInput(descriptionInput);
   }
 
-  log(
+  debug(
     `Format description ${formatDescription}.`,
     descriptionInput ? 'Checked' : 'Not Found'
   );
@@ -179,7 +182,7 @@ export function setInputValue(
   inputElement.blur();
 
   const inputLabel = inputElement.getAttribute('aria-label');
-  log(`"${inputLabel}" input value changed`, { prev, value });
+  debug(`"${inputLabel}" input value changed`, { prev, value });
 }
 
 function checkInput(inputElement: HTMLInputElement): void {
@@ -210,7 +213,7 @@ function selectOptionByValue(
     triggerChangeEvent(selectElement);
     selectElement.blur();
     const label = selectElement.getAttribute('aria-label');
-    log(`"${label}" select value changed`, value);
+    debug(`"${label}" select value changed`, value);
     return;
   }
 
@@ -279,7 +282,7 @@ function getClearFieldButton(): string {
 }
 
 export function setSection(section: Section): void {
-  log('Setting section', section);
+  debug('Setting section', section);
 
   const sectionElement = getSection(section.section);
   let b2dSection = sectionElement.querySelector('.b2d-section');
@@ -333,7 +336,7 @@ function variationButtonClickHandler(
   const variation = getDataAttribute(button, 'text');
   const targets = group.targets;
 
-  log('Apply text:', variation, ' to target elements ', targets);
+  debug('Apply text:', variation, ' to target elements ', targets);
 
   targets.forEach((element: FormElement) => {
     if (element instanceof HTMLInputElement) {

@@ -83,7 +83,7 @@ function setupReadMetadataButton() {
 }
 
 function applyMetadata(metadata: Metadata) {
-  log('Applying metadata...', metadata);
+  debug('Applying metadata...', metadata);
 
   setMetadataHints(metadata);
   setFormat(

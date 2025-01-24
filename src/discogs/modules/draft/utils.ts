@@ -9,7 +9,7 @@ import {
   toggleClass
 } from '../../../utils/html';
 import { log, logError } from '../../../utils/console';
-import { isArray } from '../../../utils/utils';
+import { hasClass, isArray } from '../../../utils/utils';
 import { truncateText } from '../../../utils/string';
 import { FormElement } from '../../app/draft/types';
 import { Section } from 'src/discogs/app/draft/section';
@@ -327,6 +327,9 @@ function variationButtonClickHandler(
   group: VariationsGroup,
   buttons: HTMLElement[]
 ): void {
+  // Do nothing if the button is already green
+  if (hasClass(button, 'button-green')) return;
+
   const variation = getDataAttribute(button, 'text');
   const targets = group.targets;
 

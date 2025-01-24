@@ -34,7 +34,7 @@ import {
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
-import { Metadata } from '../../app/metadata';
+import { Metadata, MetadataValue } from '../../app/metadata';
 import { FormElement } from '../../app/draft/types';
 import { VariationsGroup } from '../../app/draft/variationGroup';
 import { Section } from '../../app/draft/section';
@@ -114,59 +114,71 @@ function autofocus() {
 }
 
 function setupSectionHints(metadata: Metadata) {
-  log('Setup section hints...');
+  log('Setup hints sections...');
 
+  setupSectionArtist(metadata.artist);
+  setupSectionTitle(metadata.title);
+  setupSectionLabel(metadata.label);
+  setupSectionCountry(metadata.country);
+  setupSectionFormat(metadata);
+  setupSectionReleased(metadata);
+  setupSectionCredits(metadata);
+  setupSectionGenres(metadata);
+  setupSectionStyles(metadata);
+  setupSectionSubmissionNotes(metadata);
+}
+
+function setupSectionArtist(artist: MetadataValue): void {
   const artistGroup = new VariationsGroup(
     'Name',
     [getArtistNameInput()],
-    metadata.artist.variations
+    artist.variations
   );
 
   setSection(
-    new Section('artist', 'Bandcamp artist name', metadata.artist.value, [
-      artistGroup
-    ])
+    new Section('artist', 'Bandcamp artist name', artist.value, [artistGroup])
   );
+}
 
+function setupSectionTitle(title: MetadataValue): void {
   const titleGroup = new VariationsGroup(
     'Title',
     [getReleaseTitleInput()],
-    metadata.title.variations
+    title.variations
   );
 
   setSection(
-    new Section('title', 'Bandcamp release title', metadata.title.value, [
-      titleGroup
-    ])
+    new Section('title', 'Bandcamp release title', title.value, [titleGroup])
   );
+}
 
+function setupSectionLabel(label: MetadataValue): void {
   const labelGroup = new VariationsGroup(
     'Label',
     [getLabelNameInput()],
-    metadata.label.variations
+    label.variations
   );
 
   setSection(
-    new Section(
-      'label',
-      'Bandcamp page label or artist name',
-      metadata.label.value,
-      [labelGroup]
-    )
+    new Section('label', 'Bandcamp page label or artist name', label.value, [
+      labelGroup
+    ])
   );
+}
 
+function setupSectionCountry(country: MetadataValue): void {
   const countryGroup = new VariationsGroup(
     'Country',
     [getCountrySelect()],
-    metadata.country.variations
+    country.variations
   );
 
   setSection(
-    new Section('country', 'Bandcamp country', metadata.country.value, [
-      countryGroup
-    ])
+    new Section('country', 'Bandcamp country', country.value, [countryGroup])
   );
+}
 
+function setupSectionFormat(metadata: Metadata): void {
   const qtyInput = getQuantityInput();
   const qtyGroup = new VariationsGroup(
     'Quantity',
@@ -213,7 +225,9 @@ function setupSectionHints(metadata: Metadata) {
       [qtyGroup, fileTypeGroup, formatDescriptionGroup, formatFreeTextGroup]
     )
   );
+}
 
+function setupSectionReleased(metadata: Metadata): void {
   const releasedGroup = new VariationsGroup(
     'Date',
     [getReleasedDateInput()],
@@ -228,23 +242,10 @@ function setupSectionHints(metadata: Metadata) {
       [releasedGroup]
     )
   );
+}
 
+function setupSectionCredits(metadata: Metadata): void {
   setSection(new Section('credits', 'Bandcamp credits', metadata.credits));
-
-  setupSectionGenres(metadata);
-  setupSectionStyles(metadata);
-
-  const submissionNotesGroup = new VariationsGroup(
-    'Submission notes',
-    [getSubmissionNotesTextarea()],
-    [metadata.submissionNotes]
-  );
-
-  setSection(
-    new Section('submission_notes', 'Auto-generated submission notes', '', [
-      submissionNotesGroup
-    ])
-  );
 }
 
 function setupSectionGenres(metadata: Metadata): void {
@@ -351,4 +352,18 @@ function setupSectionStyles(metadata: Metadata): void {
 
   onClick(variationButtons, updateVariationButtonsState);
   updateVariationButtonsState();
+}
+
+function setupSectionSubmissionNotes(metadata: Metadata): void {
+  const submissionNotesGroup = new VariationsGroup(
+    'Submission notes',
+    [getSubmissionNotesTextarea()],
+    [metadata.submissionNotes]
+  );
+
+  setSection(
+    new Section('submission_notes', 'Auto-generated submission notes', '', [
+      submissionNotesGroup
+    ])
+  );
 }

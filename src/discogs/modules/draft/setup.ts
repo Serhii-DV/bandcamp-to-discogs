@@ -283,7 +283,17 @@ function setupSectionStyles(metadata: Metadata): void {
   const getStyleButtons = (): HTMLElement[] =>
     elements('button.facet-tag', stylesButtonGroup as Element);
 
+  onClick(stylesButtonGroup, (event) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'UL') return;
+
+    // Update buttons status after some time because style buttons need to be updated
+    setTimeout(updateVariationButtonsState, 10);
+  });
+
   const updateVariationButtonsState = (): void => {
+    removeClass(variationButtons, 'button-green');
+
     const styleButtons = getStyleButtons();
     styleButtons.forEach((styleButton) => {
       variationButtons.forEach((variationButton) => {
@@ -294,7 +304,6 @@ function setupSectionStyles(metadata: Metadata): void {
           addClass(variationButton, 'button-green');
         }
       });
-      onClick(styleButton, updateVariationButtonsState);
     });
   };
 
@@ -325,5 +334,5 @@ function setupSectionStyles(metadata: Metadata): void {
   });
 
   onClick(variationButtons, updateVariationButtonsState);
-  updateVariationButtonsState(); // Initialize state
+  updateVariationButtonsState();
 }

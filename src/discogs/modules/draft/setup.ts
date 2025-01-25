@@ -5,7 +5,6 @@ import { MessageType } from '../../../app/core/messageType';
 import {
   addClass,
   click,
-  createElementFromHTML,
   element,
   elements,
   getDataAttribute,

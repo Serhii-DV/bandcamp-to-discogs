@@ -33,7 +33,13 @@ import {
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
-import { Format, Metadata, MetadataValue } from '../../app/metadata';
+import {
+  Format,
+  Metadata,
+  MetadataValue,
+  metadataValueAsArray,
+  metadataValueAsString
+} from '../../app/metadata';
 import { FormElement } from '../../app/draft/types';
 import { VariationsGroup } from '../../app/draft/variationGroup';
 import { Section } from '../../app/draft/section';
@@ -119,11 +125,16 @@ function setupSectionArtist(artist: MetadataValue): void {
   const artistGroup = new VariationsGroup(
     'Name',
     [getArtistNameInput()],
-    artist.variations
+    metadataValueAsArray(artist)
   );
 
   setSection(
-    new Section('artist', 'Bandcamp artist name', artist.value, [artistGroup])
+    new Section(
+      'artist',
+      'Bandcamp artist name',
+      metadataValueAsString(artist),
+      [artistGroup]
+    )
   );
 }
 
@@ -131,11 +142,16 @@ function setupSectionTitle(title: MetadataValue): void {
   const titleGroup = new VariationsGroup(
     'Title',
     [getReleaseTitleInput()],
-    title.variations
+    metadataValueAsArray(title)
   );
 
   setSection(
-    new Section('title', 'Bandcamp release title', title.value, [titleGroup])
+    new Section(
+      'title',
+      'Bandcamp release title',
+      metadataValueAsString(title),
+      [titleGroup]
+    )
   );
 }
 
@@ -143,13 +159,16 @@ function setupSectionLabel(label: MetadataValue): void {
   const labelGroup = new VariationsGroup(
     'Label',
     [getLabelNameInput()],
-    label.variations
+    metadataValueAsArray(label)
   );
 
   setSection(
-    new Section('label', 'Bandcamp page label or artist name', label.value, [
-      labelGroup
-    ])
+    new Section(
+      'label',
+      'Bandcamp page label or artist name',
+      metadataValueAsString(label),
+      [labelGroup]
+    )
   );
 }
 
@@ -157,21 +176,22 @@ function setupSectionCountry(country: MetadataValue): void {
   const countryGroup = new VariationsGroup(
     'Country',
     [getCountrySelect()],
-    country.variations
+    metadataValueAsArray(country)
   );
+  const countryValue = metadataValueAsString(country);
 
   setSection(
-    new Section('country', 'Bandcamp country', country.value, [countryGroup])
+    new Section('country', 'Bandcamp country', countryValue, [countryGroup])
   );
 
-  setCountry(country.value);
+  setCountry(countryValue);
 }
 
 function setupSectionFormat(format: Format): void {
   const qtyGroup = new VariationsGroup(
     'Quantity',
     [getQuantityInput()],
-    format.qty.variations
+    metadataValueAsArray(format.qty)
   );
 
   const formatDescriptionTypeElements = elements(
@@ -186,7 +206,7 @@ function setupSectionFormat(format: Format): void {
       'input[type="checkbox"]',
       formatFileTypeContainer
     ) as HTMLInputElement[],
-    format.fileType.variations
+    metadataValueAsArray(format.fileType)
   );
 
   const formatDescriptionGroup = new VariationsGroup(
@@ -195,30 +215,35 @@ function setupSectionFormat(format: Format): void {
       'input[type="checkbox"]',
       formatDescriptionContainer
     ) as FormElement[],
-    format.description.variations
+    metadataValueAsArray(format.description)
   );
 
   const formatFreeTextGroup = new VariationsGroup(
     'Free Text',
     [element('input#free-text-input-0') as HTMLInputElement],
-    format.freeText.variations
+    metadataValueAsArray(format.freeText)
   );
+
+  const qtyValue = metadataValueAsString(format.qty);
+  const fileTypeValue = metadataValueAsString(format.fileType);
+  const descriptionValue = metadataValueAsString(format.description);
+  const freeTextValue = metadataValueAsString(format.freeText);
 
   setSection(
     new Section(
       'format',
       'Bandcamp auto-detected format',
       valueToHtml({
-        qty: format.qty.value,
-        fileType: format.fileType.value,
-        description: format.description.value,
-        freeText: format.freeText.value
+        qty: qtyValue,
+        fileType: fileTypeValue,
+        description: descriptionValue,
+        freeText: freeTextValue
       }),
       [qtyGroup, fileTypeGroup, formatDescriptionGroup, formatFreeTextGroup]
     )
   );
 
-  setFormat(format.qty.value, format.fileType.value, format.description.value);
+  setFormat(qtyValue, fileTypeValue, descriptionValue);
 }
 
 function setupSectionReleased(metadata: Metadata): void {
@@ -330,7 +355,7 @@ function setupSectionSubmissionNotes(submissionNotes: MetadataValue): void {
   const submissionNotesGroup = new VariationsGroup(
     'Submission notes',
     [getSubmissionNotesTextarea()],
-    submissionNotes.variations
+    metadataValueAsArray(submissionNotes)
   );
 
   setSection(
@@ -339,5 +364,5 @@ function setupSectionSubmissionNotes(submissionNotes: MetadataValue): void {
     ])
   );
 
-  setSubmissionNotes(submissionNotes.value);
+  setSubmissionNotes(metadataValueAsString(submissionNotes));
 }

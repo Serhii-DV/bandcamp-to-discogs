@@ -47,14 +47,29 @@ interface MetadataParams {
   releaseUrl: string;
 }
 
-export class MetadataValue {
-  value: string;
-  variations: string[];
+export type MetadataValue = string | string[];
 
-  constructor(value: string, variations: string[] = []) {
-    this.value = value;
-    this.variations = arrayUnique([value, ...variations]);
+export function metadataValueAsArray(value: MetadataValue): string[] {
+  return Array.isArray(value) ? value : [value];
+}
+
+export function metadataValueAsString(value: MetadataValue): string {
+  return Array.isArray(value) ? (value[0] as string) : value;
+}
+
+/**
+ * Converts MetadataValue based on its content:
+ * - If it's a string, returns the string.
+ * - If it's an array, applies `arrayUnique` to remove duplicates.
+ *   - If the resulting array has a single element, returns that element as a string.
+ *   - If the resulting array has more than one element, returns the array as-is.
+ */
+function convertMetadataValue(value: MetadataValue): string | string[] {
+  if (Array.isArray(value)) {
+    const uniqueArray = arrayUnique(value);
+    return uniqueArray.length === 1 ? uniqueArray[0] : uniqueArray;
   }
+  return value;
 }
 
 export class Metadata {
@@ -87,30 +102,30 @@ export class Metadata {
     const manifest = getExtensionManifest();
 
     this.version = manifest.version;
-    this.artist = new MetadataValue(artist, [convertArtistName(artist)]);
-    this.title = new MetadataValue(title);
-    this.label = new MetadataValue(label, [generateSelfReleasedLabel(label)]);
+    this.artist = convertMetadataValue([artist, convertArtistName(artist)]);
+    this.title = convertMetadataValue(title);
+    this.label = convertMetadataValue([
+      label,
+      generateSelfReleasedLabel(label)
+    ]);
     this.format = {
-      fileType: new MetadataValue(formatFileType, ['FLAC', 'WAV', 'MP3']),
-      qty: new MetadataValue(trackQty.toString()),
-      description: new MetadataValue(formatDescription),
-      freeText: new MetadataValue('', [
-        '24-bit/44.1kHz',
-        '320 kbps',
-        '128 kbps'
-      ])
+      fileType: convertMetadataValue([formatFileType, 'FLAC', 'WAV', 'MP3']),
+      qty: convertMetadataValue(trackQty.toString()),
+      description: convertMetadataValue(formatDescription),
+      freeText: convertMetadataValue(['24-bit/44.1kHz', '320 kbps', '128 kbps'])
     };
-    this.country = new MetadataValue(country ?? config.metadata.country, [
+    this.country = convertMetadataValue([
+      country ?? config.metadata.country,
       config.metadata.country
     ]);
     this.released = released;
     this.tracklist = tracklist;
     this.credits = credits;
     this.genres = genres;
-    this.submissionNotes = new MetadataValue(
+    this.submissionNotes = convertMetadataValue([
       generateSubmissionNotesDefault(releaseUrl),
-      [generateSubmissionNotesShort(releaseUrl)]
-    );
+      generateSubmissionNotesShort(releaseUrl)
+    ]);
   }
 
   static fromRelease(release: Release): Metadata {

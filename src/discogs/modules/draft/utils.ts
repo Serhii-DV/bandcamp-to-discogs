@@ -266,10 +266,13 @@ function getVariationHtml(variation: Variation): string {
   return `<span class="b2d-variation button button-small" title="${value}" data-text="${value}">${icon} ${content}</span>`;
 }
 
-function getVariationsGroupHtml(group: VariationsGroup): string {
+function getVariationsGroupHtml(
+  group: VariationsGroup,
+  showTitle: boolean = true
+): string {
   return `
 <div class="b2d-group ${getVariationsGroupClass(group)}">
-  ${group.title ? `<b>${group.title}:</b>` : ''}
+  ${showTitle && group.title ? `<b>${group.title}:</b>` : ''}
   ${getVariationsHtml(group.variations, group.allowSelectAll)}
 </div>
 `;
@@ -280,7 +283,10 @@ export function getVariationsGroupClass(group: VariationsGroup): string {
 }
 
 function getVariationsGroupsHtml(groups: VariationsGroup[]): string {
-  return groups.map(getVariationsGroupHtml).join('\n');
+  const showTitle = groups.length > 1;
+  return groups
+    .map((group) => getVariationsGroupHtml(group, showTitle))
+    .join('\n');
 }
 
 function getClearButtonHtml(): string {

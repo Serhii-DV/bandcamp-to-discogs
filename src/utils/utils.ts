@@ -22,7 +22,7 @@ export function capitalizeEachWord(str: string): string {
   const words = str.split(' ');
   const capitalizedWords = words.map((word: string) => {
     const firstLetter = word.charAt(0).toUpperCase();
-    const restOfWord = word.slice(1);
+    const restOfWord = word.slice(1).toLowerCase();
     return `${firstLetter}${restOfWord}`;
   });
 

@@ -12,7 +12,7 @@ import {
 import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
-import { arrayUnique } from '../../utils/utils';
+import { arrayUnique, capitalizeEachWord } from '../../utils/utils';
 
 export interface Format {
   fileType: MetadataValue;
@@ -102,11 +102,15 @@ export class Metadata {
     const manifest = getExtensionManifest();
 
     this.version = manifest.version;
-    this.artist = convertMetadataValue([artist, convertArtistName(artist)]);
-    this.title = convertMetadataValue(title);
+    this.artist = convertMetadataValue([
+      capitalizeEachWord(artist),
+      convertArtistName(artist),
+      artist
+    ]);
+    this.title = convertMetadataValue([capitalizeEachWord(title), title]);
     this.label = convertMetadataValue([
       label,
-      generateSelfReleasedLabel(label)
+      artist === label ? generateSelfReleasedLabel(artist) : label
     ]);
     this.format = {
       fileType: convertMetadataValue([formatFileType, 'FLAC', 'WAV', 'MP3']),

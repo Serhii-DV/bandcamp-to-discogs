@@ -339,7 +339,7 @@ function setupVariationsGroup(
 
   const clearButton = element('.b2d-clear-button', variationsGroupElement);
   onClick(clearButton as HTMLElement, () => {
-    removeClass(buttons, 'button-green');
+    clearButtonClickHandler(group, buttons);
   });
 
   const selectAllButton = element(
@@ -362,45 +362,52 @@ function variationButtonClickHandler(
   const variation = getDataAttribute(button, 'text');
   const targets = group.targets;
 
-  debug('Apply text:', variation, ' to target elements ', targets);
+  debug('Set variation to form elements:', variation, targets);
 
   targets.forEach((element: FormElement) => {
-    if (element instanceof HTMLInputElement) {
-      handleInput(element);
-    } else if (element instanceof HTMLTextAreaElement) {
-      handleTextArea(element);
-    } else if (element instanceof HTMLSelectElement) {
-      handleSelect(element);
-    } else {
-      return;
+    if (setFormElementVariation(element, variation)) {
+      toggleClass(buttons, 'button-green', button);
     }
-
-    toggleClass(buttons, 'button-green', button);
   });
+}
 
-  function handleInput(element: HTMLInputElement): void {
-    if (isCheckbox(element)) {
-      handleCheckbox(element, variation);
-    } else {
-      setInputValue(element, variation);
-    }
-  }
-
-  function handleCheckbox(element: HTMLInputElement, variation: string): void {
+function setFormElementVariation(
+  element: FormElement,
+  variation: string
+): boolean {
+  if (element instanceof HTMLInputElement && isCheckbox(element)) {
     const shouldClick = element.checked !== (element.value === variation);
 
     if (shouldClick) {
       click(element);
     }
-  }
-
-  function handleTextArea(element: HTMLTextAreaElement): void {
+  } else if (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement
+  ) {
     setInputValue(element, variation);
+  } else if (element instanceof HTMLSelectElement) {
+    selectOptionByValue(element, variation);
+  } else {
+    return false;
   }
 
-  function handleSelect(element: HTMLSelectElement): void {
-    selectOptionByValue(element, variation);
-  }
+  return true;
+}
+
+function clearButtonClickHandler(
+  group: VariationsGroup,
+  buttons: HTMLElement[]
+): void {
+  const targets = group.targets;
+
+  debug('Clear form elements:', targets);
+
+  targets.forEach((element: FormElement) => {
+    setFormElementVariation(element, '');
+  });
+
+  removeClass(buttons, 'button-green');
 }
 
 function setupFormElementsListener(

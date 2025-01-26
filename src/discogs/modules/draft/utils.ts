@@ -254,16 +254,14 @@ function makeVariationsHtml(
 }
 
 function makeVariationHtml(variation: Variation): string {
-  const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
-
   if (!variation) {
     return '';
   }
 
+  const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
   const value = variation.toString();
-  const content = truncateText(value, 30);
 
-  return `<span class="b2d-variation button button-small" title="${value}" data-text="${value}">${icon} ${content}</span>`;
+  return `<button class="b2d-variation button button-small" title="${value}" value="${value}">${icon} ${value}</button>`;
 }
 
 function makeVariationsGroupHtml(
@@ -290,11 +288,11 @@ function makeVariationsGroupsHtml(groups: VariationsGroup[]): string {
 }
 
 function makeClearButtonHtml(): string {
-  return `<span class="b2d-clear-button button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
+  return `<button class="b2d-clear-button button button-small button-red" title="Clear the field">Clear</button>`;
 }
 
 function makeSelectAllButtonHtml(): string {
-  return `<span class="b2d-select-all-button button button-small button-blue" title="Select all fields">Select All</span>`;
+  return `<button class="b2d-select-all-button button button-small button-blue" title="Select all fields">Select All</button>`;
 }
 
 export function setSection(section: Section): void {
@@ -332,7 +330,10 @@ function setupVariationsGroup(
   );
   if (!variationsGroupElement) return;
 
-  const buttons = elements('.b2d-variation', variationsGroupElement);
+  const buttons = elements(
+    '.b2d-variation',
+    variationsGroupElement
+  ) as HTMLButtonElement[];
   setupFormElementsListener(group.targets, buttons, 'button-green');
 
   onClick(buttons, (event) =>
@@ -352,7 +353,7 @@ function setupVariationsGroup(
     '.b2d-select-all-button',
     variationsGroupElement
   );
-  onClick(selectAllButton as HTMLElement, () => {
+  onClick(selectAllButton as HTMLButtonElement, () => {
     click(buttons);
   });
 }
@@ -365,7 +366,7 @@ function variationButtonClickHandler(
   // Do nothing if the button is already green
   if (hasClass(button, 'button-green')) return;
 
-  const variation = getDataAttribute(button, 'text');
+  const variation = button.value;
   const targets = group.targets;
 
   debug('Set variation to form elements:', variation, targets);
@@ -403,7 +404,7 @@ function setFormElementVariation(
 
 function clearButtonClickHandler(
   group: VariationsGroup,
-  buttons: HTMLElement[]
+  buttons: HTMLButtonElement[]
 ): void {
   const targets = group.targets;
 
@@ -418,7 +419,7 @@ function clearButtonClickHandler(
 
 function setupFormElementsListener(
   targets: FormElement[],
-  buttons: HTMLElement[],
+  buttons: HTMLButtonElement[],
   toggleClassName: string
 ): void {
   const getElementValue = (target: FormElement): string =>
@@ -428,7 +429,10 @@ function setupFormElementsListener(
       ? target.value.trim()
       : '';
 
-  const handleButtons = (target: FormElement, buttons: HTMLElement[]): void => {
+  const handleButtons = (
+    target: FormElement,
+    buttons: HTMLButtonElement[]
+  ): void => {
     const value = getElementValue(target);
     const isCheckboxTarget = isCheckbox(target as HTMLInputElement);
     const isChecked = isCheckboxTarget
@@ -440,7 +444,7 @@ function setupFormElementsListener(
     }
 
     buttons.forEach((button) => {
-      const buttonValue = getDataAttribute(button, 'text');
+      const buttonValue = button.value;
       const shouldAddClass = isCheckboxTarget
         ? isChecked && buttonValue === value
         : buttonValue === value;

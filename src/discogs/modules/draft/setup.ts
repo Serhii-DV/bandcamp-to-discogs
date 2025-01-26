@@ -306,7 +306,10 @@ function setupSectionStyles(metadata: Metadata): void {
   );
   if (!variationsGroupElement) return;
 
-  const variationButtons = elements('.b2d-variation', variationsGroupElement);
+  const variationButtons = elements(
+    '.b2d-variation',
+    variationsGroupElement
+  ) as HTMLButtonElement[];
   const styleSection = getSection('styles');
   const stylesButtonGroup = element('.styles ul', styleSection);
 
@@ -327,10 +330,7 @@ function setupSectionStyles(metadata: Metadata): void {
     const styleButtons = getStyleButtons();
     styleButtons.forEach((styleButton) => {
       variationButtons.forEach((variationButton) => {
-        if (
-          getDataAttribute(variationButton, 'text') ===
-          styleButton.textContent?.trim()
-        ) {
+        if (variationButton.value === styleButton.textContent?.trim()) {
           addClass(variationButton, 'button-green');
         }
       });

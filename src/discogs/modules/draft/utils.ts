@@ -232,7 +232,7 @@ function triggerChangeEvent(element: HTMLElement): void {
   element.dispatchEvent(changeEvent);
 }
 
-function getVariationsHtml(
+function makeVariationsHtml(
   variations: Variation[],
   selectAllBtn: boolean
 ): string {
@@ -246,14 +246,14 @@ function getVariationsHtml(
 
   return `
 <div class="b2d-variations">
-  ${variations.map(getVariationHtml).join(' ')}
-  ${getClearButtonHtml()}
-  ${selectAllBtn ? getSelectAllButtonHtml() : ''}
+  ${variations.map(makeVariationHtml).join(' ')}
+  ${makeClearButtonHtml()}
+  ${selectAllBtn ? makeSelectAllButtonHtml() : ''}
 </div>
 `;
 }
 
-function getVariationHtml(variation: Variation): string {
+function makeVariationHtml(variation: Variation): string {
   const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
   if (!variation) {
@@ -266,34 +266,34 @@ function getVariationHtml(variation: Variation): string {
   return `<span class="b2d-variation button button-small" title="${value}" data-text="${value}">${icon} ${content}</span>`;
 }
 
-function getVariationsGroupHtml(
+function makeVariationsGroupHtml(
   group: VariationsGroup,
   showTitle: boolean = true
 ): string {
   return `
-<div class="b2d-group ${getVariationsGroupClass(group)}">
+<div class="b2d-group ${makeVariationsGroupClass(group)}">
   ${showTitle && group.title ? `<b>${group.title}:</b>` : ''}
-  ${getVariationsHtml(group.variations, group.allowSelectAll)}
+  ${makeVariationsHtml(group.variations, group.allowSelectAll)}
 </div>
 `;
 }
 
-export function getVariationsGroupClass(group: VariationsGroup): string {
+export function makeVariationsGroupClass(group: VariationsGroup): string {
   return `b2d-variations-group-${group.alias}`;
 }
 
-function getVariationsGroupsHtml(groups: VariationsGroup[]): string {
+function makeVariationsGroupsHtml(groups: VariationsGroup[]): string {
   const showTitle = groups.length > 1;
   return groups
-    .map((group) => getVariationsGroupHtml(group, showTitle))
+    .map((group) => makeVariationsGroupHtml(group, showTitle))
     .join('\n');
 }
 
-function getClearButtonHtml(): string {
+function makeClearButtonHtml(): string {
   return `<span class="b2d-clear-button button button-small button-red" title="Clear the field" data-text="">Clear</span>`;
 }
 
-function getSelectAllButtonHtml(): string {
+function makeSelectAllButtonHtml(): string {
   return `<span class="b2d-select-all-button button button-small button-blue" title="Select all fields">Select All</span>`;
 }
 
@@ -314,7 +314,7 @@ export function setSection(section: Section): void {
   b2dSection.innerHTML = `
   <h4>${section.title}</h4>
   <div class="b2d-content">${section.content}</div>
-  ${getVariationsGroupsHtml(section.variationsGroups)}
+  ${makeVariationsGroupsHtml(section.variationsGroups)}
 `;
 
   section.variationsGroups.forEach((group: VariationsGroup) =>
@@ -327,7 +327,7 @@ function setupVariationsGroup(
   b2dSection: Element
 ): void {
   const variationsGroupElement = element(
-    `.${getVariationsGroupClass(group)} .b2d-variations`,
+    `.${makeVariationsGroupClass(group)} .b2d-variations`,
     b2dSection
   );
   if (!variationsGroupElement) return;

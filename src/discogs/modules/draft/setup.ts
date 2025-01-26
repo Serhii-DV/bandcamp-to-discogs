@@ -28,7 +28,7 @@ import {
   getReleasedDateInput,
   getCountrySelect,
   getQuantityInput,
-  getVariationsGroupClass,
+  makeVariationsGroupClass,
   getSection
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
@@ -302,7 +302,7 @@ function setupSectionStyles(metadata: Metadata): void {
   );
 
   const variationsGroupElement = element(
-    `.${getVariationsGroupClass(stylesGroup)} .b2d-variations`
+    `.${makeVariationsGroupClass(stylesGroup)} .b2d-variations`
   );
   if (!variationsGroupElement) return;
 

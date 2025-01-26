@@ -4,7 +4,6 @@ import {
   createElementFromHTML,
   element,
   elements,
-  getDataAttribute,
   isCheckbox,
   onClick,
   removeClass,
@@ -246,22 +245,28 @@ function makeVariationsHtml(
 
   return `
 <div class="b2d-variations">
-  ${variations.map(makeVariationHtml).join(' ')}
+  ${variations.map(makeVariationButtonHtml).join(' ')}
   ${makeClearButtonHtml()}
   ${selectAllBtn ? makeSelectAllButtonHtml() : ''}
 </div>
 `;
 }
 
-function makeVariationHtml(variation: Variation): string {
+function makeVariationButtonHtml(variation: Variation): string {
   if (!variation) {
     return '';
   }
 
   const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
   const value = variation.toString();
+  const content = truncateText(value, 30);
+  const button = createElementFromHTML(
+    `<button class="b2d-variation button button-small">${icon} ${content}</button>`
+  ) as HTMLButtonElement;
+  button.title = value;
+  button.value = value;
 
-  return `<button class="b2d-variation button button-small" title="${value}" value="${value}">${icon} ${value}</button>`;
+  return button.outerHTML;
 }
 
 function makeVariationsGroupHtml(

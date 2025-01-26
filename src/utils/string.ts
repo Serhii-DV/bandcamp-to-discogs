@@ -21,6 +21,10 @@ export function getTextInitials(text: string): string {
  * truncateText("Hello World", 5) => "Hello..."
  * truncateText("Hello", 10) => "Hello"
  */
-export function truncateText(text: string, length: number): string {
-  return text.length <= length ? text : text.slice(0, length) + '...';
+export function truncateText(
+  text: string,
+  length: number,
+  end: string = '...'
+): string {
+  return text.length <= length ? text : text.slice(0, length) + end;
 }

@@ -5,19 +5,19 @@ import { Variation } from './variation';
 export class VariationsGroup {
   title: string;
   alias: string;
-  targets: FormElement[];
+  elements: FormElement[];
   variations: Variation[];
   allowSelectAll: boolean;
 
   constructor(
     title: string,
-    targets: FormElement[],
+    elements: FormElement[],
     variations: string[],
     allowSelectAll: boolean = false
   ) {
     this.title = title;
     this.alias = convertToAlias(title);
-    this.targets = targets;
+    this.elements = elements;
     this.variations = arrayUnique(
       variations.filter((variation) => !!variation)
     ).map((variation) => new Variation(variation));

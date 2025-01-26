@@ -457,15 +457,6 @@ export function checkOneByValue(
   });
 }
 
-export function toggleClass<T extends HTMLElement>(
-  elements: T[],
-  className: string,
-  activeElement?: T
-): void {
-  removeClass(elements, className);
-  activeElement?.classList.add(className);
-}
-
 export function removeClass<T extends HTMLElement>(
   element: T | T[] | null,
   className: string
@@ -487,6 +478,18 @@ export function addClass<T extends HTMLElement>(
     element.forEach((e) => e.classList.add(className));
   } else {
     element.classList.add(className);
+  }
+}
+
+export function toggleClass<T extends HTMLElement>(
+  element: T | T[] | null,
+  className: string
+): void {
+  if (!element) return;
+  if (Array.isArray(element)) {
+    element.forEach((e) => e.classList.toggle(className));
+  } else {
+    element.classList.toggle(className);
   }
 }
 

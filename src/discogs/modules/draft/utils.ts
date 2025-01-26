@@ -16,29 +16,29 @@ import { Section } from 'src/discogs/app/draft/section';
 import { VariationsGroup } from 'src/discogs/app/draft/variationGroup';
 import { Variation } from 'src/discogs/app/draft/variation';
 
-export const getArtistNameInput = (): HTMLInputElement | null => {
+export const getArtistNameInput = (): HTMLInputElement => {
   return document.getElementById('artist-name-input') as HTMLInputElement;
 };
 
-export const getReleaseTitleInput = (): HTMLInputElement | null => {
+export const getReleaseTitleInput = (): HTMLInputElement => {
   return document.getElementById('release-title-input') as HTMLInputElement;
 };
 
-export const getLabelNameInput = (): HTMLInputElement | null => {
+export const getLabelNameInput = (): HTMLInputElement => {
   return document.getElementById('label-name-input-0') as HTMLInputElement;
 };
 
-export const getQuantityInput = (): HTMLInputElement | null => {
+export const getQuantityInput = (): HTMLInputElement => {
   return document.querySelector(
     'input[aria-label="Quantity of format"]'
   ) as HTMLInputElement;
 };
 
-export const getCountrySelect = (): HTMLSelectElement | null => {
+export const getCountrySelect = (): HTMLSelectElement => {
   return document.getElementById('release-country-select') as HTMLSelectElement;
 };
 
-export const getReleasedDateInput = (): HTMLInputElement | null => {
+export const getReleasedDateInput = (): HTMLInputElement => {
   return document.getElementById('release-date') as HTMLInputElement;
 };
 
@@ -48,13 +48,13 @@ export const getTrackTitleInputs = (): NodeListOf<HTMLInputElement> => {
   ) as NodeListOf<HTMLInputElement>;
 };
 
-export const getNotesTextarea = (): HTMLTextAreaElement | null => {
+export const getNotesTextarea = (): HTMLTextAreaElement => {
   return document.querySelector(
     'textarea#release-notes-textarea'
   ) as HTMLTextAreaElement;
 };
 
-export const getSubmissionNotesTextarea = (): HTMLTextAreaElement | null => {
+export const getSubmissionNotesTextarea = (): HTMLTextAreaElement => {
   return document.querySelector(
     'textarea#release-submission-notes-textarea'
   ) as HTMLTextAreaElement;

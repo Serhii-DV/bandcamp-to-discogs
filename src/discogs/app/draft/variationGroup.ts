@@ -7,13 +7,13 @@ export class VariationsGroup {
   alias: string;
   elements: FormElement[];
   variations: Variation[];
-  allowSelectAll: boolean;
+  multiChoice: boolean;
 
   constructor(
     title: string,
     elements: FormElement[],
     variations: string[],
-    allowSelectAll: boolean = false
+    multiChoice: boolean = false
   ) {
     this.title = title;
     this.alias = convertToAlias(title);
@@ -21,6 +21,6 @@ export class VariationsGroup {
     this.variations = arrayUnique(
       variations.filter((variation) => !!variation)
     ).map((variation) => new Variation(variation));
-    this.allowSelectAll = allowSelectAll;
+    this.multiChoice = multiChoice;
   }
 }

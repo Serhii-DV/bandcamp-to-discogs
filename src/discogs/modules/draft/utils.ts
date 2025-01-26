@@ -275,7 +275,7 @@ function makeVariationsGroupHtml(
   return `
 <div class="b2d-group ${makeVariationsGroupClass(group)}">
   ${showTitle && group.title ? `<b>${group.title}:</b>` : ''}
-  ${makeVariationsHtml(group.variations, group.allowSelectAll)}
+  ${makeVariationsHtml(group.variations, group.multiChoice)}
 </div>
 `;
 }
@@ -334,35 +334,45 @@ function setupVariationsGroup(
   );
   if (!variationsGroupElement) return;
 
+  const activeButtonClassName = 'button-green';
   const buttons = elements(
     '.b2d-variation',
     variationsGroupElement
   ) as HTMLButtonElement[];
-  setupFormElementsListener(group.elements, buttons, 'button-green');
+  setupFormElementsListener(group.elements, buttons, activeButtonClassName);
 
   onClick(buttons, (event) =>
-    variationButtonClickHandler(event.target as HTMLButtonElement, group)
+    variationButtonClickHandler(
+      event.target as HTMLButtonElement,
+      group,
+      buttons,
+      activeButtonClassName
+    )
   );
 
   const clearButton = element('.b2d-clear-button', variationsGroupElement);
   onClick(clearButton as HTMLElement, () => {
-    clearButtonClickHandler(group, buttons);
+    clearButtonClickHandler(group, buttons, activeButtonClassName);
   });
 
-  const selectAllButton = element(
-    '.b2d-select-all-button',
-    variationsGroupElement
-  );
-  onClick(selectAllButton as HTMLButtonElement, () => {
-    click(buttons);
-  });
+  if (group.multiChoice) {
+    const selectAllButton = element(
+      '.b2d-select-all-button',
+      variationsGroupElement
+    );
+    onClick(selectAllButton as HTMLButtonElement, () => {
+      click(buttons);
+    });
+  }
 }
 
 function variationButtonClickHandler(
   button: HTMLButtonElement,
-  group: VariationsGroup
+  group: VariationsGroup,
+  buttons: HTMLButtonElement[],
+  activeClassName: string
 ): void {
-  const isButtonActive = hasClass(button, 'button-green');
+  const isButtonActive = hasClass(button, activeClassName);
   const value = isButtonActive ? '' : button.value;
   const elements = group.elements;
 
@@ -371,10 +381,14 @@ function variationButtonClickHandler(
   elements.forEach((element: FormElement) => {
     setFormElementValue(element, value);
 
+    if (!group.multiChoice) {
+      removeClass(buttons, activeClassName);
+    }
+
     if (isButtonActive) {
-      removeClass(button, 'button-green');
+      removeClass(button, activeClassName);
     } else {
-      addClass(button, 'button-green');
+      addClass(button, activeClassName);
     }
   });
 }
@@ -398,7 +412,8 @@ function setFormElementValue(element: FormElement, value: string): void {
 
 function clearButtonClickHandler(
   group: VariationsGroup,
-  buttons: HTMLButtonElement[]
+  buttons: HTMLButtonElement[],
+  activeClassName: string
 ): void {
   const targets = group.elements;
 
@@ -408,7 +423,7 @@ function clearButtonClickHandler(
     setFormElementValue(element, '');
   });
 
-  removeClass(buttons, 'button-green');
+  removeClass(buttons, activeClassName);
 }
 
 function setupFormElementsListener(

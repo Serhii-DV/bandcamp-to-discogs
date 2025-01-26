@@ -7,7 +7,6 @@ import {
   click,
   element,
   elements,
-  getDataAttribute,
   onClick,
   removeClass,
   valueToHtml

@@ -54,7 +54,7 @@ export function metadataValueAsArray(value: MetadataValue): string[] {
 }
 
 export function metadataValueAsString(value: MetadataValue): string {
-  return Array.isArray(value) ? (value[0] as string) : value;
+  return Array.isArray(value) ? (value[value.length - 1] as string) : value;
 }
 
 /**

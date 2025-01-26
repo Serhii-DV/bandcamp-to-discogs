@@ -17,16 +17,16 @@ export function safeFilename(value: string): string {
     .toLowerCase();
 }
 
-/** @see https://flexiple.com/javascript/javascript-capitalize-first-letter/ */
 export function capitalizeEachWord(str: string): string {
-  const words = str.split(' ');
-  const capitalizedWords = words.map((word: string) => {
-    const firstLetter = word.charAt(0).toUpperCase();
-    const restOfWord = word.slice(1).toLowerCase();
-    return `${firstLetter}${restOfWord}`;
-  });
-
-  return capitalizedWords.join(' ');
+  return str
+    .split(/(\s+|["'“”‘’,.()!?\-])/g) // Split by spaces and special characters, keeping them as separators
+    .map(
+      (word) =>
+        /^[a-zA-Z]/.test(word) // Check if the word starts with a letter
+          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          : word // Leave separators and non-alphabetic parts as they are
+    )
+    .join('');
 }
 
 export function convertToAlias(str: string): string {

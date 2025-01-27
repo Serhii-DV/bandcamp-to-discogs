@@ -307,7 +307,7 @@ export function setSection(section: Section): void {
   debug('Setting section', section);
 
   const sectionElement = getSection(section.section);
-  let b2dSection = sectionElement.querySelector('.b2d-section');
+  let b2dSection = sectionElement.querySelector('.b2d-section') as HTMLElement;
 
   if (!b2dSection) {
     b2dSection = createElementFromHTML(
@@ -323,25 +323,19 @@ export function setSection(section: Section): void {
   ${makeVariationsGroupsHtml(section.variationsGroups)}
 `;
 
-  section.variationsGroups.forEach((group: VariationsGroup) =>
-    setupVariationsGroup(group, b2dSection)
-  );
+  section.variationsGroups.forEach((group: VariationsGroup) => {
+    const groupElement = getGroupElement(group, b2dSection);
+    if (groupElement) {
+      setupVariationsGroup(group, groupElement);
+    }
+  });
 }
 
 function setupVariationsGroup(
   group: VariationsGroup,
-  b2dSection: Element
+  variationsGroupElement: HTMLElement
 ): void {
-  const variationsGroupElement = element(
-    `.${makeVariationsGroupClass(group)} .b2d-variations`,
-    b2dSection
-  );
-  if (!variationsGroupElement) return;
-
-  const buttons = elements(
-    '.b2d-variation',
-    variationsGroupElement
-  ) as HTMLButtonElement[];
+  const buttons = getButtons(variationsGroupElement);
   setupFormElementsListener(group.elements, buttons);
 
   onClick(buttons, (event) =>
@@ -352,22 +346,66 @@ function setupVariationsGroup(
     )
   );
 
-  const clearButton = element('.b2d-clear-button', variationsGroupElement);
-  onClick(clearButton as HTMLElement, () => {
-    clearActiveVariationButtons(buttons);
-  });
+  const clearButton = getClearButton(variationsGroupElement);
+  setupClearButton(clearButton, buttons);
 
   if (group.multiChoice) {
-    const selectAllButton = element(
-      '.b2d-select-all-button',
-      variationsGroupElement
-    );
-    onClick(selectAllButton as HTMLButtonElement, () => {
-      buttons
-        .filter((button) => !hasClass(button, activeButtonClassName))
-        .forEach((button) => click(button));
-    });
+    const selectAllButton = getSelectAllButton(variationsGroupElement);
+    setupSelectAllButton(selectAllButton, buttons);
   }
+}
+
+function getGroupElement(
+  group: VariationsGroup,
+  b2dSection: HTMLElement
+): HTMLElement {
+  return element(
+    `.${makeVariationsGroupClass(group)} .b2d-variations`,
+    b2dSection
+  ) as HTMLElement;
+}
+
+function getButtons(variationsGroupElement: HTMLElement): HTMLButtonElement[] {
+  return elements(
+    '.b2d-variation',
+    variationsGroupElement
+  ) as HTMLButtonElement[];
+}
+
+function getClearButton(
+  variationsGroupElement: HTMLElement
+): HTMLButtonElement {
+  return element(
+    '.b2d-clear-button',
+    variationsGroupElement
+  ) as HTMLButtonElement;
+}
+
+function setupClearButton(
+  button: HTMLButtonElement,
+  buttons: HTMLButtonElement[]
+): void {
+  onClick(button, () => {
+    clearActiveButtons(buttons);
+  });
+}
+
+function getSelectAllButton(
+  variationsGroupElement: HTMLElement
+): HTMLButtonElement {
+  return element(
+    '.b2d-select-all-button',
+    variationsGroupElement
+  ) as HTMLButtonElement;
+}
+
+function setupSelectAllButton(
+  selectAllButton: HTMLButtonElement,
+  buttons: HTMLButtonElement[]
+): void {
+  onClick(selectAllButton, () => {
+    click(getNonActiveButtons(buttons));
+  });
 }
 
 function variationButtonClickHandler(
@@ -423,14 +461,8 @@ function processCheckboxes(
 
 function setFormElementValue(element: FormElement, value: string): void {
   debug('Set form element value:', element, value);
-  if (element instanceof HTMLInputElement && isCheckbox(element)) {
-    const shouldClick = element.value === value && !element.checked;
 
-    debug('shouldClick', shouldClick);
-    if (shouldClick) {
-      click(element);
-    }
-  } else if (
+  if (
     element instanceof HTMLInputElement ||
     element instanceof HTMLTextAreaElement
   ) {
@@ -440,7 +472,7 @@ function setFormElementValue(element: FormElement, value: string): void {
   }
 }
 
-function clearActiveVariationButtons(buttons: HTMLButtonElement[]): void {
+function clearActiveButtons(buttons: HTMLButtonElement[]): void {
   click(getActiveButtons(buttons));
 }
 
@@ -503,6 +535,12 @@ function isButtonActive(button: HTMLButtonElement): boolean {
 
 function getActiveButtons(buttons: HTMLButtonElement[]): HTMLButtonElement[] {
   return buttons.filter(isButtonActive);
+}
+
+function getNonActiveButtons(
+  buttons: HTMLButtonElement[]
+): HTMLButtonElement[] {
+  return buttons.filter((button) => !isButtonActive(button));
 }
 
 function toggleButtonActiveState(button: HTMLButtonElement): void {

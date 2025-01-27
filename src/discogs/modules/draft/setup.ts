@@ -270,7 +270,8 @@ function setupSectionGenres(metadata: Metadata): void {
   const genresGroup = new VariationsGroup(
     'Genres',
     elements('.genres input[type="checkbox"]') as HTMLInputElement[],
-    metadata.genres.autoDetectedGenres
+    metadata.genres.autoDetectedGenres,
+    true
   );
 
   setSection(

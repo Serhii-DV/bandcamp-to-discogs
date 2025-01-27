@@ -200,6 +200,41 @@ export function triggerInputEvent(
   return element;
 }
 
+export function dispatchChangeEvent(
+  element: HTMLElement,
+  eventInitDict?: EventInit
+): HTMLElement {
+  if (
+    !(
+      element instanceof HTMLInputElement ||
+      element instanceof HTMLSelectElement ||
+      element instanceof HTMLTextAreaElement
+    )
+  ) {
+    throw new Error(
+      'The provided element does not support the "change" event.'
+    );
+  }
+
+  element.dispatchEvent(
+    new Event('change', eventInitDict ?? { bubbles: true })
+  );
+  return element;
+}
+
+export function dispatchClickEvent(
+  element: HTMLElement,
+  eventInitDict?: MouseEventInit
+): HTMLElement {
+  element.dispatchEvent(
+    new MouseEvent(
+      'click',
+      eventInitDict ?? { bubbles: true, cancelable: true }
+    )
+  );
+  return element;
+}
+
 export function createElementFromHTML(htmlString: string): Element | null {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = htmlString.trim();

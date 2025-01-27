@@ -6,7 +6,8 @@ import {
   elements,
   isCheckbox,
   onClick,
-  removeClass
+  removeClass,
+  toggleClass
 } from '../../../utils/html';
 import { debug, logError } from '../../../utils/console';
 import { hasClass, isArray } from '../../../utils/utils';
@@ -361,7 +362,9 @@ function setupVariationsGroup(
       variationsGroupElement
     );
     onClick(selectAllButton as HTMLButtonElement, () => {
-      click(buttons);
+      buttons
+        .filter((button) => !hasClass(button, activeButtonClassName))
+        .forEach((button) => click(button));
     });
   }
 }
@@ -372,31 +375,55 @@ function variationButtonClickHandler(
   buttons: HTMLButtonElement[],
   activeClassName: string
 ): void {
-  const isButtonActive = hasClass(button, activeClassName);
+  const isButtonActive = hasClass(button, activeClassName) as boolean;
   const value = isButtonActive ? '' : button.value;
   const elements = group.elements;
 
   debug('Set values to form elements:', value, elements);
 
-  elements.forEach((element: FormElement) => {
-    setFormElementValue(element, value);
-
-    if (!group.multiChoice) {
+  if (group.multiChoice) {
+    elements
+      .filter(
+        (element) =>
+          element instanceof HTMLInputElement &&
+          isCheckbox(element) &&
+          element.value === button.value
+      )
+      .forEach((element) => {
+        toggleClass(button, activeClassName);
+        click(element);
+      });
+  } else {
+    elements.forEach((element: FormElement) => {
       removeClass(buttons, activeClassName);
-    }
 
-    if (isButtonActive) {
-      removeClass(button, activeClassName);
-    } else {
-      addClass(button, activeClassName);
-    }
-  });
+      if (isButtonActive) {
+        removeClass(button, activeClassName);
+      } else {
+        addClass(button, activeClassName);
+      }
+
+      setFormElementValue(element, value, isButtonActive);
+    });
+  }
 }
 
-function setFormElementValue(element: FormElement, value: string): void {
+function setFormElementValue(
+  element: FormElement,
+  value: string,
+  isButtonActive: boolean
+): void {
+  debug('Set form element value:', element, value, isButtonActive);
   if (element instanceof HTMLInputElement && isCheckbox(element)) {
-    const shouldClick = element.checked !== (element.value === value);
+    let shouldClick = false;
 
+    if (isButtonActive) {
+      // Uncheck
+      shouldClick = element.checked && element.value === value;
+    } else {
+      shouldClick = !element.checked && element.value === value;
+    }
+    debug('shouldClick', shouldClick);
     if (shouldClick) {
       click(element);
     }
@@ -415,12 +442,12 @@ function clearButtonClickHandler(
   buttons: HTMLButtonElement[],
   activeClassName: string
 ): void {
-  const targets = group.elements;
+  const elements = group.elements;
 
-  debug('Clear form elements:', targets);
+  debug('Clear form elements:', elements);
 
-  targets.forEach((element: FormElement) => {
-    setFormElementValue(element, '');
+  elements.forEach((element: FormElement) => {
+    setFormElementValue(element, '', false);
   });
 
   removeClass(buttons, activeClassName);

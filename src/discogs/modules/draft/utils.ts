@@ -443,9 +443,22 @@ function getGroupCheckboxes(group: VariationsGroup): HTMLInputElement[] {
   ) as HTMLInputElement[];
 }
 
+function getMatchedCheckboxes(
+  checkboxes: HTMLInputElement[],
+  value: string
+): HTMLInputElement[] {
+  return checkboxes.filter((checkbox) => checkbox.value === value);
+}
+
+function getSelectedCheckboxes(
+  checkboxes: HTMLInputElement[]
+): HTMLInputElement[] {
+  return checkboxes.filter((checkbox) => checkbox.checked);
+}
+
 function uncheckSelectedCheckboxes(checkboxes: HTMLInputElement[]): void {
   // Uncheck all checked checkboxes
-  const uncheckCheckboxes = checkboxes.filter((checkbox) => checkbox.checked);
+  const uncheckCheckboxes = getSelectedCheckboxes(checkboxes);
   click(uncheckCheckboxes);
 }
 
@@ -456,18 +469,29 @@ function processCheckboxes(
 ): boolean {
   const checkboxes = getGroupCheckboxes(group);
 
-  if (!checkboxes.length) {
-    return false;
+  if (!checkboxes.length) return false;
+
+  const { multiChoice } = group;
+
+  if (!multiChoice && isButtonActive(button)) {
+    const matchedCheckboxes = getMatchedCheckboxes(checkboxes, button.value);
+    const clickCheckboxes = getSelectedCheckboxes(matchedCheckboxes);
+
+    // Uncheck only current button checkboxes if it's active
+    click(clickCheckboxes);
+    updateButtonsStateByCheckboxes(buttons, checkboxes);
+
+    return true;
   }
 
-  if (!group.multiChoice) {
-    uncheckSelectedCheckboxes(checkboxes);
+  if (!multiChoice) {
+    // Uncheck all selected checkboxes
+    const clickCheckboxes = getSelectedCheckboxes(checkboxes);
+    click(clickCheckboxes);
   }
 
   // Click only on the checkbox that matches the button value
-  const checkCheckboxes = checkboxes.filter(
-    (checkbox) => checkbox.value === button.value
-  );
+  const checkCheckboxes = getMatchedCheckboxes(checkboxes, button.value);
   click(checkCheckboxes);
 
   updateButtonsStateByCheckboxes(buttons, checkboxes);

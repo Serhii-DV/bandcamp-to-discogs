@@ -410,13 +410,11 @@ function processCheckboxes(
     click(uncheckCheckboxes);
   }
 
-  if (!isButtonActive(button)) {
-    // Click only on the checkbox that matches the button value
-    const checkCheckboxes = checkboxes.filter(
-      (checkbox) => !checkbox.checked && checkbox.value === button.value
-    );
-    click(checkCheckboxes);
-  }
+  // Click only on the checkbox that matches the button value
+  const checkCheckboxes = checkboxes.filter(
+    (checkbox) => checkbox.value === button.value
+  );
+  click(checkCheckboxes);
 
   updateButtonsStateByCheckboxes(buttons, checkboxes);
 

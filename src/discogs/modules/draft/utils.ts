@@ -17,6 +17,9 @@ import { Section } from 'src/discogs/app/draft/section';
 import { VariationsGroup } from 'src/discogs/app/draft/variationGroup';
 import { Variation } from 'src/discogs/app/draft/variation';
 
+// General setup
+const activeButtonClassName = 'button-green';
+
 export const getArtistNameInput = (): HTMLInputElement => {
   return document.getElementById('artist-name-input') as HTMLInputElement;
 };
@@ -335,25 +338,23 @@ function setupVariationsGroup(
   );
   if (!variationsGroupElement) return;
 
-  const activeButtonClassName = 'button-green';
   const buttons = elements(
     '.b2d-variation',
     variationsGroupElement
   ) as HTMLButtonElement[];
-  setupFormElementsListener(group.elements, buttons, activeButtonClassName);
+  setupFormElementsListener(group.elements, buttons);
 
   onClick(buttons, (event) =>
     variationButtonClickHandler(
       event.target as HTMLButtonElement,
       group,
-      buttons,
-      activeButtonClassName
+      buttons
     )
   );
 
   const clearButton = element('.b2d-clear-button', variationsGroupElement);
   onClick(clearButton as HTMLElement, () => {
-    clearButtonClickHandler(group, buttons, activeButtonClassName);
+    clearActiveVariationButtons(buttons);
   });
 
   if (group.multiChoice) {
@@ -372,57 +373,61 @@ function setupVariationsGroup(
 function variationButtonClickHandler(
   button: HTMLButtonElement,
   group: VariationsGroup,
-  buttons: HTMLButtonElement[],
-  activeClassName: string
+  buttons: HTMLButtonElement[]
 ): void {
-  const isButtonActive = hasClass(button, activeClassName) as boolean;
-  const value = isButtonActive ? '' : button.value;
+  const isActiveButton = isButtonActive(button);
+  const value = isActiveButton ? '' : button.value;
   const elements = group.elements;
 
   debug('Set values to form elements:', value, elements);
 
-  if (group.multiChoice) {
-    elements
-      .filter(
-        (element) =>
-          element instanceof HTMLInputElement &&
-          isCheckbox(element) &&
-          element.value === button.value
-      )
-      .forEach((element) => {
-        toggleClass(button, activeClassName);
-        click(element);
-      });
-  } else {
-    elements.forEach((element: FormElement) => {
-      removeClass(buttons, activeClassName);
+  if (processCheckboxes(group, button, buttons)) return;
 
-      if (isButtonActive) {
-        removeClass(button, activeClassName);
-      } else {
-        addClass(button, activeClassName);
-      }
+  removeButtonActiveState(buttons);
+  toggleButtonActiveState(button);
 
-      setFormElementValue(element, value, isButtonActive);
-    });
-  }
+  elements.forEach((element: FormElement) => {
+    setFormElementValue(element, value);
+  });
 }
 
-function setFormElementValue(
-  element: FormElement,
-  value: string,
-  isButtonActive: boolean
-): void {
-  debug('Set form element value:', element, value, isButtonActive);
-  if (element instanceof HTMLInputElement && isCheckbox(element)) {
-    let shouldClick = false;
+function processCheckboxes(
+  group: VariationsGroup,
+  button: HTMLButtonElement,
+  buttons: HTMLButtonElement[]
+): boolean {
+  const checkboxes = group.elements.filter(
+    (element) => element instanceof HTMLInputElement && isCheckbox(element)
+  ) as HTMLInputElement[];
 
-    if (isButtonActive) {
-      // Uncheck
-      shouldClick = element.checked && element.value === value;
-    } else {
-      shouldClick = !element.checked && element.value === value;
-    }
+  if (!checkboxes.length) {
+    return false;
+  }
+
+  if (!group.multiChoice) {
+    // Uncheck all checked checkboxes
+    const uncheckCheckboxes = checkboxes.filter((checkbox) => checkbox.checked);
+    click(uncheckCheckboxes);
+  }
+
+  if (!isButtonActive(button)) {
+    // Click only on the checkbox that matches the button value
+    const checkCheckboxes = checkboxes.filter(
+      (checkbox) => !checkbox.checked && checkbox.value === button.value
+    );
+    click(checkCheckboxes);
+  }
+
+  updateButtonsStateByCheckboxes(buttons, checkboxes);
+
+  return true;
+}
+
+function setFormElementValue(element: FormElement, value: string): void {
+  debug('Set form element value:', element, value);
+  if (element instanceof HTMLInputElement && isCheckbox(element)) {
+    const shouldClick = element.value === value && !element.checked;
+
     debug('shouldClick', shouldClick);
     if (shouldClick) {
       click(element);
@@ -437,26 +442,13 @@ function setFormElementValue(
   }
 }
 
-function clearButtonClickHandler(
-  group: VariationsGroup,
-  buttons: HTMLButtonElement[],
-  activeClassName: string
-): void {
-  const elements = group.elements;
-
-  debug('Clear form elements:', elements);
-
-  elements.forEach((element: FormElement) => {
-    setFormElementValue(element, '', false);
-  });
-
-  removeClass(buttons, activeClassName);
+function clearActiveVariationButtons(buttons: HTMLButtonElement[]): void {
+  click(getActiveButtons(buttons));
 }
 
 function setupFormElementsListener(
   elements: FormElement[],
-  buttons: HTMLButtonElement[],
-  activeClassName: string
+  buttons: HTMLButtonElement[]
 ): void {
   const getElementValue = (element: FormElement): string =>
     element instanceof HTMLInputElement ||
@@ -475,7 +467,7 @@ function setupFormElementsListener(
       ? (element as HTMLInputElement).checked === true
       : false;
 
-    if (!isCheckboxElement) removeClass(buttons, activeClassName);
+    if (!isCheckboxElement) removeClass(buttons, activeButtonClassName);
     {
     }
 
@@ -486,7 +478,7 @@ function setupFormElementsListener(
         : buttonValue === value;
 
       if (shouldAddClass) {
-        addClass(button, activeClassName);
+        addClass(button, activeButtonClassName);
       }
     });
   };
@@ -504,5 +496,44 @@ function setupFormElementsListener(
 
     element.addEventListener(eventType, handleEvent);
     handleEvent();
+  });
+}
+
+function isButtonActive(button: HTMLButtonElement): boolean {
+  return hasClass(button, activeButtonClassName) as boolean;
+}
+
+function getActiveButtons(buttons: HTMLButtonElement[]): HTMLButtonElement[] {
+  return buttons.filter(isButtonActive);
+}
+
+function toggleButtonActiveState(button: HTMLButtonElement): void {
+  toggleClass(button, activeButtonClassName);
+}
+
+function removeButtonActiveState(
+  buttons: HTMLButtonElement | HTMLButtonElement[]
+): void {
+  const applyButtons = isArray(buttons)
+    ? getActiveButtons(buttons as HTMLButtonElement[])
+    : buttons;
+  debug('removeButtonActiveState', applyButtons);
+  removeClass(applyButtons, activeButtonClassName);
+}
+
+function updateButtonsStateByCheckboxes(
+  buttons: HTMLButtonElement[],
+  checkboxes: HTMLInputElement[]
+): void {
+  removeClass(buttons, activeButtonClassName);
+
+  buttons.forEach((button) => {
+    const isActive = checkboxes.some(
+      (checkbox) => checkbox.checked && checkbox.value === button.value
+    );
+
+    if (isActive) {
+      addClass(button, activeButtonClassName);
+    }
   });
 }

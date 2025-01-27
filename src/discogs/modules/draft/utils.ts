@@ -347,7 +347,7 @@ function setupVariationsGroup(
   );
 
   const clearButton = getClearButton(variationsGroupElement);
-  setupClearButton(clearButton, buttons);
+  setupClearButton(group, clearButton, buttons);
 
   if (group.multiChoice) {
     const selectAllButton = getSelectAllButton(variationsGroupElement);
@@ -382,10 +382,20 @@ function getClearButton(
 }
 
 function setupClearButton(
-  button: HTMLButtonElement,
+  group: VariationsGroup,
+  clearButton: HTMLButtonElement,
   buttons: HTMLButtonElement[]
 ): void {
-  onClick(button, () => {
+  const checkboxes = getGroupCheckboxes(group);
+  const hasCheckboxes = checkboxes.length > 0;
+
+  onClick(clearButton, () => {
+    if (hasCheckboxes) {
+      uncheckSelectedCheckboxes(checkboxes);
+      updateButtonsStateByCheckboxes(buttons, checkboxes);
+      return;
+    }
+
     clearActiveButtons(buttons);
   });
 }
@@ -413,13 +423,11 @@ function variationButtonClickHandler(
   group: VariationsGroup,
   buttons: HTMLButtonElement[]
 ): void {
+  if (processCheckboxes(group, button, buttons)) return;
+
   const isActiveButton = isButtonActive(button);
   const value = isActiveButton ? '' : button.value;
   const elements = group.elements;
-
-  debug('Set values to form elements:', value, elements);
-
-  if (processCheckboxes(group, button, buttons)) return;
 
   removeButtonActiveState(buttons);
   toggleButtonActiveState(button);
@@ -429,23 +437,31 @@ function variationButtonClickHandler(
   });
 }
 
+function getGroupCheckboxes(group: VariationsGroup): HTMLInputElement[] {
+  return group.elements.filter(
+    (element) => element instanceof HTMLInputElement && isCheckbox(element)
+  ) as HTMLInputElement[];
+}
+
+function uncheckSelectedCheckboxes(checkboxes: HTMLInputElement[]): void {
+  // Uncheck all checked checkboxes
+  const uncheckCheckboxes = checkboxes.filter((checkbox) => checkbox.checked);
+  click(uncheckCheckboxes);
+}
+
 function processCheckboxes(
   group: VariationsGroup,
   button: HTMLButtonElement,
   buttons: HTMLButtonElement[]
 ): boolean {
-  const checkboxes = group.elements.filter(
-    (element) => element instanceof HTMLInputElement && isCheckbox(element)
-  ) as HTMLInputElement[];
+  const checkboxes = getGroupCheckboxes(group);
 
   if (!checkboxes.length) {
     return false;
   }
 
   if (!group.multiChoice) {
-    // Uncheck all checked checkboxes
-    const uncheckCheckboxes = checkboxes.filter((checkbox) => checkbox.checked);
-    click(uncheckCheckboxes);
+    uncheckSelectedCheckboxes(checkboxes);
   }
 
   // Click only on the checkbox that matches the button value

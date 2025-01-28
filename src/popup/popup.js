@@ -44,7 +44,6 @@ import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
 import { PageTypeEnum } from '../bandcamp/app/page-type.js';
 import { Storage } from '../app/core/storage';
-import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 import { MessageType } from '../app/core/messageType';
 import { isValidBandcampURL } from '../app/core/bandcampUrl';
 import { mapMusicStyles } from './modules/musicStyles';
@@ -154,9 +153,6 @@ function initialize(tab) {
   } else {
     showLatestViewed();
   }
-
-  // TODO: Remove this logic in the release 0.19.0
-  removeNonUuidRecordsFromStorage(storage);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -11,8 +11,6 @@ import {
   triggerInputEvent
 } from '../../utils/html';
 import {
-  containsOneOf,
-  splitString,
   isEmptyArray,
   countOccurrences,
   removeBrackets
@@ -211,12 +209,7 @@ function getArtistListData(releaseItems) {
 
   // add artists
   releaseItems.forEach((releaseItem) => {
-    if (containsOneOf(releaseItem.artist, ['V/A'])) {
-      artistsData.push(releaseItem.artist);
-    } else {
-      const artists = splitString(releaseItem.artist, /[,/+•|]| Vs | & +/);
-      artistsData.push(...artists);
-    }
+    artistsData.push(...releaseItem.artists);
   });
   artistsData.sort();
   filterData.push(...countOccurrences(artistsData));

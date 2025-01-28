@@ -1,5 +1,6 @@
 import { IReleaseItem, StorageData } from 'src/types';
 import { BandcampItem } from './bandcampItem';
+import { containsOneOf, splitString } from '../utils/utils';
 
 export class ReleaseItem extends BandcampItem {
   public artist: string;
@@ -18,6 +19,12 @@ export class ReleaseItem extends BandcampItem {
     this.artist = artist;
     this.title = title;
     this.label = label;
+  }
+
+  get artists(): string[] {
+    return containsOneOf(this.artist, ['V/A'])
+      ? [this.artist]
+      : splitString(this.artist, /[,/+•|]| Vs | & +/);
   }
 
   toStorageData(): StorageData {

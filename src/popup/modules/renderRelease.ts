@@ -19,6 +19,7 @@ import {
   keywordsToDiscogsStyles
 } from '../../bandcamp/modules/bandcamp';
 import { Track } from '../../app/track';
+import { debug } from '../../utils/console';
 
 export function renderReleaseCard(
   release: Release,
@@ -66,7 +67,8 @@ export function renderReleaseCard(
     }
   };
   const styles = keywordsToDiscogsStyles(release.keywords);
-
+  debug('RenderReleaseCard');
+  debug('release', release);
   render(releaseCardTemplate, element, {
     release,
     tracks,

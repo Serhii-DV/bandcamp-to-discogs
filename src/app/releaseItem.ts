@@ -1,9 +1,9 @@
 import { IReleaseItem, StorageData } from 'src/types';
 import { BandcampItem } from './bandcampItem';
-import { containsOneOf, splitString } from '../utils/utils';
+import { ReleaseArtist } from './releaseArtist';
 
 export class ReleaseItem extends BandcampItem {
-  public artist: string;
+  public artist: ReleaseArtist;
   public title: string;
   public label: string;
 
@@ -16,15 +16,13 @@ export class ReleaseItem extends BandcampItem {
     visit?: Date
   ) {
     super(url, undefined, visit, id);
-    this.artist = artist;
+    this.artist = ReleaseArtist.fromString(artist);
     this.title = title;
     this.label = label;
   }
 
   get artists(): string[] {
-    return containsOneOf(this.artist, ['V/A'])
-      ? [this.artist]
-      : splitString(this.artist, /[,/+•|]| Vs | & +/);
+    return this.artist.names;
   }
 
   toStorageData(): StorageData {

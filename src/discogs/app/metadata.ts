@@ -54,7 +54,7 @@ export function metadataValueAsArray(value: MetadataValue): string[] {
 }
 
 export function metadataValueAsString(value: MetadataValue): string {
-  return Array.isArray(value) ? (value[value.length - 1] as string) : value;
+  return Array.isArray(value) ? (value[0] as string) : value;
 }
 
 /**
@@ -107,16 +107,21 @@ export class Metadata {
       convertArtistName(artist),
       artist
     ]);
-    this.title = convertMetadataValue([capitalizeEachWord(title), title]);
+    this.title = convertMetadataValue([title, capitalizeEachWord(title)]);
     this.label = convertMetadataValue([
-      label,
-      artist === label ? generateSelfReleasedLabel(artist) : label
+      artist === label ? generateSelfReleasedLabel(artist) : label,
+      label
     ]);
     this.format = {
       fileType: convertMetadataValue([formatFileType, 'FLAC', 'WAV', 'MP3']),
       qty: convertMetadataValue(trackQty.toString()),
       description: convertMetadataValue(formatDescription),
-      freeText: convertMetadataValue(['24-bit/44.1kHz', '320 kbps', '128 kbps'])
+      freeText: convertMetadataValue([
+        '24-bit/44.1kHz',
+        '16-bit/44.1kHz',
+        '320 kbps',
+        '128 kbps'
+      ])
     };
     this.country = convertMetadataValue([
       country ?? config.metadata.country,

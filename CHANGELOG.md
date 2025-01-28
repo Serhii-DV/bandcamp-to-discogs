@@ -9,6 +9,8 @@
 - popup: Output album styles on the album card and Bandcamp latest viewed widget
 - bandcamp: Improved getting artists from tracks in case of various artists release
 - discogs: Improve importing metadata logic. Added more choices for fields.
+- discogs: Metadata. Added more choices for format types.
+- discogs: Metadata. Added more choices for genres and styles.
 
 ## 0.18.1 (2024-12-25)
 

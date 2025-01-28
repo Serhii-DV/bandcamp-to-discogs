@@ -1,13 +1,15 @@
 import {
   keywordsToDiscogsGenres,
   keywordsToDiscogsStyles
-} from '../../bandcamp/modules/bandcamp.js';
+} from '../../bandcamp/modules/bandcamp';
 import {
   capitalizeEachWord,
   removeLeadingZeroOrColon
 } from '../../utils/utils';
-import { getDiscogsDateValue } from './utils.js';
-import { Metadata } from './metadata.js';
+import { getDiscogsDateValue } from './utils';
+import { Metadata } from './metadata';
+import { convertArtistName } from '../modules/submission';
+import { generateSelfReleasedLabel } from '../modules/discogs';
 
 /**
  * Represents a Discogs CSV entry.
@@ -41,7 +43,7 @@ export class DiscogsCsv {
     date,
     images
   }) {
-    this.artist = artist;
+    this.artist = convertArtistName(artist);
     this.title = title;
     this.label = label;
     this.catno = catno;
@@ -62,7 +64,7 @@ export class DiscogsCsv {
   static fromRelease(release) {
     const label =
       release.artist === release.label
-        ? `Not On Label (${release.artist} Self-released)`
+        ? generateSelfReleasedLabel(release.artist)
         : release.label;
     const metadata = Metadata.fromRelease(release);
 
@@ -145,7 +147,7 @@ export class DiscogsCsv {
     const tracks = this.tracks
       .map(
         (track) =>
-          `${capitalizeEachWord(track.title)} ${removeLeadingZeroOrColon(track.time.value)}`
+          `${capitalizeEachWord(track.displayName)} ${removeLeadingZeroOrColon(track.time.value)}`
       )
       .join('\r');
     const notes = this.notes ? this.notes.replace(/"/g, '""') : '';

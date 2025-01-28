@@ -1,6 +1,26 @@
 import { B2DIconComponent } from '../popup/components/icon';
 import { log } from './console';
-import { isFunction, isString } from './utils';
+import {
+  camelCaseToReadable,
+  getOwnProperty,
+  isArray,
+  isFunction,
+  isObject,
+  isString
+} from './utils';
+
+export function elements(selector: string, parent?: Element): HTMLElement[] {
+  return Array.from(
+    (parent ? parent : document).querySelectorAll(selector)
+  ) as HTMLElement[];
+}
+
+export function element(
+  selector: string,
+  parent?: Element
+): HTMLElement | null {
+  return (parent ? parent : document).querySelector(selector);
+}
 
 export function hasDataAttribute(
   element: Element,
@@ -124,31 +144,32 @@ export function enable(
 }
 
 /**
- * Triggers click event on the element
+ * Triggers click event on the element or array of elements
  */
-export function click(element: HTMLElement): HTMLElement {
-  const event = new MouseEvent('click', {
-    bubbles: true,
-    cancelable: true,
-    view: window
-  });
-  element.dispatchEvent(event);
-  return element;
+export function click<T extends HTMLElement>(element: T | T[] | null): void {
+  if (!element) return;
+  if (isArray(element)) {
+    (element as T[]).forEach((el) => click(el));
+    return;
+  }
+
+  (element as T).click();
+
+  return;
 }
 
-export function onClick(
-  elements: HTMLElement | NodeListOf<HTMLElement> | null,
+export function onClick<T extends HTMLElement>(
+  element: T | T[] | NodeListOf<T> | null,
   callback: (event: MouseEvent) => void
 ): void {
-  if (!elements) return;
-
-  if (elements instanceof HTMLElement) {
-    elements.addEventListener('click', (event) =>
-      callback(event as MouseEvent)
-    );
-  } else {
-    elements.forEach((element) => onClick(element, callback));
+  if (!element) return;
+  if (!(element instanceof HTMLElement)) {
+    (element as T[]).forEach((el) => onClick(el, callback));
+    return;
   }
+  (element as T).addEventListener('click', callback);
+
+  return;
 }
 
 /**
@@ -176,6 +197,41 @@ export function triggerInputEvent(
   eventInitDict?: EventInit
 ): HTMLInputElement {
   element.dispatchEvent(new Event('input', eventInitDict ?? { bubbles: true }));
+  return element;
+}
+
+export function dispatchChangeEvent(
+  element: HTMLElement,
+  eventInitDict?: EventInit
+): HTMLElement {
+  if (
+    !(
+      element instanceof HTMLInputElement ||
+      element instanceof HTMLSelectElement ||
+      element instanceof HTMLTextAreaElement
+    )
+  ) {
+    throw new Error(
+      'The provided element does not support the "change" event.'
+    );
+  }
+
+  element.dispatchEvent(
+    new Event('change', eventInitDict ?? { bubbles: true })
+  );
+  return element;
+}
+
+export function dispatchClickEvent(
+  element: HTMLElement,
+  eventInitDict?: MouseEventInit
+): HTMLElement {
+  element.dispatchEvent(
+    new MouseEvent(
+      'click',
+      eventInitDict ?? { bubbles: true, cancelable: true }
+    )
+  );
   return element;
 }
 
@@ -416,4 +472,82 @@ export function isElementVisible(element: HTMLElement | null): boolean {
     style.visibility !== 'hidden' &&
     style.opacity !== '0'
   );
+}
+
+export function isCheckbox(input: HTMLInputElement): boolean {
+  return input.type === 'checkbox';
+}
+
+export function checkOneByValue(
+  checkboxes: HTMLInputElement[],
+  value: string,
+  callback?: (checkbox: HTMLInputElement) => void
+): void {
+  checkboxes.filter(isCheckbox).forEach((checkbox) => {
+    checkbox.checked = checkbox.value === value;
+
+    if (callback) {
+      callback(checkbox);
+    }
+  });
+}
+
+export function removeClass<T extends HTMLElement>(
+  element: T | T[] | null,
+  className: string
+): void {
+  if (!element) return;
+  if (Array.isArray(element)) {
+    element.forEach((e) => e.classList.remove(className));
+  } else {
+    element.classList.remove(className);
+  }
+}
+
+export function addClass<T extends HTMLElement>(
+  element: T | T[] | null,
+  className: string
+): void {
+  if (!element) return;
+  if (Array.isArray(element)) {
+    element.forEach((e) => e.classList.add(className));
+  } else {
+    element.classList.add(className);
+  }
+}
+
+export function toggleClass<T extends HTMLElement>(
+  element: T | T[] | null,
+  className: string
+): void {
+  if (!element) return;
+  if (Array.isArray(element)) {
+    element.forEach((e) => e.classList.toggle(className));
+  } else {
+    element.classList.toggle(className);
+  }
+}
+
+export function objectToHtml(
+  object: Object,
+  className: string = 'b2d-value'
+): string {
+  return Object.keys(object)
+    .map(
+      (key) =>
+        `<div class="${className}"><b>${camelCaseToReadable(key)}:</b> ${valueToHtml(getOwnProperty(object, key, ''))}</div>`
+    )
+    .join('');
+}
+
+export function valueToHtml(value: any): string {
+  if (isArray(value)) {
+    return value.join(', ');
+  }
+
+  if (isObject(value)) {
+    return objectToHtml(value);
+  }
+
+  return value;
 }

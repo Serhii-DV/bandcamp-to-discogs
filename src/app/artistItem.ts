@@ -27,7 +27,6 @@ export class ArtistItem extends BandcampItem {
   }
 
   static fromObject(obj: IArtistItem): ArtistItem {
-    console.log('ArtistItem fromObject', obj);
     return new ArtistItem(
       obj.url,
       obj.name,

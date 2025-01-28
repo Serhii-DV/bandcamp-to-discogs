@@ -17,9 +17,6 @@ import {
   getCurrentTab,
   getExtensionManifest
 } from '../utils/chrome';
-import { loadDiscogsGenres } from '../discogs/modules/genres.js';
-import { loadKeywordMapping } from '../bandcamp/modules/mapping.js';
-import config from '../config.js';
 import {
   setHistoryTabSearchValue,
   setupHistoryTab
@@ -32,7 +29,7 @@ import {
   setupConsoleLogRelease,
   setupConsoleLogSchema
 } from './console.js';
-import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
+import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils';
 import { logInfo } from '../utils/console';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
 import {
@@ -50,6 +47,7 @@ import { Storage } from '../app/core/storage';
 import { removeNonUuidRecordsFromStorage } from '../utils/storage';
 import { MessageType } from '../app/core/messageType';
 import { isValidBandcampURL } from '../app/core/bandcampUrl';
+import { mapMusicStyles } from './modules/musicStyles';
 
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
@@ -83,18 +81,16 @@ function processBandcampResponse(response) {
   }
 
   if (isPageAlbum) {
-    loadDiscogsGenres(config.genres_url).then(() => {
-      loadKeywordMapping(config.keyword_mapping_url).then((keywordsMapping) => {
-        storage.getByUuid(response.uuid).then((release) => {
-          setupConsoleLogKeywordsMapping(keywordsMapping);
-          setupConsoleLogRelease(release);
-          setupConsoleLogSchema(response.schema);
-          processBandcampPageAlbumResponse(
-            release,
-            response.schema,
-            keywordsMapping
-          );
-        });
+    mapMusicStyles().then((keywordsMapping) => {
+      storage.getByUuid(response.uuid).then((release) => {
+        setupConsoleLogKeywordsMapping(keywordsMapping);
+        setupConsoleLogRelease(release);
+        setupConsoleLogSchema(response.schema);
+        processBandcampPageAlbumResponse(
+          release,
+          response.schema,
+          keywordsMapping
+        );
       });
     });
   } else if (isPageMusic) {
@@ -165,7 +161,9 @@ function initialize(tab) {
 
 document.addEventListener('DOMContentLoaded', () => {
   getCurrentTab().then((tab) => {
-    initialize(tab);
+    mapMusicStyles().then(() => {
+      initialize(tab);
+    });
   });
 });
 

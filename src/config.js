@@ -22,12 +22,16 @@ export default {
       artist: 'https://www.discogs.com/search?q={artist}&type=artist',
       release:
         'https://www.discogs.com/search?q={artist}+{release}&type=release'
+    },
+    draft: {
+      self_released: 'Not On Label ({artist} Self-released)',
+      // Submission notes text
+      submission_notes: {
+        default:
+          'This draft was created via CSV upload and Bandcamp To Discogs Google Chrome and Firefox extension\n\nRelease url: {release_url}',
+        short: 'Release url: {release_url}'
+      }
     }
-  },
-  text: {
-    // Submission notes text
-    notes:
-      'This draft was created via CSV upload and Bandcamp To Discogs Google Chrome and Firefox extension\n\nRelease url: {release_url}'
   },
   metadata: {
     country: 'Worldwide'

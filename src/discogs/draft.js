@@ -1,14 +1,11 @@
 import { injectCSSFile } from '../utils/html';
-import { initialize } from './modules/initialization.js';
-import {
-  getArtistNameInput,
-  getReleaseTitleInput
-} from './modules/draft-page.js';
+import { setupDraftPage } from './modules/draft/setup';
+import { getArtistNameInput, getReleaseTitleInput } from './modules/draft/html';
 import {
   closeNotification,
   showNotificationError,
   showNotificationInfo
-} from './modules/notification.js';
+} from './modules/notification';
 import { log } from '../utils/console';
 
 import './css/b2d.css';
@@ -19,10 +16,10 @@ import { chromeListenToMessage } from '../utils/chrome';
 main();
 
 function main() {
-  log('Running discogs content main logic (src/discogs/content.js)');
+  log('Running discogs content main logic (src/discogs/draft.js)');
 
   // Inject concatenated discogs content css
-  injectCSSFile(chrome.runtime.getURL('discogs.content.css'));
+  injectCSSFile(chrome.runtime.getURL('discogs.draft.css'));
 
   showNotificationInfo('Waiting for metadata parsing...');
 
@@ -33,7 +30,7 @@ function main() {
     if (loadingElement) return;
 
     try {
-      initialize();
+      setupDraftPage();
     } catch (error) {
       console.error(error);
       showNotInitializedMessage(error.message);
@@ -53,7 +50,7 @@ const showNotInitializedMessage = (message) => {
       notification
         .querySelector('.action-restart')
         .addEventListener('click', () => {
-          initialize();
+          setupDraftPage();
           closeNotification(notification);
         });
     }

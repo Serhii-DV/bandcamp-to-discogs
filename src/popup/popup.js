@@ -29,7 +29,7 @@ import {
   setupConsoleLogRelease,
   setupConsoleLogSchema
 } from './console.js';
-import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils.js';
+import { isValidDiscogsReleaseEditUrl } from '../discogs/app/utils';
 import { logInfo } from '../utils/console';
 import { setupBandcampTab } from './tabs/bandcamp_tab.js';
 import {

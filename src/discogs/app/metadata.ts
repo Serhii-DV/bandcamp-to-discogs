@@ -1,18 +1,24 @@
-import config from '../../config.js';
+import config from '../../config';
 import {
   keywordsToDiscogsGenres,
   keywordsToDiscogsStyles
-} from '../../bandcamp/modules/bandcamp.js';
+} from '../../bandcamp/modules/bandcamp';
 import { getExtensionManifest } from '../../utils/chrome';
-import { generateSubmissionNotes } from '../modules/discogs.js';
-import { getDiscogsDateValue } from './utils.js';
+import {
+  generateSelfReleasedLabel,
+  generateSubmissionNotesDefault,
+  generateSubmissionNotesShort
+} from '../modules/discogs';
+import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
+import { arrayUnique, capitalizeEachWord } from '../../utils/utils';
 
-interface Format {
-  fileType: string;
-  qty: number;
-  description: string;
+export interface Format {
+  fileType: MetadataValue;
+  qty: MetadataValue;
+  description: MetadataValue;
+  freeText: MetadataValue;
 }
 
 interface Released {
@@ -41,18 +47,43 @@ interface MetadataParams {
   releaseUrl: string;
 }
 
+export type MetadataValue = string | string[];
+
+export function metadataValueAsArray(value: MetadataValue): string[] {
+  return Array.isArray(value) ? value : [value];
+}
+
+export function metadataValueAsString(value: MetadataValue): string {
+  return Array.isArray(value) ? (value[0] as string) : value;
+}
+
+/**
+ * Converts MetadataValue based on its content:
+ * - If it's a string, returns the string.
+ * - If it's an array, applies `arrayUnique` to remove duplicates.
+ *   - If the resulting array has a single element, returns that element as a string.
+ *   - If the resulting array has more than one element, returns the array as-is.
+ */
+function convertMetadataValue(value: MetadataValue): string | string[] {
+  if (Array.isArray(value)) {
+    const uniqueArray = arrayUnique(value);
+    return uniqueArray.length === 1 ? uniqueArray[0] : uniqueArray;
+  }
+  return value;
+}
+
 export class Metadata {
   version: string;
-  artist: string;
-  title: string;
-  label: string;
+  artist: MetadataValue;
+  title: MetadataValue;
+  label: MetadataValue;
   format: Format;
-  country: string;
+  country: MetadataValue;
   released: Released;
   tracklist: string;
   credits: string;
   genres: Genres;
-  submissionNotes: string;
+  submissionNotes: MetadataValue;
 
   constructor({
     artist,
@@ -71,27 +102,41 @@ export class Metadata {
     const manifest = getExtensionManifest();
 
     this.version = manifest.version;
-    this.artist = convertArtistName(artist);
-    this.title = title;
-    this.label = label;
+    this.artist = convertMetadataValue([
+      capitalizeEachWord(artist),
+      convertArtistName(artist),
+      artist
+    ]);
+    this.title = convertMetadataValue([title, capitalizeEachWord(title)]);
+    this.label = convertMetadataValue([
+      artist === label ? generateSelfReleasedLabel(artist) : label,
+      label
+    ]);
     this.format = {
-      fileType: formatFileType,
-      qty: trackQty,
-      description: formatDescription
+      fileType: convertMetadataValue([formatFileType, 'FLAC', 'WAV', 'MP3']),
+      qty: convertMetadataValue(trackQty.toString()),
+      description: convertMetadataValue(formatDescription),
+      freeText: convertMetadataValue([
+        '24-bit/44.1kHz',
+        '16-bit/44.1kHz',
+        '320 kbps',
+        '128 kbps'
+      ])
     };
-    this.country = country ?? config.metadata.country;
+    this.country = convertMetadataValue([
+      country ?? config.metadata.country,
+      config.metadata.country
+    ]);
     this.released = released;
     this.tracklist = tracklist;
     this.credits = credits;
     this.genres = genres;
-    this.submissionNotes = generateSubmissionNotes(releaseUrl);
+    this.submissionNotes = convertMetadataValue([
+      generateSubmissionNotesDefault(releaseUrl),
+      generateSubmissionNotesShort(releaseUrl)
+    ]);
   }
 
-  /**
-   * Creates a Metadata instance from a Release object.
-   * @param {Release} release - The Release object to convert.
-   * @return {Metadata} - The converted Metadata instance.
-   */
   static fromRelease(release: Release): Metadata {
     const publishedDate = getDiscogsDateValue(release.published);
     const modifiedDate = getDiscogsDateValue(release.modified);

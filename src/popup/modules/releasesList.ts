@@ -6,7 +6,10 @@ import {
   getCurrentTabUrl,
   openTabsAndClose
 } from '../../utils/chrome';
-import { isValidDiscogsReleaseEditUrl } from '../../discogs/app/utils';
+import {
+  isValidDiscogsReleaseAddUrl,
+  isValidDiscogsReleaseEditUrl
+} from '../../discogs/app/utils';
 import { createIconLink } from '../../utils/html';
 import { showReleaseCard, showReleases } from './main';
 import { Metadata } from '../../discogs/app/metadata';
@@ -65,14 +68,16 @@ function ArtistOrReleaseItemArrayToReleaseListItems(
   items: ArtistOrReleaseItem[]
 ): ReleasesListItem[] {
   const releasesListItems: ReleasesListItem[] = [];
-  const isDiscogsEditPage = isValidDiscogsReleaseEditUrl(currentTabUrl);
+  const isPageAcceptMetadata =
+    isValidDiscogsReleaseEditUrl(currentTabUrl) ||
+    isValidDiscogsReleaseAddUrl(currentTabUrl);
 
   items.forEach((item) => {
     const isReleaseItem = item instanceof ReleaseItem;
     const isBandcampItem = item instanceof BandcampItem;
     const controls = [];
 
-    if (isDiscogsEditPage && isReleaseItem) {
+    if (isPageAcceptMetadata && isReleaseItem) {
       controls.push(createApplyMetadataLink(item));
     }
 

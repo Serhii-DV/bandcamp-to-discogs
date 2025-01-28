@@ -9,69 +9,27 @@ import {
   removeClass,
   toggleClass
 } from '../../../utils/html';
-import { debug, logError } from '../../../utils/console';
+import { debug } from '../../../utils/console';
 import { hasClass, isArray } from '../../../utils/utils';
 import { truncateText } from '../../../utils/string';
 import { FormElement } from '../../app/draft/types';
 import { Section } from 'src/discogs/app/draft/section';
 import { VariationsGroup } from 'src/discogs/app/draft/variationGroup';
 import { Variation } from 'src/discogs/app/draft/variation';
+import {
+  checkInput,
+  getCountrySelect,
+  getNotesTextarea,
+  getQuantityInput,
+  getSection,
+  getSubmissionNotesTextarea,
+  getTrackTitleInputs,
+  selectOptionByValue,
+  setInputValue
+} from './html';
 
 // General setup
 const activeButtonClassName = 'button-green';
-
-export const getArtistNameInput = (): HTMLInputElement => {
-  return document.getElementById('artist-name-input') as HTMLInputElement;
-};
-
-export const getReleaseTitleInput = (): HTMLInputElement => {
-  return document.getElementById('release-title-input') as HTMLInputElement;
-};
-
-export const getLabelNameInput = (): HTMLInputElement => {
-  return document.getElementById('label-name-input-0') as HTMLInputElement;
-};
-
-export const getQuantityInput = (): HTMLInputElement => {
-  return document.querySelector(
-    'input[aria-label="Quantity of format"]'
-  ) as HTMLInputElement;
-};
-
-export const getCountrySelect = (): HTMLSelectElement => {
-  return document.getElementById('release-country-select') as HTMLSelectElement;
-};
-
-export const getReleasedDateInput = (): HTMLInputElement => {
-  return document.getElementById('release-date') as HTMLInputElement;
-};
-
-export const getTrackTitleInputs = (): NodeListOf<HTMLInputElement> => {
-  return document.querySelectorAll(
-    '.track_input'
-  ) as NodeListOf<HTMLInputElement>;
-};
-
-export const getNotesTextarea = (): HTMLTextAreaElement => {
-  return document.querySelector(
-    'textarea#release-notes-textarea'
-  ) as HTMLTextAreaElement;
-};
-
-export const getSubmissionNotesTextarea = (): HTMLTextAreaElement => {
-  return document.querySelector(
-    'textarea#release-submission-notes-textarea'
-  ) as HTMLTextAreaElement;
-};
-
-export function getSection(name: string): HTMLElement {
-  const artistBlock = document.querySelector(`[data-ref-overview="${name}"]`);
-  return artistBlock!.parentElement as HTMLElement;
-}
-
-export function getSubmissionFormSectionNotes(): HTMLElement | null {
-  return document.querySelector('#subform .notes');
-}
 
 /**
  * @param {String} fileType
@@ -132,7 +90,7 @@ export function autofillDurations(): void {
  * @param {String} str
  * @returns {Array<String, String>}
  */
-function extractTitleAndTime(str: string): [string, string] {
+export function extractTitleAndTime(str: string): [string, string] {
   const parts = str.split(' ');
 
   const timeFormatRegex = /^(\d{1,2}:)?\d{1,2}:\d{2}$/; // Matches hh:mm:ss or mm:ss
@@ -153,7 +111,7 @@ export function setFormat(
   fileType: string,
   description: string
 ): void {
-  const qtyInput = getQuantityInput() as HTMLInputElement;
+  const qtyInput = getQuantityInput();
   setInputValue(qtyInput, qty);
   selectFormatFileType(fileType);
   selectFormatDescription(description);
@@ -165,73 +123,13 @@ export function setCountry(country: string): void {
 }
 
 export function setSubmissionNotes(submissionNotes: string): void {
-  const submissionNotesTextarea =
-    getSubmissionNotesTextarea() as HTMLTextAreaElement;
+  const submissionNotesTextarea = getSubmissionNotesTextarea();
   setInputValue(submissionNotesTextarea, submissionNotes);
 }
 
 export function setNotes(notes: string): void {
-  const notesTextarea = getNotesTextarea() as HTMLTextAreaElement;
+  const notesTextarea = getNotesTextarea();
   setInputValue(notesTextarea, notes);
-}
-
-export function setInputValue(
-  inputElement: HTMLInputElement | HTMLTextAreaElement,
-  value: string
-): void {
-  const prev = inputElement.value;
-  inputElement.focus();
-  inputElement.value = value;
-  triggerInputEvent(inputElement);
-  inputElement.blur();
-
-  const inputLabel = inputElement.getAttribute('aria-label');
-  debug(`"${inputLabel}" input value changed`, { prev, value });
-}
-
-function checkInput(inputElement: HTMLInputElement): void {
-  // if (inputElement.checked) {
-  //   return;
-  // }
-
-  inputElement.focus();
-  inputElement.click();
-  triggerInputEvent(inputElement);
-  inputElement.blur();
-}
-
-function selectOptionByValue(
-  selectElement: HTMLSelectElement | null,
-  value: string
-): void {
-  if (!selectElement || !(selectElement instanceof HTMLSelectElement)) {
-    throw new Error('The first argument must be a valid <select> element.');
-  }
-
-  const option = Array.from(selectElement.options).find(
-    (opt) => opt.value === value
-  );
-
-  if (option) {
-    selectElement.value = value;
-    triggerChangeEvent(selectElement);
-    selectElement.blur();
-    const label = selectElement.getAttribute('aria-label');
-    debug(`"${label}" select value changed`, value);
-    return;
-  }
-
-  logError(`Option with value "${value}" not found.`);
-}
-
-function triggerInputEvent(element: HTMLElement): void {
-  const inputEvent = new Event('input', { bubbles: true, cancelable: true });
-  element.dispatchEvent(inputEvent);
-}
-
-function triggerChangeEvent(element: HTMLElement): void {
-  const changeEvent = new Event('change', { bubbles: true, cancelable: true });
-  element.dispatchEvent(changeEvent);
 }
 
 function makeVariationsHtml(

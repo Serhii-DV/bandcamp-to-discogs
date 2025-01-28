@@ -1,5 +1,3 @@
-'use strict';
-
 import { chromeListenToMessage } from '../../../utils/chrome';
 import { MessageType } from '../../../app/core/messageType';
 import {
@@ -14,21 +12,11 @@ import {
 import {
   setSection,
   autofillDurations,
-  getSubmissionFormSectionNotes,
-  getArtistNameInput,
-  getNotesTextarea,
-  getSubmissionNotesTextarea,
   setFormat,
   setSubmissionNotes,
   setNotes,
   setCountry,
-  getReleaseTitleInput,
-  getLabelNameInput,
-  getReleasedDateInput,
-  getCountrySelect,
-  getQuantityInput,
-  makeVariationsGroupClass,
-  getSection
+  makeVariationsGroupClass
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
@@ -42,6 +30,18 @@ import {
 import { FormElement } from '../../app/draft/types';
 import { VariationsGroup } from '../../app/draft/variationGroup';
 import { Section } from '../../app/draft/section';
+import {
+  getArtistNameInput,
+  getCountrySelect,
+  getLabelNameInput,
+  getNotesTextarea,
+  getQuantityInput,
+  getReleasedDateInput,
+  getReleaseTitleInput,
+  getSection,
+  getSubmissionFormSectionNotes,
+  getSubmissionNotesTextarea
+} from './html';
 
 export const setupDraftPage = () => {
   log('Setup draft page... (src/discogs/modules/draft/setup.ts)');
@@ -60,7 +60,7 @@ function setupReadMetadataButton() {
 
   onClick(readMetadataBtn, () => {
     try {
-      const notesTextarea = getNotesTextarea() as HTMLTextAreaElement;
+      const notesTextarea = getNotesTextarea();
 
       if (!notesTextarea.value) {
         showNotificationWarning('No Metadata in Notes');
@@ -78,8 +78,7 @@ function setupReadMetadataButton() {
   const submissionFormSectionNotes = getSubmissionFormSectionNotes();
   submissionFormSectionNotes?.append(readMetadataBtn);
 
-  const submissionNotesTextarea =
-    getSubmissionNotesTextarea() as HTMLTextAreaElement;
+  const submissionNotesTextarea = getSubmissionNotesTextarea();
   if (submissionNotesTextarea.value) {
     click(readMetadataBtn);
   }

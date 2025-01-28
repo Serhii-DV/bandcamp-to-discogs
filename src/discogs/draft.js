@@ -1,9 +1,6 @@
 import { injectCSSFile } from '../utils/html';
 import { setupDraftPage } from './modules/draft/setup';
-import {
-  getArtistNameInput,
-  getReleaseTitleInput
-} from './modules/draft/utils';
+import { getArtistNameInput, getReleaseTitleInput } from './modules/draft/html';
 import {
   closeNotification,
   showNotificationError,

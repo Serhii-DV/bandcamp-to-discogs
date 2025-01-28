@@ -34,6 +34,7 @@ interface Genres {
 
 interface MetadataParams {
   artist: string;
+  artists: string[];
   title: string;
   label: string;
   trackQty: number;
@@ -90,9 +91,12 @@ export class Metadata {
 
     this.version = manifest.version;
     this.artist = convertMetadataValue([
+      params.artist,
       capitalizeEachWord(params.artist),
       convertArtistName(params.artist),
-      params.artist
+      ...params.artists.map((artist) => capitalizeEachWord(artist)),
+      ...params.artists.map((artist) => convertArtistName(artist)),
+      ...params.artists
     ]);
     this.title = convertMetadataValue([
       params.title,
@@ -141,7 +145,8 @@ export class Metadata {
     const discogsStyles = keywordsToDiscogsStyles(release.keywords);
 
     return new Metadata({
-      artist: release.releaseItem.artist,
+      artist: release.releaseItem.artist.asString,
+      artists: release.releaseItem.artist.asArray,
       title: release.releaseItem.title,
       label: release.label,
       released: {

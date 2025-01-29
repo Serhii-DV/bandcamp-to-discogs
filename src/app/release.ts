@@ -1,3 +1,4 @@
+import { ReleaseArtist } from './releaseArtist';
 import { ReleaseItem } from './releaseItem';
 import { Track } from './track';
 
@@ -35,7 +36,7 @@ export class Release {
     this.credit = credit;
   }
 
-  get artist(): string {
+  get artist(): ReleaseArtist {
     return this.releaseItem.artist;
   }
 

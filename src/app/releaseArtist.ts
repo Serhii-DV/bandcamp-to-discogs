@@ -3,6 +3,7 @@ import { containsOneOf, splitString } from '../utils/utils';
 export class ReleaseArtist {
   public names: string[];
   public joins: string[];
+  private artist?: string = undefined;
 
   constructor(names: string[], joins: string[] = []) {
     this.names = names;
@@ -36,6 +37,6 @@ export class ReleaseArtist {
   }
 
   toString(): string {
-    return this.asArray.join(' ');
+    return this.artist ?? (this.artist = this.asArray.join(' '));
   }
 }

@@ -245,23 +245,23 @@ function setupVariationsGroup(
   variationsGroupElement: HTMLElement
 ): void {
   const buttons = getButtons(variationsGroupElement);
+  const clearButton = getClearButton(variationsGroupElement);
 
   if (group.draggable) {
-    setupDraggableButtons(group.elements, buttons);
+    setupDraggableButtons(group.elements, buttons, clearButton);
   } else {
     setupFormElements(group.elements, buttons);
+
+    onClick(buttons, (event) =>
+      variationButtonClickHandler(
+        event.target as HTMLButtonElement,
+        group,
+        buttons
+      )
+    );
+
+    setupClearButton(group, clearButton, buttons);
   }
-
-  onClick(buttons, (event) =>
-    variationButtonClickHandler(
-      event.target as HTMLButtonElement,
-      group,
-      buttons
-    )
-  );
-
-  const clearButton = getClearButton(variationsGroupElement);
-  setupClearButton(group, clearButton, buttons);
 
   if (group.multiChoice) {
     const selectAllButton = getSelectAllButton(variationsGroupElement);
@@ -483,7 +483,8 @@ function setupFormElements(
 
 function setupDraggableButtons(
   elements: FormElement[],
-  buttons: HTMLButtonElement[]
+  buttons: HTMLButtonElement[],
+  clearButton: HTMLButtonElement
 ): void {
   buttons.forEach((button) => {
     button.addEventListener('dragstart', handleDragStart);
@@ -497,17 +498,31 @@ function setupDraggableButtons(
       element.addEventListener('dragover', (event) =>
         handleDragOver(event as DragEvent)
       );
-      element.addEventListener('drop', (event) =>
-        handleDrop(event as DragEvent, buttons)
-      );
+      element.addEventListener('drop', (event) => {
+        handleDrop(event as DragEvent, buttons);
+        updateButtonsState(buttons, elements);
+      });
     }
+  });
+
+  onClick(clearButton, () => {
+    // Clear inputs
+    elements.forEach((element) => {
+      if (
+        element instanceof HTMLInputElement ||
+        element instanceof HTMLTextAreaElement
+      ) {
+        setInputValue(element, '');
+      }
+    });
+
+    updateButtonsState(buttons, elements);
   });
 }
 
 function handleDragStart(event: DragEvent) {
   const button = event.target as HTMLButtonElement;
   event.dataTransfer?.setData('text/plain', button.value || '');
-  debug('DragStart', button.value);
 }
 
 function handleDragOver(event: DragEvent) {
@@ -516,15 +531,13 @@ function handleDragOver(event: DragEvent) {
 }
 
 function handleDrop(event: DragEvent, buttons: HTMLButtonElement[]): void {
-  debug('Dropping', event);
   event.preventDefault();
 
   const data = event.dataTransfer?.getData('text/plain');
   if (!data) return;
 
   const target = event.target as HTMLInputElement | HTMLTextAreaElement;
-  debug('Dropping data', data, target.value);
-  target.value = data;
+  setInputValue(target, data);
 
   buttons.forEach((button) => {
     if (button.value === data) {
@@ -563,6 +576,30 @@ function removeButtonActiveState(
     : buttons;
 
   removeClass(applyButtons, activeButtonClassName);
+}
+
+function updateButtonsState(
+  buttons: HTMLButtonElement[],
+  elements: FormElement[]
+): void {
+  const verifyElements = elements.filter(
+    (element) =>
+      element instanceof HTMLInputElement ||
+      element instanceof HTMLTextAreaElement
+  );
+  if (!verifyElements.length) return;
+
+  removeClass(buttons, activeButtonClassName);
+
+  buttons.forEach((button) => {
+    const hasValue = verifyElements.some(
+      (element) => element.value === button.value
+    );
+
+    if (hasValue) {
+      addClass(button, activeButtonClassName);
+    }
+  });
 }
 
 function updateButtonsStateByCheckboxes(

@@ -120,9 +120,14 @@ function autofocus() {
 }
 
 function setupSectionArtist(artist: MetadataValue): void {
+  const artistSection = getSection('artist');
+  const artistInputs = elements(
+    '.drag-drop-list input[type="text"]',
+    artistSection
+  ) as HTMLInputElement[];
   const artistGroup = new VariationsGroup(
     'Name',
-    [getArtistNameInput()],
+    artistInputs,
     metadataValueAsArray(artist),
     false,
     true

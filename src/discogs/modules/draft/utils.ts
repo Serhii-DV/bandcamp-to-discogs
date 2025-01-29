@@ -528,7 +528,7 @@ function handleDrop(event: DragEvent, buttons: HTMLButtonElement[]): void {
 
   buttons.forEach((button) => {
     if (button.value === data) {
-      toggleButtonActiveState(button);
+      setButtonInActiveState(button);
     }
   });
 }
@@ -551,13 +551,17 @@ function toggleButtonActiveState(button: HTMLButtonElement): void {
   toggleClass(button, activeButtonClassName);
 }
 
+function setButtonInActiveState(button: HTMLButtonElement): void {
+  addClass(button, activeButtonClassName);
+}
+
 function removeButtonActiveState(
   buttons: HTMLButtonElement | HTMLButtonElement[]
 ): void {
   const applyButtons = isArray(buttons)
     ? getActiveButtons(buttons as HTMLButtonElement[])
     : buttons;
-  debug('removeButtonActiveState', applyButtons);
+
   removeClass(applyButtons, activeButtonClassName);
 }
 

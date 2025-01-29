@@ -8,12 +8,14 @@ export class VariationsGroup {
   elements: FormElement[];
   variations: Variation[];
   multiChoice: boolean;
+  draggable: boolean;
 
   constructor(
     title: string,
     elements: FormElement[],
     variations: string[],
-    multiChoice: boolean = false
+    multiChoice: boolean = false,
+    draggable: boolean = false
   ) {
     this.title = title;
     this.alias = convertToAlias(title);
@@ -22,5 +24,6 @@ export class VariationsGroup {
       variations.filter((variation) => !!variation)
     ).map((variation) => new Variation(variation));
     this.multiChoice = multiChoice;
+    this.draggable = draggable;
   }
 }

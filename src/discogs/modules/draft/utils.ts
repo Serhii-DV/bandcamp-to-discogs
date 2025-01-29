@@ -30,6 +30,7 @@ import {
 
 // General setup
 const activeButtonClassName = 'button-green';
+const iconMagic = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
 /**
  * @param {String} fileType
@@ -134,7 +135,8 @@ export function setNotes(notes: string): void {
 
 function makeVariationsHtml(
   variations: Variation[],
-  selectAllBtn: boolean
+  selectAllBtn: boolean,
+  draggable: boolean
 ): string {
   if (!isArray(variations)) {
     throw new Error('Variations should be an array');
@@ -146,19 +148,22 @@ function makeVariationsHtml(
 
   return `
 <div class="b2d-variations">
-  ${variations.map(makeVariationButtonHtml).join(' ')}
+  ${variations.map((variation) => makeVariationButtonHtml(variation, draggable)).join(' ')}
   ${makeClearButtonHtml()}
   ${selectAllBtn ? makeSelectAllButtonHtml() : ''}
 </div>
 `;
 }
 
-function makeVariationButtonHtml(variation: Variation): string {
+function makeVariationButtonHtml(
+  variation: Variation,
+  draggable: boolean = false
+): string {
   if (!variation) {
     return '';
   }
 
-  const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
+  const icon = iconMagic;
   const value = variation.toString();
   const content = truncateText(value, 30);
   const button = createElementFromHTML(
@@ -166,6 +171,11 @@ function makeVariationButtonHtml(variation: Variation): string {
   ) as HTMLButtonElement;
   button.title = value;
   button.value = value;
+
+  if (draggable) {
+    button.draggable = true;
+    addClass(button, 'b2d-draggable');
+  }
 
   return button.outerHTML;
 }
@@ -175,9 +185,10 @@ function makeVariationsGroupHtml(
   showTitle: boolean = true
 ): string {
   return `
+${group.draggable ? '<div class="b2d-info">You can drag buttons to the form fields</div>' : ''}
 <div class="b2d-group ${makeVariationsGroupClass(group)}">
   ${showTitle && group.title ? `<b>${group.title}:</b>` : ''}
-  ${makeVariationsHtml(group.variations, group.multiChoice)}
+  ${makeVariationsHtml(group.variations, group.multiChoice, group.draggable)}
 </div>
 `;
 }
@@ -234,7 +245,12 @@ function setupVariationsGroup(
   variationsGroupElement: HTMLElement
 ): void {
   const buttons = getButtons(variationsGroupElement);
-  setupFormElementsListener(group.elements, buttons);
+
+  if (group.draggable) {
+    setupDraggableButtons(group.elements, buttons);
+  } else {
+    setupFormElements(group.elements, buttons);
+  }
 
   onClick(buttons, (event) =>
     variationButtonClickHandler(
@@ -414,7 +430,7 @@ function clearActiveButtons(buttons: HTMLButtonElement[]): void {
   click(getActiveButtons(buttons));
 }
 
-function setupFormElementsListener(
+function setupFormElements(
   elements: FormElement[],
   buttons: HTMLButtonElement[]
 ): void {
@@ -436,8 +452,6 @@ function setupFormElementsListener(
       : false;
 
     if (!isCheckboxElement) removeClass(buttons, activeButtonClassName);
-    {
-    }
 
     buttons.forEach((button) => {
       const buttonValue = button.value;
@@ -464,6 +478,58 @@ function setupFormElementsListener(
 
     element.addEventListener(eventType, handleEvent);
     handleEvent();
+  });
+}
+
+function setupDraggableButtons(
+  elements: FormElement[],
+  buttons: HTMLButtonElement[]
+): void {
+  buttons.forEach((button) => {
+    button.addEventListener('dragstart', handleDragStart);
+  });
+
+  elements.forEach((element) => {
+    if (
+      element instanceof HTMLInputElement ||
+      element instanceof HTMLTextAreaElement
+    ) {
+      element.addEventListener('dragover', (event) =>
+        handleDragOver(event as DragEvent)
+      );
+      element.addEventListener('drop', (event) =>
+        handleDrop(event as DragEvent, buttons)
+      );
+    }
+  });
+}
+
+function handleDragStart(event: DragEvent) {
+  const button = event.target as HTMLButtonElement;
+  event.dataTransfer?.setData('text/plain', button.value || '');
+  debug('DragStart', button.value);
+}
+
+function handleDragOver(event: DragEvent) {
+  // Prevent default to allow drop
+  event.preventDefault();
+}
+
+function handleDrop(event: DragEvent, buttons: HTMLButtonElement[]): void {
+  debug('Dropping', event);
+  event.preventDefault();
+
+  const data = event.dataTransfer?.getData('text/plain');
+  if (!data) return;
+
+  const target = event.target as HTMLInputElement | HTMLTextAreaElement;
+  debug('Dropping data', data, target.value);
+  target.value = data;
+
+  buttons.forEach((button) => {
+    if (button.value === data) {
+      toggleButtonActiveState(button);
+    }
   });
 }
 

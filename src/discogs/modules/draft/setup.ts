@@ -123,7 +123,9 @@ function setupSectionArtist(artist: MetadataValue): void {
   const artistGroup = new VariationsGroup(
     'Name',
     [getArtistNameInput()],
-    metadataValueAsArray(artist)
+    metadataValueAsArray(artist),
+    false,
+    true
   );
 
   setSection(

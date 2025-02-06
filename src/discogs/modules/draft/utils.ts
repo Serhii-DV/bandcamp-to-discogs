@@ -12,7 +12,7 @@ import {
 import { debug } from '../../../utils/console';
 import { hasClass, isArray } from '../../../utils/utils';
 import { truncateText } from '../../../utils/string';
-import { FormElement } from '../../app/draft/types';
+import { FormElement, FormTextElement } from '../../app/draft/types';
 import { Section } from 'src/discogs/app/draft/section';
 import { VariationsGroup } from 'src/discogs/app/draft/variationGroup';
 import { Variation } from 'src/discogs/app/draft/variation';
@@ -247,8 +247,8 @@ function setupVariationsGroup(
   const buttons = getButtons(variationsGroupElement);
   const clearButton = getClearButton(variationsGroupElement);
 
-  if (group.draggable) {
-    setupDraggableButtons(group.elements, buttons, clearButton);
+  if (group.draggable && group.container) {
+    setupDraggableButtons(group.container, buttons, clearButton);
   } else {
     setupFormElements(group.elements, buttons);
 
@@ -468,11 +468,7 @@ function setupFormElements(
   elements.forEach((element) => {
     if (!element) return;
 
-    const eventType =
-      element instanceof HTMLInputElement ||
-      element instanceof HTMLTextAreaElement
-        ? 'input'
-        : 'change';
+    const eventType = instanceOfFormTextElement(element) ? 'input' : 'change';
 
     const handleEvent = () => handleButtons(element, buttons);
 
@@ -482,42 +478,47 @@ function setupFormElements(
 }
 
 function setupDraggableButtons(
-  elements: FormElement[],
+  container: HTMLElement,
   buttons: HTMLButtonElement[],
   clearButton: HTMLButtonElement
 ): void {
+  const containerElements = (): FormTextElement[] => {
+    return Array.from(container.querySelectorAll('input, textarea'));
+  };
+
   buttons.forEach((button) => {
     button.addEventListener('dragstart', handleDragStart);
   });
 
-  elements.forEach((element) => {
-    if (
-      element instanceof HTMLInputElement ||
-      element instanceof HTMLTextAreaElement
-    ) {
-      element.addEventListener('dragover', (event) =>
-        handleDragOver(event as DragEvent)
-      );
-      element.addEventListener('drop', (event) => {
-        handleDrop(event as DragEvent, buttons);
-        updateButtonsState(buttons, elements);
-      });
+  container.addEventListener('dragover', (event) => {
+    if (instanceOfFormTextElement(event.target)) {
+      handleDragOver(event as DragEvent);
+    }
+  });
+
+  container.addEventListener('drop', (event) => {
+    if (instanceOfFormTextElement(event.target)) {
+      handleDrop(event as DragEvent, buttons);
+      updateButtonsState(buttons, containerElements());
     }
   });
 
   onClick(clearButton, () => {
-    // Clear inputs
+    const elements = containerElements();
     elements.forEach((element) => {
-      if (
-        element instanceof HTMLInputElement ||
-        element instanceof HTMLTextAreaElement
-      ) {
-        setInputValue(element, '');
-      }
+      setInputValue(element, '');
     });
-
     updateButtonsState(buttons, elements);
   });
+}
+
+function instanceOfFormTextElement(
+  element?: EventTarget | null
+): element is FormTextElement {
+  return (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement
+  );
 }
 
 function handleDragStart(event: DragEvent) {

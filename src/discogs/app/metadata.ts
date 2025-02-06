@@ -91,9 +91,14 @@ export class Metadata {
 
     this.version = manifest.version;
     this.artist = convertMetadataValue([
-      params.artist,
-      capitalizeEachWord(params.artist),
-      convertArtistName(params.artist),
+      // Do not add default artist if there is more than one artist
+      ...(params.artists.length > 1
+        ? []
+        : [
+            params.artist,
+            capitalizeEachWord(params.artist),
+            convertArtistName(params.artist)
+          ]),
       ...params.artists.map((artist) => capitalizeEachWord(artist)),
       ...params.artists.map((artist) => convertArtistName(artist)),
       ...params.artists

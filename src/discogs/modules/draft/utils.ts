@@ -416,10 +416,7 @@ function processCheckboxes(
 function setFormElementValue(element: FormElement, value: string): void {
   debug('Set form element value:', element, value);
 
-  if (
-    element instanceof HTMLInputElement ||
-    element instanceof HTMLTextAreaElement
-  ) {
+  if (instanceOfFormTextElement(element)) {
     setInputValue(element, value);
   } else if (element instanceof HTMLSelectElement) {
     selectOptionByValue(element, value);
@@ -537,7 +534,7 @@ function handleDrop(event: DragEvent, buttons: HTMLButtonElement[]): void {
   const data = event.dataTransfer?.getData('text/plain');
   if (!data) return;
 
-  const target = event.target as HTMLInputElement | HTMLTextAreaElement;
+  const target = event.target as FormTextElement;
   setInputValue(target, data);
 
   buttons.forEach((button) => {
@@ -583,11 +580,7 @@ function updateButtonsState(
   buttons: HTMLButtonElement[],
   elements: FormElement[]
 ): void {
-  const verifyElements = elements.filter(
-    (element) =>
-      element instanceof HTMLInputElement ||
-      element instanceof HTMLTextAreaElement
-  );
+  const verifyElements = elements.filter(instanceOfFormTextElement);
   if (!verifyElements.length) return;
 
   removeClass(buttons, activeButtonClassName);

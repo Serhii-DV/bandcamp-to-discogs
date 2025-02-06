@@ -70,7 +70,7 @@ export class Release {
 
   toStorageObject(): object {
     return {
-      artist: this.releaseItem.artist,
+      artist: this.releaseItem.artist.toString(),
       title: this.releaseItem.title,
       url: this.releaseItem.url.toString(),
       label: this.label,

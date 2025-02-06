@@ -163,13 +163,14 @@ export class Storage {
 
       const obj = storageDataMap[key];
 
+      log('[Storage]', obj);
       try {
         uuidMap[key] = Release.fromStorageObject(obj);
       } catch (error) {
         try {
           uuidMap[key] = Music.fromObject(obj);
         } catch (error) {
-          logError('[Storage] Broken storage object.', error, obj);
+          logError('[Storage] Broken storage object.', error);
         }
       }
     }

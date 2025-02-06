@@ -29,7 +29,7 @@ export class ReleaseItem extends BandcampItem {
     const self = this;
     return {
       url: self.url.toString(),
-      artist: self.artist,
+      artist: self.artist.toString(),
       title: self.title,
       label: self.label,
       image: self.image,

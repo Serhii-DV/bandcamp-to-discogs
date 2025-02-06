@@ -5,7 +5,7 @@ import {
   Uuid,
   UuidMap
 } from 'src/types';
-import { log } from '../../utils/console';
+import { log, logError } from '../../utils/console';
 import { Release } from '../release';
 import { Music } from '../music';
 import { hasOwnProperty, isObject } from '../../utils/utils';
@@ -169,7 +169,7 @@ export class Storage {
         try {
           uuidMap[key] = Music.fromObject(obj);
         } catch (error) {
-          log('[Storage] Broken storage object.', JSON.stringify(error), obj);
+          logError('[Storage] Broken storage object.', error, obj);
         }
       }
     }

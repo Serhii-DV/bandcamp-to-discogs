@@ -21,7 +21,7 @@
     "json-minimizer-webpack-plugin": "^5.0.0",
     "mini-css-extract-plugin": "^2.9.2",
     "mustache": "^4.2.0",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.0",
     "source-map-loader": "^5.0.0",
     "terser-webpack-plugin": "^5.3.11",
     "ts-loader": "^9.5.2",

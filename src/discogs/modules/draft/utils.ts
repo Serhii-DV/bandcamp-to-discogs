@@ -12,7 +12,7 @@ import {
 import { debug } from '../../../utils/console';
 import { hasClass, isArray } from '../../../utils/utils';
 import { truncateText } from '../../../utils/string';
-import { FormElement } from '../../app/draft/types';
+import { FormElement, FormTextElement } from '../../app/draft/types';
 import { Section } from 'src/discogs/app/draft/section';
 import { VariationsGroup } from 'src/discogs/app/draft/variationGroup';
 import { Variation } from 'src/discogs/app/draft/variation';
@@ -30,6 +30,7 @@ import {
 
 // General setup
 const activeButtonClassName = 'button-green';
+const iconMagic = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
 /**
  * @param {String} fileType
@@ -134,7 +135,8 @@ export function setNotes(notes: string): void {
 
 function makeVariationsHtml(
   variations: Variation[],
-  selectAllBtn: boolean
+  selectAllBtn: boolean,
+  draggable: boolean
 ): string {
   if (!isArray(variations)) {
     throw new Error('Variations should be an array');
@@ -146,19 +148,22 @@ function makeVariationsHtml(
 
   return `
 <div class="b2d-variations">
-  ${variations.map(makeVariationButtonHtml).join(' ')}
+  ${variations.map((variation) => makeVariationButtonHtml(variation, draggable)).join(' ')}
   ${makeClearButtonHtml()}
   ${selectAllBtn ? makeSelectAllButtonHtml() : ''}
 </div>
 `;
 }
 
-function makeVariationButtonHtml(variation: Variation): string {
+function makeVariationButtonHtml(
+  variation: Variation,
+  draggable: boolean = false
+): string {
   if (!variation) {
     return '';
   }
 
-  const icon = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
+  const icon = iconMagic;
   const value = variation.toString();
   const content = truncateText(value, 30);
   const button = createElementFromHTML(
@@ -166,6 +171,11 @@ function makeVariationButtonHtml(variation: Variation): string {
   ) as HTMLButtonElement;
   button.title = value;
   button.value = value;
+
+  if (draggable) {
+    button.draggable = true;
+    addClass(button, 'b2d-draggable');
+  }
 
   return button.outerHTML;
 }
@@ -177,9 +187,20 @@ function makeVariationsGroupHtml(
   return `
 <div class="b2d-group ${makeVariationsGroupClass(group)}">
   ${showTitle && group.title ? `<b>${group.title}:</b>` : ''}
-  ${makeVariationsHtml(group.variations, group.multiChoice)}
+  ${makeVariationsHtml(group.variations, group.multiChoice, group.draggable)}
 </div>
+${group.draggable ? makeInfoHtml('Drag the buttons to the Name fields and drop them.') : ''}
 `;
+}
+
+function makeInfoHtml(content: string): string {
+  return `<div class="b2d-info">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square" viewBox="0 0 16 16">
+  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+</svg>
+${content}
+</div>`;
 }
 
 export function makeVariationsGroupClass(group: VariationsGroup): string {
@@ -234,18 +255,23 @@ function setupVariationsGroup(
   variationsGroupElement: HTMLElement
 ): void {
   const buttons = getButtons(variationsGroupElement);
-  setupFormElementsListener(group.elements, buttons);
-
-  onClick(buttons, (event) =>
-    variationButtonClickHandler(
-      event.target as HTMLButtonElement,
-      group,
-      buttons
-    )
-  );
-
   const clearButton = getClearButton(variationsGroupElement);
-  setupClearButton(group, clearButton, buttons);
+
+  if (group.draggable && group.container) {
+    setupDraggableButtons(group.container, buttons, clearButton);
+  } else {
+    setupFormElements(group.elements, buttons);
+
+    onClick(buttons, (event) =>
+      variationButtonClickHandler(
+        event.target as HTMLButtonElement,
+        group,
+        buttons
+      )
+    );
+
+    setupClearButton(group, clearButton, buttons);
+  }
 
   if (group.multiChoice) {
     const selectAllButton = getSelectAllButton(variationsGroupElement);
@@ -400,10 +426,7 @@ function processCheckboxes(
 function setFormElementValue(element: FormElement, value: string): void {
   debug('Set form element value:', element, value);
 
-  if (
-    element instanceof HTMLInputElement ||
-    element instanceof HTMLTextAreaElement
-  ) {
+  if (instanceOfFormTextElement(element)) {
     setInputValue(element, value);
   } else if (element instanceof HTMLSelectElement) {
     selectOptionByValue(element, value);
@@ -414,7 +437,7 @@ function clearActiveButtons(buttons: HTMLButtonElement[]): void {
   click(getActiveButtons(buttons));
 }
 
-function setupFormElementsListener(
+function setupFormElements(
   elements: FormElement[],
   buttons: HTMLButtonElement[]
 ): void {
@@ -436,8 +459,6 @@ function setupFormElementsListener(
       : false;
 
     if (!isCheckboxElement) removeClass(buttons, activeButtonClassName);
-    {
-    }
 
     buttons.forEach((button) => {
       const buttonValue = button.value;
@@ -454,16 +475,82 @@ function setupFormElementsListener(
   elements.forEach((element) => {
     if (!element) return;
 
-    const eventType =
-      element instanceof HTMLInputElement ||
-      element instanceof HTMLTextAreaElement
-        ? 'input'
-        : 'change';
+    const eventType = instanceOfFormTextElement(element) ? 'input' : 'change';
 
     const handleEvent = () => handleButtons(element, buttons);
 
     element.addEventListener(eventType, handleEvent);
     handleEvent();
+  });
+}
+
+function setupDraggableButtons(
+  container: HTMLElement,
+  buttons: HTMLButtonElement[],
+  clearButton: HTMLButtonElement
+): void {
+  const containerElements = (): FormTextElement[] => {
+    return Array.from(container.querySelectorAll('input, textarea'));
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener('dragstart', handleDragStart);
+  });
+
+  container.addEventListener('dragover', (event) => {
+    if (instanceOfFormTextElement(event.target)) {
+      handleDragOver(event as DragEvent);
+    }
+  });
+
+  container.addEventListener('drop', (event) => {
+    if (instanceOfFormTextElement(event.target)) {
+      handleDrop(event as DragEvent, buttons);
+      updateButtonsState(buttons, containerElements());
+    }
+  });
+
+  onClick(clearButton, () => {
+    const elements = containerElements();
+    elements.forEach((element) => {
+      setInputValue(element, '');
+    });
+    updateButtonsState(buttons, elements);
+  });
+}
+
+function instanceOfFormTextElement(
+  element?: EventTarget | null
+): element is FormTextElement {
+  return (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement
+  );
+}
+
+function handleDragStart(event: DragEvent) {
+  const button = event.target as HTMLButtonElement;
+  event.dataTransfer?.setData('text/plain', button.value || '');
+}
+
+function handleDragOver(event: DragEvent) {
+  // Prevent default to allow drop
+  event.preventDefault();
+}
+
+function handleDrop(event: DragEvent, buttons: HTMLButtonElement[]): void {
+  event.preventDefault();
+
+  const data = event.dataTransfer?.getData('text/plain');
+  if (!data) return;
+
+  const target = event.target as FormTextElement;
+  setInputValue(target, data);
+
+  buttons.forEach((button) => {
+    if (button.value === data) {
+      setButtonInActiveState(button);
+    }
   });
 }
 
@@ -485,14 +572,38 @@ function toggleButtonActiveState(button: HTMLButtonElement): void {
   toggleClass(button, activeButtonClassName);
 }
 
+function setButtonInActiveState(button: HTMLButtonElement): void {
+  addClass(button, activeButtonClassName);
+}
+
 function removeButtonActiveState(
   buttons: HTMLButtonElement | HTMLButtonElement[]
 ): void {
   const applyButtons = isArray(buttons)
     ? getActiveButtons(buttons as HTMLButtonElement[])
     : buttons;
-  debug('removeButtonActiveState', applyButtons);
+
   removeClass(applyButtons, activeButtonClassName);
+}
+
+function updateButtonsState(
+  buttons: HTMLButtonElement[],
+  elements: FormElement[]
+): void {
+  const verifyElements = elements.filter(instanceOfFormTextElement);
+  if (!verifyElements.length) return;
+
+  removeClass(buttons, activeButtonClassName);
+
+  buttons.forEach((button) => {
+    const hasValue = verifyElements.some(
+      (element) => element.value === button.value
+    );
+
+    if (hasValue) {
+      addClass(button, activeButtonClassName);
+    }
+  });
 }
 
 function updateButtonsStateByCheckboxes(

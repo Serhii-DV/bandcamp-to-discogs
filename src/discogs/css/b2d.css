@@ -19,3 +19,12 @@ div.b2d-section > div {
 div.b2d-section .b2d-variation {
   font-style: normal;
 }
+
+div.b2d-section .b2d-draggable {
+  cursor: move;
+}
+
+div.b2d-section .b2d-info {
+  font-style: italic;
+  font-size: 80%;
+}

@@ -47,13 +47,13 @@ export function renderReleaseCard(
     bandcamp: {
       artistUrl: release.artistUrl,
       releaseUrl: release.url,
-      searchArtistUrl: getBandcampSearchArtistUrl(release.artist),
+      searchArtistUrl: getBandcampSearchArtistUrl(release.artist.toString()),
       searchReleaseUrl: getBandcampSearchReleaseUrl(
-        release.artist,
+        release.artist.toString(),
         release.title
       ),
       searchAllUrl: getBandcampSearchReleaseAllUrl(
-        release.artist,
+        release.artist.toString(),
         release.title
       )
     },

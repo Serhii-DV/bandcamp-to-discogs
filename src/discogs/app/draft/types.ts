@@ -1,4 +1,2 @@
-export type FormElement =
-  | HTMLInputElement
-  | HTMLSelectElement
-  | HTMLTextAreaElement;
+export type FormTextElement = HTMLInputElement | HTMLTextAreaElement;
+export type FormElement = FormTextElement | HTMLSelectElement;

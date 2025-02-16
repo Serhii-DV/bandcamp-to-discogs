@@ -1,5 +1,5 @@
 import { ReleaseItem } from '../../app/releaseItem';
-import { getDataAttribute } from '../../utils/html';
+import { element, getDataAttribute } from '../../utils/html';
 import {
   removeInvisibleChars,
   trimCharactersFromString
@@ -68,4 +68,17 @@ export function extractBCSearchInputStyle(): CSSStyleDeclaration | null {
   return bcSearchInputElement
     ? window.getComputedStyle(bcSearchInputElement)
     : null;
+}
+
+export function getDigitalAudioQuality(): string {
+  return (
+    extractAudioQuality(element('.digital .audio-quality')?.innerText ?? '') ??
+    ''
+  );
+}
+
+function extractAudioQuality(input: string): string | null {
+  const match = input.match(/(\d+-bit\/\d+(?:\.\d+)?kHz)/);
+
+  return match ? match[1] : null;
 }

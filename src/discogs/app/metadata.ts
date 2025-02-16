@@ -40,6 +40,7 @@ interface MetadataParams {
   trackQty: number;
   formatFileType: string;
   formatDescription: string;
+  freeText: string;
   country?: string;
   released: Released;
   tracklist: string;
@@ -122,12 +123,7 @@ export class Metadata {
       ]),
       qty: convertMetadataValue(params.trackQty.toString()),
       description: convertMetadataValue(params.formatDescription),
-      freeText: convertMetadataValue([
-        '24-bit/44.1kHz',
-        '16-bit/44.1kHz',
-        '320 kbps',
-        '128 kbps'
-      ])
+      freeText: convertMetadataValue([params.freeText, '320 kbps', '128 kbps'])
     };
     this.country = convertMetadataValue([
       params.country ?? config.metadata.country,
@@ -161,6 +157,7 @@ export class Metadata {
       trackQty: release.tracksQty,
       formatFileType: 'FLAC',
       formatDescription: 'Album',
+      freeText: release.quality,
       genres: {
         keywords: release.keywords,
         autoDetectedGenres: discogsGenres,

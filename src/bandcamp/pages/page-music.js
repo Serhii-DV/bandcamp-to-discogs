@@ -19,7 +19,7 @@ import {
   extractBCSearchInputStyle,
   getBandPhotoSrc,
   getReleaseItems as getReleaseItemsFromPage
-} from '../modules/html.js';
+} from '../modules/html';
 import { log } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Music } from '../../app/music';

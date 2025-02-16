@@ -1,5 +1,5 @@
 import { logInfo } from '../../utils/console';
-import { getMusicAlbumSchemaData } from '../modules/html.js';
+import { getMusicAlbumSchemaData } from '../modules/html';
 import { createReleaseFromSchema } from '../../utils/schema';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Storage } from '../../app/core/storage';

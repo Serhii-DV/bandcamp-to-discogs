@@ -1,5 +1,8 @@
 import { logInfo } from '../../utils/console';
-import { getMusicAlbumSchemaData } from '../modules/html.js';
+import {
+  getDigitalAudioQuality,
+  getMusicAlbumSchemaData
+} from '../modules/html';
 import { createReleaseFromSchema } from '../../utils/schema';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Storage } from '../../app/core/storage';
@@ -12,6 +15,7 @@ export function setupPageAlbum(pageType) {
   logInfo('Setup page album');
   const schema = getMusicAlbumSchemaData();
   const release = createReleaseFromSchema(schema);
+  release.quality = getDigitalAudioQuality();
   storage.save(release);
 
   chromeListenToMessage((message, sender, sendResponse) => {

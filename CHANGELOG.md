@@ -6,6 +6,7 @@
 
 - discogs/popup: Detect multiple artists in the title if they are
 - discogs: Improved search for Draft release in popup
+- bandcamp: Auto-detection of the digital release audio quality
 
 ## 0.19.0 (2025-01-28)
 

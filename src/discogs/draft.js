@@ -71,7 +71,9 @@ function prepareSendMessageData() {
 
   return {
     data: {
-      artistName: artistNameInput.value + ' - ' + releaseTitleInput.value
+      artistName: releaseTitleInput.value
+        ? releaseTitleInput.value
+        : artistNameInput.value
     }
   };
 }

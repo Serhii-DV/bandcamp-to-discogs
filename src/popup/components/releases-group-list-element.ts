@@ -155,7 +155,7 @@ export class ReleasesGroupListElement extends HTMLElement {
   addReleaseItem(item: ReleaseItem) {
     const self = this;
     const contentElement = self.createReleaseItemContentElement(
-      item.artist,
+      item.artist.toString(),
       item.artistHostname,
       item.title,
       item.visit
@@ -178,7 +178,7 @@ export class ReleasesGroupListElement extends HTMLElement {
   addRelease(release: Release) {
     const self = this;
     const contentElement = self.createReleaseItemContentElement(
-      release.releaseItem.artist,
+      release.releaseItem.artist.toString(),
       release.releaseItem.artistHostname,
       release.releaseItem.title,
       release.releaseItem.visit,

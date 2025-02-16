@@ -1,5 +1,12 @@
 # Change log
 
+## 0.20.0 (2025-02-xx)
+
+### Features
+
+- discogs/popup: Detect multiple artists in the title if they are
+- discogs: Improved search for Draft release in popup
+
 ## 0.19.0 (2025-01-28)
 
 ### Features

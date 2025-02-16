@@ -1,8 +1,9 @@
 import { IReleaseItem, StorageData } from 'src/types';
 import { BandcampItem } from './bandcampItem';
+import { ReleaseArtist } from './releaseArtist';
 
 export class ReleaseItem extends BandcampItem {
-  public artist: string;
+  public artist: ReleaseArtist;
   public title: string;
   public label: string;
 
@@ -15,16 +16,20 @@ export class ReleaseItem extends BandcampItem {
     visit?: Date
   ) {
     super(url, undefined, visit, id);
-    this.artist = artist;
+    this.artist = ReleaseArtist.fromString(artist);
     this.title = title;
     this.label = label;
+  }
+
+  get artists(): string[] {
+    return this.artist.names;
   }
 
   toStorageData(): StorageData {
     const self = this;
     return {
       url: self.url.toString(),
-      artist: self.artist,
+      artist: self.artist.toString(),
       title: self.title,
       label: self.label,
       image: self.image,

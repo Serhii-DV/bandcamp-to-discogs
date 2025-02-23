@@ -101,7 +101,7 @@ function setupIsotope() {
 
   releaseItems.forEach((releaseItem) => {
     const gridElement = grid.querySelector(
-      '[data-item-id="' + releaseItem.id + '"]'
+      '[data-item-id="album-' + releaseItem.id + '"]'
     );
     setDataAttribute(
       gridElement,

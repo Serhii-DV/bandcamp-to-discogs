@@ -32,7 +32,9 @@ function createReleaseItemFromMusicGridElement(element: Element): ReleaseItem {
   const url =
     (element.querySelector('a') as HTMLAnchorElement).getAttribute('href') ||
     '';
-  const itemId = parseInt(getDataAttribute(element, 'item-id'));
+  const itemId = parseInt(
+    getDataAttribute(element, 'item-id').replace('album-', '')
+  );
 
   return new ReleaseItem(
     (url[0] === '/' ? window.location.origin : '') + url,

@@ -20,7 +20,7 @@ import {
   getBandPhotoSrc,
   getReleaseItems as getReleaseItemsFromPage
 } from '../modules/html';
-import { log } from '../../utils/console';
+import { log, logError } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Music } from '../../app/music';
 import { ArtistItem } from '../../app/artistItem';
@@ -103,6 +103,12 @@ function setupIsotope() {
     const gridElement = grid.querySelector(
       '[data-item-id="album-' + releaseItem.id + '"]'
     );
+
+    if (!gridElement) {
+      logError('Could not find grid element for release item', releaseItem);
+      return;
+    }
+
     setDataAttribute(
       gridElement,
       'filter-artist',

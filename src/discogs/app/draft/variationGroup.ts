@@ -8,19 +8,25 @@ export class VariationsGroup {
   elements: FormElement[];
   variations: Variation[];
   multiChoice: boolean;
+  draggable: boolean;
+  container?: HTMLElement | null;
 
   constructor(
     title: string,
     elements: FormElement[],
     variations: string[],
-    multiChoice: boolean = false
+    multiChoice: boolean = false,
+    draggable: boolean = false,
+    container?: HTMLElement | null
   ) {
     this.title = title;
     this.alias = convertToAlias(title);
     this.elements = elements;
+    this.container = container;
     this.variations = arrayUnique(
       variations.filter((variation) => !!variation)
     ).map((variation) => new Variation(variation));
     this.multiChoice = multiChoice;
+    this.draggable = draggable;
   }
 }

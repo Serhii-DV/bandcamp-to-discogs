@@ -70,7 +70,7 @@
       <!-- Tab: Visits -->
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="release-history-tab" data-bs-toggle="pill" data-bs-target="#release-history" type="button" role="tab" aria-controls="release-history" aria-selected="false">
-          View History
+          Visit History
         </button>
       </li>
     </ul>
@@ -85,6 +85,9 @@
         {{#modified}}
         Modified <relative-time class="release-visited-date text-body-secondary" datetime="{{isoString}}">{{localeString}}</relative-time><br>
         {{/modified}}
+        {{#release.quality}}
+        Audio Quality: {{release.quality}}<br>
+        {{/release.quality}}
         </div>
       </div>
       <!-- Tracklist -->

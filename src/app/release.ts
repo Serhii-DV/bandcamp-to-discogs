@@ -1,3 +1,4 @@
+import { ReleaseArtist } from './releaseArtist';
 import { ReleaseItem } from './releaseItem';
 import { Track } from './track';
 
@@ -11,6 +12,7 @@ export class Release {
   image: string;
   keywords: string[];
   credit: string;
+  quality: string;
 
   constructor(
     artist: string,
@@ -22,7 +24,8 @@ export class Release {
     url: string,
     image: string,
     keywords: string[],
-    credit: string
+    credit: string,
+    quality: string = ''
   ) {
     this.releaseItem = new ReleaseItem(url, artist, title);
     this.label = label;
@@ -33,9 +36,10 @@ export class Release {
     this.image = image;
     this.keywords = keywords;
     this.credit = credit;
+    this.quality = quality;
   }
 
-  get artist(): string {
+  get artist(): ReleaseArtist {
     return this.releaseItem.artist;
   }
 
@@ -69,7 +73,7 @@ export class Release {
 
   toStorageObject(): object {
     return {
-      artist: this.releaseItem.artist,
+      artist: this.releaseItem.artist.toString(),
       title: this.releaseItem.title,
       url: this.releaseItem.url.toString(),
       label: this.label,
@@ -78,7 +82,8 @@ export class Release {
       tracks: this.tracks.map((track) => track.toStorageObject()),
       image: this.image,
       keywords: this.keywords,
-      credit: this.credit
+      credit: this.credit,
+      quality: this.quality
     };
   }
 
@@ -109,7 +114,8 @@ export class Release {
       obj.url,
       obj.image,
       obj.keywords,
-      obj.credit ?? ''
+      obj.credit ?? '',
+      obj.quality ?? ''
     );
   }
 }

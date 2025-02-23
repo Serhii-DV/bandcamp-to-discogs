@@ -1,5 +1,17 @@
 # Change log
 
+## 0.20.0 (2025-02-xx)
+
+### Features
+
+- discogs/popup: Detect multiple artists in the title if they are
+- discogs: Improved search for Draft release in popup
+- bandcamp: Auto-detection of the digital release audio quality
+
+### Fixed
+
+- bandcamp: Fixed the issue with the artist/album filtering on the artist page
+
 ## 0.19.0 (2025-01-28)
 
 ### Features

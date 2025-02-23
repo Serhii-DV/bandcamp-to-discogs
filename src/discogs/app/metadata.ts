@@ -34,11 +34,13 @@ interface Genres {
 
 interface MetadataParams {
   artist: string;
+  artists: string[];
   title: string;
   label: string;
   trackQty: number;
   formatFileType: string;
   formatDescription: string;
+  freeText: string;
   country?: string;
   released: Released;
   tracklist: string;
@@ -85,55 +87,55 @@ export class Metadata {
   genres: Genres;
   submissionNotes: MetadataValue;
 
-  constructor({
-    artist,
-    title,
-    label,
-    trackQty,
-    formatFileType,
-    formatDescription,
-    country,
-    released,
-    tracklist,
-    credits,
-    genres,
-    releaseUrl
-  }: MetadataParams) {
+  constructor(params: MetadataParams) {
     const manifest = getExtensionManifest();
 
     this.version = manifest.version;
     this.artist = convertMetadataValue([
-      capitalizeEachWord(artist),
-      convertArtistName(artist),
-      artist
+      // Do not add default artist if there is more than one artist
+      ...(params.artists.length > 1
+        ? []
+        : [
+            params.artist,
+            capitalizeEachWord(params.artist),
+            convertArtistName(params.artist)
+          ]),
+      ...params.artists.map((artist) => capitalizeEachWord(artist)),
+      ...params.artists.map((artist) => convertArtistName(artist)),
+      ...params.artists
     ]);
-    this.title = convertMetadataValue([title, capitalizeEachWord(title)]);
+    this.title = convertMetadataValue([
+      params.title,
+      capitalizeEachWord(params.title)
+    ]);
     this.label = convertMetadataValue([
-      artist === label ? generateSelfReleasedLabel(artist) : label,
-      label
+      params.artist === params.label
+        ? generateSelfReleasedLabel(params.artist)
+        : params.label,
+      params.label
     ]);
     this.format = {
-      fileType: convertMetadataValue([formatFileType, 'FLAC', 'WAV', 'MP3']),
-      qty: convertMetadataValue(trackQty.toString()),
-      description: convertMetadataValue(formatDescription),
-      freeText: convertMetadataValue([
-        '24-bit/44.1kHz',
-        '16-bit/44.1kHz',
-        '320 kbps',
-        '128 kbps'
-      ])
+      fileType: convertMetadataValue([
+        params.formatFileType,
+        'FLAC',
+        'WAV',
+        'MP3'
+      ]),
+      qty: convertMetadataValue(params.trackQty.toString()),
+      description: convertMetadataValue(params.formatDescription),
+      freeText: convertMetadataValue([params.freeText, '320 kbps', '128 kbps'])
     };
     this.country = convertMetadataValue([
-      country ?? config.metadata.country,
+      params.country ?? config.metadata.country,
       config.metadata.country
     ]);
-    this.released = released;
-    this.tracklist = tracklist;
-    this.credits = credits;
-    this.genres = genres;
+    this.released = params.released;
+    this.tracklist = params.tracklist;
+    this.credits = params.credits;
+    this.genres = params.genres;
     this.submissionNotes = convertMetadataValue([
-      generateSubmissionNotesDefault(releaseUrl),
-      generateSubmissionNotesShort(releaseUrl)
+      generateSubmissionNotesDefault(params.releaseUrl),
+      generateSubmissionNotesShort(params.releaseUrl)
     ]);
   }
 
@@ -144,7 +146,8 @@ export class Metadata {
     const discogsStyles = keywordsToDiscogsStyles(release.keywords);
 
     return new Metadata({
-      artist: release.releaseItem.artist,
+      artist: release.releaseItem.artist.asString,
+      artists: release.releaseItem.artist.asArray,
       title: release.releaseItem.title,
       label: release.label,
       released: {
@@ -154,6 +157,7 @@ export class Metadata {
       trackQty: release.tracksQty,
       formatFileType: 'FLAC',
       formatDescription: 'Album',
+      freeText: release.quality,
       genres: {
         keywords: release.keywords,
         autoDetectedGenres: discogsGenres,

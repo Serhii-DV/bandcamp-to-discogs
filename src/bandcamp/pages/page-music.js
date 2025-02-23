@@ -11,8 +11,6 @@ import {
   triggerInputEvent
 } from '../../utils/html';
 import {
-  containsOneOf,
-  splitString,
   isEmptyArray,
   countOccurrences,
   removeBrackets
@@ -21,8 +19,8 @@ import {
   extractBCSearchInputStyle,
   getBandPhotoSrc,
   getReleaseItems as getReleaseItemsFromPage
-} from '../modules/html.js';
-import { log } from '../../utils/console';
+} from '../modules/html';
+import { log, logError } from '../../utils/console';
 import { chromeListenToMessage } from '../../utils/chrome';
 import { Music } from '../../app/music';
 import { ArtistItem } from '../../app/artistItem';
@@ -103,8 +101,14 @@ function setupIsotope() {
 
   releaseItems.forEach((releaseItem) => {
     const gridElement = grid.querySelector(
-      '[data-item-id="' + releaseItem.id + '"]'
+      '[data-item-id="album-' + releaseItem.id + '"]'
     );
+
+    if (!gridElement) {
+      logError('Could not find grid element for release item', releaseItem);
+      return;
+    }
+
     setDataAttribute(
       gridElement,
       'filter-artist',
@@ -211,12 +215,7 @@ function getArtistListData(releaseItems) {
 
   // add artists
   releaseItems.forEach((releaseItem) => {
-    if (containsOneOf(releaseItem.artist, ['V/A'])) {
-      artistsData.push(releaseItem.artist);
-    } else {
-      const artists = splitString(releaseItem.artist, /[,/+•|]| Vs | & +/);
-      artistsData.push(...artists);
-    }
+    artistsData.push(...releaseItem.artists);
   });
   artistsData.sort();
   filterData.push(...countOccurrences(artistsData));

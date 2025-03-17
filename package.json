@@ -2,7 +2,7 @@
   "version": "0.20.0",
   "devDependencies": {
     "@github/relative-time-element": "^4.4.5",
-    "@swc/html": "^1.10.16",
+    "@swc/html": "^1.11.9",
     "@types/chrome": "^0.0.304",
     "@types/isotope-layout": "^3.0.13",
     "@types/mustache": "^4.2.5",

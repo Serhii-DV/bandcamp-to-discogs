@@ -2,6 +2,7 @@ import {
   capitalizeEachWord,
   convertToAlias,
   getTextInitials,
+  splitString,
   truncateText
 } from './string';
 
@@ -140,5 +141,88 @@ describe('convertToAlias', () => {
   it('should handle mixed case input correctly', () => {
     expect(convertToAlias('CamelCase Example')).toBe('camelcase-example');
     expect(convertToAlias('Title Case Test')).toBe('title-case-test');
+  });
+});
+
+describe('splitString', () => {
+  it('should split a string by a single delimiter', () => {
+    expect(splitString('apple,banana,orange', ',')).toEqual([
+      'apple',
+      'banana',
+      'orange'
+    ]);
+  });
+
+  it('should split a string by multiple delimiters', () => {
+    expect(splitString('apple, banana; orange', /[,\s;]/)).toEqual([
+      'apple',
+      'banana',
+      'orange'
+    ]);
+  });
+
+  it('should trim whitespace from substrings', () => {
+    expect(splitString('  apple  ,   banana  , orange  ', ',')).toEqual([
+      'apple',
+      'banana',
+      'orange'
+    ]);
+  });
+
+  it('should remove empty entries after splitting', () => {
+    expect(splitString('apple,,banana,,orange', ',')).toEqual([
+      'apple',
+      'banana',
+      'orange'
+    ]);
+  });
+
+  it('should handle multiple consecutive delimiters correctly', () => {
+    expect(splitString('apple,,banana,,,orange', ',')).toEqual([
+      'apple',
+      'banana',
+      'orange'
+    ]);
+  });
+
+  it('should handle empty string', () => {
+    expect(splitString('', ',')).toEqual([]);
+  });
+
+  it('should return an empty array when no non-empty substrings remain', () => {
+    expect(splitString('  , , ,  ', ',')).toEqual([]);
+  });
+
+  it('should split by a regex with special characters', () => {
+    expect(splitString('apple!banana!orange', /[!]/)).toEqual([
+      'apple',
+      'banana',
+      'orange'
+    ]);
+  });
+
+  it('should handle strings with only delimiters', () => {
+    expect(splitString(',,,,', ',')).toEqual([]);
+  });
+
+  it('should return a single item if there is no delimiter', () => {
+    expect(splitString('apple', ',')).toEqual(['apple']);
+  });
+
+  it('should handle complex delimiters (spaces, commas, semicolons, etc.)', () => {
+    expect(splitString('apple banana,orange ;grape', /[\s,;]+/)).toEqual([
+      'apple',
+      'banana',
+      'orange',
+      'grape'
+    ]);
+  });
+
+  it('should handle multiple delimiters with spaces correctly', () => {
+    expect(splitString('apple, banana ; orange  ', /[\s,;]+/)).toEqual([
+      'apple',
+      'banana',
+      'orange'
+    ]);
   });
 });

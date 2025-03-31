@@ -1,4 +1,5 @@
-import { containsOneOf, splitString } from '../utils/utils';
+import { splitString } from 'src/utils/string';
+import { containsOneOf } from '../utils/utils';
 
 export class ReleaseArtist {
   public names: string[];

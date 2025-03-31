@@ -5,10 +5,7 @@ import {
 } from '../../discogs/modules/discogs';
 import { Release } from '../../app/release';
 import { setBackgroundImage } from '../helpers';
-import {
-  capitalizeEachWord,
-  removeLeadingZeroOrColon
-} from '../../utils/utils';
+import { removeLeadingZeroOrColon } from '../../utils/utils';
 import { render } from '../../utils/render';
 import { setupBtnToDownloadReleasesAsCsv } from '../tabs/download_tab';
 import { History } from '../../types';
@@ -20,6 +17,7 @@ import {
 } from '../../bandcamp/modules/bandcamp';
 import { Track } from '../../app/track';
 import { debug } from '../../utils/console';
+import { capitalizeEachWord } from 'src/utils/string';
 
 export function renderReleaseCard(
   release: Release,

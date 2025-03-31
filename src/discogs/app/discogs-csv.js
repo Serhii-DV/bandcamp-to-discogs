@@ -2,14 +2,12 @@ import {
   keywordsToDiscogsGenres,
   keywordsToDiscogsStyles
 } from '../../bandcamp/modules/bandcamp';
-import {
-  capitalizeEachWord,
-  removeLeadingZeroOrColon
-} from '../../utils/utils';
+import { removeLeadingZeroOrColon } from '../../utils/utils';
 import { getDiscogsDateValue } from './utils';
 import { Metadata } from './metadata';
 import { convertArtistName } from '../modules/submission';
 import { generateSelfReleasedLabel } from '../modules/discogs';
+import { capitalizeEachWord } from 'src/utils/string';
 
 /**
  * Represents a Discogs CSV entry.

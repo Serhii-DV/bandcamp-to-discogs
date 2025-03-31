@@ -28,3 +28,15 @@ export function truncateText(
 ): string {
   return text.length <= length ? text : text.slice(0, length) + end;
 }
+
+export function capitalizeEachWord(str: string): string {
+  return str
+    .split(/(\s+|["'“”‘’,.()!?\-])/g) // Split by spaces and special characters, keeping them as separators
+    .map(
+      (word) =>
+        /^[a-zA-Z]/.test(word) // Check if the word starts with a letter
+          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          : word // Leave separators and non-alphabetic parts as they are
+    )
+    .join('');
+}

@@ -10,11 +10,7 @@ import {
   setDataAttribute,
   triggerInputEvent
 } from '../../utils/html';
-import {
-  isEmptyArray,
-  countOccurrences,
-  removeBrackets
-} from '../../utils/utils';
+import { isEmptyArray, countOccurrences } from '../../utils/utils';
 import {
   extractBCSearchInputStyle,
   getBandPhotoSrc,
@@ -26,6 +22,7 @@ import { Music } from '../../app/music';
 import { ArtistItem } from '../../app/artistItem';
 import { Storage, StorageKey } from '../../app/core/storage';
 import { MessageType } from '../../app/core/messageType';
+import { removeBrackets } from 'src/utils/string';
 
 const storage = new Storage();
 

@@ -3,6 +3,7 @@ import {
   containsOneOf,
   convertToAlias,
   getTextInitials,
+  removeBrackets,
   splitString,
   truncateText
 } from './string';
@@ -275,5 +276,39 @@ describe('containsOneOf', () => {
     const largeArray = Array(1000).fill('apple');
     expect(containsOneOf('I like apple pie', largeArray)).toBe(true);
     expect(containsOneOf('I like banana pie', largeArray)).toBe(false);
+  });
+});
+
+describe('removeBrackets', () => {
+  it('should remove the first occurrence of brackets and its contents', () => {
+    expect(removeBrackets('Hello (world)!')).toBe('Hello!');
+    expect(removeBrackets('Apple (fruit), Banana')).toBe('Apple, Banana');
+  });
+
+  it('should handle strings without brackets', () => {
+    expect(removeBrackets('No brackets here')).toBe('No brackets here');
+  });
+
+  it('should handle strings with multiple sets of brackets, removing only the first one', () => {
+    expect(removeBrackets('Hello (world)! I am (here).')).toBe(
+      'Hello! I am (here).'
+    );
+  });
+
+  it('should handle empty strings', () => {
+    expect(removeBrackets('')).toBe('');
+  });
+
+  it('should remove empty brackets', () => {
+    expect(removeBrackets('Hello () world')).toBe('Hello world');
+  });
+
+  it('should remove brackets with spaces and no content', () => {
+    expect(removeBrackets('Test ( ) here')).toBe('Test here');
+  });
+
+  it('should handle strings with only brackets', () => {
+    expect(removeBrackets('()')).toBe('');
+    expect(removeBrackets('(content)')).toBe('');
   });
 });

@@ -117,10 +117,6 @@ export function countOccurrences(arr: string[]): string[] {
   return result;
 }
 
-export function removeBrackets(inputString: string): string {
-  return inputString.replace(/\s*\([^)]*\)/, '');
-}
-
 export function trimCharactersFromString(
   inputString: string,
   charactersToTrim: string

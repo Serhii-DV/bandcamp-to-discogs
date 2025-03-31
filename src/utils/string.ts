@@ -93,3 +93,7 @@ export function containsOneOf(
   }
   return false;
 }
+
+export function removeBrackets(inputString: string): string {
+  return inputString.replace(/\s*\([^)]*\)/, '');
+}

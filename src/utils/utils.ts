@@ -126,7 +126,3 @@ export function bytesToSize(bytes: number): string {
   const roundedSize = (bytes / Math.pow(1024, i)).toFixed(2);
   return `${roundedSize} ${sizes[i]}`;
 }
-
-export function convertNewlinesToBreaks(str: string): string {
-  return str.replace(/\n/g, '<br>').replace(/\r/g, '');
-}

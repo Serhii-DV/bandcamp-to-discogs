@@ -134,3 +134,7 @@ export function camelCaseToReadable(str: string): string {
   result = result.charAt(0).toUpperCase() + result.slice(1);
   return result;
 }
+
+export function convertNewlinesToBreaks(str: string): string {
+  return str.replace(/\n/g, '<br>').replace(/\r/g, '');
+}

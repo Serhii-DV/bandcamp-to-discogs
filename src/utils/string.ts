@@ -124,3 +124,7 @@ export function removeInvisibleChars(inputString: string): string {
 
   return cleanedString;
 }
+
+export function removeLeadingZeroOrColon(str: string): string {
+  return str.replace(/^(:|0)*/, '');
+}

@@ -5,6 +5,7 @@ import {
   getTextInitials,
   removeBrackets,
   removeInvisibleChars,
+  removeLeadingZeroOrColon,
   splitString,
   trimCharactersFromString,
   truncateText
@@ -420,5 +421,51 @@ describe('removeInvisibleChars', () => {
     expect(removeInvisibleChars('\u200BHello&lrm; World\u200F')).toBe(
       'Hello World'
     );
+  });
+});
+
+describe('removeLeadingZeroOrColon', () => {
+  it('should remove leading zeros from the string', () => {
+    expect(removeLeadingZeroOrColon('000123')).toBe('123');
+    expect(removeLeadingZeroOrColon('00123')).toBe('123');
+  });
+
+  it('should remove leading colons from the string', () => {
+    expect(removeLeadingZeroOrColon(':123')).toBe('123');
+    expect(removeLeadingZeroOrColon('::123')).toBe('123');
+  });
+
+  it('should remove both leading zeros and colons', () => {
+    expect(removeLeadingZeroOrColon(':000123')).toBe('123');
+    expect(removeLeadingZeroOrColon('::000123')).toBe('123');
+  });
+
+  it('should return the same string if no leading zero or colon exists', () => {
+    expect(removeLeadingZeroOrColon('123')).toBe('123');
+    expect(removeLeadingZeroOrColon('abc')).toBe('abc');
+  });
+
+  it('should return an empty string if the string consists entirely of zeros or colons', () => {
+    expect(removeLeadingZeroOrColon('0000')).toBe('');
+    expect(removeLeadingZeroOrColon('::::')).toBe('');
+    expect(removeLeadingZeroOrColon('::00')).toBe('');
+  });
+
+  it('should handle an empty string correctly', () => {
+    expect(removeLeadingZeroOrColon('')).toBe('');
+  });
+
+  it('should handle strings with mixed content, removing only the leading zeros or colons', () => {
+    expect(removeLeadingZeroOrColon('::0abc')).toBe('abc');
+    expect(removeLeadingZeroOrColon('000:xyz')).toBe('xyz');
+  });
+
+  it('should handle time values', () => {
+    expect(removeLeadingZeroOrColon('00:00:01')).toBe('1');
+    expect(removeLeadingZeroOrColon('00:00:12')).toBe('12');
+    expect(removeLeadingZeroOrColon('00:01:23')).toBe('1:23');
+    expect(removeLeadingZeroOrColon('00:12:34')).toBe('12:34');
+    expect(removeLeadingZeroOrColon('01:23:45')).toBe('1:23:45');
+    expect(removeLeadingZeroOrColon('12:34:56')).toBe('12:34:56');
   });
 });

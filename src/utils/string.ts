@@ -31,11 +31,17 @@ export function truncateText(
 
 export function capitalizeEachWord(str: string): string {
   return str
-    .split(/(\s+|["'“”‘’,.()!?\-])/g) // Split by spaces and special characters, keeping them as separators
+    .split(/(\s+|[^a-zA-Z0-9'\-]+)/g) // Split by spaces and non-alphanumeric characters, keeping separators
     .map(
       (word) =>
         /^[a-zA-Z]/.test(word) // Check if the word starts with a letter
-          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          ? word
+              .split('-') // Split hyphenated words
+              .map(
+                (part) =>
+                  part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
+              ) // Capitalize each part of the hyphenated word
+              .join('-') // Join them back with the hyphen
           : word // Leave separators and non-alphabetic parts as they are
     )
     .join('');

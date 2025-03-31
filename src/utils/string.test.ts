@@ -1,4 +1,4 @@
-import { getTextInitials, truncateText } from './string';
+import { capitalizeEachWord, getTextInitials, truncateText } from './string';
 
 describe('getTextInitials', () => {
   it('should return initials for multiple words', () => {
@@ -48,5 +48,47 @@ describe('truncateText', () => {
 
   it('should not truncate if length equals text length', () => {
     expect(truncateText('Hello', 5)).toBe('Hello');
+  });
+});
+
+describe('capitalizeEachWord', () => {
+  it('should capitalize each word in a sentence', () => {
+    expect(capitalizeEachWord('hello world')).toBe('Hello World');
+    expect(capitalizeEachWord('javascript is fun')).toBe('Javascript Is Fun');
+  });
+
+  it('should handle mixed-case input', () => {
+    expect(capitalizeEachWord('hElLo WoRLd')).toBe('Hello World');
+  });
+
+  it('should preserve spaces and punctuation', () => {
+    expect(capitalizeEachWord('hello, world!')).toBe('Hello, World!');
+    expect(capitalizeEachWord("it's a test.")).toBe("It's A Test.");
+    expect(capitalizeEachWord('he said: "hello there"')).toBe(
+      'He Said: "Hello There"'
+    );
+  });
+
+  it('should handle multiple spaces between words', () => {
+    expect(capitalizeEachWord('hello   world')).toBe('Hello   World');
+  });
+
+  it('should handle special characters correctly', () => {
+    expect(capitalizeEachWord('(hello) world!')).toBe('(Hello) World!');
+    expect(capitalizeEachWord('good-morning everyone')).toBe(
+      'Good-Morning Everyone'
+    );
+  });
+
+  it('should return an empty string if input is empty', () => {
+    expect(capitalizeEachWord('')).toBe('');
+  });
+
+  it('should not modify already capitalized words', () => {
+    expect(capitalizeEachWord('Hello World')).toBe('Hello World');
+  });
+
+  it('should handle single-letter words', () => {
+    expect(capitalizeEachWord('a b c')).toBe('A B C');
   });
 });

@@ -1,4 +1,5 @@
 import {
+  camelCaseToReadable,
   capitalizeEachWord,
   containsOneOf,
   convertToAlias,
@@ -467,5 +468,25 @@ describe('removeLeadingZeroOrColon', () => {
     expect(removeLeadingZeroOrColon('00:12:34')).toBe('12:34');
     expect(removeLeadingZeroOrColon('01:23:45')).toBe('1:23:45');
     expect(removeLeadingZeroOrColon('12:34:56')).toBe('12:34:56');
+  });
+});
+
+describe('camelCaseToReadable', () => {
+  it('should convert camelCase to readable format', () => {
+    expect(camelCaseToReadable('camelCase')).toBe('Camel Case');
+    expect(camelCaseToReadable('helloWorld')).toBe('Hello World');
+    expect(camelCaseToReadable('myVariableName')).toBe('My Variable Name');
+  });
+
+  it('should handle single word in camelCase', () => {
+    expect(camelCaseToReadable('word')).toBe('Word');
+  });
+
+  it('should handle strings that are already in readable format', () => {
+    expect(camelCaseToReadable('HelloWorld')).toBe('Hello World');
+  });
+
+  it('should return an empty string if the input is empty', () => {
+    expect(camelCaseToReadable('')).toBe('');
   });
 });

@@ -128,3 +128,9 @@ export function removeInvisibleChars(inputString: string): string {
 export function removeLeadingZeroOrColon(str: string): string {
   return str.replace(/^(:|0)*/, '');
 }
+
+export function camelCaseToReadable(str: string): string {
+  let result = str.replace(/([a-z])([A-Z])/g, '$1 $2');
+  result = result.charAt(0).toUpperCase() + result.slice(1);
+  return result;
+}

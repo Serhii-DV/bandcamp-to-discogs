@@ -127,12 +127,6 @@ export function bytesToSize(bytes: number): string {
   return `${roundedSize} ${sizes[i]}`;
 }
 
-export function camelCaseToReadable(str: string): string {
-  let result = str.replace(/([a-z])([A-Z])/g, '$1 $2');
-  result = result.charAt(0).toUpperCase() + result.slice(1);
-  return result;
-}
-
 export function convertNewlinesToBreaks(str: string): string {
   return str.replace(/\n/g, '<br>').replace(/\r/g, '');
 }

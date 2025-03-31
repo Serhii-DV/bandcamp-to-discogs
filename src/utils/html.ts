@@ -1,7 +1,7 @@
 import { B2DIconComponent } from '../popup/components/icon';
 import { log } from './console';
+import { camelCaseToReadable } from './string';
 import {
-  camelCaseToReadable,
   getOwnProperty,
   isArray,
   isFunction,

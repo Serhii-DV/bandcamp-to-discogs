@@ -46,3 +46,9 @@ export function capitalizeEachWord(str: string): string {
     )
     .join('');
 }
+
+export function convertToAlias(str: string): string {
+  const slug = str.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const trimmedSlug = slug.replace(/^-+|-+$/g, '');
+  return trimmedSlug;
+}

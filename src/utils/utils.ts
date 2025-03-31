@@ -7,12 +7,6 @@ export function safeFilename(value: string): string {
     .toLowerCase();
 }
 
-export function convertToAlias(str: string): string {
-  const slug = str.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  const trimmedSlug = slug.replace(/^-+|-+$/g, '');
-  return trimmedSlug;
-}
-
 export function isEmptyObject(obj: object): boolean {
   for (const key in obj) {
     if (hasOwnProperty(obj, key)) {

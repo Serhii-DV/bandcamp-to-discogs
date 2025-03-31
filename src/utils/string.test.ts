@@ -1,4 +1,9 @@
-import { capitalizeEachWord, getTextInitials, truncateText } from './string';
+import {
+  capitalizeEachWord,
+  convertToAlias,
+  getTextInitials,
+  truncateText
+} from './string';
 
 describe('getTextInitials', () => {
   it('should return initials for multiple words', () => {
@@ -90,5 +95,50 @@ describe('capitalizeEachWord', () => {
 
   it('should handle single-letter words', () => {
     expect(capitalizeEachWord('a b c')).toBe('A B C');
+  });
+});
+
+describe('convertToAlias', () => {
+  it('should convert a string to a slug', () => {
+    expect(convertToAlias('Hello World')).toBe('hello-world');
+    expect(convertToAlias('JavaScript is fun!')).toBe('javascript-is-fun');
+  });
+
+  it('should handle special characters', () => {
+    expect(convertToAlias('Hello, World!')).toBe('hello-world');
+    expect(convertToAlias('C++ is great!!')).toBe('c-is-great');
+  });
+
+  it('should convert spaces to hyphens', () => {
+    expect(convertToAlias('This is a test')).toBe('this-is-a-test');
+    expect(convertToAlias('Convert to alias')).toBe('convert-to-alias');
+  });
+
+  it('should remove leading and trailing non-alphanumeric characters', () => {
+    expect(convertToAlias('  Hello World  ')).toBe('hello-world');
+    expect(convertToAlias('!!!Special characters!!')).toBe(
+      'special-characters'
+    );
+  });
+
+  it('should handle numbers correctly', () => {
+    expect(convertToAlias('Product 123 - Available!')).toBe(
+      'product-123-available'
+    );
+    expect(convertToAlias('Version 2.0.1')).toBe('version-2-0-1');
+  });
+
+  it('should handle empty string', () => {
+    expect(convertToAlias('')).toBe('');
+  });
+
+  it('should handle strings with only non-alphanumeric characters', () => {
+    expect(convertToAlias('!!!')).toBe('');
+    expect(convertToAlias('???????')).toBe('');
+  });
+
+  it('should handle mixed case input correctly', () => {
+    expect(convertToAlias('CamelCase Example')).toBe('camelcase-example');
+    expect(convertToAlias('Title Case Test')).toBe('title-case-test');
   });
 });

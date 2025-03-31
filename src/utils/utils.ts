@@ -1,12 +1,3 @@
-import { transliterate } from './transliterate';
-
-/** @see https://stackoverflow.com/a/8485137/3227570 */
-export function safeFilename(value: string): string {
-  return transliterate(value)
-    .replace(/[^a-zA-Z0-9]/gi, '_')
-    .toLowerCase();
-}
-
 export function isEmptyObject(obj: object): boolean {
   for (const key in obj) {
     if (hasOwnProperty(obj, key)) {

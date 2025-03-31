@@ -1,3 +1,5 @@
+import { transliterate } from './transliterate';
+
 /**
  * Extracts the initials from the text, with each initial in uppercase.
  * For single-word text, it returns the first letter in uppercase.
@@ -138,4 +140,11 @@ export function camelCaseToReadable(str: string): string {
 export function convertNewlinesToBreaks(str: string): string {
   // Replace both `\r\n` and `\n` with `<br>` and remove carriage returns
   return str.replace(/\r\n|\r|\n/g, '<br>');
+}
+
+/** @see https://stackoverflow.com/a/8485137/3227570 */
+export function safeFilename(value: string): string {
+  return transliterate(value)
+    .replace(/[^a-zA-Z0-9]/gi, '_')
+    .toLowerCase();
 }

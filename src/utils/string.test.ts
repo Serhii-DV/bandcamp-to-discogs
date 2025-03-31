@@ -8,6 +8,7 @@ import {
   removeBrackets,
   removeInvisibleChars,
   removeLeadingZeroOrColon,
+  safeFilename,
   splitString,
   trimCharactersFromString,
   truncateText
@@ -543,5 +544,32 @@ describe('convertNewlinesToBreaks', () => {
     const input = '  Hello \n World  ';
     const expected = '  Hello <br> World  ';
     expect(convertNewlinesToBreaks(input)).toBe(expected);
+  });
+});
+
+describe('safeFilename', () => {
+  it('should replace spaces with underscores', () => {
+    expect(safeFilename('My File Name')).toBe('my_file_name');
+  });
+
+  it('should remove RU accents and transliterate characters', () => {
+    expect(safeFilename('Привет Мир')).toBe('privet_mir');
+  });
+
+  it('should convert the result to lowercase', () => {
+    expect(safeFilename('UpperCaseText')).toBe('uppercasetext');
+    expect(safeFilename('MiXeD CaSe')).toBe('mixed_case');
+  });
+
+  it('should handle empty strings', () => {
+    expect(safeFilename('')).toBe('');
+  });
+
+  it('should handle strings with only special characters', () => {
+    expect(safeFilename('!@#$%^&*()')).toBe('__________');
+  });
+
+  it('should not add extra underscores for consecutive non-alphanumeric characters', () => {
+    expect(safeFilename('Hello---World')).toBe('hello___world');
   });
 });

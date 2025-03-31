@@ -1,5 +1,6 @@
 import {
   capitalizeEachWord,
+  containsOneOf,
   convertToAlias,
   getTextInitials,
   splitString,
@@ -224,5 +225,55 @@ describe('splitString', () => {
       'banana',
       'orange'
     ]);
+  });
+});
+
+describe('containsOneOf', () => {
+  it('should return true if string1 contains any string from the array', () => {
+    expect(containsOneOf('apple pie', ['apple', 'banana', 'orange'])).toBe(
+      true
+    );
+    expect(containsOneOf('Hello world!', ['world', 'earth'])).toBe(true);
+  });
+
+  it('should return false if string1 contains none of the strings from the array', () => {
+    expect(containsOneOf('apple pie', ['banana', 'orange', 'grape'])).toBe(
+      false
+    );
+    expect(containsOneOf('Hello world!', ['earth', 'mars'])).toBe(false);
+    expect(containsOneOf('apple', ['', 'banana'])).toBe(false);
+  });
+
+  it('should return true if string1 contains a string from the array with case insensitivity', () => {
+    expect(containsOneOf('Apple Pie', ['apple', 'banana', 'orange'])).toBe(
+      true
+    );
+    expect(containsOneOf('HELLO world!', ['world', 'earth'])).toBe(true);
+  });
+
+  it('should return false if the array is empty', () => {
+    expect(containsOneOf('apple pie', [])).toBe(false);
+  });
+
+  it('should return true if string1 matches exactly with a string in the array', () => {
+    expect(containsOneOf('apple', ['apple', 'banana', 'orange'])).toBe(true);
+    expect(containsOneOf('hello', ['hello', 'world'])).toBe(true);
+  });
+
+  it('should return false for empty strings', () => {
+    expect(containsOneOf('', ['apple', 'banana'])).toBe(false);
+  });
+
+  it('should return true if string1 contains a partial match from the array', () => {
+    expect(containsOneOf('I love apple pie', ['apple', 'banana'])).toBe(true);
+    expect(containsOneOf('I like banana bread', ['apple', 'banana'])).toBe(
+      true
+    );
+  });
+
+  it('should handle large arrays efficiently', () => {
+    const largeArray = Array(1000).fill('apple');
+    expect(containsOneOf('I like apple pie', largeArray)).toBe(true);
+    expect(containsOneOf('I like banana pie', largeArray)).toBe(false);
   });
 });

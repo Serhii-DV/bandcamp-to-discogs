@@ -80,8 +80,14 @@ export function containsOneOf(
   string1: string,
   arrayOfStrings: string[]
 ): boolean {
+  // Return false immediately if string1 is empty
+  if (string1 === '') return false;
+  const lcString = string1.toLowerCase();
+
+  // Check each string in the array, converted to lowercase for case-insensitive comparison
   for (const string2 of arrayOfStrings) {
-    if (string1.includes(string2)) {
+    if (string2 === '') continue;
+    if (lcString.includes(string2.toLowerCase())) {
       return true;
     }
   }

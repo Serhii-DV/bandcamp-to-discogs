@@ -5,6 +5,7 @@ import {
   getTextInitials,
   removeBrackets,
   splitString,
+  trimCharactersFromString,
   truncateText
 } from './string';
 
@@ -310,5 +311,57 @@ describe('removeBrackets', () => {
   it('should handle strings with only brackets', () => {
     expect(removeBrackets('()')).toBe('');
     expect(removeBrackets('(content)')).toBe('');
+  });
+});
+
+describe('trimCharactersFromString', () => {
+  it('should trim the specified characters from both ends of the string', () => {
+    expect(trimCharactersFromString('$$$hello$$$', '$')).toBe('hello');
+    expect(trimCharactersFromString('###test###', '#')).toBe('test');
+  });
+
+  it('should handle strings with no characters to trim', () => {
+    expect(trimCharactersFromString('hello', '$')).toBe('hello');
+    expect(trimCharactersFromString('test', '#')).toBe('test');
+  });
+
+  it('should trim multiple characters', () => {
+    expect(trimCharactersFromString('!!@hello@!!', '@!')).toBe('hello');
+  });
+
+  it('should remove all characters from both ends if they are in the trim set', () => {
+    expect(trimCharactersFromString('***', '*')).toBe('');
+    expect(trimCharactersFromString('!!!', '!')).toBe('');
+  });
+
+  it('should return an empty string when the input string is empty', () => {
+    expect(trimCharactersFromString('', '$')).toBe('');
+  });
+
+  it('should handle trimming special characters', () => {
+    expect(trimCharactersFromString('...hello...', '.')).toBe('hello');
+    expect(trimCharactersFromString('(!)important(!)', '()!')).toBe(
+      'important'
+    );
+  });
+
+  it('should return the original string if no matching characters are at the ends', () => {
+    expect(trimCharactersFromString('no-trim-here', '#')).toBe('no-trim-here');
+  });
+
+  it('should work with strings containing spaces', () => {
+    expect(trimCharactersFromString('   hello world   ', ' ')).toBe(
+      'hello world'
+    );
+  });
+
+  it('should correctly handle empty input and trim characters to remove', () => {
+    expect(trimCharactersFromString('   ', ' ')).toBe('');
+    expect(trimCharactersFromString('   hello   ', ' ')).toBe('hello');
+  });
+
+  it('should correctly escape special characters in the trim string', () => {
+    expect(trimCharactersFromString('$$$abc$$$', '$')).toBe('abc');
+    expect(trimCharactersFromString('[abc]', '[]')).toBe('abc');
   });
 });

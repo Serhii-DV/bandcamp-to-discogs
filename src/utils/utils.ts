@@ -117,24 +117,6 @@ export function countOccurrences(arr: string[]): string[] {
   return result;
 }
 
-export function trimCharactersFromString(
-  inputString: string,
-  charactersToTrim: string
-): string {
-  // Escape special characters within the provided string and construct the regex pattern
-  const escapedCharacters = charactersToTrim.replace(
-    /[-/\\^$*+?.()|[\]{}]/g,
-    '\\$&'
-  );
-  const regexPattern = new RegExp(
-    `^[${escapedCharacters}]+|[${escapedCharacters}]+$`,
-    'g'
-  );
-  const trimmedString = inputString.replace(regexPattern, '');
-
-  return trimmedString;
-}
-
 export function removeInvisibleChars(inputString: string): string {
   // Define the invisible character(s) you want to remove (for example, non-breaking space)
   const invisibleCharsRegex =

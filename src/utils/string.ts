@@ -97,3 +97,21 @@ export function containsOneOf(
 export function removeBrackets(inputString: string): string {
   return inputString.replace(/\s*\([^)]*\)/, '');
 }
+
+export function trimCharactersFromString(
+  inputString: string,
+  charactersToTrim: string
+): string {
+  // Escape special characters within the provided string and construct the regex pattern
+  const escapedCharacters = charactersToTrim.replace(
+    /[-/\\^$*+?.()|[\]{}]/g,
+    '\\$&'
+  );
+  const regexPattern = new RegExp(
+    `^[${escapedCharacters}]+|[${escapedCharacters}]+$`,
+    'g'
+  );
+  const trimmedString = inputString.replace(regexPattern, '');
+
+  return trimmedString;
+}

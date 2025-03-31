@@ -2,6 +2,7 @@ import {
   camelCaseToReadable,
   capitalizeEachWord,
   containsOneOf,
+  convertNewlinesToBreaks,
   convertToAlias,
   getTextInitials,
   removeBrackets,
@@ -488,5 +489,59 @@ describe('camelCaseToReadable', () => {
 
   it('should return an empty string if the input is empty', () => {
     expect(camelCaseToReadable('')).toBe('');
+  });
+});
+
+describe('convertNewlinesToBreaks', () => {
+  it('should convert newline characters to <br> tags', () => {
+    const input = 'Hello\nWorld';
+    const expected = 'Hello<br>World';
+    expect(convertNewlinesToBreaks(input)).toBe(expected);
+  });
+
+  it('should handle multiple newline characters', () => {
+    const input = 'Hello\nWorld\nGoodbye';
+    const expected = 'Hello<br>World<br>Goodbye';
+    expect(convertNewlinesToBreaks(input)).toBe(expected);
+  });
+
+  it('should remove carriage return characters', () => {
+    const input = 'Hello\rWorld';
+    const expected = 'Hello<br>World';
+    expect(convertNewlinesToBreaks(input)).toBe(expected);
+  });
+
+  it('should convert multiple newlines and remove carriage returns', () => {
+    const input = 'Hello\r\nWorld\rGoodbye';
+    const expected = 'Hello<br>World<br>Goodbye';
+    expect(convertNewlinesToBreaks(input)).toBe(expected);
+  });
+
+  it('should handle strings without newlines or carriage returns', () => {
+    const input = 'Hello World';
+    const expected = 'Hello World';
+    expect(convertNewlinesToBreaks(input)).toBe(expected);
+  });
+
+  it('should handle empty strings', () => {
+    expect(convertNewlinesToBreaks('')).toBe('');
+  });
+
+  it('should handle only carriage return characters', () => {
+    const input = 'Hello\r\rWorld';
+    const expected = 'Hello<br><br>World';
+    expect(convertNewlinesToBreaks(input)).toBe(expected);
+  });
+
+  it('should handle strings with mixed newlines and carriage returns', () => {
+    const input = 'Hello\rWorld\nGoodbye';
+    const expected = 'Hello<br>World<br>Goodbye';
+    expect(convertNewlinesToBreaks(input)).toBe(expected);
+  });
+
+  it('should convert newline to <br> even with leading or trailing spaces', () => {
+    const input = '  Hello \n World  ';
+    const expected = '  Hello <br> World  ';
+    expect(convertNewlinesToBreaks(input)).toBe(expected);
   });
 });

@@ -136,5 +136,6 @@ export function camelCaseToReadable(str: string): string {
 }
 
 export function convertNewlinesToBreaks(str: string): string {
-  return str.replace(/\n/g, '<br>').replace(/\r/g, '');
+  // Replace both `\r\n` and `\n` with `<br>` and remove carriage returns
+  return str.replace(/\r\n|\r|\n/g, '<br>');
 }

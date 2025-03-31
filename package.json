@@ -5,6 +5,7 @@
     "@swc/html": "^1.11.13",
     "@types/chrome": "^0.0.313",
     "@types/isotope-layout": "^3.0.13",
+    "@types/jest": "^29.5.14",
     "@types/mustache": "^4.2.5",
     "@types/uuid": "^10.0.0",
     "@webcomponents/custom-elements": "^1.6.0",
@@ -18,13 +19,18 @@
     "html-minimizer-webpack-plugin": "^5.0.0",
     "html-webpack-plugin": "^5.6.3",
     "isotope-layout": "^3.0.6",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-webextension-mock": "^4.0.0",
     "json-minimizer-webpack-plugin": "^5.0.0",
     "mini-css-extract-plugin": "^2.9.2",
     "mustache": "^4.2.0",
     "prettier": "^3.5.3",
     "source-map-loader": "^5.0.0",
     "terser-webpack-plugin": "^5.3.11",
+    "ts-jest": "^29.3.0",
     "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "uuid": "^11.1.0",
     "webpack": "^5.98.0",
@@ -43,6 +49,7 @@
     "pf": "npm run prettier:fix",
     "setup-git-hooks": "git config core.hooksPath .githooks",
     "dist-zip": "rm -rf bandcamp-to-discogs-${npm_package_version}.zip && cd dist/ && zip -r ../bandcamp-to-discogs-${npm_package_version}.zip ./* && cd ..",
-    "make": "npm run build && npm run dist-zip"
+    "make": "npm run build && npm run dist-zip",
+    "test": "jest"
   }
 }

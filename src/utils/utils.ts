@@ -50,8 +50,8 @@ export function arrayUnique(arr: string[] | string[][]): string[] {
 export function hasClass(
   element: Element | HTMLElement | null,
   className: string
-) {
-  return element?.classList.contains(className);
+): boolean {
+  return !!element?.classList.contains(className);
 }
 
 export function getArrLastElement(array: Array<any>) {

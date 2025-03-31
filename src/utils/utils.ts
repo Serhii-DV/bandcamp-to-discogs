@@ -86,24 +86,6 @@ export function replaceTokens(
 }
 
 /**
- * Checks if a string contains any of the strings in a given array.
- * @param string1 - The string to check.
- * @param arrayOfStrings - An array of strings to look for.
- * @returns True if `string1` contains any of the strings in `arrayOfStrings`; otherwise, false.
- */
-export function containsOneOf(
-  string1: string,
-  arrayOfStrings: string[]
-): boolean {
-  for (const string2 of arrayOfStrings) {
-    if (string1.includes(string2)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
  * Counts the occurrences of each unique element in an array and formats the result.
  * @param arr - The array of strings to count occurrences in.
  * @returns An array of strings where each string represents an item and its count (if greater than 1).

@@ -69,3 +69,21 @@ export function splitString(
     .map((item: string) => item.trim())
     .filter((item: string) => item !== '');
 }
+
+/**
+ * Checks if a string contains any of the strings in a given array.
+ * @param string1 - The string to check.
+ * @param arrayOfStrings - An array of strings to look for.
+ * @returns True if `string1` contains any of the strings in `arrayOfStrings`; otherwise, false.
+ */
+export function containsOneOf(
+  string1: string,
+  arrayOfStrings: string[]
+): boolean {
+  for (const string2 of arrayOfStrings) {
+    if (string1.includes(string2)) {
+      return true;
+    }
+  }
+  return false;
+}

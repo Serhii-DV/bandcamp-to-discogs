@@ -115,3 +115,12 @@ export function trimCharactersFromString(
 
   return trimmedString;
 }
+
+export function removeInvisibleChars(inputString: string): string {
+  // Define the invisible character(s) you want to remove (for example, non-breaking space)
+  const invisibleCharsRegex =
+    /[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]|&lrm;/g;
+  const cleanedString = inputString.replace(invisibleCharsRegex, '');
+
+  return cleanedString;
+}

@@ -117,15 +117,6 @@ export function countOccurrences(arr: string[]): string[] {
   return result;
 }
 
-export function removeInvisibleChars(inputString: string): string {
-  // Define the invisible character(s) you want to remove (for example, non-breaking space)
-  const invisibleCharsRegex =
-    /[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]|&lrm;/g;
-  const cleanedString = inputString.replace(invisibleCharsRegex, '');
-
-  return cleanedString;
-}
-
 export function bytesToSize(bytes: number): string {
   const sizes: string[] = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 

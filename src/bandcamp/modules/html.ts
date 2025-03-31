@@ -1,7 +1,9 @@
-import { trimCharactersFromString } from 'src/utils/string';
+import {
+  removeInvisibleChars,
+  trimCharactersFromString
+} from 'src/utils/string';
 import { ReleaseItem } from '../../app/releaseItem';
 import { element, getDataAttribute } from '../../utils/html';
-import { removeInvisibleChars } from '../../utils/utils';
 
 export function getMusicAlbumSchemaData(): any {
   const jsonLdScript = document.querySelector(

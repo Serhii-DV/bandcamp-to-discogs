@@ -4,6 +4,7 @@ import {
   convertToAlias,
   getTextInitials,
   removeBrackets,
+  removeInvisibleChars,
   splitString,
   trimCharactersFromString,
   truncateText
@@ -363,5 +364,61 @@ describe('trimCharactersFromString', () => {
   it('should correctly escape special characters in the trim string', () => {
     expect(trimCharactersFromString('$$$abc$$$', '$')).toBe('abc');
     expect(trimCharactersFromString('[abc]', '[]')).toBe('abc');
+  });
+});
+
+describe('removeInvisibleChars', () => {
+  it('should remove zero-width space character (U+200B)', () => {
+    expect(removeInvisibleChars('Hello\u200BWorld')).toBe('HelloWorld');
+  });
+
+  it('should remove zero-width non-joiner character (U+200C)', () => {
+    expect(removeInvisibleChars('Hello\u200CWorld')).toBe('HelloWorld');
+  });
+
+  it('should remove left-to-right mark (U+200E)', () => {
+    expect(removeInvisibleChars('Hello\u200EWorld')).toBe('HelloWorld');
+  });
+
+  it('should remove right-to-left mark (U+200F)', () => {
+    expect(removeInvisibleChars('Hello\u200FWorld')).toBe('HelloWorld');
+  });
+
+  it('should remove invisible characters from the middle of a string', () => {
+    expect(removeInvisibleChars('Hel\u200Blo\u200FWorld')).toBe('HelloWorld');
+  });
+
+  it('should remove invisible characters from the beginning and end of a string', () => {
+    expect(removeInvisibleChars('\u200BHello World\u200F')).toBe('Hello World');
+  });
+
+  it('should not remove visible characters', () => {
+    expect(removeInvisibleChars('Hello World')).toBe('Hello World');
+  });
+
+  it('should handle strings with multiple invisible characters', () => {
+    expect(removeInvisibleChars('H\u200Bello\u200C World\u200F')).toBe(
+      'Hello World'
+    );
+  });
+
+  it('should handle an empty string correctly', () => {
+    expect(removeInvisibleChars('')).toBe('');
+  });
+
+  it('should return the same string if no invisible characters are present', () => {
+    expect(removeInvisibleChars('Invisible characters should not exist')).toBe(
+      'Invisible characters should not exist'
+    );
+  });
+
+  it('should handle invisible HTML entities like &lrm;', () => {
+    expect(removeInvisibleChars('Hello&lrm;World')).toBe('HelloWorld');
+  });
+
+  it('should remove all invisible characters and HTML entities', () => {
+    expect(removeInvisibleChars('\u200BHello&lrm; World\u200F')).toBe(
+      'Hello World'
+    );
   });
 });

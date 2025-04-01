@@ -10,13 +10,13 @@ import {
   isValidDiscogsReleaseAddUrl,
   isValidDiscogsReleaseEditUrl
 } from '../../discogs/app/utils';
-import { createIconLink } from '../../utils/html';
 import { showReleaseCard, showReleases } from './main';
 import { Metadata } from '../../discogs/app/metadata';
 import { ReleaseItem } from '../../app/releaseItem';
 import { BandcampItem } from '../../app/bandcampItem';
 import { Music } from '../../app/music';
 import { MessageType } from '../../app/core/messageType';
+import { createIconLink } from 'src/utils/icon';
 
 export type ArtistOrReleaseItem = ArtistItem | ReleaseItem;
 

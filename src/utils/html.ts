@@ -1,13 +1,6 @@
-import { B2DIconComponent } from '../popup/components/icon';
 import { log } from './console';
 import { camelCaseToReadable } from './string';
-import {
-  getOwnProperty,
-  isArray,
-  isFunction,
-  isObject,
-  isString
-} from './utils';
+import { getOwnProperty, isArray, isObject, isString } from './utils';
 
 export function elements(selector: string, parent?: Element): HTMLElement[] {
   return Array.from(
@@ -320,54 +313,6 @@ export function listenForMessage(
     }
   });
 }
-
-interface CreateIconLinkParams {
-  className?: string;
-  href?: string;
-  onClick?: (event: MouseEvent) => any;
-  title?: string;
-  iconDefault: string;
-  iconOnClick?: string;
-  iconOnClickTimeout?: number;
-}
-
-export const createIconLink = ({
-  className = 'icon-link',
-  href = '#',
-  onClick,
-  title = '',
-  iconDefault,
-  iconOnClick,
-  iconOnClickTimeout = 3000
-}: CreateIconLinkParams): HTMLAnchorElement => {
-  const link = document.createElement('a');
-  link.classList.add(className);
-  link.title = title;
-  link.href = href;
-  link.target = '_blank';
-  link.innerHTML = `<b2d-icon name="${iconDefault}"></b2d-icon>`;
-
-  if (onClick && isFunction(onClick)) {
-    link.addEventListener('click', (e: MouseEvent) => {
-      e.preventDefault();
-      const eventReturn = onClick(e);
-
-      if (iconOnClick) {
-        const icon = link.querySelector('b2d-icon');
-        if (icon instanceof B2DIconComponent) {
-          icon.setIcon(iconOnClick);
-          setTimeout(() => {
-            icon.setIcon(iconDefault);
-          }, iconOnClickTimeout);
-        }
-      }
-
-      return eventReturn;
-    });
-  }
-
-  return link;
-};
 
 export function setActiveTab(
   activeTab: HTMLElement | null,

@@ -200,41 +200,6 @@ export function triggerInputEvent(
   return element;
 }
 
-export function dispatchChangeEvent(
-  element: HTMLElement,
-  eventInitDict?: EventInit
-): HTMLElement {
-  if (
-    !(
-      element instanceof HTMLInputElement ||
-      element instanceof HTMLSelectElement ||
-      element instanceof HTMLTextAreaElement
-    )
-  ) {
-    throw new Error(
-      'The provided element does not support the "change" event.'
-    );
-  }
-
-  element.dispatchEvent(
-    new Event('change', eventInitDict ?? { bubbles: true })
-  );
-  return element;
-}
-
-export function dispatchClickEvent(
-  element: HTMLElement,
-  eventInitDict?: MouseEventInit
-): HTMLElement {
-  element.dispatchEvent(
-    new MouseEvent(
-      'click',
-      eventInitDict ?? { bubbles: true, cancelable: true }
-    )
-  );
-  return element;
-}
-
 export function createElementFromHTML(htmlString: string): Element | null {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = htmlString.trim();
@@ -306,40 +271,6 @@ export function selectElementWithContent(
   }
 
   return null;
-}
-
-/**
- */
-export function getCurrentUrl(): string {
-  return window.location.href;
-}
-
-/**
- * Observes changes to a specified attribute on a given HTMLElement
- * and runs a callback function when changes are detected.
- *
- * @param element - The element to observe.
- * @param attributeName - The name of the attribute to observe.
- * @param callback - The function to call when the attribute changes.
- */
-export function observeAttributeChange(
-  element: HTMLElement,
-  attributeName: string,
-  callback: (element: HTMLElement) => void
-): void {
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      if (
-        mutation.type === 'attributes' &&
-        mutation.attributeName === attributeName
-      ) {
-        callback(element);
-      }
-    }
-  });
-
-  const config = { attributes: true, attributeFilter: [attributeName] };
-  observer.observe(element, config);
 }
 
 /**
@@ -454,42 +385,8 @@ export function setActiveTab(
   }
 }
 
-export function getVisibleElement(
-  elements: (HTMLElement | null)[]
-): HTMLElement | undefined {
-  return elements.find((element) => isElementVisible(element)) || undefined;
-}
-
-export function isElementVisible(element: HTMLElement | null): boolean {
-  if (!element) {
-    return false;
-  }
-
-  const style = getComputedStyle(element);
-  return (
-    !element.classList.contains('d-none') &&
-    style.display !== 'none' &&
-    style.visibility !== 'hidden' &&
-    style.opacity !== '0'
-  );
-}
-
 export function isCheckbox(input: HTMLInputElement): boolean {
   return input.type === 'checkbox';
-}
-
-export function checkOneByValue(
-  checkboxes: HTMLInputElement[],
-  value: string,
-  callback?: (checkbox: HTMLInputElement) => void
-): void {
-  checkboxes.filter(isCheckbox).forEach((checkbox) => {
-    checkbox.checked = checkbox.value === value;
-
-    if (callback) {
-      callback(checkbox);
-    }
-  });
 }
 
 export function removeClass<T extends HTMLElement>(

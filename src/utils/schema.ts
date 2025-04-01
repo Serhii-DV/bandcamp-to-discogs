@@ -16,7 +16,7 @@ interface Schema {
   track: {
     numberOfItems: number;
     itemListElement: {
-      position: string;
+      position: number;
       item: {
         name: string;
         duration: string;

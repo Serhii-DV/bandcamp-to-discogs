@@ -1,21 +1,20 @@
 import { getGenreByStyle } from '../../discogs/modules/genres.js';
-import {
-  hasOwnProperty,
-  isEmptyObject,
-  isObject,
-  isString
-} from '../../utils/utils.js';
+import { hasOwnProperty, isEmptyObject, isString } from '../../utils/utils';
 
-let mapping = {};
+interface KeywordMapping {
+  [key: string]: string | Style;
+}
 
-export function getMapping() {
+let mapping: KeywordMapping = {};
+
+export function getMapping(): KeywordMapping {
   return (mapping = isEmptyObject(mapping)
     ? createMapping(keywordMapping)
     : mapping);
 }
 
-function createMapping(keywordMapping) {
-  const mapping = {};
+function createMapping(keywordMapping: Record<string, string>): KeywordMapping {
+  const mapping: KeywordMapping = {};
 
   for (const key in keywordMapping) {
     if (hasOwnProperty(keywordMapping, key)) {
@@ -30,21 +29,18 @@ function createMapping(keywordMapping) {
 }
 
 export class Style {
-  constructor(style) {
-    this.style = style;
-    this._genre = null;
-  }
+  constructor(public style: string) {}
 
-  get genre() {
-    return (this._genre = isObject(this._genre)
-      ? this._genre
-      : getGenreByStyle(this.style));
+  get genre(): string {
+    return getGenreByStyle(this.style);
   }
 }
 
-let keywordMapping = {};
+let keywordMapping: Record<string, string> = {};
 
-export async function loadKeywordMapping(url) {
+export async function loadKeywordMapping(
+  url: string
+): Promise<Record<string, string>> {
   return fetch(url)
     .then((response) => response.json())
     .then((data) => {
@@ -53,5 +49,6 @@ export async function loadKeywordMapping(url) {
     })
     .catch(() => {
       keywordMapping = {};
+      return keywordMapping;
     });
 }

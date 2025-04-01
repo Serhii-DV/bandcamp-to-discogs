@@ -1,6 +1,6 @@
 import { log } from '../utils/console';
 import { injectCSSFile, injectJSFile } from '../utils/html';
-import { PageTypeDetector } from './app/page-type.js';
+import { PageTypeDetector } from './app/page-type';
 import { setupPageAlbum } from './pages/page-album.js';
 import { setupPageMusic } from './pages/page-music.js';
 

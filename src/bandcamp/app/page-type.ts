@@ -1,64 +1,67 @@
-export const PageTypeEnum = Object.freeze({
-  ALBUM: 'album',
-  ARTISTS: 'artists',
-  COMMUNITY: 'community',
-  MERCH: 'merch',
-  MUSIC: 'music',
-  TRACK: 'track',
-  VIDEO: 'video',
-  UNKNOWN: 'unknown'
-});
+export enum PageTypeEnum {
+  ALBUM = 'album',
+  ARTISTS = 'artists',
+  COMMUNITY = 'community',
+  MERCH = 'merch',
+  MUSIC = 'music',
+  TRACK = 'track',
+  VIDEO = 'video',
+  UNKNOWN = 'unknown'
+}
 
 export class PageType {
-  constructor(value) {
+  value: PageTypeEnum;
+
+  constructor(value: PageTypeEnum) {
     this.value = value;
   }
 
-  isAlbum = () => this.value === PageTypeEnum.ALBUM;
-  isArtists = () => this.value === PageTypeEnum.ARTISTS;
-  isCommunity = () => this.value === PageTypeEnum.COMMUNITY;
-  isMerch = () => this.value === PageTypeEnum.MERCH;
-  isMusic = () => this.value === PageTypeEnum.MUSIC;
-  isTrack = () => this.value === PageTypeEnum.TRACK;
-  isVideo = () => this.value === PageTypeEnum.VIDEO;
-  isUnknow = () => this.value === PageTypeEnum.UNKNOWN;
+  isAlbum = (): boolean => this.value === PageTypeEnum.ALBUM;
+  isArtists = (): boolean => this.value === PageTypeEnum.ARTISTS;
+  isCommunity = (): boolean => this.value === PageTypeEnum.COMMUNITY;
+  isMerch = (): boolean => this.value === PageTypeEnum.MERCH;
+  isMusic = (): boolean => this.value === PageTypeEnum.MUSIC;
+  isTrack = (): boolean => this.value === PageTypeEnum.TRACK;
+  isVideo = (): boolean => this.value === PageTypeEnum.VIDEO;
+  isUnknown = (): boolean => this.value === PageTypeEnum.UNKNOWN;
 }
 
 export class PageTypeDetector {
+  private url: string;
+
   constructor() {
     this.url = window.location.href;
   }
 
-  detect = () => {
-    const self = this;
-    let value = PageTypeEnum.UNKNOWN;
+  detect = (): PageType => {
+    let value: PageTypeEnum = PageTypeEnum.UNKNOWN;
 
-    if (self.isAlbum()) {
+    if (this.isAlbum()) {
       value = PageTypeEnum.ALBUM;
-    } else if (self.isArtists()) {
+    } else if (this.isArtists()) {
       value = PageTypeEnum.ARTISTS;
-    } else if (self.isCommunity()) {
+    } else if (this.isCommunity()) {
       value = PageTypeEnum.COMMUNITY;
-    } else if (self.isMusic()) {
+    } else if (this.isMusic()) {
       value = PageTypeEnum.MUSIC;
-    } else if (self.isMerch()) {
+    } else if (this.isMerch()) {
       value = PageTypeEnum.MERCH;
-    } else if (self.isTrack()) {
+    } else if (this.isTrack()) {
       value = PageTypeEnum.TRACK;
-    } else if (self.isVideo()) {
+    } else if (this.isVideo()) {
       value = PageTypeEnum.VIDEO;
     }
 
     return new PageType(value);
   };
 
-  isAlbum = () => this.url.includes('/album/');
-  isArtists = () =>
+  isAlbum = (): boolean => this.url.includes('/album/');
+  isArtists = (): boolean =>
     this.url.includes('/artists/') || !!document.querySelector('.artists-grid');
-  isCommunity = () => this.url.includes('/community/');
-  isMerch = () => this.url.includes('/merch/');
-  isMusic = () =>
+  isCommunity = (): boolean => this.url.includes('/community/');
+  isMerch = (): boolean => this.url.includes('/merch/');
+  isMusic = (): boolean =>
     this.url.includes('/music/') || !!document.querySelector('#music-grid');
-  isTrack = () => this.url.includes('/track/');
-  isVideo = () => this.url.includes('/video/');
+  isTrack = (): boolean => this.url.includes('/track/');
+  isVideo = (): boolean => this.url.includes('/video/');
 }

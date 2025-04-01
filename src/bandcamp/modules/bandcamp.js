@@ -5,7 +5,7 @@ import {
   isString,
   replaceTokens
 } from '../../utils/utils';
-import { Style, getMapping } from './mapping.js';
+import { Style, getMapping } from './mapping';
 
 /**
  * @param {String} keyword

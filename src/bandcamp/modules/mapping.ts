@@ -4,7 +4,7 @@ import {
   isEmptyObject,
   isObject,
   isString
-} from '../../utils/utils';
+} from '../../utils/utils.js';
 
 let mapping = {};
 

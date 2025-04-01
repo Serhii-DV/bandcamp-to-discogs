@@ -12,7 +12,8 @@ import {
   getArrLastElement,
   replaceTokens,
   countOccurrences,
-  bytesToSize
+  bytesToSize,
+  urlToUuid
 } from './utils';
 
 describe('Utility Functions', () => {
@@ -197,5 +198,18 @@ describe('Utility Functions', () => {
       expect(bytesToSize(500)).toBe('500.00 Bytes');
       expect(bytesToSize(1536)).toBe('1.50 KB');
     });
+  });
+});
+
+describe('urlToUuid', () => {
+  it('should generate a UUID v5 from a URL', () => {
+    expect(urlToUuid('https://cryochamber.bandcamp.com/')).toBe(
+      '453a7f8c-3649-5023-8135-941bc881db61'
+    );
+    expect(
+      urlToUuid(
+        'https://cryochamber.bandcamp.com/album/detune-the-tragic-light'
+      )
+    ).toBe('8e96a5a2-9a45-53ff-a37c-e2762c5fa6f5');
   });
 });

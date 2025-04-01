@@ -1,9 +1,5 @@
 import { safeFilename } from './string';
 
-export function arrayToCsv(rows: string[][]): string {
-  return rows.map((e: string[]) => e.join(',')).join('\n');
-}
-
 export function objectsToCsv(objects: object[]): string {
   if (!objects || objects.length === 0) {
     return ''; // Return an empty string if the array is empty or not provided

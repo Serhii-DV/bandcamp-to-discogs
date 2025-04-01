@@ -2,7 +2,7 @@ import { getGenreByStyle } from '../../discogs/modules/genres.js';
 import { hasOwnProperty, isEmptyObject, isString } from '../../utils/utils';
 
 interface KeywordMapping {
-  [key: string]: string | Style;
+  [key: string]: string | string[] | Style;
 }
 
 let mapping: KeywordMapping = {};

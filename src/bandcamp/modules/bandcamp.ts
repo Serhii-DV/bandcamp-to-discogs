@@ -7,11 +7,7 @@ import {
 } from '../../utils/utils';
 import { Style, getMapping } from './mapping';
 
-/**
- * @param {String} keyword
- * @returns {Array<String>}
- */
-export function keywordToDiscogsGenre(keyword) {
+export function keywordToDiscogsGenre(keyword: string): string[] {
   const keywordMapping = getMapping();
   const key = keyword.toLowerCase();
 
@@ -19,26 +15,22 @@ export function keywordToDiscogsGenre(keyword) {
     const keywordMapData = keywordMapping[key];
 
     if (keywordMapData instanceof Style) {
-      return [keywordMapData.genre];
+      return [keywordMapData.genre as string];
     }
 
     if (isArray(keywordMapData)) {
-      return keywordsToDiscogsGenres(keywordMapData);
+      return keywordsToDiscogsGenres(keywordMapData as string[]);
     }
 
     if (isString(keywordMapData)) {
-      return keywordToDiscogsGenre(keywordMapData);
+      return keywordToDiscogsGenre(keywordMapData as string);
     }
   }
 
   return [];
 }
 
-/**
- * @param {String} keyword
- * @returns {Array<String>}
- */
-export function keywordToDiscogsStyles(keyword) {
+export function keywordToDiscogsStyles(keyword: string): string[] {
   const keywordMapping = getMapping();
   const key = keyword.toLowerCase();
 
@@ -50,51 +42,49 @@ export function keywordToDiscogsStyles(keyword) {
     }
 
     if (isArray(keywordMapData)) {
-      return keywordsToDiscogsStyles(keywordMapData);
+      return keywordsToDiscogsStyles(keywordMapData as string[]);
     }
 
     if (isString(keywordMapData)) {
-      return keywordToDiscogsStyles(keywordMapData);
+      return keywordToDiscogsStyles(keywordMapData as string);
     }
   }
 
   return [];
 }
 
-/**
- * @param {Array<String>} keywords
- * @returns {Array<String>}
- */
-export function keywordsToDiscogsGenres(keywords) {
-  return arrayUnique(keywords.map(keywordToDiscogsGenre));
+export function keywordsToDiscogsGenres(keywords: string[]): string[] {
+  return arrayUnique(keywords.flatMap(keywordToDiscogsGenre));
 }
 
-/**
- * @param {Array<String>} keywords
- * @returns {Array<String>}
- */
-export function keywordsToDiscogsStyles(keywords) {
-  return arrayUnique(keywords.map(keywordToDiscogsStyles));
+export function keywordsToDiscogsStyles(keywords: string[]): string[] {
+  return arrayUnique(keywords.flatMap(keywordToDiscogsStyles));
 }
 
-export function getBandcampSearchAllUrl(query) {
+export function getBandcampSearchAllUrl(query: string): string {
   return replaceTokens(config.bandcamp.search.all, {
     query: encodeURIComponent(query)
   });
 }
 
-export function getBandcampSearchArtistUrl(artist) {
+export function getBandcampSearchArtistUrl(artist: string): string {
   return replaceTokens(config.bandcamp.search.artist, {
     query: encodeURIComponent(artist)
   });
 }
 
-export function getBandcampSearchReleaseUrl(artist, release) {
+export function getBandcampSearchReleaseUrl(
+  artist: string,
+  release: string
+): string {
   return replaceTokens(config.bandcamp.search.release, {
-    query: encodeURIComponent(artist + ' ' + release)
+    query: encodeURIComponent(`${artist} ${release}`)
   });
 }
 
-export function getBandcampSearchReleaseAllUrl(artist, release) {
-  return getBandcampSearchAllUrl(artist + ' ' + release);
+export function getBandcampSearchReleaseAllUrl(
+  artist: string,
+  release: string
+): string {
+  return getBandcampSearchAllUrl(`${artist} ${release}`);
 }

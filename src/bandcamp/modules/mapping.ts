@@ -8,9 +8,11 @@ interface KeywordMapping {
 let mapping: KeywordMapping = {};
 
 export function getMapping(): KeywordMapping {
-  return (mapping = isEmptyObject(mapping)
-    ? createMapping(keywordMapping)
-    : mapping);
+  if (isEmptyObject(mapping)) {
+    mapping = createMapping(keywordMapping);
+  }
+
+  return mapping;
 }
 
 function createMapping(keywordMapping: Record<string, string>): KeywordMapping {

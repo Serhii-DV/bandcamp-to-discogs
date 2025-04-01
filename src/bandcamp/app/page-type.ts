@@ -29,8 +29,8 @@ export class PageType {
 export class PageTypeDetector {
   private url: string;
 
-  constructor() {
-    this.url = window.location.href;
+  constructor(url: string) {
+    this.url = url;
   }
 
   detect = (): PageType => {

@@ -12,7 +12,7 @@ function main() {
   injectCSSFile(getExtensionUrl('bandcamp.content.css'));
   injectJSFile(getExtensionUrl('bandcamp.inject.js'));
 
-  const pageType = new PageTypeDetector().detect();
+  const pageType = new PageTypeDetector(window.location.href).detect();
 
   if (pageType.isMusic()) {
     setupPageMusic(pageType);

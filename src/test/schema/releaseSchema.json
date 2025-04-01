@@ -1,0 +1,1636 @@
+{
+  "albumReleaseType": "AlbumRelease",
+  "@id": "https://cryochamber.bandcamp.com/album/detune-the-tragic-light",
+  "mainEntityOfPage": "https://cryochamber.bandcamp.com/album/detune-the-tragic-light",
+  "@type": "MusicAlbum",
+  "name": "Detune the Tragic Light",
+  "dateModified": "14 Jan 2025 16:56:42 GMT",
+  "albumRelease": [
+      {
+          "@type": [
+              "MusicRelease",
+              "Product"
+          ],
+          "@id": "https://cryochamber.bandcamp.com/album/detune-the-tragic-light",
+          "name": "Detune the Tragic Light",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "item_id",
+                  "value": 3213857873
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "item_type",
+                  "value": "a"
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "selling_band_id",
+                  "value": 1969444599
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "type_name",
+                  "value": "Digital"
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "art_id",
+                  "value": 3461983006
+              }
+          ],
+          "description": "Includes high-quality download in MP3, FLAC and more. Paying supporters also get unlimited streaming via the free Bandcamp app.",
+          "offers": {
+              "@type": "Offer",
+              "url": "https://cryochamber.bandcamp.com/album/detune-the-tragic-light#a3213857873-buy",
+              "priceCurrency": "USD",
+              "price": 7,
+              "priceSpecification": {
+                  "minPrice": 7
+              },
+              "availability": "OnlineOnly"
+          },
+          "musicReleaseFormat": "DigitalFormat",
+          "image": [
+              "https://f4.bcbits.com/img/a3461983006_10.jpg"
+          ]
+      },
+      {
+          "@type": [
+              "MusicRelease",
+              "Product"
+          ],
+          "@id": "https://cryochamber.bandcamp.com/album/detune-the-tragic-light#p2850549248",
+          "name": "CD",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "item_id",
+                  "value": 2850549248
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "item_type",
+                  "value": "p"
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "selling_band_id",
+                  "value": 1969444599
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "type_name",
+                  "value": "Compact Disc (CD)"
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_ids",
+                  "value": [
+                      37512987,
+                      37512989
+                  ]
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "is_music_merch",
+                  "value": true
+              },
+              {
+                  "@type": "PropertyValue",
+                  "name": "type_id",
+                  "value": 1
+              }
+          ],
+          "description": "200 edition CD comes in a beautiful matte 6 panel digipak with full inside spine print with artwork by Simon Heath",
+          "offers": {
+              "@type": "Offer",
+              "url": "https://cryochamber.bandcamp.com/album/detune-the-tragic-light#p2850549248-buy",
+              "priceCurrency": "USD",
+              "price": 15,
+              "priceSpecification": {
+                  "minPrice": 15
+              },
+              "availability": "InStock",
+              "additionalProperty": [
+                  {
+                      "@type": "PropertyValue",
+                      "name": "includes_digital_download",
+                      "value": true
+                  }
+              ]
+          },
+          "musicReleaseFormat": "CDFormat",
+          "image": [
+              "https://f4.bcbits.com/img/0037512987_10.jpg",
+              "https://f4.bcbits.com/img/0037512989_10.jpg"
+          ]
+      },
+      {
+          "@type": "MusicRelease",
+          "@id": "https://cryochamber.bandcamp.com/track/the-voice-of-depression"
+      },
+      {
+          "@type": "MusicRelease",
+          "@id": "https://cryochamber.bandcamp.com/track/portraits-of-possession"
+      },
+      {
+          "@type": "MusicRelease",
+          "@id": "https://cryochamber.bandcamp.com/track/faraway-and-far-from-well"
+      },
+      {
+          "@type": "MusicRelease",
+          "@id": "https://cryochamber.bandcamp.com/track/the-tragic-night-when-all-stars-fell"
+      },
+      {
+          "@type": "MusicRelease",
+          "@id": "https://cryochamber.bandcamp.com/track/we-emerged-as-one-from-the-sunken-sea"
+      },
+      {
+          "@type": "MusicRelease",
+          "@id": "https://cryochamber.bandcamp.com/track/detune-the-skies-with-a-lesser-key"
+      },
+      {
+          "@type": "MusicRelease",
+          "@id": "https://cryochamber.bandcamp.com/track/is-it-dream-or-memory"
+      },
+      {
+          "@type": "MusicRelease",
+          "@id": "https://cryochamber.bandcamp.com/track/the-body-devoid-of-light"
+      },
+      {
+          "@type": "MusicRelease",
+          "@id": "https://cryochamber.bandcamp.com/track/a-swill-of-pills-to-close-the-night"
+      }
+  ],
+  "byArtist": {
+      "@type": "MusicGroup",
+      "name": "God Body Disconnect"
+  },
+  "publisher": {
+      "@type": "MusicGroup",
+      "@id": "https://cryochamber.bandcamp.com",
+      "name": "Cryo Chamber",
+      "additionalProperty": [
+          {
+              "@type": "PropertyValue",
+              "name": "band_id",
+              "value": 1969444599
+          },
+          {
+              "@type": "PropertyValue",
+              "name": "has_any_downloads",
+              "value": true
+          },
+          {
+              "@type": "PropertyValue",
+              "name": "has_download_codes",
+              "value": true
+          },
+          {
+              "@type": "PropertyValue",
+              "name": "has_policies",
+              "value": true
+          },
+          {
+              "@type": "PropertyValue",
+              "name": "image_height",
+              "value": 2010
+          },
+          {
+              "@type": "PropertyValue",
+              "name": "image_id",
+              "value": 37431178
+          },
+          {
+              "@type": "PropertyValue",
+              "name": "image_width",
+              "value": 2010
+          }
+      ],
+      "image": "https://f4.bcbits.com/img/0037431178_10.jpg",
+      "genre": "https://bandcamp.com/discover/ambient",
+      "description": "Cryo Chamber is a record label with a collaborative focus run by Simon Heath (Atrium Carceri) focusing on high quality dark ambient with a cinematic edge. \n\nSend Demos to our Facebook",
+      "mainEntityOfPage": [
+          {
+              "@type": "WebPage",
+              "url": "https://cryocrypt.bandcamp.com/",
+              "name": "Cryo Crypt"
+          },
+          {
+              "@type": "WebPage",
+              "url": "http://www.youtube.com/user/cryochamberlabel",
+              "name": "YouTube"
+          },
+          {
+              "@type": "WebPage",
+              "url": "https://soundcloud.com/cryo-chamber",
+              "name": "SoundCloud"
+          },
+          {
+              "@type": "WebPage",
+              "url": "http://www.facebook.com/CryoChamber",
+              "name": "Facebook"
+          },
+          {
+              "@type": "WebPage",
+              "url": "https://twitter.com/CryoChamber",
+              "name": "Twitter"
+          }
+      ],
+      "subjectOf": [
+          {
+              "@type": "WebPage",
+              "url": "https://cryochamber.bandcamp.com/music",
+              "name": "music",
+              "additionalProperty": [
+                  {
+                      "@type": "PropertyValue",
+                      "name": "nav_type",
+                      "value": "m"
+                  }
+              ]
+          },
+          {
+              "@type": "WebPage",
+              "url": "https://cryochamber.bandcamp.com/merch",
+              "name": "CD/Vinyl",
+              "additionalProperty": [
+                  {
+                      "@type": "PropertyValue",
+                      "name": "nav_type",
+                      "value": "p"
+                  }
+              ]
+          },
+          {
+              "@type": "WebPage",
+              "url": "https://cryochamber.bandcamp.com/video",
+              "name": "video",
+              "additionalProperty": [
+                  {
+                      "@type": "PropertyValue",
+                      "name": "nav_type",
+                      "value": "v"
+                  }
+              ]
+          },
+          {
+              "@type": "WebPage",
+              "url": "https://cryochamber.bandcamp.com/community",
+              "name": "community",
+              "additionalProperty": [
+                  {
+                      "@type": "PropertyValue",
+                      "name": "nav_type",
+                      "value": "c"
+                  }
+              ]
+          }
+      ],
+      "foundingLocation": {
+          "@type": "Place",
+          "name": "Oregon"
+      }
+  },
+  "numTracks": 9,
+  "track": {
+      "@type": "ItemList",
+      "numberOfItems": 9,
+      "itemListElement": [
+          {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                  "@type": "MusicRecording",
+                  "@id": "https://cryochamber.bandcamp.com/track/the-voice-of-depression",
+                  "additionalProperty": [
+                      {
+                          "@type": "PropertyValue",
+                          "name": "track_id",
+                          "value": 996337192
+                      },
+                      {
+                          "@type": "PropertyValue",
+                          "name": "license_name",
+                          "value": "all_rights_reserved"
+                      }
+                  ],
+                  "name": "The Voice of Depression",
+                  "duration": "P00H06M30S",
+                  "copyrightNotice": "All Rights Reserved",
+                  "mainEntityOfPage": "https://cryochamber.bandcamp.com/track/the-voice-of-depression"
+              }
+          },
+          {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                  "@type": "MusicRecording",
+                  "@id": "https://cryochamber.bandcamp.com/track/portraits-of-possession",
+                  "additionalProperty": [
+                      {
+                          "@type": "PropertyValue",
+                          "name": "track_id",
+                          "value": 1381795026
+                      },
+                      {
+                          "@type": "PropertyValue",
+                          "name": "license_name",
+                          "value": "all_rights_reserved"
+                      }
+                  ],
+                  "name": "Portraits of Possession",
+                  "duration": "P00H09M09S",
+                  "copyrightNotice": "All Rights Reserved",
+                  "mainEntityOfPage": "https://cryochamber.bandcamp.com/track/portraits-of-possession"
+              }
+          },
+          {
+              "@type": "ListItem",
+              "position": 3,
+              "item": {
+                  "@type": "MusicRecording",
+                  "@id": "https://cryochamber.bandcamp.com/track/faraway-and-far-from-well",
+                  "additionalProperty": [
+                      {
+                          "@type": "PropertyValue",
+                          "name": "track_id",
+                          "value": 1092771953
+                      },
+                      {
+                          "@type": "PropertyValue",
+                          "name": "license_name",
+                          "value": "all_rights_reserved"
+                      }
+                  ],
+                  "name": "Faraway and Far From Well",
+                  "duration": "P00H09M18S",
+                  "copyrightNotice": "All Rights Reserved",
+                  "mainEntityOfPage": "https://cryochamber.bandcamp.com/track/faraway-and-far-from-well"
+              }
+          },
+          {
+              "@type": "ListItem",
+              "position": 4,
+              "item": {
+                  "@type": "MusicRecording",
+                  "@id": "https://cryochamber.bandcamp.com/track/the-tragic-night-when-all-stars-fell",
+                  "additionalProperty": [
+                      {
+                          "@type": "PropertyValue",
+                          "name": "track_id",
+                          "value": 3218171948
+                      },
+                      {
+                          "@type": "PropertyValue",
+                          "name": "license_name",
+                          "value": "all_rights_reserved"
+                      }
+                  ],
+                  "name": "The Tragic Night When All Stars Fell",
+                  "duration": "P00H10M22S",
+                  "copyrightNotice": "All Rights Reserved",
+                  "mainEntityOfPage": "https://cryochamber.bandcamp.com/track/the-tragic-night-when-all-stars-fell"
+              }
+          },
+          {
+              "@type": "ListItem",
+              "position": 5,
+              "item": {
+                  "@type": "MusicRecording",
+                  "@id": "https://cryochamber.bandcamp.com/track/we-emerged-as-one-from-the-sunken-sea",
+                  "additionalProperty": [
+                      {
+                          "@type": "PropertyValue",
+                          "name": "track_id",
+                          "value": 3322595750
+                      },
+                      {
+                          "@type": "PropertyValue",
+                          "name": "license_name",
+                          "value": "all_rights_reserved"
+                      }
+                  ],
+                  "name": "We Emerged As One From The Sunken Sea",
+                  "duration": "P00H06M26S",
+                  "copyrightNotice": "All Rights Reserved",
+                  "mainEntityOfPage": "https://cryochamber.bandcamp.com/track/we-emerged-as-one-from-the-sunken-sea"
+              }
+          },
+          {
+              "@type": "ListItem",
+              "position": 6,
+              "item": {
+                  "@type": "MusicRecording",
+                  "@id": "https://cryochamber.bandcamp.com/track/detune-the-skies-with-a-lesser-key",
+                  "additionalProperty": [
+                      {
+                          "@type": "PropertyValue",
+                          "name": "track_id",
+                          "value": 2866961957
+                      },
+                      {
+                          "@type": "PropertyValue",
+                          "name": "license_name",
+                          "value": "all_rights_reserved"
+                      }
+                  ],
+                  "name": "Detune the Skies With A Lesser Key",
+                  "duration": "P00H08M29S",
+                  "copyrightNotice": "All Rights Reserved",
+                  "mainEntityOfPage": "https://cryochamber.bandcamp.com/track/detune-the-skies-with-a-lesser-key"
+              }
+          },
+          {
+              "@type": "ListItem",
+              "position": 7,
+              "item": {
+                  "@type": "MusicRecording",
+                  "@id": "https://cryochamber.bandcamp.com/track/is-it-dream-or-memory",
+                  "additionalProperty": [
+                      {
+                          "@type": "PropertyValue",
+                          "name": "track_id",
+                          "value": 1602935779
+                      },
+                      {
+                          "@type": "PropertyValue",
+                          "name": "license_name",
+                          "value": "all_rights_reserved"
+                      }
+                  ],
+                  "name": "Is It Dream Or Memory",
+                  "duration": "P00H08M29S",
+                  "copyrightNotice": "All Rights Reserved",
+                  "mainEntityOfPage": "https://cryochamber.bandcamp.com/track/is-it-dream-or-memory"
+              }
+          },
+          {
+              "@type": "ListItem",
+              "position": 8,
+              "item": {
+                  "@type": "MusicRecording",
+                  "@id": "https://cryochamber.bandcamp.com/track/the-body-devoid-of-light",
+                  "additionalProperty": [
+                      {
+                          "@type": "PropertyValue",
+                          "name": "track_id",
+                          "value": 4215722907
+                      },
+                      {
+                          "@type": "PropertyValue",
+                          "name": "license_name",
+                          "value": "all_rights_reserved"
+                      }
+                  ],
+                  "name": "The Body Devoid Of Light",
+                  "duration": "P00H04M25S",
+                  "copyrightNotice": "All Rights Reserved",
+                  "mainEntityOfPage": "https://cryochamber.bandcamp.com/track/the-body-devoid-of-light"
+              }
+          },
+          {
+              "@type": "ListItem",
+              "position": 9,
+              "item": {
+                  "@type": "MusicRecording",
+                  "@id": "https://cryochamber.bandcamp.com/track/a-swill-of-pills-to-close-the-night",
+                  "additionalProperty": [
+                      {
+                          "@type": "PropertyValue",
+                          "name": "track_id",
+                          "value": 768072287
+                      },
+                      {
+                          "@type": "PropertyValue",
+                          "name": "license_name",
+                          "value": "all_rights_reserved"
+                      }
+                  ],
+                  "name": "A Swill Of Pills To Close The Night",
+                  "duration": "P00H06M36S",
+                  "copyrightNotice": "All Rights Reserved",
+                  "mainEntityOfPage": "https://cryochamber.bandcamp.com/track/a-swill-of-pills-to-close-the-night"
+              }
+          }
+      ]
+  },
+  "image": "https://f4.bcbits.com/img/a3461983006_10.jpg",
+  "keywords": [
+      "Ambient",
+      "atmospheric",
+      "dark ambient",
+      "drone",
+      "field recordings",
+      "soundscapes",
+      "Oregon"
+  ],
+  "datePublished": "14 Jan 2025 00:00:00 GMT",
+  "description": "Nearly a decade ago, God Body Disconnect burst on the scene with his critically acclaimed debut album “Dredge Portals.” It has been hailed by many as an album that challenged the mold of the dark ambient genre. In the subsequent years and with a span of several album releases, Bruce Moallem has proven to be one of the genres most unique artists, who unrelentingly follows his vision without regard for confines. Today, God Body Disconnect presents his 10th solo album, “Detune The Tragic Light.”\r\n\r\nThis is a bold album in many ways. The dark sections are much darker, and the emotional digs are deep and impactful. Meticulous details drag you on a rollercoaster ride where inner and outer demons accompany the seat next to you.\r\n\r\nB.M. Journal entry 12/15/XXXX\r\nIt wasn’t always this way. There was a time when I felt in control of my life. When crippling depression and anxiety weren’t constantly looming over me. When I didn’t hear poisonous voices, or see frightening visions. I didn’t always feel like a helpless puppet dangling within a strange, twisted world. There were some happier moments when I saw the world as a brighter shade. When what I could achieve seemed boundless. I desperately tried to keep myself in the light, because it felt good for once. I thought I could stay there by burying all the pain as deep as I could; I tried to forget. I learned the hard way that there was no hole deep enough to cover them. The decline wasn’t a quick process, but rather a slow and methodical corroding of the mind. First it was the little things that began to change. I noticed I had trouble sleeping, and would have terrible lucid nightmares when I did. I couldn’t remember things as good anymore. My thoughts and speech weren’t sinking up as they used to. I started to have unpredictable anxiety attacks that felt like a heart attack. Depression began to creep into my everyday life without any conscious reason I could point to. I just knew I didn’t feel good, and something was wrong. I became angrier, and my propensity for violence grew. I’m not going to lie and tell you I was a saint. Some deeds done leave a permanent stain on your soul. The grave mistake I made was I didn’t understand how the power of guilt and pain would bite me back. From there it only escalated to a point where life was becoming unbearable. I didn’t want to wake up anymore. I wished it was nighttime so I didn’t have to live with the suffering all day. I started to withdraw from the world. Paranoia of being watched or targeted controlled my every thought. I started to hear and see things that no one else did. It felt like being possessed by demons. I was scared and confused, and foolishly thought I could fix me on my own. I self medicated to numb the biting emotions. But, that only spiraled me deeper into a pit of blackness. I tried to hold on as tight as I could, but I eventually lost my grip on reality. I was no longer me. It’s been so long now, that I don’t even know what “me” is anymore. It’s so dark in here, and I can’t seem to find any light. I pray I haven’t lost it forever.\r\n\r\nRecommended for fans of moody, depressive soundscapes and themes.",
+  "creditText": "Written, Produced, Performed - Bruce Moallem\r\nArtwork & Mastering - Simon Heath",
+  "copyrightNotice": "All Rights Reserved",
+  "comment": [
+      {
+          "@type": "Comment",
+          "author": {
+              "@type": "Person",
+              "url": "https://bandcamp.com/PseudoSynthrogen",
+              "image": "https://f4.bcbits.com/img/0006537669_50.jpg",
+              "additionalProperty": [
+                  {
+                      "@type": "PropertyValue",
+                      "name": "image_id",
+                      "value": 6537669
+                  }
+              ],
+              "name": "Ed Conrad"
+          },
+          "text": [
+              "Immediately, I was whisked away to a jazzy Noir world from another dimension or plane of existence. I sense recordings of daily routines of poisonous medications that makes you think, is depression even real if one says it exists, then certainly you will believe it. This is the most vulnerable & real emotion from GBD ever & when the narration comes in, you know that burning numbness & pain in one's brainstem is genuine. Bruce is at his best when he breaks the rules of traditional dark ambient!",
+              "Favorite track: Detune the Skies With A Lesser Key"
+          ]
+      },
+      {
+          "@type": "Comment",
+          "author": {
+              "@type": "Person",
+              "url": "https://bandcamp.com/rezbitdiortem",
+              "image": "https://f4.bcbits.com/img/0015518704_50.jpg",
+              "additionalProperty": [
+                  {
+                      "@type": "PropertyValue",
+                      "name": "image_id",
+                      "value": 15518704
+                  }
+              ],
+              "name": "Ac!dKru"
+          },
+          "text": [
+              "You’ll feel like you’ve spent a day in Twin Peaks, or a dark, Lynchian episode ",
+              "Favorite track: Detune the Skies With A Lesser Key"
+          ]
+      }
+  ],
+  "sponsor": [
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/deantitus",
+          "image": "https://f4.bcbits.com/img/0034729371_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 34729371
+              }
+          ],
+          "name": "Dean Titus"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/arcadia-noire",
+          "image": "https://f4.bcbits.com/img/0016738474_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 16738474
+              }
+          ],
+          "name": "猛龍過江"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/audio-bomb",
+          "image": "https://f4.bcbits.com/img/0000882237_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 882237
+              }
+          ],
+          "name": "Gordon Feiner"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/music_74",
+          "image": "https://f4.bcbits.com/img/0031207774_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 31207774
+              }
+          ],
+          "name": "Determined Atmosphere "
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/panagiotiskrokidas",
+          "image": "https://f4.bcbits.com/img/0013608979_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 13608979
+              }
+          ],
+          "name": "Panagiotis Krokidas"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/Sire84",
+          "image": "https://f4.bcbits.com/img/0012847825_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 12847825
+              }
+          ],
+          "name": "Sire84"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/rotzettazz",
+          "image": "https://f4.bcbits.com/img/0004028072_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 4028072
+              }
+          ],
+          "name": "Rotzettazz"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/garoafb",
+          "image": "https://f4.bcbits.com/img/0034439389_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 34439389
+              }
+          ],
+          "name": "The_Vinyl_Maniac"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/kvesti",
+          "image": "https://f4.bcbits.com/img/0007179825_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 7179825
+              }
+          ],
+          "name": "Marko Kovanen"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/leszekdabrowski",
+          "image": "https://f4.bcbits.com/img/0027092176_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 27092176
+              }
+          ],
+          "name": "laocy"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/oliver92",
+          "image": "https://f4.bcbits.com/img/0031675159_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 31675159
+              }
+          ],
+          "name": "oliver92"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/naparry",
+          "image": "https://f4.bcbits.com/img/0004790964_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 4790964
+              }
+          ],
+          "name": "NA Parry"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/robertckozletsky",
+          "image": "https://f4.bcbits.com/img/0025950405_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 25950405
+              }
+          ],
+          "name": "Oneiros33"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/relxct",
+          "image": "https://f4.bcbits.com/img/0029920857_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 29920857
+              }
+          ],
+          "name": "relxct"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/johnkochnorthrup",
+          "image": "https://f4.bcbits.com/img/0013936985_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 13936985
+              }
+          ],
+          "name": "John KochNorthrup"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/atrilling",
+          "image": "https://f4.bcbits.com/img/0013508821_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 13508821
+              }
+          ],
+          "name": "André Trilling"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/thunderbolt1000siren",
+          "image": "https://f4.bcbits.com/img/0023408148_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 23408148
+              }
+          ],
+          "name": "Thunderbolt 1000 Siren"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/indigolab",
+          "image": "https://f4.bcbits.com/img/0005861224_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 5861224
+              }
+          ],
+          "name": "Nobody"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/Lokesmith",
+          "image": "https://f4.bcbits.com/img/0007535740_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 7535740
+              }
+          ],
+          "name": "DevilsKnock"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/user02091976",
+          "image": "https://f4.bcbits.com/img/0006993446_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 6993446
+              }
+          ],
+          "name": "user02091976"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/ryanlong",
+          "image": "https://f4.bcbits.com/img/0018003759_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 18003759
+              }
+          ],
+          "name": "Kobayashi Magu"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/franopit",
+          "image": "https://f4.bcbits.com/img/0020327017_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 20327017
+              }
+          ],
+          "name": "aywendil"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/swimmingly",
+          "image": "https://f4.bcbits.com/img/0028093393_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 28093393
+              }
+          ],
+          "name": "swimmingly"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/icculus927",
+          "image": "https://f4.bcbits.com/img/0035338654_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 35338654
+              }
+          ],
+          "name": "icculus927"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/musicandysmith",
+          "image": "https://f4.bcbits.com/img/0022919968_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 22919968
+              }
+          ],
+          "name": "Andrew Smith"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/oad1397",
+          "image": "https://f4.bcbits.com/img/0032435718_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 32435718
+              }
+          ],
+          "name": "oad1397"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/philippebalzer",
+          "image": "https://f4.bcbits.com/img/0019783368_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 19783368
+              }
+          ],
+          "name": "Philippe B"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/tizianoromagnoli",
+          "image": "https://f4.bcbits.com/img/0007094161_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 7094161
+              }
+          ],
+          "name": "Tiziano Romagnoli"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/k9_1008",
+          "image": "https://f4.bcbits.com/img/0038454976_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 38454976
+              }
+          ],
+          "name": "k9"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/ikondrar",
+          "image": "https://f4.bcbits.com/img/0023360548_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 23360548
+              }
+          ],
+          "name": "ikondrar"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/kristerwennberg",
+          "image": "https://f4.bcbits.com/img/0002512501_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 2512501
+              }
+          ],
+          "name": "Krister Wennberg"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/aka_mowgli",
+          "image": "https://f4.bcbits.com/img/0033594899_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 33594899
+              }
+          ],
+          "name": "Michael"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/jarnvidagrima",
+          "image": "https://f4.bcbits.com/img/0027984574_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 27984574
+              }
+          ],
+          "name": "Gríma"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/lindenman",
+          "image": "https://f4.bcbits.com/img/0012683785_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 12683785
+              }
+          ],
+          "name": "lindenman"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/tmurakami",
+          "image": "https://f4.bcbits.com/img/0010867073_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 10867073
+              }
+          ],
+          "name": "TaKashi MuraKami"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/greighvongottreich",
+          "image": "https://f4.bcbits.com/img/0038953320_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 38953320
+              }
+          ],
+          "name": "Greigh VonGottreich"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/harveymorgan",
+          "image": "https://f4.bcbits.com/img/0006948710_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 6948710
+              }
+          ],
+          "name": "Harvey Morgan"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/gumballmachineweekend",
+          "image": "https://f4.bcbits.com/img/0001009361_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 1009361
+              }
+          ],
+          "name": "Jawad Charafeddine"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/djgaarkeuken",
+          "image": "https://f4.bcbits.com/img/0011784418_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 11784418
+              }
+          ],
+          "name": "DJG"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/siegeldandrew",
+          "image": "https://f4.bcbits.com/img/0033502088_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 33502088
+              }
+          ],
+          "name": "siegeldandrew"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/tcb",
+          "image": "https://f4.bcbits.com/img/0007369132_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 7369132
+              }
+          ],
+          "name": "tcb"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/heathbar666",
+          "image": "https://f4.bcbits.com/img/0013295883_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 13295883
+              }
+          ],
+          "name": "Heath Gardner"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/gianpaolo",
+          "image": "https://f4.bcbits.com/img/0013372000_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 13372000
+              }
+          ],
+          "name": "Gianpaolo Cerato"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/kanonite",
+          "image": "https://f4.bcbits.com/img/0010498430_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 10498430
+              }
+          ],
+          "name": "kanonite"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/josephb",
+          "image": "https://f4.bcbits.com/img/0004339642_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 4339642
+              }
+          ],
+          "name": "Joseph B Brunk"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/arthur_goodnessache",
+          "image": "https://f4.bcbits.com/img/0018599488_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 18599488
+              }
+          ],
+          "name": "Cold Rollins"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/ilmarkerm",
+          "image": "https://f4.bcbits.com/img/0026512572_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 26512572
+              }
+          ],
+          "name": "Ilmar Kerm"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/dpezz65",
+          "image": "https://f4.bcbits.com/img/0038211852_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 38211852
+              }
+          ],
+          "name": "dpezz65"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/johnkaskie",
+          "image": "https://f4.bcbits.com/img/0035969882_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 35969882
+              }
+          ],
+          "name": "John Kaskie"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/chadschlegel",
+          "image": "https://f4.bcbits.com/img/0005629171_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 5629171
+              }
+          ],
+          "name": "chad schlegel"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/darkfarmer",
+          "image": "https://f4.bcbits.com/img/0031444594_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 31444594
+              }
+          ],
+          "name": "Devin Passage"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/The_Navigator",
+          "image": "https://f4.bcbits.com/img/0009985361_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 9985361
+              }
+          ],
+          "name": "The Navigator"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/unenthullte",
+          "image": "https://f4.bcbits.com/img/0010624850_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 10624850
+              }
+          ],
+          "name": "unenthullte"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/nulhomme",
+          "image": "https://f4.bcbits.com/img/0027475443_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 27475443
+              }
+          ],
+          "name": "nulhomme"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/matusfabian",
+          "image": "https://f4.bcbits.com/img/0037732729_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 37732729
+              }
+          ],
+          "name": "Matus"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/dave_barker",
+          "image": "https://f4.bcbits.com/img/0002126551_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 2126551
+              }
+          ],
+          "name": "Dave Barker"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/ruinsinalandscape",
+          "image": "https://f4.bcbits.com/img/0033367799_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 33367799
+              }
+          ],
+          "name": "ruinsinalandscape"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/itscyanide",
+          "image": "https://f4.bcbits.com/img/0010392094_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 10392094
+              }
+          ],
+          "name": "cyanide"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/winkster",
+          "image": "https://f4.bcbits.com/img/0023784014_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 23784014
+              }
+          ],
+          "name": "Bub"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/snorth",
+          "image": "https://f4.bcbits.com/img/0027067051_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 27067051
+              }
+          ],
+          "name": "Stephen Alexander North"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/sigilbyanitaarora",
+          "image": "https://f4.bcbits.com/img/0004264914_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 4264914
+              }
+          ],
+          "name": "SIGIL "
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/metallifitz",
+          "image": "https://f4.bcbits.com/img/0012171888_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 12171888
+              }
+          ],
+          "name": "metallifitz"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/riskbeing",
+          "image": "https://f4.bcbits.com/img/0026375147_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 26375147
+              }
+          ],
+          "name": "riskbeing"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/geitungur_akureyrar",
+          "image": "https://f4.bcbits.com/img/0031573234_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 31573234
+              }
+          ],
+          "name": "geitungur akureyrar"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/SoManyRats",
+          "image": "https://f4.bcbits.com/img/0008075061_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 8075061
+              }
+          ],
+          "name": "So Many Rats"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/howardrosenbloom",
+          "image": "https://f4.bcbits.com/img/0013795972_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 13795972
+              }
+          ],
+          "name": "Howard"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/cheopys",
+          "image": "https://f4.bcbits.com/img/0011589680_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 11589680
+              }
+          ],
+          "name": "Chris Fox"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/fluffytufts",
+          "image": "https://f4.bcbits.com/img/0010792440_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 10792440
+              }
+          ],
+          "name": "Fluffytufts"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/julienmarion",
+          "image": "https://f4.bcbits.com/img/0027915130_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 27915130
+              }
+          ],
+          "name": "Julien MARION"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/infiniteinalldirections",
+          "image": "https://f4.bcbits.com/img/0011518710_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 11518710
+              }
+          ],
+          "name": "infiniteinalldirections"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/chadmohr",
+          "image": "https://f4.bcbits.com/img/0016168402_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 16168402
+              }
+          ],
+          "name": "chad mohr"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/kevirdorovar",
+          "image": "https://f4.bcbits.com/img/0020657225_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 20657225
+              }
+          ],
+          "name": "kevirdono"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/mr_lamppost",
+          "image": "https://f4.bcbits.com/img/0019495914_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 19495914
+              }
+          ],
+          "name": "Mr_Lamppost"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/virgiliodominguezdelc",
+          "image": "https://f4.bcbits.com/img/0002845857_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 2845857
+              }
+          ],
+          "name": "VirD"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/lstnr",
+          "image": "https://f4.bcbits.com/img/0002924912_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 2924912
+              }
+          ],
+          "name": "lstnr"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/bladerunnerphil",
+          "image": "https://f4.bcbits.com/img/0005868426_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 5868426
+              }
+          ],
+          "name": "Phil Resch"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/sechogs1",
+          "image": "https://f4.bcbits.com/img/0039002132_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 39002132
+              }
+          ],
+          "name": "Randall "
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/xxnobody",
+          "image": "https://f4.bcbits.com/img/0015028200_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 15028200
+              }
+          ],
+          "name": "XxNobody"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/alonexone",
+          "image": "https://f4.bcbits.com/img/0033168797_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 33168797
+              }
+          ],
+          "name": "alonexone"
+      },
+      {
+          "@type": "Person",
+          "url": "https://bandcamp.com/iran-ed",
+          "image": "https://f4.bcbits.com/img/0026424033_50.jpg",
+          "additionalProperty": [
+              {
+                  "@type": "PropertyValue",
+                  "name": "image_id",
+                  "value": 26424033
+              }
+          ],
+          "name": "Iran-Ed"
+      }
+  ],
+  "additionalProperty": [
+      {
+          "@type": "PropertyValue",
+          "name": "art_id",
+          "value": 3461983006
+      },
+      {
+          "@type": "PropertyValue",
+          "name": "featured_track_num",
+          "value": 1
+      },
+      {
+          "@type": "PropertyValue",
+          "name": "license_name",
+          "value": "all_rights_reserved"
+      }
+  ],
+  "@context": "https://schema.org"
+}

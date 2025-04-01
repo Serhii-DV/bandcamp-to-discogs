@@ -4,7 +4,11 @@ global.chrome = {
     onMessage: {
       addListener: jest.fn(),
       removeListener: jest.fn()
-    }
+    },
+    getManifest: jest.fn(() => ({
+      name: 'Test Extension',
+      version: '1.0'
+    }))
   },
   storage: {
     local: {

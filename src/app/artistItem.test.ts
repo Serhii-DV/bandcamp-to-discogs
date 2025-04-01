@@ -6,7 +6,8 @@ describe('ArtistItem', () => {
   const testName = 'Artist Name';
   const testUuid = '755a15a9-d6bc-5ee4-9b87-efd498702f04';
   const testImage = 'https://image.url';
-  const testVisit = new Date('2025-01-01');
+  const testVisit = '2025-01-01';
+  const testVisitDate = new Date(testVisit);
   const testId = 123;
 
   describe('constructor', () => {
@@ -15,7 +16,7 @@ describe('ArtistItem', () => {
         testUrl,
         testName,
         testImage,
-        testVisit,
+        testVisitDate,
         testId
       );
 
@@ -23,7 +24,7 @@ describe('ArtistItem', () => {
       expect(artistItem.url.toString()).toBe(testUrl);
       expect(artistItem.name).toBe(testName);
       expect(artistItem.image).toBe(testImage);
-      expect(artistItem.visit).toEqual(testVisit);
+      expect(artistItem.visit).toEqual(testVisitDate);
       expect(artistItem.id).toBe(testId);
     });
 
@@ -45,7 +46,7 @@ describe('ArtistItem', () => {
         testUrl,
         testName,
         testImage,
-        testVisit,
+        testVisitDate,
         testId
       );
       const storageData: StorageData = artistItem.toStorageData();
@@ -53,7 +54,7 @@ describe('ArtistItem', () => {
       expect(storageData.url).toBe(testUrl);
       expect(storageData.name).toBe(testName);
       expect(storageData.image).toBe(testImage);
-      expect(storageData.visit).toBe(testVisit.toISOString());
+      expect(storageData.visit).toBe(testVisitDate.toISOString());
       expect(storageData.id).toBe(testId);
     });
 
@@ -87,7 +88,7 @@ describe('ArtistItem', () => {
       expect(artistItem.name).toBe(testName);
       expect(artistItem.uuid).toBe(testUuid);
       expect(artistItem.image).toBe(testImage);
-      expect(artistItem.visit).toEqual(testVisit);
+      expect(artistItem.visit).toEqual(testVisitDate);
       expect(artistItem.id).toBe(testId);
     });
 

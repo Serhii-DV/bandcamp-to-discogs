@@ -1,4 +1,4 @@
-import { urlToUuid } from '../utils/key-generator';
+import { urlToUuid } from 'src/utils/utils';
 import { BandcampURL } from './core/bandcampUrl';
 
 export abstract class BandcampItem {

@@ -1,3 +1,5 @@
+import { v5 as uuid5 } from 'uuid';
+
 export function isEmptyObject(obj: object): boolean {
   for (const key in obj) {
     if (hasOwnProperty(obj, key)) {
@@ -116,4 +118,10 @@ export function bytesToSize(bytes: number): string {
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   const roundedSize = (bytes / Math.pow(1024, i)).toFixed(2);
   return `${roundedSize} ${sizes[i]}`;
+}
+
+export function urlToUuid(url: string): string {
+  const uuid = uuid5(url, uuid5.URL);
+  // console.log(`B2D: uuid5(${url}): `, uuid);
+  return uuid;
 }

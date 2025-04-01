@@ -5,11 +5,12 @@ import { setupPageAlbum } from './pages/page-album.js';
 import { setupPageMusic } from './pages/page-music.js';
 
 import './css/b2d.css';
+import { getExtensionUrl } from 'src/utils/chrome.js';
 
 function main() {
   log('Running bandcamp content main module logic (bandcamp/modules/main.js)');
-  injectCSSFile(chrome.runtime.getURL('bandcamp.content.css'));
-  injectJSFile(chrome.runtime.getURL('bandcamp.inject.js'));
+  injectCSSFile(getExtensionUrl('bandcamp.content.css'));
+  injectJSFile(getExtensionUrl('bandcamp.inject.js'));
 
   const pageType = new PageTypeDetector().detect();
 

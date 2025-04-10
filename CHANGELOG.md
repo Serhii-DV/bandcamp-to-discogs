@@ -1,6 +1,12 @@
 # Change log
 
-## 0.20.0 (2025-02-xx)
+## 0.21.0 (2025-04-xx)
+
+### Features
+
+- core: Added basic tests (Jest)
+
+## 0.20.0 (2025-02-23)
 
 ### Features
 

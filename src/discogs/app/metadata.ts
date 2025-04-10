@@ -12,7 +12,8 @@ import {
 import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
-import { arrayUnique, capitalizeEachWord } from '../../utils/utils';
+import { arrayUnique } from '../../utils/utils';
+import { capitalizeEachWord } from 'src/utils/string';
 
 export interface Format {
   fileType: MetadataValue;

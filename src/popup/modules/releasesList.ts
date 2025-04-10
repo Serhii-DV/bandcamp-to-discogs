@@ -16,7 +16,7 @@ import { ReleaseItem } from '../../app/releaseItem';
 import { BandcampItem } from '../../app/bandcampItem';
 import { Music } from '../../app/music';
 import { MessageType } from '../../app/core/messageType';
-import { createIconLink } from 'src/utils/icon';
+import { createIconLink } from '../../utils/icon';
 
 export type ArtistOrReleaseItem = ArtistItem | ReleaseItem;
 

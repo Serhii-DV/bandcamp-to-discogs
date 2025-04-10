@@ -1,4 +1,4 @@
-import { convertToAlias } from 'src/utils/string';
+import { convertToAlias } from '../../../utils/string';
 import { arrayUnique } from '../../../utils/utils';
 import { FormElement } from './types';
 import { Variation } from './variation';

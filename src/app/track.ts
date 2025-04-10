@@ -3,7 +3,7 @@ import TrackTime from './trackTime';
 
 export class Track {
   constructor(
-    public readonly num: string,
+    public readonly num: number,
     public readonly title: string,
     public readonly time: TrackTime,
     public readonly artist?: string
@@ -19,7 +19,7 @@ export class Track {
 
   toStorageObject(): TrackStorageObject {
     return {
-      num: this.num,
+      num: this.num.toString(),
       title: this.title,
       time: this.time.value,
       artist: this.artist
@@ -34,7 +34,7 @@ export class Track {
       throw new Error('Invalid TrackStorageObject');
     }
     return new Track(
-      obj.num,
+      Number(obj.num),
       obj.title,
       TrackTime.fromString(obj.time || obj.duration!),
       obj.artist

@@ -1,7 +1,8 @@
 import { getExtensionManifest } from './chrome';
 
 // `update_url` field is not present in the manifest. If this field is absent, the extension is in development mode.
-const isDevMode = !('update_url' in chrome.runtime.getManifest());
+const manifest = getExtensionManifest();
+const isDevMode = !('update_url' in manifest);
 
 export const log = (...args: any[]): void => {
   if (!isDevMode) return;
@@ -22,8 +23,6 @@ export const logError = (...args: any[]): void => {
   if (!isDevMode) return;
   console.error(getLogPrefix('error'), ...args);
 };
-
-const manifest = getExtensionManifest();
 
 function getLogPrefix(level: string): string {
   return `[b2d][${manifest.version}][${level}]:`;

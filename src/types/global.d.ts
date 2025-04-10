@@ -21,7 +21,7 @@ export interface IArtistItem {
   url: string;
   uuid: string;
   image?: string;
-  visit?: Date;
+  visit?: string;
   id?: number;
 }
 
@@ -30,7 +30,7 @@ export interface IReleaseItem {
   artist: string;
   title: string;
   label?: string;
-  visit?: Date;
+  visit?: string;
   id?: number;
 }
 

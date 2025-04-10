@@ -42,7 +42,7 @@ import {
 } from './modules/main';
 import { setupReleasesTab } from './tabs/releases_tab.js';
 import { setupReleaseCardTab } from './tabs/release-card_tab.js';
-import { PageTypeEnum } from '../bandcamp/app/page-type.js';
+import { PageTypeEnum } from '../bandcamp/app/page-type';
 import { Storage } from '../app/core/storage';
 import { MessageType } from '../app/core/messageType';
 import { isValidBandcampURL } from '../app/core/bandcampUrl';

@@ -1,8 +1,4 @@
-import { safeFilename } from './utils';
-
-export function arrayToCsv(rows: string[][]): string {
-  return rows.map((e: string[]) => e.join(',')).join('\n');
-}
+import { safeFilename } from './string';
 
 export function objectsToCsv(objects: object[]): string {
   if (!objects || objects.length === 0) {

@@ -1,3 +1,4 @@
+import { TrackStorageObject } from 'src/types';
 import { Track } from './track';
 import TrackTime from './trackTime';
 
@@ -81,11 +82,16 @@ describe('Track', () => {
     });
 
     it('should throw an error for an invalid storage object', () => {
-      expect(() => Track.fromStorageObject({ title: 'Invalid Song' })).toThrow(
-        'Invalid TrackStorageObject'
-      );
       expect(() =>
-        Track.fromStorageObject({ num: '8', time: '00:03:00' })
+        Track.fromStorageObject({
+          title: 'Invalid Song'
+        } as unknown as TrackStorageObject)
+      ).toThrow('Invalid TrackStorageObject');
+      expect(() =>
+        Track.fromStorageObject({
+          num: '8',
+          time: '00:03:00'
+        } as unknown as TrackStorageObject)
       ).toThrow('Invalid TrackStorageObject');
     });
 

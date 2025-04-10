@@ -37,8 +37,8 @@ describe('getMapping', () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         json: () => Promise.resolve(mockKeywordMapping)
-      })
-    ) as jest.Mock;
+      } as Response)
+    ) as jest.MockedFunction<typeof fetch>;
 
     await loadKeywordMapping('http://example.com/keywords.json');
     const result = getMapping();

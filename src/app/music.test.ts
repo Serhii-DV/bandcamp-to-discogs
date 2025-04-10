@@ -65,7 +65,7 @@ describe('Music', () => {
           name: 'Test Artist',
           uuid: '12345',
           image: 'https://image.url',
-          visit: new Date('2025-01-01'),
+          visit: '2025-01-01',
           id: 1
         },
         albums: [
@@ -74,7 +74,7 @@ describe('Music', () => {
             artist: 'Test Artist 1',
             title: 'Test Album 1',
             label: 'Test Label 1',
-            visit: new Date('2025-01-02'),
+            visit: '2025-01-02',
             id: 101
           },
           {
@@ -82,7 +82,7 @@ describe('Music', () => {
             artist: 'Test Artist 2',
             title: 'Test Album 2',
             label: 'Test Label 1',
-            visit: new Date('2025-01-03'),
+            visit: '2025-01-03',
             id: 102
           }
         ]

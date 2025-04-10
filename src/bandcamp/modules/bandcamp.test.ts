@@ -33,10 +33,10 @@ jest.mock('../../config', () => ({
 describe('Bandcamp module', () => {
   beforeEach(() => {
     (getMapping as jest.Mock).mockReturnValue({
-      ambient: new Style('Electronic', 'Ambient'),
+      ambient: new Style('Electronic'),
       'dark ambient': 'ambient',
       electronic: ['ambient', 'synthwave'],
-      synthwave: new Style('Electronic', 'Synthwave')
+      synthwave: new Style('Electronic')
     });
   });
 

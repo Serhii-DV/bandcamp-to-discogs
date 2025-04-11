@@ -1,4 +1,4 @@
-import { B2DIconComponent } from 'src/popup/components/icon';
+import { B2DIconComponent } from '../popup/components/icon';
 import { isFunction } from './utils';
 
 interface CreateIconLinkParams {

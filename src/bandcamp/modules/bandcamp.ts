@@ -1,3 +1,4 @@
+import { Style } from '../../discogs/app/style';
 import config from '../../config';
 import {
   arrayUnique,
@@ -5,17 +6,17 @@ import {
   isString,
   replaceTokens
 } from '../../utils/utils';
-import { Style, getMapping } from './mapping';
+import { getKeywordMapping } from './keywordMapping';
 
 export function keywordToDiscogsGenre(keyword: string): string[] {
-  const keywordMapping = getMapping();
+  const keywordMapping = getKeywordMapping();
   const key = keyword.toLowerCase();
 
   if (key in keywordMapping) {
     const keywordMapData = keywordMapping[key];
 
     if (keywordMapData instanceof Style) {
-      return [keywordMapData.genre as string];
+      return [keywordMapData.genre];
     }
 
     if (isArray(keywordMapData)) {
@@ -31,7 +32,7 @@ export function keywordToDiscogsGenre(keyword: string): string[] {
 }
 
 export function keywordToDiscogsStyles(keyword: string): string[] {
-  const keywordMapping = getMapping();
+  const keywordMapping = getKeywordMapping();
   const key = keyword.toLowerCase();
 
   if (key in keywordMapping) {

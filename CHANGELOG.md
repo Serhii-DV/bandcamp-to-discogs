@@ -5,6 +5,7 @@
 ### Features
 
 - core: Added basic tests (Jest)
+- core: Refactor. Load keyword mapping and discogs styles directly.
 
 ## 0.20.0 (2025-02-23)
 

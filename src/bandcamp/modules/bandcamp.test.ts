@@ -8,17 +8,6 @@ import {
   getBandcampSearchReleaseUrl,
   getBandcampSearchReleaseAllUrl
 } from './bandcamp';
-import { getMapping, Style } from './mapping';
-
-jest.mock('./mapping', () => ({
-  getMapping: jest.fn(),
-  Style: class {
-    constructor(
-      public genre: string,
-      public style: string
-    ) {}
-  }
-}));
 
 jest.mock('../../config', () => ({
   bandcamp: {
@@ -30,56 +19,120 @@ jest.mock('../../config', () => ({
   }
 }));
 
-describe('Bandcamp module', () => {
-  beforeEach(() => {
-    (getMapping as jest.Mock).mockReturnValue({
-      ambient: new Style('Electronic', 'Ambient'),
-      'dark ambient': 'ambient',
-      electronic: ['ambient', 'synthwave'],
-      synthwave: new Style('Electronic', 'Synthwave')
+describe('keywordToDiscogsGenre', () => {
+  const genreTests = [
+    {
+      input: 'ambient',
+      expected: ['Electronic']
+    },
+    {
+      input: 'dark ambient',
+      expected: ['Electronic']
+    },
+    {
+      input: 'neoclassical',
+      expected: ['Classical']
+    },
+    {
+      input: 'ambient drone',
+      expected: ['Electronic']
+    },
+    {
+      input: 'bombastic',
+      expected: ['Brass & Military', 'Electronic', 'Classical']
+    },
+    {
+      input: 'martial industrial ambient',
+      expected: ['Brass & Military', 'Electronic']
+    },
+    {
+      input: 'martial folk',
+      expected: ['Brass & Military', 'Electronic']
+    },
+    {
+      input: 'black metal',
+      expected: ['Rock']
+    },
+    // Aliases
+    {
+      input: 'darkambient',
+      expected: ['Electronic']
+    }
+  ];
+
+  genreTests.forEach(({ input, expected }) => {
+    test(`keywordToDiscogsGenre: ${input}`, () => {
+      expect(keywordToDiscogsGenre(input)).toEqual(expected);
     });
   });
+});
 
-  test('keywordToDiscogsGenre - direct match', () => {
-    expect(keywordToDiscogsGenre('ambient')).toEqual(['Electronic']);
+describe('keywordToDiscogsStyles', () => {
+  const styleTests = [
+    {
+      input: 'ambient',
+      expected: ['Ambient']
+    },
+    {
+      input: 'drone',
+      expected: ['Drone']
+    },
+    {
+      input: 'dark ambient',
+      expected: ['Dark Ambient']
+    },
+    {
+      input: 'darkwave',
+      expected: ['Darkwave']
+    },
+    {
+      input: 'folk',
+      expected: ['Folk']
+    },
+    {
+      input: 'black metal',
+      expected: ['Black Metal']
+    }
+  ];
+
+  styleTests.forEach(({ input, expected }) => {
+    test(`keywordToDiscogsStyles: ${input}`, () => {
+      expect(keywordToDiscogsStyles(input)).toEqual(expected);
+    });
   });
+});
 
-  test('keywordToDiscogsGenre - mapped string', () => {
-    expect(keywordToDiscogsGenre('dark ambient')).toEqual(['Electronic']);
+describe('keywordsToDiscogsGenres', () => {
+  const multipleGenreTests = [
+    {
+      input: ['ambient', 'synthwave'],
+      expected: ['Electronic']
+    }
+  ];
+
+  multipleGenreTests.forEach(({ input, expected }) => {
+    test(`keywordsToDiscogsGenres: ${input.join(', ')}`, () => {
+      expect(keywordsToDiscogsGenres(input)).toEqual(expected);
+    });
   });
+});
 
-  test('keywordToDiscogsGenre - mapped array', () => {
-    expect(keywordToDiscogsGenre('electronic')).toEqual(['Electronic']);
+describe('keywordsToDiscogsStyles', () => {
+  const multipleStyleTests = [
+    {
+      input: ['ambient', 'synthwave'],
+      expected: ['Ambient']
+    }
+  ];
+
+  multipleStyleTests.forEach(({ input, expected }) => {
+    test(`keywordsToDiscogsStyles: ${input.join(', ')}`, () => {
+      expect(keywordsToDiscogsStyles(input)).toEqual(expected);
+    });
   });
+});
 
-  test('keywordToDiscogsStyles - direct match', () => {
-    expect(keywordToDiscogsStyles('ambient')).toEqual(['Ambient']);
-  });
-
-  test('keywordToDiscogsStyles - mapped string', () => {
-    expect(keywordToDiscogsStyles('dark ambient')).toEqual(['Ambient']);
-  });
-
-  test('keywordToDiscogsStyles - mapped array', () => {
-    expect(keywordToDiscogsStyles('electronic')).toEqual([
-      'Ambient',
-      'Synthwave'
-    ]);
-  });
-
-  test('keywordsToDiscogsGenres - multiple inputs', () => {
-    expect(keywordsToDiscogsGenres(['ambient', 'synthwave'])).toEqual([
-      'Electronic'
-    ]);
-  });
-
-  test('keywordsToDiscogsStyles - multiple inputs', () => {
-    expect(keywordsToDiscogsStyles(['ambient', 'synthwave'])).toEqual([
-      'Ambient',
-      'Synthwave'
-    ]);
-  });
-
+describe('Bandcamp module', () => {
   test('getBandcampSearchAllUrl', () => {
     expect(getBandcampSearchAllUrl('test artist')).toBe(
       'https://bandcamp.com/search?q=test%20artist'

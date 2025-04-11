@@ -1,4 +1,4 @@
-import { getMapping, loadKeywordMapping, Style } from './mapping';
+import { getMapping, Style } from './mapping';
 import { getGenreByStyle } from '../../discogs/modules/genres';
 import { jest } from '@jest/globals';
 
@@ -40,7 +40,6 @@ describe('getMapping', () => {
       } as Response)
     ) as jest.MockedFunction<typeof fetch>;
 
-    await loadKeywordMapping('http://example.com/keywords.json');
     const result = getMapping();
 
     expect(result).toHaveProperty('Rock');

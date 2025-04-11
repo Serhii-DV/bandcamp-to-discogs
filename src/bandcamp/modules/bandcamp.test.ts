@@ -8,17 +8,6 @@ import {
   getBandcampSearchReleaseUrl,
   getBandcampSearchReleaseAllUrl
 } from './bandcamp';
-import { getMapping, Style } from './mapping';
-
-jest.mock('./mapping', () => ({
-  getMapping: jest.fn(),
-  Style: class {
-    constructor(
-      public genre: string,
-      public style: string
-    ) {}
-  }
-}));
 
 jest.mock('../../config', () => ({
   bandcamp: {
@@ -31,15 +20,6 @@ jest.mock('../../config', () => ({
 }));
 
 describe('Bandcamp module', () => {
-  beforeEach(() => {
-    (getMapping as jest.Mock).mockReturnValue({
-      ambient: new Style('Electronic'),
-      'dark ambient': 'ambient',
-      electronic: ['ambient', 'synthwave'],
-      synthwave: new Style('Electronic')
-    });
-  });
-
   test('keywordToDiscogsGenre - direct match', () => {
     expect(keywordToDiscogsGenre('ambient')).toEqual(['Electronic']);
   });

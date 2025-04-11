@@ -6,7 +6,10 @@ import { getDiscogsDateValue } from './utils';
 import { Metadata } from './metadata';
 import { convertArtistName } from '../modules/submission';
 import { generateSelfReleasedLabel } from '../modules/discogs';
-import { capitalizeEachWord, removeLeadingZeroOrColon } from 'src/utils/string';
+import {
+  capitalizeEachWord,
+  removeLeadingZeroOrColon
+} from '../../utils/string';
 
 /**
  * Represents a Discogs CSV entry.

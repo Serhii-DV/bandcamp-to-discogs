@@ -20,7 +20,6 @@ import {
 
 describe('HTML utility functions', () => {
   let testElement: HTMLElement;
-  let parentElement: HTMLElement;
 
   beforeEach(() => {
     document.body.innerHTML = `
@@ -31,7 +30,6 @@ describe('HTML utility functions', () => {
     `;
 
     testElement = document.getElementById('child1') as HTMLElement;
-    parentElement = document.getElementById('parent') as HTMLElement;
   });
 
   afterEach(() => {

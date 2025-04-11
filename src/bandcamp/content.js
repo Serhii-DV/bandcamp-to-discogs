@@ -5,7 +5,7 @@ import { setupPageAlbum } from './pages/page-album.js';
 import { setupPageMusic } from './pages/page-music.js';
 
 import './css/b2d.css';
-import { getExtensionUrl } from 'src/utils/chrome.js';
+import { getExtensionUrl } from '../utils/chrome';
 
 function main() {
   log('Running bandcamp content main module logic (bandcamp/modules/main.js)');

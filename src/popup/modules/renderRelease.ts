@@ -16,7 +16,10 @@ import {
 } from '../../bandcamp/modules/bandcamp';
 import { Track } from '../../app/track';
 import { debug } from '../../utils/console';
-import { capitalizeEachWord, removeLeadingZeroOrColon } from 'src/utils/string';
+import {
+  capitalizeEachWord,
+  removeLeadingZeroOrColon
+} from '../../utils/string';
 
 export function renderReleaseCard(
   release: Release,

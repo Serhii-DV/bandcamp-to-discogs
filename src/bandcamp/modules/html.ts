@@ -1,7 +1,7 @@
 import {
   removeInvisibleChars,
   trimCharactersFromString
-} from 'src/utils/string';
+} from '../../utils/string';
 import { ReleaseItem } from '../../app/releaseItem';
 import { element, getDataAttribute } from '../../utils/html';
 

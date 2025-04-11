@@ -1,3 +1,4 @@
+import { getKeywordMapping } from '../bandcamp/modules/keywordMapping';
 import { Metadata } from '../discogs/app/metadata';
 import { releaseToDiscogsCsv } from '../discogs/modules/discogs.js';
 import { log, logInfo } from '../utils/console';
@@ -28,9 +29,9 @@ export function setupConsoleLogRelease(release) {
   });
 }
 
-export function setupConsoleLogKeywordsMapping(keywordsMapping) {
+export function setupConsoleLogKeywordsMapping() {
   setCommand('log.keywordsMapping', () => {
-    log('Console Keywords mapping:', keywordsMapping);
+    log('Console Keywords mapping:', getKeywordMapping());
   });
 }
 

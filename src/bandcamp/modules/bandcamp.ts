@@ -1,3 +1,4 @@
+import { Style } from '../../discogs/app/style';
 import config from '../../config';
 import {
   arrayUnique,
@@ -5,7 +6,7 @@ import {
   isString,
   replaceTokens
 } from '../../utils/utils';
-import { Style, getKeywordMapping } from './keywordMapping';
+import { getKeywordMapping } from './keywordMapping';
 
 export function keywordToDiscogsGenre(keyword: string): string[] {
   const keywordMapping = getKeywordMapping();

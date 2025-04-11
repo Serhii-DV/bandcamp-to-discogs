@@ -1,25 +1,5 @@
-import { getKeywordMapping, Style } from './keywordMapping';
-import { getGenreByStyle } from '../../discogs/modules/genres';
-import { jest } from '@jest/globals';
-
-// Mock the `getGenreByStyle` function
-jest.mock('../../discogs/modules/genres', () => ({
-  getGenreByStyle: jest.fn()
-}));
-
-describe('Style class', () => {
-  it('should initialize with a style value', () => {
-    const style = new Style('Rock');
-    expect(style.style).toBe('Rock');
-  });
-
-  it('should return the correct genre using getGenreByStyle', () => {
-    (getGenreByStyle as jest.Mock).mockReturnValue('Alternative');
-    const style = new Style('Indie Rock');
-    expect(style.genre).toBe('Alternative');
-    expect(getGenreByStyle).toHaveBeenCalledWith('Indie Rock');
-  });
-});
+import { Style } from '../../discogs/app/style';
+import { getKeywordMapping } from './keywordMapping';
 
 describe('getKeywordMapping', () => {
   it('should return a populated mapping', async () => {

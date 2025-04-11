@@ -1,6 +1,7 @@
-import { getGenreByStyle } from '../../discogs/modules/genres';
 import { hasOwnProperty, isArray, isEmptyObject } from '../../utils/utils';
 import keywordMapping from '../../data/keyword_mapping.json';
+import { Style } from '../../discogs/app/style';
+
 interface KeywordMapping {
   [key: string]: string | string[] | Style;
 }
@@ -30,12 +31,4 @@ function createMapping(
   }
 
   return mapping;
-}
-
-export class Style {
-  constructor(public style: string) {}
-
-  get genre(): string {
-    return getGenreByStyle(this.style) ?? '';
-  }
 }

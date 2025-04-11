@@ -16,7 +16,7 @@ export function keywordToDiscogsGenre(keyword: string): string[] {
     const keywordMapData = keywordMapping[key];
 
     if (keywordMapData instanceof Style) {
-      return [keywordMapData.genre as string];
+      return [keywordMapData.genre];
     }
 
     if (isArray(keywordMapData)) {

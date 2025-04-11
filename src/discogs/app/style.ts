@@ -1,9 +1,9 @@
-import { getGenreByStyle } from '../modules/genres';
+import { GenreLookup } from '../modules/genreLookup';
 
 export class Style {
-  constructor(public style: string) {}
+  public readonly genre: string;
 
-  get genre(): string {
-    return getGenreByStyle(this.style) ?? '';
+  constructor(public readonly style: string) {
+    this.genre = GenreLookup.getByStyle(style) ?? '';
   }
 }

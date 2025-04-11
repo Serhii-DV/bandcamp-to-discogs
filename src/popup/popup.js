@@ -46,7 +46,6 @@ import { PageTypeEnum } from '../bandcamp/app/page-type';
 import { Storage } from '../app/core/storage';
 import { MessageType } from '../app/core/messageType';
 import { isValidBandcampURL } from '../app/core/bandcampUrl';
-import { mapMusicStyles } from './modules/musicStyles';
 
 globalThis.storage = new Storage();
 const storage = globalThis.storage;
@@ -80,17 +79,11 @@ function processBandcampResponse(response) {
   }
 
   if (isPageAlbum) {
-    mapMusicStyles().then((keywordsMapping) => {
-      storage.getByUuid(response.uuid).then((release) => {
-        setupConsoleLogKeywordsMapping(keywordsMapping);
-        setupConsoleLogRelease(release);
-        setupConsoleLogSchema(response.schema);
-        processBandcampPageAlbumResponse(
-          release,
-          response.schema,
-          keywordsMapping
-        );
-      });
+    storage.getByUuid(response.uuid).then((release) => {
+      setupConsoleLogKeywordsMapping();
+      setupConsoleLogRelease(release);
+      setupConsoleLogSchema(response.schema);
+      processBandcampPageAlbumResponse(release);
     });
   } else if (isPageMusic) {
     storage.getByUuid(response.uuid).then((music) => {
@@ -157,9 +150,7 @@ function initialize(tab) {
 
 document.addEventListener('DOMContentLoaded', () => {
   getCurrentTab().then((tab) => {
-    mapMusicStyles().then(() => {
-      initialize(tab);
-    });
+    initialize(tab);
   });
 });
 

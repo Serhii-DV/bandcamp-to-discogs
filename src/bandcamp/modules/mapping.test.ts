@@ -22,31 +22,16 @@ describe('Style class', () => {
 });
 
 describe('getMapping', () => {
-  it('should return an empty object initially', () => {
-    expect(getMapping()).toEqual({});
-  });
-
-  it('should return a populated mapping after loading keywords', async () => {
-    // Mock a sample keyword mapping
-    const mockKeywordMapping = {
-      Rock: 'Rock',
-      Pop: 'Pop',
-      Jazz: 'Jazz'
-    };
-
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        json: () => Promise.resolve(mockKeywordMapping)
-      } as Response)
-    ) as jest.MockedFunction<typeof fetch>;
-
+  it('should return a populated mapping', async () => {
     const result = getMapping();
 
-    expect(result).toHaveProperty('Rock');
-    expect(result).toHaveProperty('Pop');
-    expect(result).toHaveProperty('Jazz');
-    expect(result['Rock']).toBeInstanceOf(Style);
-    expect(result['Pop']).toBeInstanceOf(Style);
-    expect(result['Jazz']).toBeInstanceOf(Style);
+    expect(result).toHaveProperty('dark ambient');
+    expect(result).toHaveProperty('black metal');
+    expect(result).toHaveProperty('martial');
+    expect(result).toHaveProperty('martial industrial');
+    expect(result['dark ambient']).toBeInstanceOf(Style);
+    expect(result['black metal']).toBeInstanceOf(Style);
+    expect(result['martial']).toBeInstanceOf(Style);
+    expect(result['martial industrial']).toBeInstanceOf(Array);
   });
 });

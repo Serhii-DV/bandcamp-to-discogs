@@ -7,7 +7,7 @@ interface KeywordMapping {
 
 let mapping: KeywordMapping = {};
 
-export function getMapping(): KeywordMapping {
+export function getKeywordMapping(): KeywordMapping {
   if (isEmptyObject(mapping)) {
     mapping = createMapping(keywordMapping);
   }

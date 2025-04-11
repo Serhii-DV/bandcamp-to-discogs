@@ -5,10 +5,10 @@ import {
   isString,
   replaceTokens
 } from '../../utils/utils';
-import { Style, getMapping } from './mapping';
+import { Style, getKeywordMapping } from './keywordMapping';
 
 export function keywordToDiscogsGenre(keyword: string): string[] {
-  const keywordMapping = getMapping();
+  const keywordMapping = getKeywordMapping();
   const key = keyword.toLowerCase();
 
   if (key in keywordMapping) {
@@ -31,7 +31,7 @@ export function keywordToDiscogsGenre(keyword: string): string[] {
 }
 
 export function keywordToDiscogsStyles(keyword: string): string[] {
-  const keywordMapping = getMapping();
+  const keywordMapping = getKeywordMapping();
   const key = keyword.toLowerCase();
 
   if (key in keywordMapping) {

@@ -1,4 +1,4 @@
-import { getMapping, Style } from './mapping';
+import { getKeywordMapping, Style } from './keywordMapping';
 import { getGenreByStyle } from '../../discogs/modules/genres';
 import { jest } from '@jest/globals';
 
@@ -21,9 +21,9 @@ describe('Style class', () => {
   });
 });
 
-describe('getMapping', () => {
+describe('getKeywordMapping', () => {
   it('should return a populated mapping', async () => {
-    const result = getMapping();
+    const result = getKeywordMapping();
 
     expect(result).toHaveProperty('dark ambient');
     expect(result).toHaveProperty('black metal');

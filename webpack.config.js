@@ -51,10 +51,6 @@ module.exports = (env, argv) => {
           loader: "source-map-loader",
           include: path.resolve(__dirname, 'src'),
         },
-        {
-          test: /\.json$/i,
-          type: "asset/resource",
-        },
       ],
     },
     optimization: {
@@ -118,16 +114,6 @@ module.exports = (env, argv) => {
           {
             from: "images/**",
             to: path.join(__dirname, "dist"),
-            force: true,
-          },
-          {
-            from: "src/data/discogs_genres.json",
-            to: path.join(__dirname, "dist/data"),
-            force: true,
-          },
-          {
-            from: "src/data/keyword_mapping.json",
-            to: path.join(__dirname, "dist/data"),
             force: true,
           },
         ],

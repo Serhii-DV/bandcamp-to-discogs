@@ -1,3 +1,5 @@
+import { convertBreaksToNewlines } from '../utils/string';
+
 export interface Credit {
   artist: string;
   roles: string[];
@@ -33,7 +35,7 @@ function cleanArtist(raw: string): string {
 }
 
 export function extractCredits(text: string): Credit[] {
-  const lines = text
+  const lines = convertBreaksToNewlines(text)
     .split(/\n|\. ?/)
     .map((l) => l.trim())
     .filter(Boolean);

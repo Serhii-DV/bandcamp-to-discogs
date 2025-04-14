@@ -15,7 +15,13 @@ describe('extractCredits from JSON files', () => {
     const testData = JSON.parse(fileContent);
 
     it(`parses ${file} correctly`, () => {
-      expect(extractCredits(testData.input)).toEqual(testData.expected);
+      const credits = extractCredits(testData.input);
+
+      if (testData.url.includes('xxx')) {
+        console.log(credits);
+      }
+
+      expect(credits).toEqual(testData.expected);
     });
   });
 });

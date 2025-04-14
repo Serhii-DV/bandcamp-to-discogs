@@ -14,6 +14,7 @@ import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
 import { arrayUnique } from '../../utils/utils';
 import { capitalizeEachWord } from '../../utils/string';
+import { Credit, extractCredits } from '../../app/credit';
 
 export interface Format {
   fileType: MetadataValue;
@@ -31,6 +32,11 @@ interface Genres {
   keywords: string[];
   autoDetectedGenres: string[];
   autoDetectedStyles: string[];
+}
+
+interface Credits {
+  text: string;
+  items: Credit[];
 }
 
 interface MetadataParams {
@@ -84,7 +90,7 @@ export class Metadata {
   country: MetadataValue;
   released: Released;
   tracklist: string;
-  credits: string;
+  credits: Credits;
   genres: Genres;
   submissionNotes: MetadataValue;
 
@@ -132,7 +138,10 @@ export class Metadata {
     ]);
     this.released = params.released;
     this.tracklist = params.tracklist;
-    this.credits = params.credits;
+    this.credits = {
+      text: params.credits,
+      items: extractCredits(params.credits)
+    };
     this.genres = params.genres;
     this.submissionNotes = convertMetadataValue([
       generateSubmissionNotesDefault(params.releaseUrl),

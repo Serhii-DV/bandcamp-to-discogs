@@ -142,6 +142,14 @@ export function convertNewlinesToBreaks(str: string): string {
   return str.replace(/\r\n|\r|\n/g, '<br>');
 }
 
+export function convertBreaksToNewlines(str: string): string {
+  // Replace `<br>` with `\n` and remove carriage returns
+  return str
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/\r/g, '')
+    .trim();
+}
+
 /** @see https://stackoverflow.com/a/8485137/3227570 */
 export function safeFilename(value: string): string {
   return transliterate(value)

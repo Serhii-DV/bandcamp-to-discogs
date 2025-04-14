@@ -2,6 +2,7 @@ import {
   camelCaseToReadable,
   capitalizeEachWord,
   containsOneOf,
+  convertBreaksToNewlines,
   convertNewlinesToBreaks,
   convertToAlias,
   getTextInitials,
@@ -544,6 +545,49 @@ describe('convertNewlinesToBreaks', () => {
     const input = '  Hello \n World  ';
     const expected = '  Hello <br> World  ';
     expect(convertNewlinesToBreaks(input)).toBe(expected);
+  });
+});
+
+describe('convertBreaksToNewlines', () => {
+  it('replaces <br> with newlines', () => {
+    const input = 'Line 1<br>Line 2';
+    const output = 'Line 1\nLine 2';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('replaces <br/> and <br /> with newlines (self-closing tags)', () => {
+    const input = 'Line 1<br/>Line 2<br />Line 3';
+    const output = 'Line 1\nLine 2\nLine 3';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('handles uppercase tags', () => {
+    const input = 'Line 1<BR>Line 2<BR/>Line 3<Br />';
+    const output = 'Line 1\nLine 2\nLine 3';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('removes carriage returns', () => {
+    const input = 'Line 1\r\nLine 2\rLine 3';
+    const output = 'Line 1\nLine 2Line 3';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('trims leading and trailing whitespace', () => {
+    const input = '  Line 1<br>Line 2  ';
+    const output = 'Line 1\nLine 2';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('returns empty string for input with only whitespace and breaks', () => {
+    const input = '  <br>  \r<br /> ';
+    const output = '';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('returns the same string if no <br> or \r is present', () => {
+    const input = 'Just a regular string.';
+    expect(convertBreaksToNewlines(input)).toBe(input);
   });
 });
 

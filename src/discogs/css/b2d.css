@@ -28,3 +28,8 @@ div.b2d-section .b2d-info {
   font-style: italic;
   font-size: 80%;
 }
+
+input[type='text'].b2d-droppable,
+.de-dark-theme .subform_react div.subform_table input.b2d-droppable {
+  background-color: #059e0f !important;
+}

@@ -31,6 +31,7 @@ import { FormElement } from '../../app/draft/types';
 import { VariationsGroup } from '../../app/draft/variationGroup';
 import { Section } from '../../app/draft/section';
 import {
+  getAddCreditButton,
   getArtistNameInput,
   getCountrySelect,
   getLabelNameInput,
@@ -271,7 +272,36 @@ function setupSectionReleased(metadata: Metadata): void {
 }
 
 function setupSectionCredits(metadata: Metadata): void {
-  setSection(new Section('credits', 'Bandcamp credits', metadata.credits));
+  const addCreditBtn = getAddCreditButton();
+  const section = getSection('credits');
+  const inputsContainer = element('.drag-drop-list', section);
+  const groups: VariationsGroup[] = [];
+
+  metadata.credits.items.forEach((credit, index) => {
+    const inputs = elements(
+      '#artist-name-credits-input-' + index,
+      inputsContainer
+    ) as HTMLInputElement[];
+
+    if (inputs.length === 0) {
+      click(addCreditBtn);
+    }
+
+    groups.push(
+      new VariationsGroup(
+        credit.artist,
+        inputs,
+        [credit.artist, ...credit.roles],
+        false,
+        true,
+        inputsContainer
+      )
+    );
+  });
+
+  setSection(
+    new Section('credits', 'Bandcamp credits', metadata.credits.text, groups)
+  );
 }
 
 function setupSectionGenres(metadata: Metadata): void {

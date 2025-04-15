@@ -2,7 +2,10 @@ import { log } from './console';
 import { camelCaseToReadable } from './string';
 import { getOwnProperty, isArray, isObject, isString } from './utils';
 
-export function elements(selector: string, parent?: Element): HTMLElement[] {
+export function elements(
+  selector: string,
+  parent?: Element | null
+): HTMLElement[] {
   return Array.from(
     (parent ? parent : document).querySelectorAll(selector)
   ) as HTMLElement[];

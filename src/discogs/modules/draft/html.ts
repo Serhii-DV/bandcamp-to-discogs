@@ -32,6 +32,16 @@ export const getTrackTitleInputs = (): NodeListOf<HTMLInputElement> => {
   ) as NodeListOf<HTMLInputElement>;
 };
 
+export const getAddCreditButton = (): HTMLButtonElement => {
+  return document.getElementById('add-credit') as HTMLButtonElement;
+};
+
+export const getCreditsArtistNameInput = (): HTMLInputElement => {
+  return document.querySelector(
+    '.credit-artist-name-input'
+  ) as HTMLInputElement;
+};
+
 export const getNotesTextarea = (): HTMLTextAreaElement => {
   return document.querySelector(
     'textarea#release-notes-textarea'

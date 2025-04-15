@@ -257,9 +257,7 @@ function setupVariationsGroup(
   const buttons = getButtons(variationsGroupElement);
   const clearButton = getClearButton(variationsGroupElement);
 
-  if (group.draggable && group.container) {
-    setupDraggableButtons(group.container, buttons, clearButton);
-  } else {
+  if (!setupDraggableButtons(group, buttons, clearButton)) {
     setupFormElements(group.elements, buttons);
 
     onClick(buttons, (event) =>
@@ -485,38 +483,73 @@ function setupFormElements(
 }
 
 function setupDraggableButtons(
-  container: HTMLElement,
+  group: VariationsGroup,
   buttons: HTMLButtonElement[],
   clearButton: HTMLButtonElement
-): void {
-  const containerElements = (): FormTextElement[] => {
+): boolean {
+  if (!group.draggable) {
+    return false;
+  }
+
+  if (group.container === null || group.container === undefined) {
+    return false;
+  }
+
+  const container = group.container;
+  const containerFormElements = (): FormTextElement[] => {
+    if (group.elements.length) {
+      return group.elements.filter(
+        (element) =>
+          element instanceof HTMLInputElement ||
+          element instanceof HTMLTextAreaElement
+      ) as FormTextElement[];
+    }
+
     return Array.from(container.querySelectorAll('input, textarea'));
   };
+  const groupFormElements = containerFormElements();
 
   buttons.forEach((button) => {
-    button.addEventListener('dragstart', handleDragStart);
+    button.addEventListener('dragstart', (event) => {
+      const button = event.target as HTMLButtonElement;
+      event.dataTransfer?.setData('text/plain', button.value || '');
+
+      addClass(groupFormElements, 'b2d-droppable');
+    });
   });
 
   container.addEventListener('dragover', (event) => {
-    if (instanceOfFormTextElement(event.target)) {
-      handleDragOver(event as DragEvent);
+    const target = event.target as FormTextElement;
+
+    if (isTargetInElements(target, groupFormElements)) {
+      event.preventDefault();
     }
   });
 
   container.addEventListener('drop', (event) => {
-    if (instanceOfFormTextElement(event.target)) {
-      handleDrop(event as DragEvent, buttons);
-      updateButtonsState(buttons, containerElements());
+    event.preventDefault();
+    removeClass(groupFormElements, 'b2d-droppable');
+    const target = event.target as FormTextElement;
+
+    if (!isTargetInElements(target, groupFormElements)) {
+      // Not a valid target — block default behavior
+      event.stopPropagation();
+      return;
     }
+
+    handleDrop(event as DragEvent, buttons);
+    updateButtonsState(buttons, groupFormElements);
   });
 
   onClick(clearButton, () => {
-    const elements = containerElements();
+    const elements = containerFormElements();
     elements.forEach((element) => {
       setInputValue(element, '');
     });
     updateButtonsState(buttons, elements);
   });
+
+  return true;
 }
 
 function instanceOfFormTextElement(
@@ -528,8 +561,15 @@ function instanceOfFormTextElement(
   );
 }
 
+function isTargetInElements(
+  target: EventTarget | null,
+  elements: FormTextElement[]
+): target is FormTextElement {
+  return elements.includes(target as FormTextElement);
+}
+
 function handleDragStart(event: DragEvent) {
-  const button = event.target as HTMLButtonElement;
+  const button = event.currentTarget as HTMLButtonElement;
   event.dataTransfer?.setData('text/plain', button.value || '');
 }
 
@@ -539,8 +579,6 @@ function handleDragOver(event: DragEvent) {
 }
 
 function handleDrop(event: DragEvent, buttons: HTMLButtonElement[]): void {
-  event.preventDefault();
-
   const data = event.dataTransfer?.getData('text/plain');
   if (!data) return;
 

@@ -278,20 +278,34 @@ function setupSectionCredits(metadata: Metadata): void {
   const groups: VariationsGroup[] = [];
 
   metadata.credits.items.forEach((credit, index) => {
-    const inputs = elements(
+    const artistNameInputs = elements(
       '#artist-name-credits-input-' + index,
       inputsContainer
     ) as HTMLInputElement[];
+    const artistRoleInputs = elements(
+      '#add-role-input-' + index,
+      inputsContainer
+    ) as HTMLInputElement[];
 
-    if (inputs.length === 0) {
+    if (artistNameInputs.length === 0) {
       click(addCreditBtn);
     }
 
     groups.push(
       new VariationsGroup(
-        credit.artist,
-        inputs,
-        [credit.artist, ...credit.roles],
+        `Artist (${credit.artist})`,
+        artistNameInputs,
+        [credit.artist],
+        false,
+        true,
+        inputsContainer
+      )
+    );
+    groups.push(
+      new VariationsGroup(
+        `${credit.artist} roles`,
+        artistRoleInputs,
+        credit.roles,
         false,
         true,
         inputsContainer

@@ -568,16 +568,6 @@ function isTargetInElements(
   return elements.includes(target as FormTextElement);
 }
 
-function handleDragStart(event: DragEvent) {
-  const button = event.currentTarget as HTMLButtonElement;
-  event.dataTransfer?.setData('text/plain', button.value || '');
-}
-
-function handleDragOver(event: DragEvent) {
-  // Prevent default to allow drop
-  event.preventDefault();
-}
-
 function handleDrop(event: DragEvent, buttons: HTMLButtonElement[]): void {
   const data = event.dataTransfer?.getData('text/plain');
   if (!data) return;

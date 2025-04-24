@@ -3,7 +3,7 @@
   "input": "Written, Produced, Performed - Mehdi Saleh<br>Artwork & Mastering - Simon Heath",
   "expected": [
     {
-      "artist": "Mehdi Saleh",
+      "artist": ["Mehdi Saleh"],
       "roles": [
         "Written",
         "Produced",
@@ -11,7 +11,7 @@
       ]
     },
     {
-      "artist": "Simon Heath",
+      "artist": ["Simon Heath"],
       "roles": [
         "Artwork",
         "Mastering"

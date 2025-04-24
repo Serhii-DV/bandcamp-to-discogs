@@ -1,7 +1,7 @@
 import { convertBreaksToNewlines } from '../utils/string';
 
 export interface Credit {
-  artist: string;
+  artist: string[];
   roles: string[];
 }
 
@@ -49,7 +49,7 @@ export function extractCredits(text: string): Credit[] {
     if ((match = line.match(/^(.+?)\s*[-–—]\s*(.+)$/))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist, roles });
+      results.push({ artist: [artist], roles });
       continue;
     }
 
@@ -57,7 +57,7 @@ export function extractCredits(text: string): Credit[] {
     if ((match = line.match(/^(.+?)\s*by\s*(.+)$/i))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist, roles });
+      results.push({ artist: [artist], roles });
       continue;
     }
 
@@ -66,7 +66,7 @@ export function extractCredits(text: string): Credit[] {
       const roles = cleanRoles(match[1]);
       const additionalRoles = cleanRoles(match[3]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist, roles: [...roles, ...additionalRoles] });
+      results.push({ artist: [artist], roles: [...roles, ...additionalRoles] });
       continue;
     }
   }

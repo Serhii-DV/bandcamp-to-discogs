@@ -3,7 +3,7 @@
   "input": "Written, Produced, Performed - Robert Kozletsky\nArtwork - Erik \"Keosz\" Osvald\nMastering - Simon Heath",
   "expected": [
     {
-      "artist": "Robert Kozletsky",
+      "artist": ["Robert Kozletsky"],
       "roles": [
         "Written",
         "Produced",
@@ -11,13 +11,13 @@
       ]
     },
     {
-      "artist": "Erik \"Keosz\" Osvald",
+      "artist": ["Erik \"Keosz\" Osvald"],
       "roles": [
         "Artwork"
       ]
     },
     {
-      "artist": "Simon Heath",
+      "artist": ["Simon Heath"],
       "roles": [
         "Mastering"
       ]

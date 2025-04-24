@@ -3,20 +3,20 @@
   "input": "Ansiktsløs sigil by Simon Heath.\nVisual stimulus & design created by Alejandro Tegin (Heresie Studio)\nMastering by Frederic Arbour",
   "expected": [
     {
-      "artist": "Simon Heath",
+      "artist": ["Simon Heath"],
       "roles": [
         "Ansiktsløs sigil"
       ]
     },
     {
-      "artist": "Alejandro Tegin (Heresie Studio)",
+      "artist": ["Alejandro Tegin (Heresie Studio)"],
       "roles": [
         "Visual stimulus",
         "Design created"
       ]
     },
     {
-      "artist": "Frederic Arbour",
+      "artist": ["Frederic Arbour"],
       "roles": [
         "Mastering"
       ]

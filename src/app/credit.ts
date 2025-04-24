@@ -38,7 +38,8 @@ export function extractCredits(text: string): Credit[] {
   const lines = convertBreaksToNewlines(text)
     .split(/\n|\. ?/)
     .map((l) => l.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .filter((line) => !line.startsWith('©')); // Ignore copyright lines
   const results: Credit[] = [];
 
   for (const line of lines) {

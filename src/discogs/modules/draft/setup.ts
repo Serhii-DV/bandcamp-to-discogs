@@ -291,11 +291,13 @@ function setupSectionCredits(metadata: Metadata): void {
       click(addCreditBtn);
     }
 
+    const artist = credit.artist.join(', ');
+
     groups.push(
       new VariationsGroup(
-        `Artist (${credit.artist})`,
-        artistNameInputs,
-        [credit.artist],
+        artist,
+        artistRoleInputs,
+        [credit.roles.join(', ')],
         false,
         true,
         inputsContainer
@@ -303,9 +305,9 @@ function setupSectionCredits(metadata: Metadata): void {
     );
     groups.push(
       new VariationsGroup(
-        `${credit.artist} roles`,
-        artistRoleInputs,
-        credit.roles,
+        `Artist (${credit.artist.join(', ')})`,
+        artistNameInputs,
+        credit.artist,
         false,
         true,
         inputsContainer

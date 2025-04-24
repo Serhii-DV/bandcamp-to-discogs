@@ -34,33 +34,6 @@ function cleanArtist(raw: string): string {
   return raw.trim();
 }
 
-function parseArtists(artistString: string): string[] {
-  const result: string[] = [];
-
-  // First split the string by "and" or "&"
-  const parts = artistString.split(/ and |&/i);
-
-  for (const part of parts) {
-    const trimmedPart = part.trim();
-
-    // Check if this part contains parentheses
-    const parenthesesMatch = trimmedPart.match(/^(.*?)\s*\((.*?)\)$/);
-
-    if (parenthesesMatch) {
-      // Add the name outside parentheses
-      result.push(parenthesesMatch[1].trim());
-
-      // Add the name inside parentheses
-      result.push(parenthesesMatch[2].trim());
-    } else {
-      // Just add the name as is
-      result.push(trimmedPart);
-    }
-  }
-
-  return result;
-}
-
 export function extractCredits(text: string): Credit[] {
   const lines = convertBreaksToNewlines(text)
     .split(/\n|\. ?/)
@@ -76,7 +49,7 @@ export function extractCredits(text: string): Credit[] {
     if ((match = line.match(/^(.+?)\s*[-–—]\s*(.+)$/))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist: parseArtists(artist), roles });
+      processArtistString(artist, roles, results);
       continue;
     }
 
@@ -84,7 +57,7 @@ export function extractCredits(text: string): Credit[] {
     if ((match = line.match(/^(.+?)\s*by\s*(.+)$/i))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist: parseArtists(artist), roles });
+      processArtistString(artist, roles, results);
       continue;
     }
 
@@ -93,13 +66,52 @@ export function extractCredits(text: string): Credit[] {
       const roles = cleanRoles(match[1]);
       const additionalRoles = cleanRoles(match[3]);
       const artist = cleanArtist(match[2]);
-      results.push({
-        artist: parseArtists(artist),
-        roles: [...roles, ...additionalRoles]
-      });
+      processArtistString(artist, [...roles, ...additionalRoles], results);
       continue;
     }
   }
 
   return results;
+}
+
+function processArtistString(
+  artistString: string,
+  roles: string[],
+  results: Credit[]
+): void {
+  // Split by "and" or "&" to handle multiple artists
+  if (artistString.includes(' and ') || artistString.includes('&')) {
+    const splitArtists = artistString.split(/ and |&/i).map((a) => a.trim());
+
+    // For each artist name, create a separate credit entry
+    splitArtists.forEach((singleArtist) => {
+      // Handle parenthetical notation for each individual artist
+      const parsedArtist = parseSingleArtist(singleArtist);
+      results.push({ artist: parsedArtist, roles });
+    });
+  } else {
+    // Handle parenthetical notation
+    results.push({ artist: parseSingleArtist(artistString), roles });
+  }
+}
+
+function parseSingleArtist(artistString: string): string[] {
+  const result: string[] = [];
+  const trimmedArtist = artistString.trim();
+
+  // Check if artist name contains parentheses
+  const parenthesesMatch = trimmedArtist.match(/^(.*?)\s*\((.*?)\)$/);
+
+  if (parenthesesMatch) {
+    // Add the name outside parentheses
+    result.push(parenthesesMatch[1].trim());
+
+    // Add the name inside parentheses
+    result.push(parenthesesMatch[2].trim());
+  } else {
+    // Just add the name as is
+    result.push(trimmedArtist);
+  }
+
+  return result;
 }

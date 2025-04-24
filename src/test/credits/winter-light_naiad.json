@@ -4,7 +4,16 @@
   "expected": [
     {
       "artist": [
-        "Nicolas Van Meirhaeghe",
+        "Nicolas Van Meirhaeghe"
+      ],
+      "roles": [
+        "Recorded",
+        "Composed",
+        "Produced"
+      ]
+    },
+    {
+      "artist": [
         "Peter Verwimp"
       ],
       "roles": [

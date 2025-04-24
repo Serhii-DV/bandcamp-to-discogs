@@ -17,7 +17,7 @@ describe('extractCredits from JSON files', () => {
     it(`parses ${file} correctly`, () => {
       const credits = extractCredits(testData.input);
 
-      if (testData.url.includes('xxx')) {
+      if (testData.debug) {
         console.log(credits);
       }
 

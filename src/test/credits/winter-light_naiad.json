@@ -3,7 +3,10 @@
   "input": "Recorded, composed and produced by Nicolas Van Meirhaeghe and Peter Verwimp.<br>Artwork, cover and design by Christel Morvan (Nesisart)<br>Mastered by Ronald Mariën (Stratosphere)<br><br>© Ashtoreth 2025<br>© Penumbral Aethyr 2025<br>© Winter-Light 2025",
   "expected": [
     {
-      "artist": ["Nicolas Van Meirhaeghe and Peter Verwimp"],
+      "artist": [
+        "Nicolas Van Meirhaeghe",
+        "Peter Verwimp"
+      ],
       "roles": [
         "Recorded",
         "Composed",
@@ -11,7 +14,7 @@
       ]
     },
     {
-      "artist": ["Christel Morvan (Nesisart)"],
+      "artist": ["Christel Morvan", "Nesisart"],
       "roles": [
         "Artwork",
         "Cover",
@@ -19,7 +22,7 @@
       ]
     },
     {
-      "artist": ["Ronald Mariën (Stratosphere)"],
+      "artist": ["Ronald Mariën", "Stratosphere"],
       "roles": [
         "Mastered"
       ]

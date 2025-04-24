@@ -34,6 +34,33 @@ function cleanArtist(raw: string): string {
   return raw.trim();
 }
 
+function parseArtists(artistString: string): string[] {
+  const result: string[] = [];
+
+  // First split the string by "and" or "&"
+  const parts = artistString.split(/ and |&/i);
+
+  for (const part of parts) {
+    const trimmedPart = part.trim();
+
+    // Check if this part contains parentheses
+    const parenthesesMatch = trimmedPart.match(/^(.*?)\s*\((.*?)\)$/);
+
+    if (parenthesesMatch) {
+      // Add the name outside parentheses
+      result.push(parenthesesMatch[1].trim());
+
+      // Add the name inside parentheses
+      result.push(parenthesesMatch[2].trim());
+    } else {
+      // Just add the name as is
+      result.push(trimmedPart);
+    }
+  }
+
+  return result;
+}
+
 export function extractCredits(text: string): Credit[] {
   const lines = convertBreaksToNewlines(text)
     .split(/\n|\. ?/)
@@ -49,7 +76,7 @@ export function extractCredits(text: string): Credit[] {
     if ((match = line.match(/^(.+?)\s*[-–—]\s*(.+)$/))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist: [artist], roles });
+      results.push({ artist: parseArtists(artist), roles });
       continue;
     }
 
@@ -57,7 +84,7 @@ export function extractCredits(text: string): Credit[] {
     if ((match = line.match(/^(.+?)\s*by\s*(.+)$/i))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist: [artist], roles });
+      results.push({ artist: parseArtists(artist), roles });
       continue;
     }
 
@@ -66,7 +93,10 @@ export function extractCredits(text: string): Credit[] {
       const roles = cleanRoles(match[1]);
       const additionalRoles = cleanRoles(match[3]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist: [artist], roles: [...roles, ...additionalRoles] });
+      results.push({
+        artist: parseArtists(artist),
+        roles: [...roles, ...additionalRoles]
+      });
       continue;
     }
   }

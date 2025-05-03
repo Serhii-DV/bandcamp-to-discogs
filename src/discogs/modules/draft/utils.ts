@@ -259,6 +259,10 @@ export function setSection(section: Section): void {
 function setupHintButton(group: VariationsGroup): void {
   group.elements.forEach((element) => {
     if (element instanceof HTMLInputElement) {
+      if (isCheckbox(element)) {
+        return;
+      }
+
       const hintButton = document.createElement('button');
       hintButton.className = 'b2d-hint-button';
       hintButton.innerHTML = iconMagic;

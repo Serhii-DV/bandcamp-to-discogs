@@ -16,7 +16,8 @@ import {
   setSubmissionNotes,
   setNotes,
   setCountry,
-  makeVariationsGroupClass
+  makeVariationsGroupClass,
+  setupInputHintButton
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
@@ -122,6 +123,7 @@ function autofocus() {
 
 function setupSectionArtist(artist: MetadataValue): void {
   const artistSection = getSection('artist');
+  let artistGroup: VariationsGroup;
 
   function setupSection() {
     const inputsContainer = element('.drag-drop-list', artistSection);
@@ -130,7 +132,7 @@ function setupSectionArtist(artist: MetadataValue): void {
       artistSection
     ) as HTMLInputElement[];
 
-    const artistGroup = new VariationsGroup(
+    artistGroup = new VariationsGroup(
       'Name',
       artistInputs,
       metadataValueAsArray(artist),
@@ -156,7 +158,40 @@ function setupSectionArtist(artist: MetadataValue): void {
     artistSection
   ) as HTMLButtonElement;
 
+  // Set up mutation observer to watch for new inputs being added to the list
+  const dragDropList = element('.drag-drop-list', artistSection);
+  if (dragDropList) {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          // New elements were added, check for inputs that need hint buttons
+          mutation.addedNodes.forEach((node) => {
+            if (node instanceof HTMLElement) {
+              const newInputs = node.querySelectorAll('input[type="text"]');
+              if (newInputs.length > 0) {
+                // For each new input, set up a hint button
+                newInputs.forEach((input) => {
+                  if (input instanceof HTMLInputElement && artistGroup) {
+                    setupInputHintButton(input, artistGroup.variations);
+                  }
+                });
+              }
+            }
+          });
+        }
+      });
+    });
+
+    // Start observing the list for changes
+    observer.observe(dragDropList, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  // Handle the add artist button click
   onClick(addArtistButton, () => {
+    // The observer will handle adding hint buttons to new inputs
     setupSection();
   });
 }

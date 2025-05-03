@@ -264,7 +264,7 @@ function setupHintButton(group: VariationsGroup): void {
   });
 }
 
-function setupInputHintButton(
+export function setupInputHintButton(
   element: HTMLInputElement,
   variations: Variation[]
 ): void {

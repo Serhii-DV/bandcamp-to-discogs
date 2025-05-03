@@ -256,26 +256,30 @@ export function setSection(section: Section): void {
 
 export function setupSectionGroupHints(group: VariationsGroup): void {
   group.elements.forEach((element) => {
-    if (element instanceof HTMLInputElement) {
+    if (
+      element instanceof HTMLInputElement ||
+      element instanceof HTMLSelectElement
+    ) {
       setupInputHintButton(element, group.variations);
     }
   });
 }
 
 export function setupInputHintButton(
-  element: HTMLInputElement,
+  element: HTMLInputElement | HTMLSelectElement,
   variations: Variation[]
 ): void {
-  if (isCheckbox(element)) {
+  // Skip checkbox inputs
+  if (element instanceof HTMLInputElement && isCheckbox(element)) {
     return;
   }
 
-  // Check if a hint button has already been added to this input
+  // Check if a hint button has already been added to this input or select
   if (
     element.previousElementSibling &&
     element.previousElementSibling.classList.contains('b2d-hint-button')
   ) {
-    return; // Hint button already exists for this input
+    return; // Hint button already exists for this element
   }
 
   const hintButton = document.createElement('button');
@@ -303,7 +307,12 @@ export function setupInputHintButton(
       item.title = variation.toString();
 
       onClick(item, () => {
-        setInputValue(element, variation.toString());
+        // Handle different element types
+        if (element instanceof HTMLSelectElement) {
+          selectOptionByValue(element, variation.toString());
+        } else {
+          setInputValue(element, variation.toString());
+        }
         dropdown.remove();
       });
 

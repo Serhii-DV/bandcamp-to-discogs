@@ -188,11 +188,10 @@ function setupSectionCountry(country: MetadataValue): void {
   );
   const countryValue = metadataValueAsString(country);
 
-  setSection(
-    new Section('country', 'Bandcamp country', countryValue, [countryGroup])
-  );
+  setSection(new Section('country', 'Bandcamp country', countryValue));
 
   setCountry(countryValue);
+  setupSectionGroupHints(countryGroup);
 }
 
 function setupSectionFormat(format: Format): void {

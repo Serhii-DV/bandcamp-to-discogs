@@ -272,6 +272,14 @@ function setupInputHintButton(
     return;
   }
 
+  // Check if a hint button has already been added to this input
+  if (
+    element.previousElementSibling &&
+    element.previousElementSibling.classList.contains('b2d-hint-button')
+  ) {
+    return; // Hint button already exists for this input
+  }
+
   const hintButton = document.createElement('button');
   hintButton.className = 'b2d-hint-button';
   hintButton.innerHTML = iconMagic;

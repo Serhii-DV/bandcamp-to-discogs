@@ -236,10 +236,14 @@ export function setSection(section: Section): void {
     sectionLabel!.insertAdjacentElement('afterend', b2dSection);
   }
 
+  const groupsWithoutParent = section.variationsGroups.filter(
+    (group) => group.parent !== null
+  );
+
   b2dSection.innerHTML = `
   <h4>${section.title}</h4>
   <div class="b2d-content">${section.content}</div>
-  ${makeVariationsGroupsHtml(section.variationsGroups)}
+  ${makeVariationsGroupsHtml(groupsWithoutParent)}
 `;
 
   section.variationsGroups.forEach((group: VariationsGroup) => {
@@ -274,6 +278,13 @@ function setupVariationsGroup(
   if (group.multiChoice) {
     const selectAllButton = getSelectAllButton(variationsGroupElement);
     setupSelectAllButton(selectAllButton, buttons);
+  }
+
+  if (group.parent) {
+    const groupElement = createElementFromHTML(
+      makeVariationsGroupHtml(group, true)
+    ) as Element;
+    group.parent.insertAdjacentElement('afterbegin', groupElement);
   }
 }
 

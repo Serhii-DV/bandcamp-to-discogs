@@ -9,6 +9,7 @@ export class VariationsGroup {
   elements: FormElement[];
   variations: Variation[];
   multiChoice: boolean;
+  parent?: HTMLElement | null;
   draggable: boolean;
   container?: HTMLElement | null;
 

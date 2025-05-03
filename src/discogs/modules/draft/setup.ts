@@ -282,6 +282,10 @@ function setupSectionCredits(metadata: Metadata): void {
       '#artist-name-credits-input-' + index,
       inputsContainer
     ) as HTMLInputElement[];
+    const artistListItem = element(
+      "li[data-path*='" + index + "'] .drag_drop_content",
+      inputsContainer
+    );
     const artistRoleInputs = elements(
       '#add-role-input-' + index,
       inputsContainer
@@ -292,27 +296,28 @@ function setupSectionCredits(metadata: Metadata): void {
     }
 
     const artist = credit.artist.join(', ');
+    const artistGroup = new VariationsGroup(
+      artist,
+      artistRoleInputs,
+      [credit.roles.join(', ')],
+      false,
+      true,
+      inputsContainer
+    );
+    artistGroup.parent = artistListItem;
 
-    groups.push(
-      new VariationsGroup(
-        artist,
-        artistRoleInputs,
-        [credit.roles.join(', ')],
-        false,
-        true,
-        inputsContainer
-      )
+    const artistRolesGroup = new VariationsGroup(
+      `Artist (${credit.artist.join(', ')})`,
+      artistNameInputs,
+      credit.artist,
+      false,
+      true,
+      inputsContainer
     );
-    groups.push(
-      new VariationsGroup(
-        `Artist (${credit.artist.join(', ')})`,
-        artistNameInputs,
-        credit.artist,
-        false,
-        true,
-        inputsContainer
-      )
-    );
+    artistRolesGroup.parent = artistListItem;
+
+    groups.push(artistGroup);
+    groups.push(artistRolesGroup);
   });
 
   setSection(

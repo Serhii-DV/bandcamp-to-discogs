@@ -13,7 +13,7 @@ export function elements(
 
 export function element(
   selector: string,
-  parent?: Element
+  parent?: Element | null
 ): HTMLElement | null {
   return (parent ? parent : document).querySelector(selector);
 }

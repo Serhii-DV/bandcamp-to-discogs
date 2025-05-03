@@ -3,6 +3,7 @@
   --txt-color: #fff;
   --var-bg-color: #666;
   --var-txt-color: #fff;
+  --hint-hover-color: #200e31;
 }
 
 div.b2d-section {
@@ -32,4 +33,39 @@ div.b2d-section .b2d-info {
 input[type='text'].b2d-droppable,
 .de-dark-theme .subform_react div.subform_table input.b2d-droppable {
   background-color: #059e0f !important;
+}
+
+.b2d-hint-button {
+  cursor: pointer;
+  margin-right: 5px;
+  background: none;
+  border: none;
+  color: #666;
+}
+
+.b2d-hint-button:hover {
+  color: #4285f4;
+}
+
+.b2d-hint-dropdown,
+.de-dark-theme .b2d-hint-dropdown {
+  position: absolute;
+  background: var(--bg-color) !important;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  min-width: 150px;
+}
+
+.b2d-hint-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.b2d-hint-item:hover,
+.de-dark-theme .b2d-hint-item:hover {
+  background-color: var(--hint-hover-color) !important;
 }

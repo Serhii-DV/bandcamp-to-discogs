@@ -17,8 +17,7 @@ import {
   setNotes,
   setCountry,
   makeVariationsGroupClass,
-  setupInputHintButton,
-  setupGroupHintButton
+  setupSectionGroupHints
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
@@ -144,7 +143,7 @@ function setupSectionArtist(artist: MetadataValue): void {
     new Section('artist', 'Bandcamp artist name', metadataValueAsString(artist))
   );
 
-  setupGroupHintButton(artistGroup);
+  setupSectionGroupHints(artistGroup);
 }
 
 function setupSectionTitle(title: MetadataValue): void {
@@ -158,7 +157,7 @@ function setupSectionTitle(title: MetadataValue): void {
     new Section('title', 'Bandcamp release title', metadataValueAsString(title))
   );
 
-  setupGroupHintButton(titleGroup);
+  setupSectionGroupHints(titleGroup);
 }
 
 function setupSectionLabel(label: MetadataValue): void {
@@ -176,7 +175,7 @@ function setupSectionLabel(label: MetadataValue): void {
     )
   );
 
-  setupGroupHintButton(labelGroup);
+  setupSectionGroupHints(labelGroup);
 }
 
 function setupSectionCountry(country: MetadataValue): void {
@@ -268,7 +267,7 @@ function setupSectionReleased(metadata: Metadata): void {
     )
   );
 
-  setupGroupHintButton(releasedGroup);
+  setupSectionGroupHints(releasedGroup);
 }
 
 function setupSectionCredits(metadata: Metadata): void {

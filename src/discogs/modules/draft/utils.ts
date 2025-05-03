@@ -254,7 +254,7 @@ export function setSection(section: Section): void {
   });
 }
 
-export function setupGroupHintButton(group: VariationsGroup): void {
+export function setupSectionGroupHints(group: VariationsGroup): void {
   group.elements.forEach((element) => {
     if (element instanceof HTMLInputElement) {
       setupInputHintButton(element, group.variations);

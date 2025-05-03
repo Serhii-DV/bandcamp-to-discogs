@@ -251,17 +251,17 @@ export function setSection(section: Section): void {
     if (groupElement) {
       setupVariationsGroup(group, groupElement);
     }
-
-    setupHintButton(group);
   });
 }
 
-function setupHintButton(group: VariationsGroup): void {
+export function setupGroupHintButton(group: VariationsGroup): void {
   group.elements.forEach((element) => {
     if (element instanceof HTMLInputElement) {
       setupInputHintButton(element, group.variations);
     }
   });
+
+  setupGroupInputObserver(group);
 }
 
 export function setupInputHintButton(
@@ -338,6 +338,68 @@ export function setupInputHintButton(
     setTimeout(() => {
       document.addEventListener('click', closeDropdown);
     }, 0);
+  });
+}
+
+function setupGroupInputObserver(group: VariationsGroup): void {
+  if (!group.container) {
+    return;
+  }
+
+  const dragDropList = group.container;
+  // Function to process any added inputs
+  const processAddedNode = (node: Node) => {
+    // First check if the node itself is an input
+    if (node instanceof HTMLInputElement && node.type === 'text') {
+      if (group) {
+        setupInputHintButton(node, group.variations);
+      }
+    }
+
+    // Then check if it contains inputs (if it's an element)
+    if (node instanceof HTMLElement) {
+      const newInputs = node.querySelectorAll('input[type="text"]');
+      if (newInputs.length > 0) {
+        newInputs.forEach((input) => {
+          if (input instanceof HTMLInputElement && group) {
+            setupInputHintButton(input, group.variations);
+          }
+        });
+      }
+    }
+  };
+
+  const observer = new MutationObserver((mutations) => {
+    let inputsFound = false;
+
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+        // Process all added nodes
+        mutation.addedNodes.forEach(processAddedNode);
+        inputsFound = true;
+      }
+    });
+
+    // If we found inputs, let's also scan the entire list as a fallback
+    // This ensures we didn't miss any inputs
+    if (inputsFound && group) {
+      setTimeout(() => {
+        const allInputs = dragDropList.querySelectorAll('input[type="text"]');
+        allInputs.forEach((input) => {
+          if (input instanceof HTMLInputElement) {
+            setupInputHintButton(input, group.variations);
+          }
+        });
+      }, 100); // Small delay to ensure DOM is fully updated
+    }
+  });
+
+  // Start observing the list for changes with more comprehensive options
+  observer.observe(dragDropList, {
+    childList: true, // Watch for direct children changes
+    subtree: true, // Watch for descendants changes
+    attributes: false, // No need to watch attributes
+    characterData: false // No need to watch text content
   });
 }
 

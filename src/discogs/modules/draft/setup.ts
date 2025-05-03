@@ -17,7 +17,8 @@ import {
   setNotes,
   setCountry,
   makeVariationsGroupClass,
-  setupInputHintButton
+  setupInputHintButton,
+  setupGroupHintButton
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
@@ -123,77 +124,32 @@ function autofocus() {
 
 function setupSectionArtist(artist: MetadataValue): void {
   const artistSection = getSection('artist');
-  let artistGroup: VariationsGroup;
+  const inputsContainer = element('.drag-drop-list', artistSection);
 
-  function setupSection() {
-    const inputsContainer = element('.drag-drop-list', artistSection);
-    const artistInputs = elements(
-      '.drag-drop-list input[type="text"]',
-      artistSection
-    ) as HTMLInputElement[];
-
-    artistGroup = new VariationsGroup(
-      'Name',
-      artistInputs,
-      metadataValueAsArray(artist),
-      false,
-      true,
-      inputsContainer
-    );
-
-    setSection(
-      new Section(
-        'artist',
-        'Bandcamp artist name',
-        metadataValueAsString(artist),
-        [artistGroup]
-      )
-    );
-  }
-
-  setupSection();
-
-  const addArtistButton = element(
-    '.drag-drop-list #add-artist',
+  const artistInputs = elements(
+    '.drag-drop-list input[type="text"]',
     artistSection
-  ) as HTMLButtonElement;
+  ) as HTMLInputElement[];
 
-  // Set up mutation observer to watch for new inputs being added to the list
-  const dragDropList = element('.drag-drop-list', artistSection);
-  if (dragDropList) {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-          // New elements were added, check for inputs that need hint buttons
-          mutation.addedNodes.forEach((node) => {
-            if (node instanceof HTMLElement) {
-              const newInputs = node.querySelectorAll('input[type="text"]');
-              if (newInputs.length > 0) {
-                // For each new input, set up a hint button
-                newInputs.forEach((input) => {
-                  if (input instanceof HTMLInputElement && artistGroup) {
-                    setupInputHintButton(input, artistGroup.variations);
-                  }
-                });
-              }
-            }
-          });
-        }
-      });
-    });
+  const artistGroup = new VariationsGroup(
+    'Name',
+    artistInputs,
+    metadataValueAsArray(artist),
+    false,
+    true,
+    inputsContainer
+  );
 
-    // Start observing the list for changes
-    observer.observe(dragDropList, {
-      childList: true,
-      subtree: true
-    });
-  }
+  setSection(
+    new Section(
+      'artist',
+      'Bandcamp artist name',
+      metadataValueAsString(artist),
+      [artistGroup]
+    )
+  );
 
-  // Handle the add artist button click
-  onClick(addArtistButton, () => {
-    // The observer will handle adding hint buttons to new inputs
-    setupSection();
-  });
+  setupGroupHintButton(artistGroup);
 }
 
 function setupSectionTitle(title: MetadataValue): void {

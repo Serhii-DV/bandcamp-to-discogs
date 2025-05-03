@@ -260,8 +260,6 @@ export function setupSectionGroupHints(group: VariationsGroup): void {
       setupInputHintButton(element, group.variations);
     }
   });
-
-  setupGroupInputObserver(group);
 }
 
 export function setupInputHintButton(
@@ -341,7 +339,7 @@ export function setupInputHintButton(
   });
 }
 
-function setupGroupInputObserver(group: VariationsGroup): void {
+export function setupGroupInputObserver(group: VariationsGroup): void {
   if (!group.container) {
     return;
   }

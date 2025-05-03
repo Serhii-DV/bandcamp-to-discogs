@@ -17,7 +17,8 @@ import {
   setNotes,
   setCountry,
   makeVariationsGroupClass,
-  setupSectionGroupHints
+  setupSectionGroupHints,
+  setupGroupInputObserver
 } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
@@ -144,6 +145,7 @@ function setupSectionArtist(artist: MetadataValue): void {
   );
 
   setupSectionGroupHints(artistGroup);
+  setupGroupInputObserver(artistGroup);
 }
 
 function setupSectionTitle(title: MetadataValue): void {

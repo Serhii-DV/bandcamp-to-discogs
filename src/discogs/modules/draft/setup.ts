@@ -122,28 +122,43 @@ function autofocus() {
 
 function setupSectionArtist(artist: MetadataValue): void {
   const artistSection = getSection('artist');
-  const inputsContainer = element('.drag-drop-list', artistSection);
-  const artistInputs = elements(
-    '.drag-drop-list input[type="text"]',
-    artistSection
-  ) as HTMLInputElement[];
-  const artistGroup = new VariationsGroup(
-    'Name',
-    artistInputs,
-    metadataValueAsArray(artist),
-    false,
-    true,
-    inputsContainer
-  );
 
-  setSection(
-    new Section(
-      'artist',
-      'Bandcamp artist name',
-      metadataValueAsString(artist),
-      [artistGroup]
-    )
-  );
+  function setupSection() {
+    const inputsContainer = element('.drag-drop-list', artistSection);
+    const artistInputs = elements(
+      '.drag-drop-list input[type="text"]',
+      artistSection
+    ) as HTMLInputElement[];
+
+    const artistGroup = new VariationsGroup(
+      'Name',
+      artistInputs,
+      metadataValueAsArray(artist),
+      false,
+      true,
+      inputsContainer
+    );
+
+    setSection(
+      new Section(
+        'artist',
+        'Bandcamp artist name',
+        metadataValueAsString(artist),
+        [artistGroup]
+      )
+    );
+  }
+
+  setupSection();
+
+  const addArtistButton = element(
+    '.drag-drop-list #add-artist',
+    artistSection
+  ) as HTMLButtonElement;
+
+  onClick(addArtistButton, () => {
+    setupSection();
+  });
 }
 
 function setupSectionTitle(title: MetadataValue): void {

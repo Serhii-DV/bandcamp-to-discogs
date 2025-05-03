@@ -259,70 +259,77 @@ export function setSection(section: Section): void {
 function setupHintButton(group: VariationsGroup): void {
   group.elements.forEach((element) => {
     if (element instanceof HTMLInputElement) {
-      if (isCheckbox(element)) {
-        return;
-      }
-
-      const hintButton = document.createElement('button');
-      hintButton.className = 'b2d-hint-button';
-      hintButton.innerHTML = iconMagic;
-      hintButton.title = 'Click to show suggestions';
-      element.insertAdjacentElement('beforebegin', hintButton);
-
-      onClick(hintButton, (event) => {
-        event.stopPropagation(); // Prevent document click from immediately closing dropdown
-
-        // Remove any existing dropdown
-        const existingDropdown = document.querySelector('.b2d-hint-dropdown');
-        if (existingDropdown) existingDropdown.remove();
-
-        // Create dropdown container
-        const dropdown = document.createElement('div');
-        dropdown.className = 'b2d-hint-dropdown';
-
-        // Add variations as dropdown items
-        group.variations.forEach((variation) => {
-          const item = document.createElement('div');
-          item.className = 'b2d-hint-item';
-          item.textContent = truncateText(variation.toString(), 50);
-          item.title = variation.toString();
-
-          onClick(item, () => {
-            setInputValue(element, variation.toString());
-            dropdown.remove();
-          });
-
-          dropdown.appendChild(item);
-        });
-
-        // Add dropdown to document body for absolute positioning
-        document.body.appendChild(dropdown);
-
-        // Position the dropdown directly under the button
-        const buttonRect = hintButton.getBoundingClientRect();
-        const scrollX = window.scrollX || window.pageXOffset;
-        const scrollY = window.scrollY || window.pageYOffset;
-
-        dropdown.style.position = 'absolute';
-        dropdown.style.top = `${buttonRect.bottom + scrollY}px`;
-        dropdown.style.left = `${buttonRect.left + scrollX}px`;
-        dropdown.style.minWidth = `${Math.max(buttonRect.width, 150)}px`;
-        dropdown.style.zIndex = '1000';
-
-        // Close dropdown when clicking outside
-        const closeDropdown = (e: MouseEvent) => {
-          if (!dropdown.contains(e.target as Node) && e.target !== hintButton) {
-            dropdown.remove();
-            document.removeEventListener('click', closeDropdown);
-          }
-        };
-
-        // Add delayed listener to allow the current click to complete
-        setTimeout(() => {
-          document.addEventListener('click', closeDropdown);
-        }, 0);
-      });
+      setupInputHintButton(element, group.variations);
     }
+  });
+}
+
+function setupInputHintButton(
+  element: HTMLInputElement,
+  variations: Variation[]
+): void {
+  if (isCheckbox(element)) {
+    return;
+  }
+
+  const hintButton = document.createElement('button');
+  hintButton.className = 'b2d-hint-button';
+  hintButton.innerHTML = iconMagic;
+  hintButton.title = 'Click to show suggestions';
+  element.insertAdjacentElement('beforebegin', hintButton);
+
+  onClick(hintButton, (event) => {
+    event.stopPropagation(); // Prevent document click from immediately closing dropdown
+
+    // Remove any existing dropdown
+    const existingDropdown = document.querySelector('.b2d-hint-dropdown');
+    if (existingDropdown) existingDropdown.remove();
+
+    // Create dropdown container
+    const dropdown = document.createElement('div');
+    dropdown.className = 'b2d-hint-dropdown';
+
+    // Add variations as dropdown items
+    variations.forEach((variation) => {
+      const item = document.createElement('div');
+      item.className = 'b2d-hint-item';
+      item.textContent = truncateText(variation.toString(), 50);
+      item.title = variation.toString();
+
+      onClick(item, () => {
+        setInputValue(element, variation.toString());
+        dropdown.remove();
+      });
+
+      dropdown.appendChild(item);
+    });
+
+    // Add dropdown to document body for absolute positioning
+    document.body.appendChild(dropdown);
+
+    // Position the dropdown directly under the button
+    const buttonRect = hintButton.getBoundingClientRect();
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    dropdown.style.position = 'absolute';
+    dropdown.style.top = `${buttonRect.bottom + scrollY}px`;
+    dropdown.style.left = `${buttonRect.left + scrollX}px`;
+    dropdown.style.minWidth = `${Math.max(buttonRect.width, 150)}px`;
+    dropdown.style.zIndex = '1000';
+
+    // Close dropdown when clicking outside
+    const closeDropdown = (e: MouseEvent) => {
+      if (!dropdown.contains(e.target as Node) && e.target !== hintButton) {
+        dropdown.remove();
+        document.removeEventListener('click', closeDropdown);
+      }
+    };
+
+    // Add delayed listener to allow the current click to complete
+    setTimeout(() => {
+      document.addEventListener('click', closeDropdown);
+    }, 0);
   });
 }
 

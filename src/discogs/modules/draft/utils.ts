@@ -291,8 +291,19 @@ function setupHintButton(group: VariationsGroup): void {
           dropdown.appendChild(item);
         });
 
-        // Position and show the dropdown
-        hintButton.insertAdjacentElement('afterend', dropdown);
+        // Add dropdown to document body for absolute positioning
+        document.body.appendChild(dropdown);
+
+        // Position the dropdown directly under the button
+        const buttonRect = hintButton.getBoundingClientRect();
+        const scrollX = window.scrollX || window.pageXOffset;
+        const scrollY = window.scrollY || window.pageYOffset;
+
+        dropdown.style.position = 'absolute';
+        dropdown.style.top = `${buttonRect.bottom + scrollY}px`;
+        dropdown.style.left = `${buttonRect.left + scrollX}px`;
+        dropdown.style.minWidth = `${Math.max(buttonRect.width, 150)}px`;
+        dropdown.style.zIndex = '1000';
 
         // Close dropdown when clicking outside
         const closeDropdown = (e: MouseEvent) => {

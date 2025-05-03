@@ -141,12 +141,7 @@ function setupSectionArtist(artist: MetadataValue): void {
   );
 
   setSection(
-    new Section(
-      'artist',
-      'Bandcamp artist name',
-      metadataValueAsString(artist),
-      [artistGroup]
-    )
+    new Section('artist', 'Bandcamp artist name', metadataValueAsString(artist))
   );
 
   setupGroupHintButton(artistGroup);
@@ -160,13 +155,10 @@ function setupSectionTitle(title: MetadataValue): void {
   );
 
   setSection(
-    new Section(
-      'title',
-      'Bandcamp release title',
-      metadataValueAsString(title),
-      [titleGroup]
-    )
+    new Section('title', 'Bandcamp release title', metadataValueAsString(title))
   );
+
+  setupGroupHintButton(titleGroup);
 }
 
 function setupSectionLabel(label: MetadataValue): void {
@@ -180,10 +172,11 @@ function setupSectionLabel(label: MetadataValue): void {
     new Section(
       'label',
       'Bandcamp page label or artist name',
-      metadataValueAsString(label),
-      [labelGroup]
+      metadataValueAsString(label)
     )
   );
+
+  setupGroupHintButton(labelGroup);
 }
 
 function setupSectionCountry(country: MetadataValue): void {
@@ -271,10 +264,11 @@ function setupSectionReleased(metadata: Metadata): void {
     new Section(
       'released',
       'Bandcamp release dates',
-      valueToHtml(metadata.released),
-      [releasedGroup]
+      valueToHtml(metadata.released)
     )
   );
+
+  setupGroupHintButton(releasedGroup);
 }
 
 function setupSectionCredits(metadata: Metadata): void {

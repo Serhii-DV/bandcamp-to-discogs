@@ -12,7 +12,12 @@ import {
 import { debug } from '../../../utils/console';
 import { hasClass, isArray } from '../../../utils/utils';
 import { truncateText } from '../../../utils/string';
-import { FormElement, FormTextElement } from '../../app/draft/types';
+import {
+  FormElement,
+  FormTextElement,
+  instanceOfFormElement,
+  instanceOfFormTextElement
+} from '../../app/draft/types';
 import { Section } from 'src/discogs/app/draft/section';
 import { VariationsGroup } from 'src/discogs/app/draft/variationGroup';
 import { Variation } from 'src/discogs/app/draft/variation';
@@ -255,13 +260,8 @@ export function setSection(section: Section): void {
 }
 
 export function setupSectionGroupHints(group: VariationsGroup): void {
-  group.elements.forEach((element) => {
-    if (
-      element instanceof HTMLInputElement ||
-      element instanceof HTMLSelectElement
-    ) {
-      setupFormElementHintButton(element, group.variations);
-    }
+  group.elements.filter(instanceOfFormElement).forEach((element) => {
+    setupFormElementHintButton(element, group.variations);
   });
 }
 
@@ -717,15 +717,6 @@ function setupDraggableButtons(
   });
 
   return true;
-}
-
-function instanceOfFormTextElement(
-  element?: EventTarget | null
-): element is FormTextElement {
-  return (
-    element instanceof HTMLInputElement ||
-    element instanceof HTMLTextAreaElement
-  );
 }
 
 function isTargetInElements(

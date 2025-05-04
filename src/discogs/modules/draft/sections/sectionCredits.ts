@@ -3,7 +3,7 @@ import { Metadata } from '../../../app/metadata';
 import { VariationsGroup } from '../../../app/draft/variationGroup';
 import { Section } from '../../../app/draft/section';
 import { getAddCreditButton, getSection } from '../html';
-import { setSection } from '../utils';
+import { setSection, setupSectionGroupHints } from '../utils';
 
 export function setupSectionCredits(metadata: Metadata): void {
   const addCreditBtn = getAddCreditButton();
@@ -54,7 +54,7 @@ export function setupSectionCredits(metadata: Metadata): void {
     groups.push(artistRolesGroup);
   });
 
-  setSection(
-    new Section('credits', 'Bandcamp credits', metadata.credits.text, groups)
-  );
+  setSection(new Section('credits', 'Bandcamp credits', metadata.credits.text));
+
+  groups.forEach(setupSectionGroupHints);
 }

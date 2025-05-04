@@ -260,13 +260,13 @@ export function setupSectionGroupHints(group: VariationsGroup): void {
       element instanceof HTMLInputElement ||
       element instanceof HTMLSelectElement
     ) {
-      setupInputHintButton(element, group.variations);
+      setupFormElementHintButton(element, group.variations);
     }
   });
 }
 
-export function setupInputHintButton(
-  element: HTMLInputElement | HTMLSelectElement,
+export function setupFormElementHintButton(
+  element: FormElement,
   variations: Variation[]
 ): void {
   // Skip checkbox inputs
@@ -359,7 +359,7 @@ export function setupGroupInputObserver(group: VariationsGroup): void {
     // First check if the node itself is an input
     if (node instanceof HTMLInputElement && node.type === 'text') {
       if (group) {
-        setupInputHintButton(node, group.variations);
+        setupFormElementHintButton(node, group.variations);
       }
     }
 
@@ -369,7 +369,7 @@ export function setupGroupInputObserver(group: VariationsGroup): void {
       if (newInputs.length > 0) {
         newInputs.forEach((input) => {
           if (input instanceof HTMLInputElement && group) {
-            setupInputHintButton(input, group.variations);
+            setupFormElementHintButton(input, group.variations);
           }
         });
       }
@@ -394,7 +394,7 @@ export function setupGroupInputObserver(group: VariationsGroup): void {
         const allInputs = dragDropList.querySelectorAll('input[type="text"]');
         allInputs.forEach((input) => {
           if (input instanceof HTMLInputElement) {
-            setupInputHintButton(input, group.variations);
+            setupFormElementHintButton(input, group.variations);
           }
         });
       }, 100); // Small delay to ensure DOM is fully updated

@@ -418,10 +418,9 @@ function setupSectionSubmissionNotes(submissionNotes: MetadataValue): void {
   );
 
   setSection(
-    new Section('submission_notes', 'Auto-generated submission notes', '', [
-      submissionNotesGroup
-    ])
+    new Section('submission_notes', 'Auto-generated submission notes', '')
   );
 
   setSubmissionNotes(metadataValueAsString(submissionNotes));
+  setupSectionGroupHints(submissionNotesGroup);
 }

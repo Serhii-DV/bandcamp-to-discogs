@@ -7,11 +7,16 @@ import {
   showNotificationInfo
 } from './modules/notification';
 import { log } from '../utils/console';
+import { registerCustomElements } from './components/custom-elements';
 
 import './css/b2d.css';
 import './css/notification.css';
 import { MessageType } from '../app/core/messageType';
 import { chromeListenToMessage, getExtensionUrl } from '../utils/chrome';
+
+// Call this before main() to ensure custom elements are registered
+// before any DOM operations
+registerCustomElements();
 
 main();
 

@@ -18,9 +18,9 @@ import {
   instanceOfFormElement,
   instanceOfFormTextElement
 } from '../../app/draft/types';
-import { Section } from 'src/discogs/app/draft/section';
-import { VariationsGroup } from 'src/discogs/app/draft/variationGroup';
-import { Variation } from 'src/discogs/app/draft/variation';
+import { Section } from '../../../discogs/app/draft/section';
+import { VariationsGroup } from '../../../discogs/app/draft/variationGroup';
+import { Variation } from '../../../discogs/app/draft/variation';
 import {
   checkInput,
   getCountrySelect,
@@ -32,6 +32,7 @@ import {
   selectOptionByValue,
   setInputValue
 } from './html';
+import { setupFormElementsHintButtons } from '../../../discogs/components/hint-button-utils';
 
 // General setup
 const activeButtonClassName = 'button-green';
@@ -260,9 +261,8 @@ export function setSection(section: Section): void {
 }
 
 export function setupSectionGroupHints(group: VariationsGroup): void {
-  group.elements.filter(instanceOfFormElement).forEach((element) => {
-    setupFormElementHintButton(element, group.variations);
-  });
+  const elements = group.elements.filter(instanceOfFormElement);
+  setupFormElementsHintButtons(elements, group.variations);
 }
 
 export function setupFormElementHintButton(

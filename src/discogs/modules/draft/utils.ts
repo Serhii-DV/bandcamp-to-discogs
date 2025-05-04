@@ -307,12 +307,7 @@ export function setupFormElementHintButton(
       item.title = variation.toString();
 
       onClick(item, () => {
-        // Handle different element types
-        if (element instanceof HTMLSelectElement) {
-          selectOptionByValue(element, variation.toString());
-        } else {
-          setInputValue(element, variation.toString());
-        }
+        setFormElementValue(element, variation.toString());
         dropdown.remove();
       });
 

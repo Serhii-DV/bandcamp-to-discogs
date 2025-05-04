@@ -1,3 +1,4 @@
+import { FormElement, FormTextElement } from 'src/discogs/app/draft/types';
 import { debug } from '../../../utils/console';
 
 export const getArtistNameInput = (): HTMLInputElement => {
@@ -63,8 +64,16 @@ export function getSubmissionFormSectionNotes(): HTMLElement | null {
   return document.querySelector('#subform .notes');
 }
 
+export function setFormElementValue(element: FormElement, value: string): void {
+  if (element instanceof HTMLSelectElement) {
+    selectOptionByValue(element, value);
+  } else {
+    setInputValue(element, value);
+  }
+}
+
 export function setInputValue(
-  inputElement: HTMLInputElement | HTMLTextAreaElement,
+  inputElement: FormTextElement,
   value: string
 ): void {
   const prev = inputElement.value;

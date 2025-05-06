@@ -7,7 +7,7 @@ import {
 import { VariationsGroup } from '../../../app/draft/variationGroup';
 import { Section } from '../../../app/draft/section';
 import { getQuantityInput } from '../html';
-import { setSection, setFormat } from '../utils';
+import { setSection, setFormat, setupSectionGroupsHints } from '../utils';
 import { FormElement } from '../../../app/draft/types';
 
 export function setupSectionFormat(format: Format): void {
@@ -62,9 +62,10 @@ export function setupSectionFormat(format: Format): void {
         description: descriptionValue,
         freeText: freeTextValue
       }),
-      [qtyGroup, fileTypeGroup, formatDescriptionGroup, formatFreeTextGroup]
+      [fileTypeGroup, formatDescriptionGroup]
     )
   );
 
   setFormat(qtyValue, fileTypeValue, descriptionValue);
+  setupSectionGroupsHints([qtyGroup, formatFreeTextGroup]);
 }

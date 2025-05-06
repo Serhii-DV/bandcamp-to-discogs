@@ -265,6 +265,10 @@ export function setupSectionGroupHints(group: VariationsGroup): void {
   setupHintButtonsForElements(elements, group.variations);
 }
 
+export function setupSectionGroupsHints(groups: VariationsGroup[]): void {
+  groups.forEach(setupSectionGroupHints);
+}
+
 export function setupFormElementHintButton(
   element: FormElement,
   variations: Variation[]

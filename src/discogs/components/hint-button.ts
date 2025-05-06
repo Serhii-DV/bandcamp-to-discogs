@@ -7,87 +7,52 @@ import { setFormElementValue } from '../modules/draft/html';
 const ICON_MAGIC = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
 /**
- * HintButton Web Component
- * Creates a button that shows suggestions when clicked
+ * Create a button element with hint functionality
+ * Shows a dropdown with variations when clicked
  */
-export class HintButton extends HTMLElement {
-  private variations: Variation[] = [];
-  private targetElement: FormElement | null = null;
+function createHintButton(
+  element: FormElement,
+  variations: Variation[]
+): HTMLElement {
+  const button = document.createElement('button');
+  button.type = 'button'; // Prevent form submission
+  button.className = 'b2d-hint-button';
+  button.innerHTML = ICON_MAGIC;
+  button.title = 'Click to show suggestions';
 
-  static get observedAttributes() {
-    return ['title'];
-  }
+  onClick(button, (event) => {
+    event.stopPropagation();
 
-  constructor() {
-    super();
-    this.innerHTML = ICON_MAGIC;
-    this.className = 'b2d-hint-button';
-    this.title = this.getAttribute('title') || 'Click to show suggestions';
-    this.setupEventListeners();
-  }
-
-  /**
-   * Connect the component to a form element
-   */
-  connectToElement(element: FormElement) {
-    if (!element) return;
-    this.targetElement = element;
-  }
-
-  /**
-   * Set the variations to be displayed in the dropdown
-   */
-  setVariations(variations: Variation[]) {
-    this.variations = variations;
-  }
-
-  /**
-   * Initialize event listeners
-   */
-  private setupEventListeners() {
-    onClick(this, (event) => {
-      event.stopPropagation(); // Prevent document click from immediately closing dropdown
-      this.showDropdown();
-    });
-  }
-
-  /**
-   * Show the dropdown with variations
-   */
-  private showDropdown() {
     // Remove any existing dropdown
     const existingDropdown = document.querySelector('.b2d-hint-dropdown');
     if (existingDropdown) existingDropdown.remove();
 
-    if (!this.targetElement || !this.variations.length) return;
+    if (!variations.length) return;
 
     // Create dropdown container
     const dropdown = document.createElement('div');
     dropdown.className = 'b2d-hint-dropdown';
 
     // Add variations as dropdown items
-    this.variations.forEach((variation) => {
+    variations.forEach((variation) => {
       const item = document.createElement('div');
       item.className = 'b2d-hint-item';
       item.textContent = truncateText(variation.toString(), 50);
       item.title = variation.toString();
 
       onClick(item, () => {
-        setFormElementValue(
-          this.targetElement as FormElement,
-          variation.toString()
-        );
+        setFormElementValue(element, variation.toString());
         dropdown.remove();
       });
 
       dropdown.appendChild(item);
     });
 
-    // Add dropdown to document body for absolute positioning
+    // Add dropdown to document body
     document.body.appendChild(dropdown);
 
-    // Position the dropdown directly under the button
-    const buttonRect = this.getBoundingClientRect();
+    // Position dropdown
+    const buttonRect = button.getBoundingClientRect();
     const scrollX = window.scrollX || window.pageXOffset;
     const scrollY = window.scrollY || window.pageYOffset;
 
@@ -99,77 +64,62 @@ export class HintButton extends HTMLElement {
 
     // Close dropdown when clicking outside
     const closeDropdown = (e: MouseEvent) => {
-      if (!dropdown.contains(e.target as Node) && e.target !== this) {
+      if (!dropdown.contains(e.target as Node) && e.target !== button) {
         dropdown.remove();
         document.removeEventListener('click', closeDropdown);
       }
     };
 
-    // Add delayed listener to allow the current click to complete
+    // Delayed listener
     setTimeout(() => {
       document.addEventListener('click', closeDropdown);
     }, 0);
-  }
+  });
 
-  /**
-   * Utility method to create a new hint button for a form element
-   */
-  static createFor(
-    element: FormElement,
-    variations: Variation[]
-  ): HTMLElement | null {
-    // Skip checkbox inputs
-    if (element instanceof HTMLInputElement && element.type === 'checkbox') {
-      return null;
-    }
-
-    // Check if a hint button has already been added to this input or select
-    if (
-      element.previousElementSibling &&
-      element.previousElementSibling.classList.contains('b2d-hint-button')
-    ) {
-      return null; // Hint button already exists for this element
-    }
-
-    // Create element using createElement instead of constructor
-    const hintButton = document.createElement('hint-button') as HTMLElement;
-
-    // Safely access methods if they exist
-    if (typeof (hintButton as any).connectToElement === 'function') {
-      (hintButton as any).connectToElement(element);
-    }
-
-    if (typeof (hintButton as any).setVariations === 'function') {
-      (hintButton as any).setVariations(variations);
-    }
-
-    element.insertAdjacentElement('beforebegin', hintButton);
-    return hintButton;
-  }
+  return button;
 }
 
-// Add this function at the bottom of hint-button.ts
-export function registerHintButton() {
-  // More robust checking for customElements API
-  if (typeof customElements === 'undefined') {
-    console.warn('customElements API is not available');
-    return;
+/**
+ * Create a hint button for a form element
+ * @param element The form element to attach the hint button to
+ * @param variations The variations to show in the dropdown
+ * @returns The created hint button element or null if not applicable
+ */
+export function createHintButtonFor(
+  element: FormElement,
+  variations: Variation[]
+): HTMLElement | null {
+  // Skip checkbox inputs
+  if (element instanceof HTMLInputElement && element.type === 'checkbox') {
+    return null;
   }
 
-  try {
-    // Check if already defined
-    if (!customElements.get('hint-button')) {
-      customElements.define('hint-button', HintButton);
-      console.log('HintButton custom element registered successfully');
-    }
-  } catch (error) {
-    console.error('Failed to register HintButton custom element:', error);
+  // Check if a hint button has already been added to this input or select
+  if (
+    element.previousElementSibling &&
+    element.previousElementSibling.classList.contains('b2d-hint-button')
+  ) {
+    return null; // Hint button already exists for this element
   }
+
+  const hintButton = createHintButton(element, variations);
+
+  // Insert the button before the element
+  element.insertAdjacentElement('beforebegin', hintButton);
+  return hintButton;
 }
 
-// Try to register the element during module load, but wrap in try/catch
-try {
-  registerHintButton();
-} catch (error) {
-  console.error('Error during initial HintButton registration:', error);
+/**
+ * Set up hint buttons for multiple form elements
+ * @param elements Array of form elements to attach hint buttons to
+ * @param variations Array of variations to use for all elements
+ * @returns Array of created hint buttons (excluding nulls)
+ */
+export function setupHintButtonsForElements(
+  elements: FormElement[],
+  variations: Variation[]
+): (HTMLElement | null)[] {
+  return elements.map((element) => {
+    return createHintButtonFor(element, variations);
+  });
 }

@@ -32,7 +32,7 @@ import {
   selectOptionByValue,
   setInputValue
 } from './html';
-import { setupFormElementsHintButtons } from '../../../discogs/components/hint-button-utils';
+import { setupHintButtonsForElements } from '../../../discogs/components/hint-button';
 
 // General setup
 const activeButtonClassName = 'button-green';
@@ -262,7 +262,7 @@ export function setSection(section: Section): void {
 
 export function setupSectionGroupHints(group: VariationsGroup): void {
   const elements = group.elements.filter(instanceOfFormElement);
-  setupFormElementsHintButtons(elements, group.variations);
+  setupHintButtonsForElements(elements, group.variations);
 }
 
 export function setupFormElementHintButton(

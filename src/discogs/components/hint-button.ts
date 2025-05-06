@@ -37,7 +37,9 @@ function createHintButton(
     variations.forEach((variation) => {
       const item = document.createElement('div');
       item.className = 'b2d-hint-item';
-      item.textContent = truncateText(variation.toString(), 50);
+
+      // Always show the full text without truncation
+      item.textContent = variation.toString();
       item.title = variation.toString();
 
       onClick(item, () => {
@@ -59,7 +61,17 @@ function createHintButton(
     dropdown.style.position = 'absolute';
     dropdown.style.top = `${buttonRect.bottom + scrollY}px`;
     dropdown.style.left = `${buttonRect.left + scrollX}px`;
-    dropdown.style.minWidth = `${Math.max(buttonRect.width, 150)}px`;
+
+    // Set appropriate width based on element type
+    if (element instanceof HTMLTextAreaElement) {
+      // For TextArea, make dropdown wider to show more text
+      const width = Math.max(element.offsetWidth, 300); // At least 300px or element width
+      dropdown.style.minWidth = `${width}px`;
+      dropdown.style.maxWidth = '500px'; // Cap the maximum width
+    } else {
+      dropdown.style.minWidth = `${Math.max(buttonRect.width, 150)}px`;
+    }
+
     dropdown.style.zIndex = '1000';
 
     // Close dropdown when clicking outside

@@ -15,7 +15,6 @@ import { truncateText } from '../../../utils/string';
 import {
   FormElement,
   FormTextElement,
-  instanceOfFormElement,
   instanceOfFormTextElement
 } from '../../app/draft/types';
 import { Section } from '../../../discogs/app/draft/section';
@@ -32,7 +31,6 @@ import {
   selectOptionByValue,
   setInputValue
 } from './html';
-import { setupHintButtonsForElements } from '../../../discogs/components/hint-button';
 
 // General setup
 const activeButtonClassName = 'button-green';
@@ -260,13 +258,20 @@ export function setSection(section: Section): void {
   });
 }
 
+/**
+ * Set up hint buttons for a variation group
+ * @param group Variation group to set up hints for
+ */
 export function setupSectionGroupHints(group: VariationsGroup): void {
-  const elements = group.elements.filter(instanceOfFormElement);
-  setupHintButtonsForElements(elements, group.variations);
+  group.setupHints();
 }
 
+/**
+ * Set up hint buttons for multiple variation groups
+ * @param groups Array of variation groups to set up hints for
+ */
 export function setupSectionGroupsHints(groups: VariationsGroup[]): void {
-  groups.forEach(setupSectionGroupHints);
+  groups.forEach((group) => setupSectionGroupHints(group));
 }
 
 export function setupFormElementHintButton(

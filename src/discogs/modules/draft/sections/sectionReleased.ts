@@ -6,10 +6,15 @@ import { getReleasedDateInput } from '../html';
 import { setSection, setupSectionGroupHints } from '../utils';
 
 export function setupSectionReleased(metadata: Metadata): void {
+  const releasedDateInput = getReleasedDateInput();
+  const target = releasedDateInput;
   const releasedGroup = new VariationsGroup(
     'Date',
-    [getReleasedDateInput()],
-    [metadata.released.publishedDate, metadata.released.modifiedDate]
+    [releasedDateInput],
+    [metadata.released.publishedDate, metadata.released.modifiedDate],
+    false,
+    false,
+    target
   );
 
   setSection(

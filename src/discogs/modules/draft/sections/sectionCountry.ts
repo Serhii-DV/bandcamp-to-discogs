@@ -9,10 +9,14 @@ import { getCountrySelect } from '../html';
 import { setSection, setupSectionGroupHints, setCountry } from '../utils';
 
 export function setupSectionCountry(country: MetadataValue): void {
+  const countrySelect = getCountrySelect();
   const countryGroup = new VariationsGroup(
     'Country',
-    [getCountrySelect()],
-    metadataValueAsArray(country)
+    [countrySelect],
+    metadataValueAsArray(country),
+    false,
+    false,
+    countrySelect
   );
   const countryValue = metadataValueAsString(country);
 

@@ -9,10 +9,14 @@ import { getReleaseTitleInput } from '../html';
 import { setSection, setupSectionGroupHints } from '../utils';
 
 export function setupSectionTitle(title: MetadataValue): void {
+  const titleInput = getReleaseTitleInput();
   const titleGroup = new VariationsGroup(
     'Title',
-    [getReleaseTitleInput()],
-    metadataValueAsArray(title)
+    [titleInput],
+    metadataValueAsArray(title),
+    false,
+    false,
+    titleInput
   );
 
   setSection(

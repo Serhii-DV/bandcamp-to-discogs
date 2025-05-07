@@ -9,10 +9,15 @@ import { getLabelNameInput } from '../html';
 import { setSection, setupSectionGroupHints } from '../utils';
 
 export function setupSectionLabel(label: MetadataValue): void {
+  const labelNameInput = getLabelNameInput();
+  const target = labelNameInput;
   const labelGroup = new VariationsGroup(
     'Label',
-    [getLabelNameInput()],
-    metadataValueAsArray(label)
+    [labelNameInput],
+    metadataValueAsArray(label),
+    false,
+    false,
+    target
   );
 
   setSection(

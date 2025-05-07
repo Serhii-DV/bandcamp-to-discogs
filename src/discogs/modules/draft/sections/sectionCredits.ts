@@ -19,11 +19,13 @@ export function setupSectionCredits(metadata: Metadata): void {
     const artistListItem = element(
       "li[data-path*='" + index + "'] .drag_drop_content",
       inputsContainer
-    );
-    const artistRoleInputs = elements(
+    ) as HTMLElement;
+    const artistListItemTarget = artistNameInputs[0];
+    const artistRoleInput = element(
       '#add-role-input-' + index,
       inputsContainer
-    ) as HTMLInputElement[];
+    ) as HTMLInputElement;
+    const artistRoleTarget = artistRoleInput;
 
     if (artistNameInputs.length === 0) {
       click(addCreditBtn);
@@ -32,11 +34,11 @@ export function setupSectionCredits(metadata: Metadata): void {
     const artist = credit.artist.join(', ');
     const artistGroup = new VariationsGroup(
       artist,
-      artistRoleInputs,
+      [artistRoleInput],
       [credit.roles.join(', ')],
       false,
       true,
-      inputsContainer
+      artistRoleTarget
     );
     artistGroup.parent = artistListItem;
 
@@ -46,7 +48,7 @@ export function setupSectionCredits(metadata: Metadata): void {
       credit.artist,
       false,
       true,
-      inputsContainer
+      artistListItemTarget
     );
     artistRolesGroup.parent = artistListItem;
 

@@ -11,10 +11,14 @@ import { setSection, setFormat, setupSectionGroupsHints } from '../utils';
 import { FormElement } from '../../../app/draft/types';
 
 export function setupSectionFormat(format: Format): void {
+  const qtyInput = getQuantityInput();
   const qtyGroup = new VariationsGroup(
     'Quantity',
-    [getQuantityInput()],
-    metadataValueAsArray(format.qty)
+    [qtyInput],
+    metadataValueAsArray(format.qty),
+    false,
+    false,
+    qtyInput
   );
 
   const formatDescriptionTypeElements = elements(
@@ -23,28 +27,58 @@ export function setupSectionFormat(format: Format): void {
   const formatFileTypeContainer = formatDescriptionTypeElements[0];
   const formatDescriptionContainer = formatDescriptionTypeElements[2];
 
+  const fileTypeCheckboxes = elements(
+    'input[type="checkbox"]',
+    formatFileTypeContainer
+  ) as HTMLInputElement[];
+
+  const fileTypeTarget =
+    fileTypeCheckboxes.length > 0
+      ? fileTypeCheckboxes[0]
+      : (element(
+          '.format_descriptions_type h4 span',
+          formatFileTypeContainer
+        ) as HTMLElement);
+
   const fileTypeGroup = new VariationsGroup(
     'File Type',
-    elements(
-      'input[type="checkbox"]',
-      formatFileTypeContainer
-    ) as HTMLInputElement[],
-    metadataValueAsArray(format.fileType)
+    fileTypeCheckboxes,
+    metadataValueAsArray(format.fileType),
+    false,
+    false,
+    fileTypeTarget
   );
+
+  const formatDescriptionCheckboxes = elements(
+    'input[type="checkbox"]',
+    formatDescriptionContainer
+  ) as FormElement[];
+
+  const formatDescriptionTarget =
+    formatDescriptionCheckboxes.length > 0
+      ? (formatDescriptionCheckboxes[0] as HTMLElement)
+      : (element(
+          '.format_descriptions_type h4 span',
+          formatDescriptionContainer
+        ) as HTMLElement);
 
   const formatDescriptionGroup = new VariationsGroup(
     'Format Description',
-    elements(
-      'input[type="checkbox"]',
-      formatDescriptionContainer
-    ) as FormElement[],
-    metadataValueAsArray(format.description)
+    formatDescriptionCheckboxes,
+    metadataValueAsArray(format.description),
+    false,
+    false,
+    formatDescriptionTarget
   );
 
+  const freeTextInput = element('input#free-text-input-0') as HTMLInputElement;
   const formatFreeTextGroup = new VariationsGroup(
     'Free Text',
-    [element('input#free-text-input-0') as HTMLInputElement],
-    metadataValueAsArray(format.freeText)
+    [freeTextInput],
+    metadataValueAsArray(format.freeText),
+    false,
+    false,
+    freeTextInput
   );
 
   const qtyValue = metadataValueAsString(format.qty);
@@ -62,10 +96,10 @@ export function setupSectionFormat(format: Format): void {
         description: descriptionValue,
         freeText: freeTextValue
       }),
-      [fileTypeGroup, formatDescriptionGroup]
+      [formatDescriptionGroup]
     )
   );
 
   setFormat(qtyValue, fileTypeValue, descriptionValue);
-  setupSectionGroupsHints([qtyGroup, formatFreeTextGroup]);
+  setupSectionGroupsHints([qtyGroup, fileTypeGroup, formatFreeTextGroup]);
 }

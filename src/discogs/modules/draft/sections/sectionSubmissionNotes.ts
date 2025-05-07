@@ -15,10 +15,14 @@ import {
 export function setupSectionSubmissionNotes(
   submissionNotes: MetadataValue
 ): void {
+  const submissionNotesTextarea = getSubmissionNotesTextarea();
   const submissionNotesGroup = new VariationsGroup(
     'Submission notes',
-    [getSubmissionNotesTextarea()],
-    metadataValueAsArray(submissionNotes)
+    [submissionNotesTextarea],
+    metadataValueAsArray(submissionNotes),
+    false,
+    false,
+    submissionNotesTextarea
   );
 
   setSection(

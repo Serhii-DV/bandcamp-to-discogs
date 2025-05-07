@@ -12,11 +12,15 @@ import { getSection } from '../html';
 import { makeVariationsGroupClass, setSection } from '../utils';
 
 export function setupSectionStyles(metadata: Metadata): void {
+  const stylesSelect = element('#release-styles') as HTMLSelectElement;
+
   const stylesGroup = new VariationsGroup(
     '',
-    [element('#release-styles') as HTMLSelectElement],
+    [stylesSelect],
     metadata.genres.autoDetectedStyles,
-    true
+    true,
+    false,
+    stylesSelect
   );
 
   setSection(

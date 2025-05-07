@@ -1,14 +1,14 @@
 import { element, elements, valueToHtml } from '../../../../utils/html';
-import {
-  Format,
-  metadataValueAsArray,
-  metadataValueAsString
-} from '../../../app/metadata';
+import { Format } from '../../../app/metadata';
 import { VariationsGroup } from '../../../app/draft/variationGroup';
 import { Section } from '../../../app/draft/section';
 import { getQuantityInput } from '../html';
 import { setSection, setFormat, setupSectionGroupsHints } from '../utils';
 import { FormElement } from '../../../app/draft/types';
+import {
+  metadataValueAsArray,
+  metadataValueAsString
+} from '../../../app/metadataValue';
 
 export function setupSectionFormat(format: Format): void {
   const qtyInput = getQuantityInput();

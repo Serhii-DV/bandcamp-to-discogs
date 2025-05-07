@@ -1,4 +1,4 @@
-import { MetadataValueObject } from '../../../app/metadata';
+import { MetadataValueObject } from '../../../app/metadataValue';
 import { VariationsGroup } from '../../../app/draft/variationGroup';
 import { Section } from '../../../app/draft/section';
 import { getLabelNameInput } from '../html';

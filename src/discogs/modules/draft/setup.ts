@@ -4,7 +4,7 @@ import { click } from '../../../utils/html';
 import { autofillDurations, setNotes } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
-import { Metadata, MetadataValueObject } from '../../app/metadata';
+import { Metadata } from '../../app/metadata';
 import {
   getArtistNameInput,
   getNotesTextarea,
@@ -23,6 +23,7 @@ import { setupSectionCredits } from './sections/sectionCredits';
 import { setupSectionGenres } from './sections/sectionGenres';
 import { setupSectionStyles } from './sections/sectionStyles';
 import { setupSectionSubmissionNotes } from './sections/sectionSubmissionNotes';
+import { MetadataValueObject } from '../../app/metadataValue';
 
 export const setupDraftPage = () => {
   log('Setup draft page... (src/discogs/modules/draft/setup.ts)');

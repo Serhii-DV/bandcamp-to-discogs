@@ -2,7 +2,7 @@ import {
   MetadataValue,
   metadataValueAsArray,
   metadataValueAsString
-} from '../../../app/metadata';
+} from '../../../app/metadataValue';
 import { VariationsGroup } from '../../../app/draft/variationGroup';
 import { Section } from '../../../app/draft/section';
 import { getSubmissionNotesTextarea } from '../html';

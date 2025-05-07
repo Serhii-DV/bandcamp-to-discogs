@@ -1,5 +1,4 @@
 import { element, elements } from '../../../../utils/html';
-import { MetadataValueObject } from '../../../app/metadata';
 import { VariationsGroup } from '../../../app/draft/variationGroup';
 import { Section } from '../../../app/draft/section';
 import { getSection } from '../html';
@@ -8,6 +7,7 @@ import {
   setupSectionGroupHints,
   setupGroupInputObserver
 } from '../utils';
+import { MetadataValueObject } from '../../../app/metadataValue';
 
 export function setupSectionArtist(artist: MetadataValueObject): void {
   const artistSection = getSection('artist');

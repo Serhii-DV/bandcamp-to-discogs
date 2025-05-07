@@ -1,31 +1,23 @@
-import {
-  MetadataValue,
-  metadataValueAsArray,
-  metadataValueAsString
-} from '../../../app/metadata';
+import { MetadataValueObject } from '../../../app/metadata';
 import { VariationsGroup } from '../../../app/draft/variationGroup';
 import { Section } from '../../../app/draft/section';
 import { getLabelNameInput } from '../html';
 import { setSection, setupSectionGroupHints } from '../utils';
 
-export function setupSectionLabel(label: MetadataValue): void {
+export function setupSectionLabel(label: MetadataValueObject): void {
   const labelNameInput = getLabelNameInput();
   const target = labelNameInput;
   const labelGroup = new VariationsGroup(
     'Label',
     [labelNameInput],
-    metadataValueAsArray(label),
+    label.toArray(),
     false,
     false,
     target
   );
 
   setSection(
-    new Section(
-      'label',
-      'Bandcamp page label or artist name',
-      metadataValueAsString(label)
-    )
+    new Section('label', 'Bandcamp page label or artist name', label.toString())
   );
 
   setupSectionGroupHints(labelGroup);

@@ -4,7 +4,7 @@ import { click } from '../../../utils/html';
 import { autofillDurations, setNotes } from './utils';
 import { showNotificationInfo, showNotificationWarning } from '../notification';
 import { debug, log, logError } from '../../../utils/console';
-import { Metadata } from '../../app/metadata';
+import { Metadata, MetadataValueObject } from '../../app/metadata';
 import {
   getArtistNameInput,
   getNotesTextarea,
@@ -68,10 +68,15 @@ function setupReadMetadataButton() {
 function applyMetadata(metadata: Metadata) {
   debug('Apply Metadata...', metadata);
 
-  setupSectionArtist(metadata.artist);
-  setupSectionTitle(metadata.title);
-  setupSectionLabel(metadata.label);
-  setupSectionCountry(metadata.country);
+  const artistValue = new MetadataValueObject(metadata.artist);
+  const titleValue = new MetadataValueObject(metadata.title);
+  const labelValue = new MetadataValueObject(metadata.label);
+  const countryValue = new MetadataValueObject(metadata.country);
+
+  setupSectionArtist(artistValue);
+  setupSectionTitle(titleValue);
+  setupSectionLabel(labelValue);
+  setupSectionCountry(countryValue);
   setupSectionFormat(metadata.format);
   setupSectionReleased(metadata);
   setupSectionCredits(metadata);

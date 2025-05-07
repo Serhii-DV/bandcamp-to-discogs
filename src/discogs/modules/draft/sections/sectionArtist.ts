@@ -1,9 +1,5 @@
 import { element, elements } from '../../../../utils/html';
-import {
-  MetadataValue,
-  metadataValueAsArray,
-  metadataValueAsString
-} from '../../../app/metadata';
+import { MetadataValueObject } from '../../../app/metadata';
 import { VariationsGroup } from '../../../app/draft/variationGroup';
 import { Section } from '../../../app/draft/section';
 import { getSection } from '../html';
@@ -13,7 +9,7 @@ import {
   setupGroupInputObserver
 } from '../utils';
 
-export function setupSectionArtist(artist: MetadataValue): void {
+export function setupSectionArtist(artist: MetadataValueObject): void {
   const artistSection = getSection('artist');
   const inputsContainer = element('.drag-drop-list', artistSection);
   const artistInputs = elements(
@@ -21,7 +17,7 @@ export function setupSectionArtist(artist: MetadataValue): void {
     inputsContainer
   ) as HTMLInputElement[];
 
-  const artistValues = metadataValueAsArray(artist);
+  const artistValues = artist.toArray();
 
   // Create individual VariationsGroup for each artist input
   if (artistInputs.length > 0) {
@@ -47,7 +43,5 @@ export function setupSectionArtist(artist: MetadataValue): void {
     });
   }
 
-  setSection(
-    new Section('artist', 'Bandcamp artist name', metadataValueAsString(artist))
-  );
+  setSection(new Section('artist', 'Bandcamp artist name', artist.toString()));
 }

@@ -23,6 +23,21 @@ export interface Format {
   freeText: MetadataValue;
 }
 
+interface Artist {
+  name: string;
+  join: string;
+}
+
+interface ArtistMetadataValue {
+  name: MetadataValue;
+  join: string;
+}
+
+export interface ArtistMetadata {
+  value: string;
+  artists: ArtistMetadataValue[];
+}
+
 interface Released {
   publishedDate: string;
   modifiedDate: string;
@@ -41,7 +56,7 @@ interface Credits {
 
 interface MetadataParams {
   artist: string;
-  artists: string[];
+  artists: Artist[];
   title: string;
   label: string;
   trackQty: number;
@@ -58,7 +73,7 @@ interface MetadataParams {
 
 export class Metadata {
   version: string;
-  artist: MetadataValue;
+  artist: ArtistMetadata;
   title: MetadataValue;
   label: MetadataValue;
   format: Format;
@@ -73,19 +88,19 @@ export class Metadata {
     const manifest = getExtensionManifest();
 
     this.version = manifest.version;
-    this.artist = convertMetadataValue([
-      // Do not add default artist if there is more than one artist
-      ...(params.artists.length > 1
-        ? []
-        : [
-            params.artist,
-            capitalizeEachWord(params.artist),
-            convertArtistName(params.artist)
-          ]),
-      ...params.artists.map((artist) => capitalizeEachWord(artist)),
-      ...params.artists.map((artist) => convertArtistName(artist)),
-      ...params.artists
-    ]);
+
+    this.artist = {
+      value: params.artist,
+      artists: params.artists.map((artist) => ({
+        name: convertMetadataValue([
+          artist.name,
+          capitalizeEachWord(artist.name),
+          convertArtistName(artist.name)
+        ]),
+        join: artist.join
+      }))
+    };
+
     this.title = convertMetadataValue([
       params.title,
       capitalizeEachWord(params.title)
@@ -130,9 +145,18 @@ export class Metadata {
     const discogsGenres = keywordsToDiscogsGenres(release.keywords);
     const discogsStyles = keywordsToDiscogsStyles(release.keywords);
 
+    const artists: Artist[] = [];
+    release.releaseItem.artist.names.forEach((name, index) => {
+      const join = release.releaseItem.artist.joins[index] || '';
+      artists.push({
+        name,
+        join
+      });
+    });
+
     return new Metadata({
       artist: release.releaseItem.artist.asString,
-      artists: release.releaseItem.artist.asArray,
+      artists,
       title: release.releaseItem.title,
       label: release.label,
       released: {

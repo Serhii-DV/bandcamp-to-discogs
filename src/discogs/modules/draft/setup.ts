@@ -69,12 +69,11 @@ function setupReadMetadataButton() {
 function applyMetadata(metadata: Metadata) {
   debug('Apply Metadata...', metadata);
 
-  const artistValue = new MetadataValueObject(metadata.artist);
   const titleValue = new MetadataValueObject(metadata.title);
   const labelValue = new MetadataValueObject(metadata.label);
   const countryValue = new MetadataValueObject(metadata.country);
 
-  setupSectionArtist(artistValue);
+  setupSectionArtist(metadata.artist);
   setupSectionTitle(titleValue);
   setupSectionLabel(labelValue);
   setupSectionCountry(countryValue);

@@ -1,7 +1,7 @@
 import { onClick } from '../../utils/html';
 import { FormElement } from '../app/draft/types';
 import { Variation } from '../app/draft/variation';
-import { setFormElementValue } from '../modules/draft/html';
+import { setCheckboxValue, setFormElementValue } from '../modules/draft/html';
 
 const ICON_MAGIC = `<i class="icon icon-magic" role="img" aria-hidden="true"></i>`;
 
@@ -90,10 +90,25 @@ export class HintButton {
         item.title = variation.toString();
 
         onClick(item, () => {
-          // Apply the variation value to all the elements
-          this.elements.forEach((element) => {
-            setFormElementValue(element, variation.toString());
-          });
+          // Check if all elements are checkboxes
+          const allCheckboxes = this.elements.every(
+            (element) =>
+              element instanceof HTMLInputElement && element.type === 'checkbox'
+          );
+          const variationValue = variation.toString();
+
+          if (allCheckboxes) {
+            // Use checkExclusively when all elements are checkboxes
+            setCheckboxValue(
+              this.elements as HTMLInputElement[],
+              variationValue
+            );
+          } else {
+            // Apply the variation value to all the elements (original behavior)
+            this.elements.forEach((element) => {
+              setFormElementValue(element, variationValue);
+            });
+          }
           dropdown.remove();
         });
 

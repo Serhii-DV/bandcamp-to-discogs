@@ -62,13 +62,10 @@ function setupFileType(format: Format): void {
     formatFileTypeContainer
   ) as HTMLInputElement[];
 
-  const fileTypeTarget =
-    fileTypeCheckboxes.length > 0
-      ? fileTypeCheckboxes[0]
-      : (element(
-          '.format_descriptions_type h4 span',
-          formatFileTypeContainer
-        ) as HTMLElement);
+  const fileTypeTarget = element(
+    '.format_descriptions_type h4 span',
+    formatFileTypeContainer
+  ) as HTMLElement;
 
   const fileTypeGroup = new VariationsGroup(
     'File Type',
@@ -93,13 +90,10 @@ function setupFileDescription(format: Format): void {
     formatDescriptionContainer
   ) as FormElement[];
 
-  const formatDescriptionTarget =
-    formatDescriptionCheckboxes.length > 0
-      ? (formatDescriptionCheckboxes[0] as HTMLElement)
-      : (element(
-          '.format_descriptions_type h4 span',
-          formatDescriptionContainer
-        ) as HTMLElement);
+  const formatDescriptionTarget = element(
+    '.format_descriptions_type h4 span',
+    formatDescriptionContainer
+  ) as HTMLElement;
 
   const formatDescriptionGroup = new VariationsGroup(
     'Format Description',

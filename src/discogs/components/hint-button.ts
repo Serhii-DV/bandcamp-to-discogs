@@ -139,6 +139,30 @@ export class HintButton {
       }, 0);
     });
 
+    // Auto-apply first variation if the first form element is empty
+    if (this.elements.length > 0 && this.variations.length > 0) {
+      const firstElement = this.elements[0];
+      let isEmpty = false;
+
+      // Check if the element value is empty
+      if (firstElement instanceof HTMLInputElement) {
+        isEmpty = !firstElement.value.trim();
+      } else if (firstElement instanceof HTMLTextAreaElement) {
+        isEmpty = !firstElement.value.trim();
+      } else if (typeof firstElement === 'object' && firstElement !== null) {
+        // Handle the case when firstElement is a custom form element object
+        const value = (firstElement as any).value || '';
+        isEmpty = !value.toString().trim();
+      }
+
+      // Apply the first variation if the element is empty
+      if (isEmpty) {
+        this.elements.forEach((element) => {
+          setFormElementValue(element, this.variations[0].toString());
+        });
+      }
+    }
+
     // Insert the button before or after the target element
     const insertPosition =
       this.placement === 'before' ? 'beforebegin' : 'afterend';

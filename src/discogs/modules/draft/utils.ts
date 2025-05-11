@@ -247,6 +247,7 @@ export function setSection(section: Section): void {
   b2dSection.innerHTML = `
   <h4>${section.title}</h4>
   <div class="b2d-content">${section.content}</div>
+  <div class="b2d-note">Use one of the auto-generated values by clicking on the button <i class="icon icon-magic" role="img" aria-hidden="true"></i></div>
   ${makeVariationsGroupsHtml(groupsWithoutParent)}
 `;
 

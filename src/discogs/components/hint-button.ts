@@ -61,136 +61,218 @@ export class HintButton {
       return null; // Hint button already exists for this element
     }
 
+    const button = this.createHintButtonElement();
+
+    onClick(button, (event) => {
+      event.stopPropagation();
+      this.showDropdown(button);
+    });
+
+    // Auto-apply first variation if applicable
+    this.autoApplyFirstVariation();
+
+    // Insert the button before or after the target element
+    this.insertButton(button);
+
+    return button;
+  }
+
+  /**
+   * Creates the hint button element
+   * @returns The created button element
+   */
+  private createHintButtonElement(): HTMLElement {
     const button = document.createElement('button');
     button.type = 'button'; // Prevent form submission
     button.className = 'b2d-hint-button';
     button.innerHTML = ICON_MAGIC;
     button.title = 'Click to show suggestions based on Bandcamp release';
+    return button;
+  }
 
-    onClick(button, (event) => {
-      event.stopPropagation();
+  /**
+   * Shows the dropdown with variation options
+   * @param button The button element that triggered the dropdown
+   */
+  private showDropdown(button: HTMLElement): void {
+    // Remove any existing dropdown
+    const existingDropdown = document.querySelector('.b2d-hint-dropdown');
+    if (existingDropdown) existingDropdown.remove();
 
-      // Remove any existing dropdown
-      const existingDropdown = document.querySelector('.b2d-hint-dropdown');
-      if (existingDropdown) existingDropdown.remove();
+    if (!this.variations.length) return;
 
-      if (!this.variations.length) return;
+    // Create dropdown container
+    const dropdown = document.createElement('div');
+    dropdown.className = 'b2d-hint-dropdown';
 
-      // Create dropdown container
-      const dropdown = document.createElement('div');
-      dropdown.className = 'b2d-hint-dropdown';
-
-      // Helper function to check if a variation matches the current element value
-      const isVariationSelected = (variation: Variation): boolean => {
-        if (!this.elements.length) return false;
-
-        const variationValue = variation.toString().trim();
-
-        // Check against first element value (could be extended to check all)
-        const firstElement = this.elements[0];
-        let currentValue = '';
-
-        if (firstElement instanceof HTMLInputElement) {
-          if (firstElement.type === 'checkbox') {
-            // For checkboxes, match the variation text to checked status
-            return (
-              (firstElement.checked && variationValue === 'true') ||
-              (!firstElement.checked && variationValue === 'false')
-            );
-          }
-          currentValue = firstElement.value;
-        } else if (firstElement instanceof HTMLTextAreaElement) {
-          currentValue = firstElement.value;
-        } else if (typeof firstElement === 'object' && firstElement !== null) {
-          currentValue = ((firstElement as any).value || '').toString();
-        }
-
-        return currentValue.trim() === variationValue;
-      };
-
-      // Add variations as dropdown items
-      this.variations.forEach((variation) => {
-        const item = document.createElement('div');
-        item.className = 'b2d-hint-item';
-
-        // Check if this variation matches current value
-        const isSelected = isVariationSelected(variation);
-        const itemText = variation.toString();
-
-        // Add selected class for matched items
-        if (isSelected) {
-          item.classList.add('b2d-hint-selected');
-        }
-
-        item.textContent = itemText;
-        item.title = itemText;
-
-        onClick(item, () => {
-          // Check if all elements are checkboxes
-          const allCheckboxes = this.elements.every(
-            (element) =>
-              element instanceof HTMLInputElement && element.type === 'checkbox'
-          );
-          const variationValue = variation.toString();
-
-          if (allCheckboxes) {
-            // Use checkExclusively when all elements are checkboxes
-            setCheckboxValue(
-              this.elements as HTMLInputElement[],
-              variationValue
-            );
-          } else {
-            // Apply the variation value to all the elements (original behavior)
-            this.elements.forEach((element) => {
-              setFormElementValue(element, variationValue);
-            });
-          }
-          dropdown.remove();
-        });
-
-        dropdown.appendChild(item);
-      });
-
-      // Add dropdown to document body
-      document.body.appendChild(dropdown);
-
-      // Position dropdown
-      const buttonRect = button.getBoundingClientRect();
-      const scrollX = window.scrollX || window.pageXOffset;
-      const scrollY = window.scrollY || window.pageYOffset;
-
-      dropdown.style.position = 'absolute';
-      dropdown.style.top = `${buttonRect.bottom + scrollY}px`;
-      dropdown.style.left = `${buttonRect.left + scrollX}px`;
-
-      // Set appropriate width based on first element type (if available)
-      const firstElement = this.elements[0];
-      if (firstElement && firstElement instanceof HTMLTextAreaElement) {
-        // For TextArea, make dropdown wider to show more text
-        const width = Math.max(firstElement.offsetWidth, 300); // At least 300px or element width
-        dropdown.style.minWidth = `${width}px`;
-        dropdown.style.maxWidth = '500px'; // Cap the maximum width
-      } else {
-        dropdown.style.minWidth = `${Math.max(buttonRect.width, 150)}px`;
-      }
-
-      dropdown.style.zIndex = '1000';
-
-      // Close dropdown when clicking outside
-      const closeDropdown = (e: MouseEvent) => {
-        if (!dropdown.contains(e.target as Node) && e.target !== button) {
-          dropdown.remove();
-          document.removeEventListener('click', closeDropdown);
-        }
-      };
-
-      // Delayed listener
-      setTimeout(() => {
-        document.addEventListener('click', closeDropdown);
-      }, 0);
+    // Add variations as dropdown items
+    this.variations.forEach((variation) => {
+      const item = this.createVariationItem(variation, dropdown);
+      dropdown.appendChild(item);
     });
 
-    // Auto-apply first variation if the first form element is empty
+    // Add dropdown to document body
+    document.body.appendChild(dropdown);
+
+    // Position the dropdown
+    this.positionDropdown(dropdown, button);
+
+    // Setup closing behavior
+    this.setupDropdownClosing(dropdown, button);
+  }
+
+  /**
+   * Creates a variation item for the dropdown
+   * @param variation The variation to create an item for
+   * @param dropdown The dropdown element containing the items
+   * @returns The created variation item element
+   */
+  private createVariationItem(
+    variation: Variation,
+    dropdown: HTMLElement
+  ): HTMLElement {
+    const item = document.createElement('div');
+    item.className = 'b2d-hint-item';
+
+    // Check if this variation matches current value
+    const isSelected = this.isVariationSelected(variation);
+    const itemText = variation.toString();
+
+    // Add selected class for matched items
+    if (isSelected) {
+      item.classList.add('b2d-hint-selected');
+    }
+
+    item.textContent = itemText;
+    item.title = itemText;
+
+    onClick(item, () => {
+      this.applyVariation(variation);
+      dropdown.remove();
+    });
+
+    return item;
+  }
+
+  /**
+   * Positions the dropdown relative to the button
+   * @param dropdown The dropdown element to position
+   * @param button The button element the dropdown is attached to
+   */
+  private positionDropdown(dropdown: HTMLElement, button: HTMLElement): void {
+    const buttonRect = button.getBoundingClientRect();
+    const scrollX = window.scrollX || window.pageXOffset;
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    dropdown.style.position = 'absolute';
+    dropdown.style.top = `${buttonRect.bottom + scrollY}px`;
+    dropdown.style.left = `${buttonRect.left + scrollX}px`;
+
+    // Set appropriate width based on first element type (if available)
+    const firstElement = this.elements[0];
+    if (firstElement && firstElement instanceof HTMLTextAreaElement) {
+      // For TextArea, make dropdown wider to show more text
+      const width = Math.max(firstElement.offsetWidth, 300); // At least 300px or element width
+      dropdown.style.minWidth = `${width}px`;
+      dropdown.style.maxWidth = '500px'; // Cap the maximum width
+    } else {
+      dropdown.style.minWidth = `${Math.max(buttonRect.width, 150)}px`;
+    }
+
+    dropdown.style.zIndex = '1000';
+  }
+
+  /**
+   * Sets up event listeners to close the dropdown when clicking outside
+   * @param dropdown The dropdown element
+   * @param button The button element that triggered the dropdown
+   */
+  private setupDropdownClosing(
+    dropdown: HTMLElement,
+    button: HTMLElement
+  ): void {
+    const closeDropdown = (e: MouseEvent) => {
+      if (!dropdown.contains(e.target as Node) && e.target !== button) {
+        dropdown.remove();
+        document.removeEventListener('click', closeDropdown);
+      }
+    };
+
+    // Delayed listener
+    setTimeout(() => {
+      document.addEventListener('click', closeDropdown);
+    }, 0);
+  }
+
+  /**
+   * Applies the selected variation to the form elements
+   * @param variation The variation to apply
+   */
+  private applyVariation(variation: Variation): void {
+    // Check if all elements are checkboxes
+    const allCheckboxes = this.elements.every(
+      (element) =>
+        element instanceof HTMLInputElement && element.type === 'checkbox'
+    );
+    const variationValue = variation.toString();
+
+    if (allCheckboxes) {
+      // Use checkExclusively when all elements are checkboxes
+      setCheckboxValue(this.elements as HTMLInputElement[], variationValue);
+    } else {
+      // Apply the variation value to all the elements (original behavior)
+      this.elements.forEach((element) => {
+        setFormElementValue(element, variationValue);
+      });
+    }
+  }
+
+  /**
+   * Checks if a variation matches the current element value
+   * @param variation The variation to check
+   * @returns Whether the variation matches the current element value
+   */
+  private isVariationSelected(variation: Variation): boolean {
+    if (!this.elements.length) return false;
+
+    const variationValue = variation.toString().trim();
+
+    // Check against first element value (could be extended to check all)
+    const firstElement = this.elements[0];
+    let currentValue = '';
+
+    if (firstElement instanceof HTMLInputElement) {
+      if (firstElement.type === 'checkbox') {
+        // For checkboxes, match the variation text to checked status
+        return (
+          (firstElement.checked && variationValue === 'true') ||
+          (!firstElement.checked && variationValue === 'false')
+        );
+      }
+      currentValue = firstElement.value;
+    } else if (firstElement instanceof HTMLTextAreaElement) {
+      currentValue = firstElement.value;
+    } else if (typeof firstElement === 'object' && firstElement !== null) {
+      currentValue = ((firstElement as any).value || '').toString();
+    }
+
+    return currentValue.trim() === variationValue;
+  }
+
+  /**
+   * Inserts the button before or after the target element
+   * @param button The button element to insert
+   */
+  private insertButton(button: HTMLElement): void {
+    const insertPosition =
+      this.placement === 'before' ? 'beforebegin' : 'afterend';
+    this.target.insertAdjacentElement(insertPosition, button);
+  }
+
+  /**
+   * Auto-applies the first variation if the first form element is empty
+   */
+  private autoApplyFirstVariation(): void {
     if (this.elements.length > 0 && this.variations.length > 0) {
       const firstElement = this.elements[0];
       let isEmpty = false;
@@ -213,12 +295,5 @@ export class HintButton {
         });
       }
     }
-
-    // Insert the button before or after the target element
-    const insertPosition =
-      this.placement === 'before' ? 'beforebegin' : 'afterend';
-    this.target.insertAdjacentElement(insertPosition, button);
-
-    return button;
   }
 }

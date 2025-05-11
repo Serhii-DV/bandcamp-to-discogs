@@ -65,7 +65,7 @@ export class HintButton {
     button.type = 'button'; // Prevent form submission
     button.className = 'b2d-hint-button';
     button.innerHTML = ICON_MAGIC;
-    button.title = 'Click to show suggestions';
+    button.title = 'Click to show suggestions based on Bandcamp release';
 
     onClick(button, (event) => {
       event.stopPropagation();

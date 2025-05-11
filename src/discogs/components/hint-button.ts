@@ -80,14 +80,50 @@ export class HintButton {
       const dropdown = document.createElement('div');
       dropdown.className = 'b2d-hint-dropdown';
 
+      // Helper function to check if a variation matches the current element value
+      const isVariationSelected = (variation: Variation): boolean => {
+        if (!this.elements.length) return false;
+
+        const variationValue = variation.toString().trim();
+
+        // Check against first element value (could be extended to check all)
+        const firstElement = this.elements[0];
+        let currentValue = '';
+
+        if (firstElement instanceof HTMLInputElement) {
+          if (firstElement.type === 'checkbox') {
+            // For checkboxes, match the variation text to checked status
+            return (
+              (firstElement.checked && variationValue === 'true') ||
+              (!firstElement.checked && variationValue === 'false')
+            );
+          }
+          currentValue = firstElement.value;
+        } else if (firstElement instanceof HTMLTextAreaElement) {
+          currentValue = firstElement.value;
+        } else if (typeof firstElement === 'object' && firstElement !== null) {
+          currentValue = ((firstElement as any).value || '').toString();
+        }
+
+        return currentValue.trim() === variationValue;
+      };
+
       // Add variations as dropdown items
       this.variations.forEach((variation) => {
         const item = document.createElement('div');
         item.className = 'b2d-hint-item';
 
-        // Always show the full text without truncation
-        item.textContent = variation.toString();
-        item.title = variation.toString();
+        // Check if this variation matches current value
+        const isSelected = isVariationSelected(variation);
+        const itemText = variation.toString();
+
+        // Add selected class for matched items
+        if (isSelected) {
+          item.classList.add('b2d-hint-selected');
+        }
+
+        item.textContent = itemText;
+        item.title = itemText;
 
         onClick(item, () => {
           // Check if all elements are checkboxes

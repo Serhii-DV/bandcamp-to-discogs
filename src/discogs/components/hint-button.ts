@@ -236,19 +236,32 @@ export class HintButton {
     if (!this.elements.length) return false;
 
     const variationValue = variation.toString().trim();
-
-    // Check against first element value (could be extended to check all)
     const firstElement = this.elements[0];
-    let currentValue = '';
 
+    // Check if we're dealing with a checkbox list
+    const allCheckboxes = this.elements.every(
+      (element) =>
+        element instanceof HTMLInputElement && element.type === 'checkbox'
+    );
+
+    if (allCheckboxes && this.elements.length > 1) {
+      // For checkbox lists, check if variation value matches any checked boxes
+      const selectedValues = this.getSelectedCheckboxValues();
+      return selectedValues.includes(variationValue);
+    } else if (
+      firstElement instanceof HTMLInputElement &&
+      firstElement.type === 'checkbox'
+    ) {
+      // For a single checkbox, match the variation text to checked status
+      return (
+        (firstElement.checked && variationValue === 'true') ||
+        (!firstElement.checked && variationValue === 'false')
+      );
+    }
+
+    // For text inputs and textareas, compare with element value
+    let currentValue = '';
     if (firstElement instanceof HTMLInputElement) {
-      if (firstElement.type === 'checkbox') {
-        // For checkboxes, match the variation text to checked status
-        return (
-          (firstElement.checked && variationValue === 'true') ||
-          (!firstElement.checked && variationValue === 'false')
-        );
-      }
       currentValue = firstElement.value;
     } else if (firstElement instanceof HTMLTextAreaElement) {
       currentValue = firstElement.value;
@@ -257,6 +270,47 @@ export class HintButton {
     }
 
     return currentValue.trim() === variationValue;
+  }
+
+  /**
+   * Gets the values of all checked checkboxes in the elements array
+   * @returns Array of values from checked checkboxes
+   */
+  private getSelectedCheckboxValues(): string[] {
+    const selectedValues: string[] = [];
+
+    this.elements.forEach((element) => {
+      if (
+        element instanceof HTMLInputElement &&
+        element.type === 'checkbox' &&
+        element.checked
+      ) {
+        // Get the value of the checkbox or its associated label text if value is empty
+        let value = element.value.trim();
+
+        // If checkbox has no value, try to get its label text or data attribute
+        if (!value || value === 'on') {
+          const id = element.id;
+          if (id) {
+            const label = document.querySelector(`label[for="${id}"]`);
+            if (label) {
+              value = label.textContent?.trim() || '';
+            }
+          }
+
+          // If still no value, check for data attributes
+          if (!value) {
+            value = element.dataset.value || '';
+          }
+        }
+
+        if (value) {
+          selectedValues.push(value);
+        }
+      }
+    });
+
+    return selectedValues;
   }
 
   /**

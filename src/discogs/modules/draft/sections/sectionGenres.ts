@@ -27,7 +27,11 @@ export function setupSectionGenres(metadata: Metadata): void {
     new Section(
       'genres',
       'Bandcamp genres related data',
-      valueToHtml({ keywords: metadata.genres.keywords })
+      'Genres were generated based on Bandcamp release keywords.' +
+        valueToHtml({
+          keywords: metadata.genres.keywords,
+          genres: metadata.genres.autoDetectedGenres
+        })
     )
   );
 }

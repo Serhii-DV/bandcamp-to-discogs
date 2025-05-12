@@ -46,6 +46,14 @@ export function extractCredits(text: string): Credit[] {
   for (const line of lines) {
     let match: RegExpMatchArray | null;
 
+    // Match "role: artist" format
+    if ((match = line.match(/^(.+?)\s*:\s*(.+)$/))) {
+      const roles = cleanRoles(match[1]);
+      const artist = cleanArtist(match[2]);
+      processArtistString(artist, roles, credits);
+      continue;
+    }
+
     // Match "role - artist" format
     if ((match = line.match(/^(.+?)\s*[-–—]\s*(.+)$/))) {
       const roles = cleanRoles(match[1]);

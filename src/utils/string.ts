@@ -186,3 +186,29 @@ export function safeFilename(value: string): string {
     .replace(/[^a-zA-Z0-9]/gi, '_')
     .toLowerCase();
 }
+
+/**
+ * Normalizes Roman numerals in text by converting them to uppercase.
+ * For example, "Ii" becomes "II", "Iii" becomes "III", etc.
+ * Specifically excludes words like "mix" and "civic" from being treated as Roman numerals.
+ *
+ * @param inputString - The string in which to normalize Roman numerals.
+ * @returns The string with Roman numerals converted to uppercase.
+ */
+export function normalizeRomanNumerals(inputString: string): string {
+  // Match Roman numerals (i, v, x, l, c, d, m) in any case
+  // The word boundary ensures we match isolated numerals
+  return inputString.replace(/\b[ivxlcdm]+\b/gi, (match) => {
+    // Exclude specific words that shouldn't be treated as Roman numerals
+    const wordLower = match.toLowerCase();
+    if (wordLower === 'mix' || wordLower === 'civic') {
+      return match; // Return the original match for excluded words
+    }
+
+    // For other potential Roman numerals, convert to uppercase if valid
+    if (/^[ivxlcdm]+$/i.test(match)) {
+      return match.toUpperCase();
+    }
+    return match;
+  });
+}

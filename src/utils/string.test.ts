@@ -6,6 +6,7 @@ import {
   convertNewlinesToBreaks,
   convertToAlias,
   getTextInitials,
+  normalizeRomanNumerals,
   normalizeSpaces,
   removeBrackets,
   removeInvisibleChars,
@@ -679,5 +680,66 @@ describe('normalizeSpaces', () => {
 
   it('should handle strings with only spaces', () => {
     expect(normalizeSpaces('   ')).toBe(' ');
+  });
+});
+
+describe('normalizeRomanNumerals', () => {
+  it('should convert mixed-case Roman numerals to uppercase', () => {
+    expect(normalizeRomanNumerals('i')).toBe('I');
+    expect(normalizeRomanNumerals('Ii')).toBe('II');
+    expect(normalizeRomanNumerals('iii')).toBe('III');
+    expect(normalizeRomanNumerals('Iv')).toBe('IV');
+    expect(normalizeRomanNumerals('Vi')).toBe('VI');
+    expect(normalizeRomanNumerals('xii')).toBe('XII');
+  });
+
+  it('should handle Roman numerals within text', () => {
+    expect(normalizeRomanNumerals('Chapter iv: The Beginning')).toBe(
+      'Chapter IV: The Beginning'
+    );
+    expect(normalizeRomanNumerals('World War ii ended in 1945')).toBe(
+      'World War II ended in 1945'
+    );
+    expect(
+      normalizeRomanNumerals('Star Wars Episode vi: Return of the Jedi')
+    ).toBe('Star Wars Episode VI: Return of the Jedi');
+  });
+
+  it('should normalize multiple Roman numerals in text', () => {
+    expect(normalizeRomanNumerals('i, ii, and iii are Roman numerals')).toBe(
+      'I, II, and III are Roman numerals'
+    );
+    expect(
+      normalizeRomanNumerals('Sections iv through viii cover advanced topics')
+    ).toBe('Sections IV through VIII cover advanced topics');
+  });
+
+  it('should not modify non-Roman numerals', () => {
+    expect(normalizeRomanNumerals('hello world')).toBe('hello world');
+    expect(normalizeRomanNumerals('123 abc')).toBe('123 abc');
+  });
+
+  it('should handle empty strings', () => {
+    expect(normalizeRomanNumerals('')).toBe('');
+  });
+
+  it('should not modify words that happen to contain Roman numeral letters', () => {
+    expect(normalizeRomanNumerals('mix')).toBe('mix'); // 'mix' contains 'ix' but isn't a Roman numeral in context
+    expect(normalizeRomanNumerals('civic')).toBe('civic'); // 'civic' contains 'iv' but isn't a Roman numeral
+  });
+
+  it('should handle strings with punctuation around Roman numerals', () => {
+    expect(normalizeRomanNumerals('(iv)')).toBe('(IV)');
+    expect(normalizeRomanNumerals('"vi"')).toBe('"VI"');
+    expect(normalizeRomanNumerals('ix.')).toBe('IX.');
+  });
+
+  it('should correctly identify isolated Roman numerals', () => {
+    expect(normalizeRomanNumerals('i ii iii iv v vi vii viii ix x')).toBe(
+      'I II III IV V VI VII VIII IX X'
+    );
+    expect(
+      normalizeRomanNumerals('xi xii xiii xiv xv xvi xvii xviii xix xx')
+    ).toBe('XI XII XIII XIV XV XVI XVII XVIII XIX XX');
   });
 });

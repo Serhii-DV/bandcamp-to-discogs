@@ -12,7 +12,7 @@ import {
 import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
-import { capitalizeEachWord } from '../../utils/string';
+import { capitalizeEachWord, removeYearInBrackets } from '../../utils/string';
 import { Credit, extractCredits } from '../../app/credit';
 import { MetadataValue, convertMetadataValue } from './metadataValue';
 
@@ -103,7 +103,8 @@ export class Metadata {
 
     this.title = convertMetadataValue([
       params.title,
-      capitalizeEachWord(params.title)
+      capitalizeEachWord(params.title),
+      removeYearInBrackets(params.title)
     ]);
     this.label = convertMetadataValue([
       params.artist === params.label

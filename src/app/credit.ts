@@ -1,4 +1,5 @@
 import { convertBreaksToNewlines } from '../utils/string';
+import creditsMapping from '../data/credits_mapping.json';
 
 export interface Credit {
   artist: string[];
@@ -40,7 +41,7 @@ export function extractCredits(text: string): Credit[] {
     .map((l) => l.trim())
     .filter(Boolean)
     .filter((line) => !line.startsWith('©')); // Ignore copyright lines
-  const results: Credit[] = [];
+  const credits: Credit[] = [];
 
   for (const line of lines) {
     let match: RegExpMatchArray | null;
@@ -49,7 +50,7 @@ export function extractCredits(text: string): Credit[] {
     if ((match = line.match(/^(.+?)\s*[-–—]\s*(.+)$/))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      processArtistString(artist, roles, results);
+      processArtistString(artist, roles, credits);
       continue;
     }
 
@@ -57,7 +58,7 @@ export function extractCredits(text: string): Credit[] {
     if ((match = line.match(/^(.+?)\s*by\s*(.+)$/i))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      processArtistString(artist, roles, results);
+      processArtistString(artist, roles, credits);
       continue;
     }
 
@@ -66,12 +67,26 @@ export function extractCredits(text: string): Credit[] {
       const roles = cleanRoles(match[1]);
       const additionalRoles = cleanRoles(match[3]);
       const artist = cleanArtist(match[2]);
-      processArtistString(artist, [...roles, ...additionalRoles], results);
+      processArtistString(artist, [...roles, ...additionalRoles], credits);
       continue;
     }
   }
 
-  return results;
+  return mapCreditRoles(credits);
+}
+
+/**
+ * Maps role names to their standardized versions using the credits_mapping.json file
+ * @param credits Array of credits to map the roles for
+ * @returns A new array of credits with mapped role names
+ */
+function mapCreditRoles(credits: Credit[]): Credit[] {
+  return credits.map((credit) => ({
+    artist: [...credit.artist],
+    roles: credit.roles.map(
+      (role) => creditsMapping[role as keyof typeof creditsMapping] || role
+    )
+  }));
 }
 
 function processArtistString(

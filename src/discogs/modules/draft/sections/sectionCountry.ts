@@ -10,8 +10,6 @@ export function setupSectionCountry(country: MetadataValueObject): void {
     'Country',
     [countrySelect],
     country.toArray(),
-    false,
-    false,
     countrySelect
   );
   const countryValue = country.toString();

@@ -11,8 +11,6 @@ export function setupSectionStyles(metadata: Metadata): void {
     '',
     [stylesSelect],
     metadata.genres.autoDetectedStyles,
-    true,
-    false,
     stylesSelect
   );
 

@@ -20,8 +20,6 @@ export function setupSectionSubmissionNotes(
     'Submission notes',
     [submissionNotesTextarea],
     metadataValueAsArray(submissionNotes),
-    false,
-    false,
     submissionNotesTextarea
   );
 

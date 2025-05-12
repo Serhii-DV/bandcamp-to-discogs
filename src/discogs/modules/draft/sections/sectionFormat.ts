@@ -43,8 +43,6 @@ function setupQuantity(format: Format): void {
     'Quantity',
     [qtyInput],
     metadataValueAsArray(format.qty),
-    false,
-    false,
     qtyInput
   );
 
@@ -71,8 +69,6 @@ function setupFileType(format: Format): void {
     'File Type',
     fileTypeCheckboxes,
     metadataValueAsArray(format.fileType),
-    false,
-    false,
     fileTypeTarget
   );
 
@@ -99,8 +95,6 @@ function setupFileDescription(format: Format): void {
     'Format Description',
     formatDescriptionCheckboxes,
     metadataValueAsArray(format.description),
-    false,
-    false,
     formatDescriptionTarget
   );
 
@@ -113,8 +107,6 @@ function setupFreeText(format: Format): void {
     'Free Text',
     [freeTextInput],
     metadataValueAsArray(format.freeText),
-    false,
-    false,
     freeTextInput
   );
 

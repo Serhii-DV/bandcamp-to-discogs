@@ -11,8 +11,6 @@ export function setupSectionLabel(label: MetadataValueObject): void {
     'Label',
     [labelNameInput],
     label.toArray(),
-    false,
-    false,
     target
   );
 

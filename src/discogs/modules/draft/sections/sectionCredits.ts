@@ -16,10 +16,6 @@ export function setupSectionCredits(metadata: Metadata): void {
       '#artist-name-credits-input-' + index,
       inputsContainer
     ) as HTMLInputElement[];
-    const artistListItem = element(
-      "li[data-path*='" + index + "'] .drag_drop_content",
-      inputsContainer
-    ) as HTMLElement;
     const artistListItemTarget = artistNameInputs[0];
     const artistRoleInput = element(
       '#add-role-input-' + index,
@@ -36,21 +32,15 @@ export function setupSectionCredits(metadata: Metadata): void {
       artist,
       [artistRoleInput],
       [credit.roles.join(', ')],
-      false,
-      true,
       artistRoleTarget
     );
-    artistGroup.parent = artistListItem;
 
     const artistRolesGroup = new VariationsGroup(
       `Artist (${credit.artist.join(', ')})`,
       artistNameInputs,
       credit.artist,
-      false,
-      true,
       artistListItemTarget
     );
-    artistRolesGroup.parent = artistListItem;
 
     groups.push(artistGroup);
     groups.push(artistRolesGroup);

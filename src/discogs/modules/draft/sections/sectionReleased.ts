@@ -12,8 +12,6 @@ export function setupSectionReleased(metadata: Metadata): void {
     'Date',
     [releasedDateInput],
     [metadata.released.publishedDate, metadata.released.modifiedDate],
-    false,
-    false,
     target
   );
 

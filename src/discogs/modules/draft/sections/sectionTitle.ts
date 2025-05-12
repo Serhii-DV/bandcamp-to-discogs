@@ -10,8 +10,6 @@ export function setupSectionTitle(title: MetadataValueObject): void {
     'Title',
     [titleInput],
     title.toArray(),
-    false,
-    false,
     titleInput
   );
 

@@ -16,8 +16,6 @@ export function setupSectionGenres(metadata: Metadata): void {
     'Genres',
     genreInputs,
     metadata.genres.autoDetectedGenres,
-    true,
-    false,
     target
   );
 

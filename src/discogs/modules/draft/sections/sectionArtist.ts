@@ -52,8 +52,6 @@ function setupArtistsInputs(
       'Name',
       [artistNameInput],
       artistNameMeta.toArray(),
-      false,
-      true,
       artistNameInput
     );
 
@@ -69,8 +67,6 @@ function setupArtistsInputs(
         'Join',
         [artistJoinInput],
         [artist.join],
-        false,
-        true,
         artistJoinInput
       );
 

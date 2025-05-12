@@ -1,11 +1,14 @@
 # Change log
 
-## 0.21.0 (2025-04-xx)
+## 0.21.0 (2025-05-xx)
 
 ### Features
 
 - core: Added basic tests (Jest)
 - core: Refactor. Load keyword mapping and discogs styles directly.
+- discogs: UI. Added button hints with a dropdown suggestions to the Draft page.
+- discogs: UI. Added notes to the sections.
+- discogs: Added suggestions for Credits section.
 
 ## 0.20.0 (2025-02-23)
 

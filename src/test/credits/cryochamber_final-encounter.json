@@ -5,16 +5,16 @@
     {
       "artist": ["Mehdi Saleh"],
       "roles": [
-        "Written",
-        "Produced",
-        "Performed"
+        "Written By",
+        "Producer",
+        "Performer"
       ]
     },
     {
       "artist": ["Simon Heath"],
       "roles": [
         "Artwork",
-        "Mastering"
+        "Mastered By"
       ]
     }
   ]

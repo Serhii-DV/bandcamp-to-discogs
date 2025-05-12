@@ -5,9 +5,9 @@
     {
       "artist": ["Robert Kozletsky"],
       "roles": [
-        "Written",
-        "Produced",
-        "Performed"
+        "Written By",
+        "Producer",
+        "Performer"
       ]
     },
     {
@@ -19,7 +19,7 @@
     {
       "artist": ["Simon Heath"],
       "roles": [
-        "Mastering"
+        "Mastered By"
       ]
     }
   ]

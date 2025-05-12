@@ -7,9 +7,9 @@
         "Nicolas Van Meirhaeghe"
       ],
       "roles": [
-        "Recorded",
-        "Composed",
-        "Produced"
+        "Recorder",
+        "Composed By",
+        "Producer"
       ]
     },
     {
@@ -17,9 +17,9 @@
         "Peter Verwimp"
       ],
       "roles": [
-        "Recorded",
-        "Composed",
-        "Produced"
+        "Recorder",
+        "Composed By",
+        "Producer"
       ]
     },
     {
@@ -33,7 +33,7 @@
     {
       "artist": ["Ronald Mariën", "Stratosphere"],
       "roles": [
-        "Mastered"
+        "Mastered By"
       ]
     }
   ]

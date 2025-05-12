@@ -8,6 +8,7 @@ import { convertArtistName } from '../modules/submission';
 import { generateSelfReleasedLabel } from '../modules/discogs';
 import {
   capitalizeEachWord,
+  normalizeRomanNumerals,
   removeLeadingZeroOrColon
 } from '../../utils/string';
 
@@ -147,7 +148,7 @@ export class DiscogsCsv {
     const tracks = this.tracks
       .map(
         (track) =>
-          `${capitalizeEachWord(track.displayName)} ${removeLeadingZeroOrColon(track.time.value)}`
+          `${capitalizeEachWord(normalizeRomanNumerals(track.displayName))} ${removeLeadingZeroOrColon(track.time.value)}`
       )
       .join('\r');
     const notes = this.notes ? this.notes.replace(/"/g, '""') : '';

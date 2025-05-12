@@ -127,6 +127,36 @@ export function removeInvisibleChars(inputString: string): string {
   return cleanedString;
 }
 
+/**
+ * Replaces multiple consecutive spaces with a single space.
+ *
+ * Examples:
+ * normalizeSpaces("Hello  World") => "Hello World"
+ * normalizeSpaces("Too    many      spaces") => "Too many spaces"
+ *
+ * @param inputString - The string in which to normalize spaces.
+ * @returns The string with multiple spaces replaced by single spaces.
+ */
+export function normalizeSpaces(inputString: string): string {
+  return inputString.replace(/\s{2,}/g, ' ');
+}
+
+/**
+ * Removes year values in brackets (e.g., "(2025)") from a string.
+ * Also normalizes any resulting double spaces.
+ *
+ * Examples:
+ * removeYearInBrackets("Album Title (2023)") => "Album Title"
+ * removeYearInBrackets("Movie (2020) - Director's Cut") => "Movie - Director's Cut"
+ *
+ * @param inputString - The string from which to remove year values in brackets.
+ * @returns The string with year values in brackets removed and spaces normalized.
+ */
+export function removeYearInBrackets(inputString: string): string {
+  const withoutYears = inputString.replace(/\s*\(\d{4}\)/g, '');
+  return normalizeSpaces(withoutYears);
+}
+
 export function removeLeadingZeroOrColon(str: string): string {
   return str.replace(/^(:|0)*/, '');
 }

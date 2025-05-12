@@ -6,9 +6,11 @@ import {
   convertNewlinesToBreaks,
   convertToAlias,
   getTextInitials,
+  normalizeSpaces,
   removeBrackets,
   removeInvisibleChars,
   removeLeadingZeroOrColon,
+  removeYearInBrackets,
   safeFilename,
   splitString,
   trimCharactersFromString,
@@ -615,5 +617,67 @@ describe('safeFilename', () => {
 
   it('should not add extra underscores for consecutive non-alphanumeric characters', () => {
     expect(safeFilename('Hello---World')).toBe('hello___world');
+  });
+});
+
+describe('removeYearInBrackets', () => {
+  it('should remove year values in brackets from the string and normalize spaces', () => {
+    expect(removeYearInBrackets('Album Title (2023)')).toBe('Album Title');
+    expect(removeYearInBrackets("Movie (2020) - Director's Cut")).toBe(
+      "Movie - Director's Cut"
+    );
+  });
+
+  it('should remove multiple year values in brackets and normalize spaces', () => {
+    expect(
+      removeYearInBrackets('First Album (2005)  and Second Album (2010)')
+    ).toBe('First Album and Second Album');
+  });
+
+  it('should only remove exact 4-digit years in brackets', () => {
+    expect(removeYearInBrackets('Album (123)')).toBe('Album (123)');
+    expect(removeYearInBrackets('Album (12345)')).toBe('Album (12345)');
+  });
+
+  it('should handle strings without year values in brackets', () => {
+    expect(removeYearInBrackets('Album Title')).toBe('Album Title');
+  });
+
+  it('should handle empty strings', () => {
+    expect(removeYearInBrackets('')).toBe('');
+  });
+
+  it('should handle strings with only year values in brackets', () => {
+    expect(removeYearInBrackets('(2023)')).toBe('');
+  });
+
+  it('should handle multiple spaces created after removing years', () => {
+    expect(removeYearInBrackets('Before (2020)  After')).toBe('Before After');
+    expect(removeYearInBrackets('Text (2020)   with    many spaces')).toBe(
+      'Text with many spaces'
+    );
+  });
+});
+
+describe('normalizeSpaces', () => {
+  it('should replace multiple spaces with a single space', () => {
+    expect(normalizeSpaces('Hello  World')).toBe('Hello World');
+    expect(normalizeSpaces('Too    many      spaces')).toBe('Too many spaces');
+  });
+
+  it('should handle strings with no extra spaces', () => {
+    expect(normalizeSpaces('No extra spaces')).toBe('No extra spaces');
+  });
+
+  it('should handle strings with leading and trailing spaces', () => {
+    expect(normalizeSpaces('  Start and end  ')).toBe(' Start and end ');
+  });
+
+  it('should handle empty strings', () => {
+    expect(normalizeSpaces('')).toBe('');
+  });
+
+  it('should handle strings with only spaces', () => {
+    expect(normalizeSpaces('   ')).toBe(' ');
   });
 });

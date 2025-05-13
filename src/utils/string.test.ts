@@ -5,7 +5,6 @@ import {
   convertBreaksToNewlines,
   convertNewlinesToBreaks,
   convertToAlias,
-  formatTimeString,
   getTextInitials,
   normalizeRomanNumerals,
   normalizeSpaces,
@@ -742,35 +741,5 @@ describe('normalizeRomanNumerals', () => {
     expect(
       normalizeRomanNumerals('xi xii xiii xiv xv xvi xvii xviii xix xx')
     ).toBe('XI XII XIII XIV XV XVI XVII XVIII XIX XX');
-  });
-});
-
-describe('formatTimeString', () => {
-  it('should format time strings correctly', () => {
-    expect(formatTimeString('00:00:01')).toBe('0:01');
-    expect(formatTimeString('00:00:10')).toBe('0:10');
-    expect(formatTimeString('00:01:00')).toBe('1:00');
-    expect(formatTimeString('00:10:00')).toBe('10:00');
-    expect(formatTimeString('01:00:00')).toBe('1:00:00');
-    expect(formatTimeString('10:00:00')).toBe('10:00:00');
-  });
-
-  it('should handle non-zero values in multiple positions', () => {
-    expect(formatTimeString('01:23:45')).toBe('1:23:45');
-    expect(formatTimeString('00:12:34')).toBe('12:34');
-  });
-
-  it('should return the original string if not in expected time format', () => {
-    expect(formatTimeString('not a time')).toBe('not a time');
-    expect(formatTimeString('00:aa:bb')).toBe('00:aa:bb');
-  });
-
-  it('should handle empty strings', () => {
-    expect(formatTimeString('')).toBe('');
-  });
-
-  it('should handle partial time formats', () => {
-    expect(formatTimeString('00:30')).toBe('0:30');
-    expect(formatTimeString('12:30')).toBe('12:30');
   });
 });

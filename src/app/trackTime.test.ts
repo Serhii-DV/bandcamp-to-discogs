@@ -63,4 +63,72 @@ describe('TrackTime', () => {
       expect(trackTime.value).toBe('00:00:00');
     });
   });
+
+  describe('toFormattedString', () => {
+    it('should format time with hours ≥ 1', () => {
+      const trackTime1 = new TrackTime(1, 5, 10);
+      expect(trackTime1.toFormattedString()).toBe('1:05:10');
+
+      const trackTime2 = new TrackTime(10, 0, 0);
+      expect(trackTime2.toFormattedString()).toBe('10:00:00');
+    });
+
+    it('should format time with 0 hours and minutes ≥ 1', () => {
+      const trackTime1 = new TrackTime(0, 1, 5);
+      expect(trackTime1.toFormattedString()).toBe('1:05');
+
+      const trackTime2 = new TrackTime(0, 10, 0);
+      expect(trackTime2.toFormattedString()).toBe('10:00');
+    });
+
+    it('should format time with 0 hours, 0 minutes, and seconds', () => {
+      const trackTime1 = new TrackTime(0, 0, 1);
+      expect(trackTime1.toFormattedString()).toBe('0:01');
+
+      const trackTime2 = new TrackTime(0, 0, 10);
+      expect(trackTime2.toFormattedString()).toBe('0:10');
+    });
+
+    it('should handle complex cases', () => {
+      const trackTime1 = new TrackTime(1, 23, 45);
+      expect(trackTime1.toFormattedString()).toBe('1:23:45');
+
+      const trackTime2 = new TrackTime(0, 12, 34);
+      expect(trackTime2.toFormattedString()).toBe('12:34');
+    });
+  });
+
+  describe('toFormattedString', () => {
+    it('should format time with hours ≥ 1', () => {
+      const trackTime1 = new TrackTime(1, 5, 10);
+      expect(trackTime1.toFormattedString()).toBe('1:05:10');
+
+      const trackTime2 = new TrackTime(10, 0, 0);
+      expect(trackTime2.toFormattedString()).toBe('10:00:00');
+    });
+
+    it('should format time with 0 hours and minutes ≥ 1', () => {
+      const trackTime1 = new TrackTime(0, 1, 5);
+      expect(trackTime1.toFormattedString()).toBe('1:05');
+
+      const trackTime2 = new TrackTime(0, 10, 0);
+      expect(trackTime2.toFormattedString()).toBe('10:00');
+    });
+
+    it('should format time with 0 hours, 0 minutes, and seconds', () => {
+      const trackTime1 = new TrackTime(0, 0, 1);
+      expect(trackTime1.toFormattedString()).toBe('0:01');
+
+      const trackTime2 = new TrackTime(0, 0, 10);
+      expect(trackTime2.toFormattedString()).toBe('0:10');
+    });
+
+    it('should handle complex cases', () => {
+      const trackTime1 = new TrackTime(1, 23, 45);
+      expect(trackTime1.toFormattedString()).toBe('1:23:45');
+
+      const trackTime2 = new TrackTime(0, 12, 34);
+      expect(trackTime2.toFormattedString()).toBe('12:34');
+    });
+  });
 });

@@ -6,11 +6,7 @@ import { getDiscogsDateValue } from './utils';
 import { Metadata } from './metadata';
 import { convertArtistName } from '../modules/submission';
 import { generateSelfReleasedLabel } from '../modules/discogs';
-import {
-  capitalizeEachWord,
-  normalizeRomanNumerals,
-  removeLeadingZeroOrColon
-} from '../../utils/string';
+import { capitalizeEachWord, normalizeRomanNumerals } from '../../utils/string';
 
 /**
  * Represents a Discogs CSV entry.
@@ -148,7 +144,7 @@ export class DiscogsCsv {
     const tracks = this.tracks
       .map(
         (track) =>
-          `${capitalizeEachWord(normalizeRomanNumerals(track.displayName))} ${removeLeadingZeroOrColon(track.time.value)}`
+          `${capitalizeEachWord(normalizeRomanNumerals(track.displayName))} ${track.time.toFormattedString()}`
       )
       .join('\r');
     const notes = this.notes ? this.notes.replace(/"/g, '""') : '';

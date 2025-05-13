@@ -212,3 +212,47 @@ export function normalizeRomanNumerals(inputString: string): string {
     return match;
   });
 }
+
+/**
+ * Format time strings by removing leading zeros according to specific rules
+ * @param timeString - A time string in format "HH:MM:SS" or similar
+ * @returns Formatted time string
+ */
+export function formatTimeString(timeString: string): string {
+  if (!timeString) return '';
+
+  // Check if the string matches a time format pattern
+  const timePattern = /^(\d{2}):(\d{2})(?::(\d{2}))?$/;
+  const match = timeString.match(timePattern);
+
+  if (!match) return timeString;
+
+  // Extract hours, minutes, and seconds
+  const hours = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
+  const seconds = match[3] ? parseInt(match[3], 10) : null;
+
+  // Apply formatting rules
+  if (hours >= 1) {
+    // For times of 1 hour or more, show all components with leading zero removed from hours
+    if (seconds !== null) {
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    } else {
+      return `${hours}:${minutes.toString().padStart(2, '0')}`;
+    }
+  } else if (minutes >= 1) {
+    // For times with 0 hours but non-zero minutes
+    if (seconds !== null) {
+      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    } else {
+      return `${hours}:${minutes.toString().padStart(2, '0')}`;
+    }
+  } else {
+    // For times with just seconds
+    if (seconds !== null) {
+      return `0:${seconds.toString().padStart(2, '0')}`;
+    } else {
+      return `${hours}:${minutes.toString().padStart(2, '0')}`;
+    }
+  }
+}

@@ -2,12 +2,16 @@ import {
   camelCaseToReadable,
   capitalizeEachWord,
   containsOneOf,
+  convertBreaksToNewlines,
   convertNewlinesToBreaks,
   convertToAlias,
   getTextInitials,
+  normalizeRomanNumerals,
+  normalizeSpaces,
   removeBrackets,
   removeInvisibleChars,
   removeLeadingZeroOrColon,
+  removeYearInBrackets,
   safeFilename,
   splitString,
   trimCharactersFromString,
@@ -547,6 +551,49 @@ describe('convertNewlinesToBreaks', () => {
   });
 });
 
+describe('convertBreaksToNewlines', () => {
+  it('replaces <br> with newlines', () => {
+    const input = 'Line 1<br>Line 2';
+    const output = 'Line 1\nLine 2';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('replaces <br/> and <br /> with newlines (self-closing tags)', () => {
+    const input = 'Line 1<br/>Line 2<br />Line 3';
+    const output = 'Line 1\nLine 2\nLine 3';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('handles uppercase tags', () => {
+    const input = 'Line 1<BR>Line 2<BR/>Line 3<Br />';
+    const output = 'Line 1\nLine 2\nLine 3';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('removes carriage returns', () => {
+    const input = 'Line 1\r\nLine 2\rLine 3';
+    const output = 'Line 1\nLine 2Line 3';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('trims leading and trailing whitespace', () => {
+    const input = '  Line 1<br>Line 2  ';
+    const output = 'Line 1\nLine 2';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('returns empty string for input with only whitespace and breaks', () => {
+    const input = '  <br>  \r<br /> ';
+    const output = '';
+    expect(convertBreaksToNewlines(input)).toBe(output);
+  });
+
+  it('returns the same string if no <br> or \r is present', () => {
+    const input = 'Just a regular string.';
+    expect(convertBreaksToNewlines(input)).toBe(input);
+  });
+});
+
 describe('safeFilename', () => {
   it('should replace spaces with underscores', () => {
     expect(safeFilename('My File Name')).toBe('my_file_name');
@@ -571,5 +618,128 @@ describe('safeFilename', () => {
 
   it('should not add extra underscores for consecutive non-alphanumeric characters', () => {
     expect(safeFilename('Hello---World')).toBe('hello___world');
+  });
+});
+
+describe('removeYearInBrackets', () => {
+  it('should remove year values in brackets from the string and normalize spaces', () => {
+    expect(removeYearInBrackets('Album Title (2023)')).toBe('Album Title');
+    expect(removeYearInBrackets("Movie (2020) - Director's Cut")).toBe(
+      "Movie - Director's Cut"
+    );
+  });
+
+  it('should remove multiple year values in brackets and normalize spaces', () => {
+    expect(
+      removeYearInBrackets('First Album (2005)  and Second Album (2010)')
+    ).toBe('First Album and Second Album');
+  });
+
+  it('should only remove exact 4-digit years in brackets', () => {
+    expect(removeYearInBrackets('Album (123)')).toBe('Album (123)');
+    expect(removeYearInBrackets('Album (12345)')).toBe('Album (12345)');
+  });
+
+  it('should handle strings without year values in brackets', () => {
+    expect(removeYearInBrackets('Album Title')).toBe('Album Title');
+  });
+
+  it('should handle empty strings', () => {
+    expect(removeYearInBrackets('')).toBe('');
+  });
+
+  it('should handle strings with only year values in brackets', () => {
+    expect(removeYearInBrackets('(2023)')).toBe('');
+  });
+
+  it('should handle multiple spaces created after removing years', () => {
+    expect(removeYearInBrackets('Before (2020)  After')).toBe('Before After');
+    expect(removeYearInBrackets('Text (2020)   with    many spaces')).toBe(
+      'Text with many spaces'
+    );
+  });
+});
+
+describe('normalizeSpaces', () => {
+  it('should replace multiple spaces with a single space', () => {
+    expect(normalizeSpaces('Hello  World')).toBe('Hello World');
+    expect(normalizeSpaces('Too    many      spaces')).toBe('Too many spaces');
+  });
+
+  it('should handle strings with no extra spaces', () => {
+    expect(normalizeSpaces('No extra spaces')).toBe('No extra spaces');
+  });
+
+  it('should handle strings with leading and trailing spaces', () => {
+    expect(normalizeSpaces('  Start and end  ')).toBe(' Start and end ');
+  });
+
+  it('should handle empty strings', () => {
+    expect(normalizeSpaces('')).toBe('');
+  });
+
+  it('should handle strings with only spaces', () => {
+    expect(normalizeSpaces('   ')).toBe(' ');
+  });
+});
+
+describe('normalizeRomanNumerals', () => {
+  it('should convert mixed-case Roman numerals to uppercase', () => {
+    expect(normalizeRomanNumerals('i')).toBe('I');
+    expect(normalizeRomanNumerals('Ii')).toBe('II');
+    expect(normalizeRomanNumerals('iii')).toBe('III');
+    expect(normalizeRomanNumerals('Iv')).toBe('IV');
+    expect(normalizeRomanNumerals('Vi')).toBe('VI');
+    expect(normalizeRomanNumerals('xii')).toBe('XII');
+  });
+
+  it('should handle Roman numerals within text', () => {
+    expect(normalizeRomanNumerals('Chapter iv: The Beginning')).toBe(
+      'Chapter IV: The Beginning'
+    );
+    expect(normalizeRomanNumerals('World War ii ended in 1945')).toBe(
+      'World War II ended in 1945'
+    );
+    expect(
+      normalizeRomanNumerals('Star Wars Episode vi: Return of the Jedi')
+    ).toBe('Star Wars Episode VI: Return of the Jedi');
+  });
+
+  it('should normalize multiple Roman numerals in text', () => {
+    expect(normalizeRomanNumerals('i, ii, and iii are Roman numerals')).toBe(
+      'I, II, and III are Roman numerals'
+    );
+    expect(
+      normalizeRomanNumerals('Sections iv through viii cover advanced topics')
+    ).toBe('Sections IV through VIII cover advanced topics');
+  });
+
+  it('should not modify non-Roman numerals', () => {
+    expect(normalizeRomanNumerals('hello world')).toBe('hello world');
+    expect(normalizeRomanNumerals('123 abc')).toBe('123 abc');
+  });
+
+  it('should handle empty strings', () => {
+    expect(normalizeRomanNumerals('')).toBe('');
+  });
+
+  it('should not modify words that happen to contain Roman numeral letters', () => {
+    expect(normalizeRomanNumerals('mix')).toBe('mix'); // 'mix' contains 'ix' but isn't a Roman numeral in context
+    expect(normalizeRomanNumerals('civic')).toBe('civic'); // 'civic' contains 'iv' but isn't a Roman numeral
+  });
+
+  it('should handle strings with punctuation around Roman numerals', () => {
+    expect(normalizeRomanNumerals('(iv)')).toBe('(IV)');
+    expect(normalizeRomanNumerals('"vi"')).toBe('"VI"');
+    expect(normalizeRomanNumerals('ix.')).toBe('IX.');
+  });
+
+  it('should correctly identify isolated Roman numerals', () => {
+    expect(normalizeRomanNumerals('i ii iii iv v vi vii viii ix x')).toBe(
+      'I II III IV V VI VII VIII IX X'
+    );
+    expect(
+      normalizeRomanNumerals('xi xii xiii xiv xv xvi xvii xviii xix xx')
+    ).toBe('XI XII XIII XIV XV XVI XVII XVIII XIX XX');
   });
 });

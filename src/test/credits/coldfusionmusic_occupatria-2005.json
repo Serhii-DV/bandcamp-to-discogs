@@ -1,0 +1,12 @@
+{
+  "url": "https://coldfusionmusic.bandcamp.com/album/occupatria-2005",
+  "input": "Music: Marcin Bachtiak",
+  "expected": [
+    {
+      "artist": ["Marcin Bachtiak"],
+      "roles": [
+        "Music By"
+      ]
+    }
+  ]
+}

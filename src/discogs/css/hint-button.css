@@ -1,0 +1,101 @@
+/* Dropdown styles */
+.b2d-hint-button {
+  cursor: pointer;
+  margin-right: 5px;
+  background: none;
+  border: none;
+  color: #666;
+}
+
+.b2d-hint-button:hover {
+  color: #4285f4;
+}
+
+.b2d-hint-dropdown,
+.de-dark-theme .b2d-hint-dropdown {
+  position: absolute;
+  background: var(--bg-color) !important;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  min-width: 150px;
+}
+
+.b2d-hint-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.b2d-hint-item:hover,
+.de-dark-theme .b2d-hint-item:hover {
+  background-color: var(--hint-hover-color) !important;
+}
+
+.b2d-hint-dropdown {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Base styling for hint items */
+.b2d-hint-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 28px; /* Make space for the checkmark */
+}
+
+/* Add checkmark to selected items */
+.b2d-hint-selected:before {
+  content: '✅';
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Add checkmark on hover for non-selected items */
+.b2d-hint-item:not(.b2d-hint-selected):hover:before {
+  content: '✅';
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7; /* Make it slightly transparent */
+}
+
+.b2d-hint-checkmark {
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+/* Hide checkmarks with hover class by default */
+.b2d-hint-checkmark-hover {
+  display: none;
+}
+
+/* Show hover checkmarks only when parent item is hovered */
+.b2d-hint-item:hover .b2d-hint-checkmark-hover {
+  display: inline-block;
+}
+
+.b2d-hint-item:last-child {
+  border-bottom: none;
+}
+
+.b2d-hint-item:hover {
+  background-color: #f5f5f5;
+}

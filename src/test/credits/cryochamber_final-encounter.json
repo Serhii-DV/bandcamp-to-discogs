@@ -1,0 +1,21 @@
+{
+  "url": "https://cryochamber.bandcamp.com/album/final-encounter",
+  "input": "Written, Produced, Performed - Mehdi Saleh<br>Artwork & Mastering - Simon Heath",
+  "expected": [
+    {
+      "artist": ["Mehdi Saleh"],
+      "roles": [
+        "Written By",
+        "Producer",
+        "Performer"
+      ]
+    },
+    {
+      "artist": ["Simon Heath"],
+      "roles": [
+        "Artwork",
+        "Mastered By"
+      ]
+    }
+  ]
+}

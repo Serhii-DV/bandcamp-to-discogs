@@ -3,12 +3,12 @@
   "input": "Composed, programmed, mixed & mastered by Alberto \"XIII\" HERNÁNDEZ SERRADILLA for Crvor Martyrivm in 2018.",
   "expected": [
     {
-      "artist": "Alberto \"XIII\" HERNÁNDEZ SERRADILLA for Crvor Martyrivm",
+      "artist": ["Alberto \"XIII\" HERNÁNDEZ SERRADILLA for Crvor Martyrivm"],
       "roles": [
-        "Composed",
-        "Programmed",
-        "Mixed",
-        "Mastered"
+        "Composed By",
+        "Programmed By",
+        "Mixed By",
+        "Mastered By"
       ]
     }
   ]

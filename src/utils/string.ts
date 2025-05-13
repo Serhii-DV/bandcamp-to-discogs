@@ -127,6 +127,36 @@ export function removeInvisibleChars(inputString: string): string {
   return cleanedString;
 }
 
+/**
+ * Replaces multiple consecutive spaces with a single space.
+ *
+ * Examples:
+ * normalizeSpaces("Hello  World") => "Hello World"
+ * normalizeSpaces("Too    many      spaces") => "Too many spaces"
+ *
+ * @param inputString - The string in which to normalize spaces.
+ * @returns The string with multiple spaces replaced by single spaces.
+ */
+export function normalizeSpaces(inputString: string): string {
+  return inputString.replace(/\s{2,}/g, ' ');
+}
+
+/**
+ * Removes year values in brackets (e.g., "(2025)") from a string.
+ * Also normalizes any resulting double spaces.
+ *
+ * Examples:
+ * removeYearInBrackets("Album Title (2023)") => "Album Title"
+ * removeYearInBrackets("Movie (2020) - Director's Cut") => "Movie - Director's Cut"
+ *
+ * @param inputString - The string from which to remove year values in brackets.
+ * @returns The string with year values in brackets removed and spaces normalized.
+ */
+export function removeYearInBrackets(inputString: string): string {
+  const withoutYears = inputString.replace(/\s*\(\d{4}\)/g, '');
+  return normalizeSpaces(withoutYears);
+}
+
 export function removeLeadingZeroOrColon(str: string): string {
   return str.replace(/^(:|0)*/, '');
 }
@@ -142,9 +172,43 @@ export function convertNewlinesToBreaks(str: string): string {
   return str.replace(/\r\n|\r|\n/g, '<br>');
 }
 
+export function convertBreaksToNewlines(str: string): string {
+  // Replace `<br>` with `\n` and remove carriage returns
+  return str
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/\r/g, '')
+    .trim();
+}
+
 /** @see https://stackoverflow.com/a/8485137/3227570 */
 export function safeFilename(value: string): string {
   return transliterate(value)
     .replace(/[^a-zA-Z0-9]/gi, '_')
     .toLowerCase();
+}
+
+/**
+ * Normalizes Roman numerals in text by converting them to uppercase.
+ * For example, "Ii" becomes "II", "Iii" becomes "III", etc.
+ * Specifically excludes words like "mix" and "civic" from being treated as Roman numerals.
+ *
+ * @param inputString - The string in which to normalize Roman numerals.
+ * @returns The string with Roman numerals converted to uppercase.
+ */
+export function normalizeRomanNumerals(inputString: string): string {
+  // Match Roman numerals (i, v, x, l, c, d, m) in any case
+  // The word boundary ensures we match isolated numerals
+  return inputString.replace(/\b[ivxlcdm]+\b/gi, (match) => {
+    // Exclude specific words that shouldn't be treated as Roman numerals
+    const wordLower = match.toLowerCase();
+    if (wordLower === 'mix' || wordLower === 'civic') {
+      return match; // Return the original match for excluded words
+    }
+
+    // For other potential Roman numerals, convert to uppercase if valid
+    if (/^[ivxlcdm]+$/i.test(match)) {
+      return match.toUpperCase();
+    }
+    return match;
+  });
 }

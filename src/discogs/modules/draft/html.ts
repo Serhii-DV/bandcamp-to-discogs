@@ -1,3 +1,4 @@
+import { FormElement, FormTextElement } from 'src/discogs/app/draft/types';
 import { debug } from '../../../utils/console';
 
 export const getArtistNameInput = (): HTMLInputElement => {
@@ -32,6 +33,16 @@ export const getTrackTitleInputs = (): NodeListOf<HTMLInputElement> => {
   ) as NodeListOf<HTMLInputElement>;
 };
 
+export const getAddCreditButton = (): HTMLButtonElement => {
+  return document.getElementById('add-credit') as HTMLButtonElement;
+};
+
+export const getCreditsArtistNameInput = (): HTMLInputElement => {
+  return document.querySelector(
+    '.credit-artist-name-input'
+  ) as HTMLInputElement;
+};
+
 export const getNotesTextarea = (): HTMLTextAreaElement => {
   return document.querySelector(
     'textarea#release-notes-textarea'
@@ -53,8 +64,16 @@ export function getSubmissionFormSectionNotes(): HTMLElement | null {
   return document.querySelector('#subform .notes');
 }
 
+export function setFormElementValue(element: FormElement, value: string): void {
+  if (element instanceof HTMLSelectElement) {
+    selectOptionByValue(element, value);
+  } else {
+    setInputValue(element, value);
+  }
+}
+
 export function setInputValue(
-  inputElement: HTMLInputElement | HTMLTextAreaElement,
+  inputElement: FormTextElement,
   value: string
 ): void {
   const prev = inputElement.value;
@@ -68,14 +87,48 @@ export function setInputValue(
 }
 
 export function checkInput(inputElement: HTMLInputElement): void {
-  // if (inputElement.checked) {
-  //   return;
-  // }
+  if (inputElement.checked) {
+    return;
+  }
 
   inputElement.focus();
   inputElement.click();
   triggerInputEvent(inputElement);
   inputElement.blur();
+}
+
+export function uncheckInput(inputElement: HTMLInputElement): void {
+  if (!inputElement.checked) {
+    return;
+  }
+  inputElement.focus();
+  inputElement.click();
+  triggerInputEvent(inputElement);
+  inputElement.blur();
+}
+
+/**
+ * Checks a checkbox with the specified value and unchecks all other checkboxes in the provided array.
+ * @param elements Array of checkbox elements
+ * @param value The value of the checkbox to check exclusively
+ */
+export function setCheckboxValue(
+  elements: HTMLInputElement[],
+  value: string
+): void {
+  const checkElement = elements.find((element) => element.value === value);
+
+  if (!checkElement) {
+    debug(`Checkbox with value "${value}" not found.`);
+    return;
+  }
+
+  // First uncheck all checkboxes
+  elements.forEach((element) => {
+    uncheckInput(element);
+  });
+
+  checkInput(checkElement);
 }
 
 export function selectOptionByValue(

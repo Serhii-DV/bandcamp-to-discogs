@@ -10,6 +10,10 @@
 - discogs: UI. Added notes to the sections.
 - discogs: Added suggestions for Credits section.
 
+### Fixed
+
+- discogs: Issue with the time in seconds. Now it shows correct time with leading zero.
+
 ## 0.20.0 (2025-02-23)
 
 ### Features

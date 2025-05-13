@@ -7,26 +7,52 @@ import { Metadata } from './metadata';
 import { convertArtistName } from '../modules/submission';
 import { generateSelfReleasedLabel } from '../modules/discogs';
 import { capitalizeEachWord, normalizeRomanNumerals } from '../../utils/string';
+import { Track } from 'src/app/track';
+import { Release } from 'src/app/release';
+interface DiscogsCsvParams {
+  artist: string;
+  title: string;
+  label: string;
+  catno: string;
+  format: string;
+  genres: string[];
+  styles: string[];
+  tracks: Track[];
+  notes: string;
+  date: Date;
+  images: string;
+}
+
+interface CsvRow {
+  artist: string;
+  title: string;
+  label: string;
+  catno: string;
+  format: string;
+  genre: string;
+  style: string;
+  tracks: string;
+  notes: string;
+  date: string;
+  images: string;
+}
 
 /**
  * Represents a Discogs CSV entry.
  */
 export class DiscogsCsv {
-  /**
-   * Creates a new DiscogsCsv instance.
-   * @param {Object} params - The parameters for the DiscogsCsv.
-   * @param {String} params.artist - The artist name.
-   * @param {String} params.title - The release title.
-   * @param {String} params.label - The label name.
-   * @param {String} params.catno - The catalog number.
-   * @param {String} params.format - The release format.
-   * @param {Array<String>} params.genres - The genres associated with the release.
-   * @param {Array<String>} params.styles - The styles associated with the release.
-   * @param {Array<Track>} params.tracks - The tracks included in the release.
-   * @param {String} params.notes - Additional notes.
-   * @param {Date} params.date - The release date.
-   * @param {String} params.images - The image URLs associated with the release.
-   */
+  artist: string;
+  title: string;
+  label: string;
+  catno: string;
+  format: string;
+  genres: string[];
+  styles: string[];
+  tracks: Track[];
+  notes: string;
+  date: Date;
+  images: string;
+
   constructor({
     artist,
     title,
@@ -39,7 +65,7 @@ export class DiscogsCsv {
     notes,
     date,
     images
-  }) {
+  }: DiscogsCsvParams) {
     this.artist = convertArtistName(artist);
     this.title = title;
     this.label = label;
@@ -53,20 +79,15 @@ export class DiscogsCsv {
     this.images = images;
   }
 
-  /**
-   * Creates a DiscogsCsv instance from a Release object.
-   * @param {Release} release - The Release object to convert.
-   * @return {DiscogsCsv} - The converted DiscogsCsv instance.
-   */
-  static fromRelease(release) {
+  static fromRelease(release: Release): DiscogsCsv {
     const label =
-      release.artist === release.label
+      release.artist.asString === release.label
         ? generateSelfReleasedLabel(release.artist)
         : release.label;
     const metadata = Metadata.fromRelease(release);
 
     return new DiscogsCsv({
-      artist: release.releaseItem.artist,
+      artist: release.releaseItem.artist.asString,
       title: release.releaseItem.title,
       label: label,
       catno: 'none',
@@ -80,67 +101,36 @@ export class DiscogsCsv {
     });
   }
 
-  /**
-   * Adds a genre to the release.
-   * @param {String} genre - The genre to add.
-   * @returns {DiscogsCsv} - The updated DiscogsCsv instance.
-   */
-  addGenre(genre) {
+  addGenre(genre: string): DiscogsCsv {
     this.genres.push(genre);
     return this;
   }
 
-  /**
-   * Adds a style to the release.
-   * @param {String} style - The style to add.
-   * @returns {DiscogsCsv} - The updated DiscogsCsv instance.
-   */
-  addStyle(style) {
+  addStyle(style: string): DiscogsCsv {
     this.styles.push(style);
     return this;
   }
 
-  /**
-   * Adds a track to the release.
-   * @param {String} track - The track to add.
-   * @returns {DiscogsCsv} - The updated DiscogsCsv instance.
-   */
-  addTrack(track) {
+  addTrack(track: Track): DiscogsCsv {
     this.tracks.push(track);
     return this;
   }
 
-  /**
-   * Retrieves the concatenated genre string.
-   * @returns {String} - The concatenated genre string.
-   */
-  getGenre() {
+  getGenre(): string {
     return this.genres
       .filter((genre) => genre !== 'Folk, World, & Country')
       .join(', ');
   }
 
-  /**
-   * Retrieves the concatenated style string.
-   * @returns {String} - The concatenated style string.
-   */
-  getStyle() {
+  getStyle(): string {
     return this.styles.join(', ');
   }
 
-  /**
-   * Retrieves the formatted date value
-   * @returns {String} - The discogs date value
-   */
-  getDate() {
+  getDate(): string {
     return getDiscogsDateValue(this.date);
   }
 
-  /**
-   * Converts the DiscogsCsv instance to a CSV object.
-   * @returns {Object} - The CSV object representing the csv row object.
-   */
-  toCsvObject() {
+  toCsvObject(): CsvRow {
     const tracks = this.tracks
       .map(
         (track) =>

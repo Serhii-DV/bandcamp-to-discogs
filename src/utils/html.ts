@@ -2,7 +2,10 @@ import { log } from './console';
 import { camelCaseToReadable } from './string';
 import { getOwnProperty, isArray, isObject, isString } from './utils';
 
-export function elements(selector: string, parent?: Element): HTMLElement[] {
+export function elements(
+  selector: string,
+  parent?: Element | null
+): HTMLElement[] {
   return Array.from(
     (parent ? parent : document).querySelectorAll(selector)
   ) as HTMLElement[];
@@ -10,7 +13,7 @@ export function elements(selector: string, parent?: Element): HTMLElement[] {
 
 export function element(
   selector: string,
-  parent?: Element
+  parent?: Element | null
 ): HTMLElement | null {
   return (parent ? parent : document).querySelector(selector);
 }
@@ -138,15 +141,22 @@ export function enable(
 
 /**
  * Triggers click event on the element or array of elements
+ * @param element - The element(s) to click
+ * @param times - Number of times to click (default: 1)
  */
-export function click<T extends HTMLElement>(element: T | T[] | null): void {
+export function click<T extends HTMLElement>(
+  element: T | T[] | null,
+  times: number = 1
+): void {
   if (!element) return;
   if (isArray(element)) {
-    (element as T[]).forEach((el) => click(el));
+    (element as T[]).forEach((el) => click(el, times));
     return;
   }
 
-  (element as T).click();
+  for (let i = 0; i < times; i++) {
+    (element as T).click();
+  }
 
   return;
 }

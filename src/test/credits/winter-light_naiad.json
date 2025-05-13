@@ -1,0 +1,40 @@
+{
+  "url": "https://winter-light.bandcamp.com/album/naiad",
+  "input": "Recorded, composed and produced by Nicolas Van Meirhaeghe and Peter Verwimp.<br>Artwork, cover and design by Christel Morvan (Nesisart)<br>Mastered by Ronald Mariën (Stratosphere)<br><br>© Ashtoreth 2025<br>© Penumbral Aethyr 2025<br>© Winter-Light 2025",
+  "expected": [
+    {
+      "artist": [
+        "Nicolas Van Meirhaeghe"
+      ],
+      "roles": [
+        "Recorder",
+        "Composed By",
+        "Producer"
+      ]
+    },
+    {
+      "artist": [
+        "Peter Verwimp"
+      ],
+      "roles": [
+        "Recorder",
+        "Composed By",
+        "Producer"
+      ]
+    },
+    {
+      "artist": ["Christel Morvan", "Nesisart"],
+      "roles": [
+        "Artwork",
+        "Cover",
+        "Design"
+      ]
+    },
+    {
+      "artist": ["Ronald Mariën", "Stratosphere"],
+      "roles": [
+        "Mastered By"
+      ]
+    }
+  ]
+}

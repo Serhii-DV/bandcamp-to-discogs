@@ -12,14 +12,30 @@ import {
 import { getDiscogsDateValue } from './utils';
 import { Release } from '../../app/release';
 import { convertArtistName } from '../modules/submission';
-import { arrayUnique } from '../../utils/utils';
-import { capitalizeEachWord } from '../../utils/string';
+import { capitalizeEachWord, removeYearInBrackets } from '../../utils/string';
+import { Credit, extractCredits } from '../../app/credit';
+import { MetadataValue, convertMetadataValue } from './metadataValue';
 
 export interface Format {
   fileType: MetadataValue;
   qty: MetadataValue;
   description: MetadataValue;
   freeText: MetadataValue;
+}
+
+interface Artist {
+  name: string;
+  join: string;
+}
+
+interface ArtistMetadataValue {
+  name: MetadataValue;
+  join: string;
+}
+
+export interface ArtistMetadata {
+  value: string;
+  artists: ArtistMetadataValue[];
 }
 
 interface Released {
@@ -33,9 +49,14 @@ interface Genres {
   autoDetectedStyles: string[];
 }
 
+interface Credits {
+  text: string;
+  items: Credit[];
+}
+
 interface MetadataParams {
   artist: string;
-  artists: string[];
+  artists: Artist[];
   title: string;
   label: string;
   trackQty: number;
@@ -50,41 +71,16 @@ interface MetadataParams {
   releaseUrl: string;
 }
 
-export type MetadataValue = string | string[];
-
-export function metadataValueAsArray(value: MetadataValue): string[] {
-  return Array.isArray(value) ? value : [value];
-}
-
-export function metadataValueAsString(value: MetadataValue): string {
-  return Array.isArray(value) ? (value[0] as string) : value;
-}
-
-/**
- * Converts MetadataValue based on its content:
- * - If it's a string, returns the string.
- * - If it's an array, applies `arrayUnique` to remove duplicates.
- *   - If the resulting array has a single element, returns that element as a string.
- *   - If the resulting array has more than one element, returns the array as-is.
- */
-function convertMetadataValue(value: MetadataValue): string | string[] {
-  if (Array.isArray(value)) {
-    const uniqueArray = arrayUnique(value);
-    return uniqueArray.length === 1 ? uniqueArray[0] : uniqueArray;
-  }
-  return value;
-}
-
 export class Metadata {
   version: string;
-  artist: MetadataValue;
+  artist: ArtistMetadata;
   title: MetadataValue;
   label: MetadataValue;
   format: Format;
   country: MetadataValue;
   released: Released;
   tracklist: string;
-  credits: string;
+  credits: Credits;
   genres: Genres;
   submissionNotes: MetadataValue;
 
@@ -92,22 +88,23 @@ export class Metadata {
     const manifest = getExtensionManifest();
 
     this.version = manifest.version;
-    this.artist = convertMetadataValue([
-      // Do not add default artist if there is more than one artist
-      ...(params.artists.length > 1
-        ? []
-        : [
-            params.artist,
-            capitalizeEachWord(params.artist),
-            convertArtistName(params.artist)
-          ]),
-      ...params.artists.map((artist) => capitalizeEachWord(artist)),
-      ...params.artists.map((artist) => convertArtistName(artist)),
-      ...params.artists
-    ]);
+
+    this.artist = {
+      value: params.artist,
+      artists: params.artists.map((artist) => ({
+        name: convertMetadataValue([
+          artist.name,
+          capitalizeEachWord(artist.name),
+          convertArtistName(artist.name)
+        ]),
+        join: artist.join
+      }))
+    };
+
     this.title = convertMetadataValue([
       params.title,
-      capitalizeEachWord(params.title)
+      capitalizeEachWord(params.title),
+      removeYearInBrackets(params.title)
     ]);
     this.label = convertMetadataValue([
       params.artist === params.label
@@ -132,7 +129,10 @@ export class Metadata {
     ]);
     this.released = params.released;
     this.tracklist = params.tracklist;
-    this.credits = params.credits;
+    this.credits = {
+      text: params.credits,
+      items: extractCredits(params.credits)
+    };
     this.genres = params.genres;
     this.submissionNotes = convertMetadataValue([
       generateSubmissionNotesDefault(params.releaseUrl),
@@ -146,9 +146,18 @@ export class Metadata {
     const discogsGenres = keywordsToDiscogsGenres(release.keywords);
     const discogsStyles = keywordsToDiscogsStyles(release.keywords);
 
+    const artists: Artist[] = [];
+    release.releaseItem.artist.names.forEach((name, index) => {
+      const join = release.releaseItem.artist.joins[index] || '';
+      artists.push({
+        name,
+        join
+      });
+    });
+
     return new Metadata({
       artist: release.releaseItem.artist.asString,
-      artists: release.releaseItem.artist.asArray,
+      artists,
       title: release.releaseItem.title,
       label: release.label,
       released: {

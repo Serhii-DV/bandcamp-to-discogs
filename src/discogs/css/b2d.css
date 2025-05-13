@@ -3,6 +3,10 @@
   --txt-color: #fff;
   --var-bg-color: #666;
   --var-txt-color: #fff;
+  --hint-hover-color: #200e31;
+  --note-bg-color: #3f1c5e;
+  --note-txt-color: #e6ddf2;
+  --note-border-color: #5e2a8a;
 }
 
 div.b2d-section {
@@ -27,4 +31,38 @@ div.b2d-section .b2d-draggable {
 div.b2d-section .b2d-info {
   font-style: italic;
   font-size: 80%;
+}
+
+div.b2d-section .b2d-note {
+  background-color: var(--note-bg-color) !important;
+  color: var(--note-txt-color) !important;
+  border-left: 4px solid var(--note-border-color);
+  padding: 8px 12px;
+  margin: 10px 0;
+  font-size: 90%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 38px;
+}
+
+div.b2d-section .b2d-note::before {
+  content: '💡'; /* Lightbulb emoji for notes/tips */
+  font-size: 18px;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+div.b2d-section .b2d-note i.icon-magic {
+  margin-left: 5px;
+  color: var(--note-txt-color);
+  opacity: 0.8;
+}
+
+input[type='text'].b2d-droppable,
+.de-dark-theme .subform_react div.subform_table input.b2d-droppable {
+  background-color: #059e0f !important;
 }

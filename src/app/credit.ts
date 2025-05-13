@@ -1,5 +1,8 @@
+import { convertBreaksToNewlines } from '../utils/string';
+import creditsMapping from '../data/credits_mapping.json';
+
 export interface Credit {
-  artist: string;
+  artist: string[];
   roles: string[];
 }
 
@@ -33,20 +36,29 @@ function cleanArtist(raw: string): string {
 }
 
 export function extractCredits(text: string): Credit[] {
-  const lines = text
+  const lines = convertBreaksToNewlines(text)
     .split(/\n|\. ?/)
     .map((l) => l.trim())
-    .filter(Boolean);
-  const results: Credit[] = [];
+    .filter(Boolean)
+    .filter((line) => !line.startsWith('©')); // Ignore copyright lines
+  const credits: Credit[] = [];
 
   for (const line of lines) {
     let match: RegExpMatchArray | null;
+
+    // Match "role: artist" format
+    if ((match = line.match(/^(.+?)\s*:\s*(.+)$/))) {
+      const roles = cleanRoles(match[1]);
+      const artist = cleanArtist(match[2]);
+      processArtistString(artist, roles, credits);
+      continue;
+    }
 
     // Match "role - artist" format
     if ((match = line.match(/^(.+?)\s*[-–—]\s*(.+)$/))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist, roles });
+      processArtistString(artist, roles, credits);
       continue;
     }
 
@@ -54,7 +66,7 @@ export function extractCredits(text: string): Credit[] {
     if ((match = line.match(/^(.+?)\s*by\s*(.+)$/i))) {
       const roles = cleanRoles(match[1]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist, roles });
+      processArtistString(artist, roles, credits);
       continue;
     }
 
@@ -63,10 +75,66 @@ export function extractCredits(text: string): Credit[] {
       const roles = cleanRoles(match[1]);
       const additionalRoles = cleanRoles(match[3]);
       const artist = cleanArtist(match[2]);
-      results.push({ artist, roles: [...roles, ...additionalRoles] });
+      processArtistString(artist, [...roles, ...additionalRoles], credits);
       continue;
     }
   }
 
-  return results;
+  return mapCreditRoles(credits);
+}
+
+/**
+ * Maps role names to their standardized versions using the credits_mapping.json file
+ * @param credits Array of credits to map the roles for
+ * @returns A new array of credits with mapped role names
+ */
+function mapCreditRoles(credits: Credit[]): Credit[] {
+  return credits.map((credit) => ({
+    artist: [...credit.artist],
+    roles: credit.roles.map(
+      (role) => creditsMapping[role as keyof typeof creditsMapping] || role
+    )
+  }));
+}
+
+function processArtistString(
+  artistString: string,
+  roles: string[],
+  results: Credit[]
+): void {
+  // Split by "and" or "&" to handle multiple artists
+  if (artistString.includes(' and ') || artistString.includes('&')) {
+    const splitArtists = artistString.split(/ and |&/i).map((a) => a.trim());
+
+    // For each artist name, create a separate credit entry
+    splitArtists.forEach((singleArtist) => {
+      // Handle parenthetical notation for each individual artist
+      const parsedArtist = parseSingleArtist(singleArtist);
+      results.push({ artist: parsedArtist, roles });
+    });
+  } else {
+    // Handle parenthetical notation
+    results.push({ artist: parseSingleArtist(artistString), roles });
+  }
+}
+
+function parseSingleArtist(artistString: string): string[] {
+  const result: string[] = [];
+  const trimmedArtist = artistString.trim();
+
+  // Check if artist name contains parentheses
+  const parenthesesMatch = trimmedArtist.match(/^(.*?)\s*\((.*?)\)$/);
+
+  if (parenthesesMatch) {
+    // Add the name outside parentheses
+    result.push(parenthesesMatch[1].trim());
+
+    // Add the name inside parentheses
+    result.push(parenthesesMatch[2].trim());
+  } else {
+    // Just add the name as is
+    result.push(trimmedArtist);
+  }
+
+  return result;
 }

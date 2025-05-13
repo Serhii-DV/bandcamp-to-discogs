@@ -9,6 +9,7 @@ import {
 import { log } from '../utils/console';
 
 import './css/b2d.css';
+import './css/hint-button.css';
 import './css/notification.css';
 import { MessageType } from '../app/core/messageType';
 import { chromeListenToMessage, getExtensionUrl } from '../utils/chrome';

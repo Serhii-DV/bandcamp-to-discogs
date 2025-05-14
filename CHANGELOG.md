@@ -1,6 +1,21 @@
 # Change log
 
-## 0.20.0 (2025-02-xx)
+## 0.21.0 (2025-05-14)
+
+### Features
+
+- core: Added basic tests (Jest)
+- core: Refactor. Load keyword mapping and discogs styles directly.
+- discogs: UI. Added button hints with a dropdown suggestions to the Draft page.
+- discogs: UI. Added notes to the sections.
+- discogs: Added suggestions for Credits section.
+- popup: Update About page. Fixed "How To Use" section.
+
+### Fixed
+
+- discogs: Issue with the time in seconds. Now it shows correct time with leading zero.
+
+## 0.20.0 (2025-02-23)
 
 ### Features
 

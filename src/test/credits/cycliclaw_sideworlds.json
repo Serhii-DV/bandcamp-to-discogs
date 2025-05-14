@@ -1,0 +1,25 @@
+{
+  "url": "https://cycliclaw.bandcamp.com/album/sideworlds",
+  "input": "Ansiktsløs sigil by Simon Heath.\nVisual stimulus & design created by Alejandro Tegin (Heresie Studio)\nMastering by Frederic Arbour",
+  "expected": [
+    {
+      "artist": ["Simon Heath"],
+      "roles": [
+        "Ansiktsløs sigil"
+      ]
+    },
+    {
+      "artist": ["Alejandro Tegin", "Heresie Studio"],
+      "roles": [
+        "Visual stimulus",
+        "Design"
+      ]
+    },
+    {
+      "artist": ["Frederic Arbour"],
+      "roles": [
+        "Mastered By"
+      ]
+    }
+  ]
+}

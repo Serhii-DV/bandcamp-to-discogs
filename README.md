@@ -1,5 +1,8 @@
 ![Bandcanmp to Discogs](https://github.com/Serhii-DV/bandcamp-to-discogs/blob/main/images/b2d_logo_128.png?raw=true)
 
+![Tests](https://github.com/Serhii-DV/bandcamp-to-discogs/actions/workflows/run-tests.yml/badge.svg)
+
+
 # Bandcamp to Discogs
 
 Bandcamp to Discogs (B2D) - is a Google Chrome extension designed to assist in converting a Bandcamp artist release page into a draft CSV file for Discogs.

@@ -13,28 +13,29 @@ class TrackTime {
     return this.toString();
   }
 
-  get date(): Date {
-    return this.toDate();
-  }
-
   toString(): string {
-    const formatter = new Intl.DateTimeFormat('en', {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-
-    return formatter.format(this.toDate());
+    const timeParts = [
+      String(this.#hours).padStart(2, '0'),
+      String(this.#minutes).padStart(2, '0'),
+      String(this.#seconds).padStart(2, '0')
+    ];
+    return timeParts.join(':');
   }
 
-  toDate(): Date {
-    const date = new Date(0);
-    date.setHours(this.#hours);
-    date.setMinutes(this.#minutes);
-    date.setSeconds(this.#seconds);
-
-    return date;
+  /**
+   * Formats the time in a human-readable format by removing unnecessary zeros
+   * For hours ≥ 1: "h:mm:ss"
+   * For minutes ≥ 1 (with 0 hours): "m:ss"
+   * For seconds only: "0:ss"
+   */
+  toFormattedString(): string {
+    if (this.#hours >= 1) {
+      return `${this.#hours}:${String(this.#minutes).padStart(2, '0')}:${String(this.#seconds).padStart(2, '0')}`;
+    } else if (this.#minutes >= 1) {
+      return `${this.#minutes}:${String(this.#seconds).padStart(2, '0')}`;
+    } else {
+      return `0:${String(this.#seconds).padStart(2, '0')}`;
+    }
   }
 
   static fromString(timeString: string): TrackTime {

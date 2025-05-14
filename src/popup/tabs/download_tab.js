@@ -1,4 +1,4 @@
-import { DiscogsCsv } from '../../discogs/app/discogs-csv.js';
+import { DiscogsCsv } from '../../discogs/app/discogs-csv';
 import { downloadCsv, objectsToCsv } from '../../utils/csv';
 import { isEmptyArray } from '../../utils/utils';
 import { disable, enable } from '../../utils/html';

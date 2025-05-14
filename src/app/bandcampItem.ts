@@ -1,4 +1,4 @@
-import { generateKeyForUrl } from '../utils/key-generator';
+import { urlToUuid } from '../utils/utils';
 import { BandcampURL } from './core/bandcampUrl';
 
 export abstract class BandcampItem {
@@ -10,7 +10,7 @@ export abstract class BandcampItem {
 
   constructor(url: string, image?: string, visit?: Date, id?: number) {
     this.url = new BandcampURL(url);
-    this.uuid = generateKeyForUrl(this.url.toString());
+    this.uuid = urlToUuid(this.url.toString());
     this.image = image;
     this.visit = visit;
     this.id = id;

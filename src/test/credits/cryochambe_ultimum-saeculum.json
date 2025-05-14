@@ -1,0 +1,26 @@
+{
+  "url": "https://cryochamber.bandcamp.com/album/ultimum-saeculum",
+  "input": "Written, Produced, Performed - Robert Kozletsky\nArtwork - Erik \"Keosz\" Osvald\nMastering - Simon Heath",
+  "expected": [
+    {
+      "artist": ["Robert Kozletsky"],
+      "roles": [
+        "Written By",
+        "Producer",
+        "Performer"
+      ]
+    },
+    {
+      "artist": ["Erik \"Keosz\" Osvald"],
+      "roles": [
+        "Artwork"
+      ]
+    },
+    {
+      "artist": ["Simon Heath"],
+      "roles": [
+        "Mastered By"
+      ]
+    }
+  ]
+}

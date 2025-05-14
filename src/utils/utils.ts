@@ -1,39 +1,4 @@
-import { transliterate } from './transliterate';
-
-export function padStringLeft(
-  string: string,
-  pad: string,
-  length: number
-): string {
-  const padding =
-    string.length >= length ? '' : pad.repeat(length - string.length);
-  return padding + string;
-}
-
-/** @see https://stackoverflow.com/a/8485137/3227570 */
-export function safeFilename(value: string): string {
-  return transliterate(value)
-    .replace(/[^a-zA-Z0-9]/gi, '_')
-    .toLowerCase();
-}
-
-export function capitalizeEachWord(str: string): string {
-  return str
-    .split(/(\s+|["'“”‘’,.()!?\-])/g) // Split by spaces and special characters, keeping them as separators
-    .map(
-      (word) =>
-        /^[a-zA-Z]/.test(word) // Check if the word starts with a letter
-          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-          : word // Leave separators and non-alphabetic parts as they are
-    )
-    .join('');
-}
-
-export function convertToAlias(str: string): string {
-  const slug = str.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  const trimmedSlug = slug.replace(/^-+|-+$/g, '');
-  return trimmedSlug;
-}
+import { v5 as uuid5 } from 'uuid';
 
 export function isEmptyObject(obj: object): boolean {
   for (const key in obj) {
@@ -87,8 +52,8 @@ export function arrayUnique(arr: string[] | string[][]): string[] {
 export function hasClass(
   element: Element | HTMLElement | null,
   className: string
-) {
-  return element?.classList.contains(className);
+): boolean {
+  return !!element?.classList.contains(className);
 }
 
 export function getArrLastElement(array: Array<any>) {
@@ -111,41 +76,6 @@ export function replaceTokens(
     }
   }
   return template;
-}
-
-/**
- * Splits a string into an array of substrings using specified delimiters, trims whitespace, and removes empty entries.
- *
- * @param inputString - The string to be split.
- * @param delimiters - A regular expression or string specifying the delimiter(s) to use for splitting.
- * @returns An array of non-empty, trimmed substrings resulting from the split operation.
- */
-export function splitString(
-  inputString: string,
-  delimiters: RegExp | string
-): string[] {
-  const resultArray = inputString.split(delimiters);
-  return resultArray
-    .map((item: string) => item.trim())
-    .filter((item: string) => item !== '');
-}
-
-/**
- * Checks if a string contains any of the strings in a given array.
- * @param string1 - The string to check.
- * @param arrayOfStrings - An array of strings to look for.
- * @returns True if `string1` contains any of the strings in `arrayOfStrings`; otherwise, false.
- */
-export function containsOneOf(
-  string1: string,
-  arrayOfStrings: string[]
-): boolean {
-  for (const string2 of arrayOfStrings) {
-    if (string1.includes(string2)) {
-      return true;
-    }
-  }
-  return false;
 }
 
 /**
@@ -180,37 +110,6 @@ export function countOccurrences(arr: string[]): string[] {
   return result;
 }
 
-export function removeBrackets(inputString: string): string {
-  return inputString.replace(/\s*\([^)]*\)/, '');
-}
-
-export function trimCharactersFromString(
-  inputString: string,
-  charactersToTrim: string
-): string {
-  // Escape special characters within the provided string and construct the regex pattern
-  const escapedCharacters = charactersToTrim.replace(
-    /[-/\\^$*+?.()|[\]{}]/g,
-    '\\$&'
-  );
-  const regexPattern = new RegExp(
-    `^[${escapedCharacters}]+|[${escapedCharacters}]+$`,
-    'g'
-  );
-  const trimmedString = inputString.replace(regexPattern, '');
-
-  return trimmedString;
-}
-
-export function removeInvisibleChars(inputString: string): string {
-  // Define the invisible character(s) you want to remove (for example, non-breaking space)
-  const invisibleCharsRegex =
-    /[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]|&lrm;/g;
-  const cleanedString = inputString.replace(invisibleCharsRegex, '');
-
-  return cleanedString;
-}
-
 export function bytesToSize(bytes: number): string {
   const sizes: string[] = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 
@@ -221,16 +120,8 @@ export function bytesToSize(bytes: number): string {
   return `${roundedSize} ${sizes[i]}`;
 }
 
-export function removeLeadingZeroOrColon(str: string): string {
-  return str.replace(/^(:|0)*/, '');
-}
-
-export function camelCaseToReadable(str: string): string {
-  let result = str.replace(/([a-z])([A-Z])/g, '$1 $2');
-  result = result.charAt(0).toUpperCase() + result.slice(1);
-  return result;
-}
-
-export function convertNewlinesToBreaks(str: string): string {
-  return str.replace(/\n/g, '<br>').replace(/\r/g, '');
+export function urlToUuid(url: string): string {
+  const uuid = uuid5(url, uuid5.URL);
+  // console.log(`B2D: uuid5(${url}): `, uuid);
+  return uuid;
 }

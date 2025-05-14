@@ -1,7 +1,7 @@
 import { Track } from '../app/track';
 import { Release } from '../app/release';
 import TrackTime from '../app/trackTime';
-import { convertNewlinesToBreaks } from './utils';
+import { convertNewlinesToBreaks } from './string';
 
 interface Schema {
   byArtist: {
@@ -16,7 +16,7 @@ interface Schema {
   track: {
     numberOfItems: number;
     itemListElement: {
-      position: string;
+      position: number;
       item: {
         name: string;
         duration: string;

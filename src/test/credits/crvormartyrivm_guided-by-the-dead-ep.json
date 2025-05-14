@@ -1,0 +1,15 @@
+{
+  "url": "https://crvormartyrivm.bandcamp.com/album/guided-by-the-dead-ep",
+  "input": "Composed, programmed, mixed & mastered by Alberto \"XIII\" HERNÁNDEZ SERRADILLA for Crvor Martyrivm in 2018.",
+  "expected": [
+    {
+      "artist": ["Alberto \"XIII\" HERNÁNDEZ SERRADILLA for Crvor Martyrivm"],
+      "roles": [
+        "Composed By",
+        "Programmed By",
+        "Mixed By",
+        "Mastered By"
+      ]
+    }
+  ]
+}

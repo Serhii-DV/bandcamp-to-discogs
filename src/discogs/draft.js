@@ -9,9 +9,10 @@ import {
 import { log } from '../utils/console';
 
 import './css/b2d.css';
+import './css/hint-button.css';
 import './css/notification.css';
 import { MessageType } from '../app/core/messageType';
-import { chromeListenToMessage } from '../utils/chrome';
+import { chromeListenToMessage, getExtensionUrl } from '../utils/chrome';
 
 main();
 
@@ -19,7 +20,7 @@ function main() {
   log('Running discogs content main logic (src/discogs/draft.js)');
 
   // Inject concatenated discogs content css
-  injectCSSFile(chrome.runtime.getURL('discogs.draft.css'));
+  injectCSSFile(getExtensionUrl('discogs.draft.css'));
 
   showNotificationInfo('Waiting for metadata parsing...');
 

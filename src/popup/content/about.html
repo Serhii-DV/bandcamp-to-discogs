@@ -1,4 +1,3 @@
-<h2 class="display-6">About</h2>
 <p>
   <strong>Bandcamp to Discogs (B2D)</strong> is a Google Chrome extension
   designed to assist in converting a
@@ -63,18 +62,16 @@
     order:<br /><code>Artist / Album / Year / Tracklist</code>
   </li>
   <li>
-    You can see a preview of the information by clicking the second button
-    <b2d-icon name="table"></b2d-icon> (<i>Preview Discogs CSV data</i>)
+    To save the information, click the blue button
+    <button class="btn btn-primary" disabled>
+      <b2d-icon name="download"></b2d-icon> CSV</button
+    >. Keep this file on your computer.
   </li>
   <li>
-    To save the information, click the third button
-    <b2d-icon name="download"></b2d-icon> (<i>Download Discogs CSV file</i>).
-    Keep this file on your computer.
-  </li>
-  <li>
-    Click the fourth button <b2d-icon name="box-arrow-up-right"></b2d-icon> (<i
-      >Open Discogs CSV to Draft page and start import</i
-    >). This will take you to the
+    Click the next button
+    <button class="btn btn-success" disabled>
+      <b2d-icon name="discogs-png"></b2d-icon> CSV to Draft</button
+    >. This will take you to the
     <a href="https://www.discogs.com/release/csv_to_draft" target="_blank"
       >Discogs CSV_To_Draft page</a
     >
@@ -96,7 +93,7 @@
 <h3 class="display-6">Contact</h3>
 
 <p>
-  For feature requests and issues please follow the link:
+  For feature requests and issues please follow the link:<br />
   <a
     href="https://github.com/Serhii-DV/bandcamp-to-discogs/issues"
     target="_blank"

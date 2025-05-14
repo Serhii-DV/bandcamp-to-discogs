@@ -1,5 +1,11 @@
 # Change log
 
+## 0.21.1 (2025-05-14)
+
+### Fixed
+
+- discogs: Fix hint buttons colors
+
 ## 0.21.0 (2025-05-14)
 
 ### Features

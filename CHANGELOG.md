@@ -9,6 +9,7 @@
 - discogs: UI. Added button hints with a dropdown suggestions to the Draft page.
 - discogs: UI. Added notes to the sections.
 - discogs: Added suggestions for Credits section.
+- popup: Update About page. Fixed "How To Use" section.
 
 ### Fixed
 

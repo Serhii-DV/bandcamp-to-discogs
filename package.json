@@ -3,7 +3,7 @@
   "devDependencies": {
     "@github/relative-time-element": "^4.4.8",
     "@swc/html": "^1.13.2",
-    "@types/chrome": "^0.0.321",
+    "@types/chrome": "^0.1.1",
     "@types/isotope-layout": "^3.0.15",
     "@types/jest": "^29.5.14",
     "@types/mustache": "^4.2.5",

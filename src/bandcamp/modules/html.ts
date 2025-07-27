@@ -65,11 +65,17 @@ export function getBandPhotoSrc(): string | undefined {
 
 export function extractBCSearchInputStyle(): CSSStyleDeclaration | null {
   const bcSearchInputElement = document.querySelector(
-    'input.search-bar'
+    '.menu-bar-wrapper input[type="search"]'
   ) as HTMLInputElement;
-  return bcSearchInputElement
-    ? window.getComputedStyle(bcSearchInputElement)
-    : null;
+
+  if (bcSearchInputElement === null) {
+    console.warn(
+      'Bandcamp search input element not found. Ensure you are on a Bandcamp page.'
+    );
+    return null;
+  }
+
+  return window.getComputedStyle(bcSearchInputElement);
 }
 
 export function getDigitalAudioQuality(): string {

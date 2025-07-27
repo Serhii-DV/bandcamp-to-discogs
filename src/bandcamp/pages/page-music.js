@@ -114,9 +114,6 @@ function setupIsotope() {
   });
 
   const bcStyle = extractBCSearchInputStyle();
-  if (bcStyle === null) {
-    logError('Could not extract Bandcamp search input style');
-  }
   const artistFilterWidget = createArtistFilterWidget(releaseItems, bcStyle);
   const albumAmountWidget = createAlbumAmountWidget(releaseItems, bcStyle);
 

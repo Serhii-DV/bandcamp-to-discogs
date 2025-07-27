@@ -12,7 +12,7 @@ import {
 } from '../../utils/html';
 import { isEmptyArray, countOccurrences } from '../../utils/utils';
 import {
-  extractBCSearchInputStyle,
+  extractFilterInputStyle,
   getBandPhotoSrc,
   getReleaseItems as getReleaseItemsFromPage
 } from '../modules/html';
@@ -113,7 +113,7 @@ function setupIsotope() {
     );
   });
 
-  const bcStyle = extractBCSearchInputStyle();
+  const bcStyle = extractFilterInputStyle();
   const artistFilterWidget = createArtistFilterWidget(releaseItems, bcStyle);
   const albumAmountWidget = createAlbumAmountWidget(releaseItems, bcStyle);
 
@@ -241,8 +241,8 @@ function createArtistFilterWidget(releaseItems, bcStyle) {
   );
   const artistFilterInput =
     artistFilterElement.querySelector('#b2dArtistFilter');
-  artistFilterInput.style.backgroundColor = bcStyle.backgroundColor;
-  artistFilterInput.style.color = bcStyle.color;
+  artistFilterInput.style.backgroundColor = bcStyle?.backgroundColor;
+  artistFilterInput.style.color = bcStyle?.color;
 
   artistFilterElement.append(artistFilterDatalist);
 
@@ -273,8 +273,8 @@ Displayed: <span class="b2d-badge b2d-visible">${releaseItems.length}</span> Tot
   );
   const badges = widget.querySelectorAll('.b2d-badge');
   badges?.forEach((badge) => {
-    badge.style.backgroundColor = bcStyle.backgroundColor;
-    badge.style.color = bcStyle.color;
+    badge.style.backgroundColor = bcStyle?.backgroundColor;
+    badge.style.color = bcStyle?.color;
   });
 
   return widget;

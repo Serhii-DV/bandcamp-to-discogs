@@ -63,13 +63,18 @@ export function getBandPhotoSrc(): string | undefined {
   return bandPhoto ? bandPhoto.src : undefined;
 }
 
-export function extractBCSearchInputStyle(): CSSStyleDeclaration | null {
-  const bcSearchInputElement = document.querySelector(
-    'input.search-bar'
-  ) as HTMLInputElement;
-  return bcSearchInputElement
-    ? window.getComputedStyle(bcSearchInputElement)
-    : null;
+export function extractFilterInputStyle(): CSSStyleDeclaration | null {
+  // We assume the style element is present on Bandcamp pages
+  const styleElement = document.querySelector('#pgBd') as HTMLElement;
+
+  if (styleElement === null) {
+    console.warn(
+      'Bandcamp style element (#pgBd) not found. Ensure you are on a Bandcamp page.'
+    );
+    return null;
+  }
+
+  return window.getComputedStyle(styleElement);
 }
 
 export function getDigitalAudioQuality(): string {

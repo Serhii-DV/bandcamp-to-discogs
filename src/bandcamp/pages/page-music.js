@@ -114,6 +114,9 @@ function setupIsotope() {
   });
 
   const bcStyle = extractBCSearchInputStyle();
+  if (bcStyle === null) {
+    logError('Could not extract Bandcamp search input style');
+  }
   const artistFilterWidget = createArtistFilterWidget(releaseItems, bcStyle);
   const albumAmountWidget = createAlbumAmountWidget(releaseItems, bcStyle);
 
@@ -241,8 +244,8 @@ function createArtistFilterWidget(releaseItems, bcStyle) {
   );
   const artistFilterInput =
     artistFilterElement.querySelector('#b2dArtistFilter');
-  artistFilterInput.style.backgroundColor = bcStyle.backgroundColor;
-  artistFilterInput.style.color = bcStyle.color;
+  artistFilterInput.style.backgroundColor = bcStyle?.backgroundColor;
+  artistFilterInput.style.color = bcStyle?.color;
 
   artistFilterElement.append(artistFilterDatalist);
 
@@ -273,8 +276,8 @@ Displayed: <span class="b2d-badge b2d-visible">${releaseItems.length}</span> Tot
   );
   const badges = widget.querySelectorAll('.b2d-badge');
   badges?.forEach((badge) => {
-    badge.style.backgroundColor = bcStyle.backgroundColor;
-    badge.style.color = bcStyle.color;
+    badge.style.backgroundColor = bcStyle?.backgroundColor;
+    badge.style.color = bcStyle?.color;
   });
 
   return widget;

@@ -1,5 +1,5 @@
 {
-  "version": "0.21.1",
+  "version": "0.21.2",
   "devDependencies": {
     "@github/relative-time-element": "^4.4.8",
     "@swc/html": "^1.13.2",

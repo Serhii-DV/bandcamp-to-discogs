@@ -119,11 +119,11 @@ export class B2DIconComponent extends HTMLElement {
       },
       {
         name: 'discogs-png',
-        html: `<img src="https://st.discogs.com/0be63d69e104091c8a7812dd7f62e00420567a46/images/favicon-16x16.png" width="16" height="16" />`
+        html: `<img src="images/discogs/favicon-32x32.png" width="16" height="16" />`
       },
       {
         name: 'bandcamp-png',
-        html: `<img src="https://s4.bcbits.com/img/favicon/favicon-16x16.png" width="16" height="16" />`
+        html: `<img src="images/bandcamp/favicon-32x32.png" width="16" height="16" />`
       },
       {
         name: 'sort-alpha-down',

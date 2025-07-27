@@ -12,7 +12,7 @@ import {
 } from '../../utils/html';
 import { isEmptyArray, countOccurrences } from '../../utils/utils';
 import {
-  extractBCSearchInputStyle,
+  extractFilterInputStyle,
   getBandPhotoSrc,
   getReleaseItems as getReleaseItemsFromPage
 } from '../modules/html';
@@ -113,7 +113,7 @@ function setupIsotope() {
     );
   });
 
-  const bcStyle = extractBCSearchInputStyle();
+  const bcStyle = extractFilterInputStyle();
   const artistFilterWidget = createArtistFilterWidget(releaseItems, bcStyle);
   const albumAmountWidget = createAlbumAmountWidget(releaseItems, bcStyle);
 

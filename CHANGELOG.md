@@ -2,6 +2,10 @@
 
 ## 0.21.2 (2025-07-XX)
 
+### Fixed
+
+- bandcamp: Fixed filter widget initialization that was broken due to changes in the bandcamp basic template
+
 ## 0.21.1 (2025-05-14)
 
 ### Fixed
